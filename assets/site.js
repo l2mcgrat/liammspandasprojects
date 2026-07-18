@@ -67,6 +67,94 @@ function drawLineChart(canvas, points, title) {
   ctx.fillStyle = '#8ea3bf'; ctx.font = '12px Georgia';
   points.forEach((p, i) => { const x = xAt(i); ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.55); ctx.textAlign = 'right'; ctx.fillText(p.round, 0, 0); ctx.restore(); });
 }
+function allRounds(chars) {
+  const seen = new Map();
+  chars.forEach(c => (c.ranks || []).forEach(p => { if (!seen.has(p.roundLabel)) seen.set(p.roundLabel, p.round); }));
+  return Array.from(seen, ([roundLabel, round]) => ({roundLabel, round}));
+}
+function drawRankAtlas(canvas, chars, highlightName) {
+  if (!canvas || !chars.length) return;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width, height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  const pad = {l: 70, r: 190, t: 40, b: 82};
+  const rounds = allRounds(chars);
+  const xAt = i => pad.l + (width - pad.l - pad.r) * (rounds.length === 1 ? .5 : i / (rounds.length - 1));
+  const yAt = rank => pad.t + (rank - 1) / 85 * (height - pad.t - pad.b);
+  drawAxes(ctx, width, height, pad, {lines: 8});
+  ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 18px Georgia'; ctx.fillText('Every Character Rank Trajectory', pad.l, 24);
+  rounds.forEach((r, i) => { const x = xAt(i); ctx.fillStyle = '#8ea3bf'; ctx.font = '13px Georgia'; ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.45); ctx.textAlign = 'right'; ctx.fillText(r.round, 0, 0); ctx.restore(); });
+  const colors = ['#00c8ff', '#ffd369', '#4ade80', '#f87171', '#b07aa1', '#76b7b2', '#edc948', '#e15759'];
+  chars.forEach((c, ci) => {
+    const map = new Map((c.ranks || []).map(p => [p.roundLabel, p.rank]));
+    const isHi = c.name === highlightName;
+    ctx.strokeStyle = isHi ? '#00c8ff' : colors[ci % colors.length];
+    ctx.globalAlpha = isHi ? 1 : 0.16;
+    ctx.lineWidth = isHi ? 4 : 1.2;
+    ctx.beginPath();
+    let started = false;
+    rounds.forEach((r, i) => {
+      if (!map.has(r.roundLabel)) return;
+      const x = xAt(i), y = yAt(map.get(r.roundLabel));
+      started ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      started = true;
+    });
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    if (isHi) {
+      rounds.forEach((r, i) => {
+        if (!map.has(r.roundLabel)) return;
+        const x = xAt(i), y = yAt(map.get(r.roundLabel));
+        ctx.fillStyle = '#00c8ff'; ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 12px Georgia'; ctx.fillText(map.get(r.roundLabel), x + 8, y - 8);
+      });
+      const last = c.ranks[c.ranks.length - 1];
+      ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 15px Georgia'; ctx.fillText(`${c.name} #${last.rank}`, width - pad.r + 20, yAt(last.rank) + 5);
+    }
+  });
+}
+const PARETO_METRICS = [
+  {key: 'score', label: 'Total Score', dir: 'desc', format: v => Number(v).toFixed(2)},
+  {key: 'rank', label: 'Current Rank', dir: 'asc', format: v => `#${v}`},
+  {key: 'avgRank', label: 'Average Rank', dir: 'asc', format: v => Number(v).toFixed(1)},
+  {key: 'winRate', label: 'Win Rate', dir: 'desc', format: v => `${Math.round(Number(v) * 100)}%`},
+  {key: 'pointsPerMatch', label: 'Points / Match', dir: 'desc', format: v => Number(v).toFixed(3)},
+  {key: 'rawPerformance', label: 'Raw Performance', dir: 'desc', format: v => Number(v).toFixed(3)},
+  {key: 'overperformance', label: 'Overperformance', dir: 'desc', format: v => Number(v).toFixed(3)},
+  {key: 'scoreLost', label: 'Score Lost', dir: 'desc', format: v => Number(v).toFixed(3)},
+  {key: 'adjustedScoreLost', label: 'Adjusted Score Lost', dir: 'desc', format: v => Number(v).toFixed(3)},
+  {key: 'wins', label: 'Wins', dir: 'desc', format: v => `${v}`},
+  {key: 'losses', label: 'Losses', dir: 'desc', format: v => `${v}`}
+];
+function drawHorizontalPareto(canvas, chars, metric) {
+  if (!canvas || !chars.length) return;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width, height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  const sorted = chars.slice().sort((a, b) => metric.dir === 'asc' ? Number(a[metric.key]) - Number(b[metric.key]) : Number(b[metric.key]) - Number(a[metric.key]));
+  const pad = {l: 250, r: 90, t: 42, b: 42};
+  const rowH = (height - pad.t - pad.b) / sorted.length;
+  const values = sorted.map(c => Math.abs(Number(c[metric.key]) || 0));
+  const max = Math.max(1, ...values);
+  ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 18px Georgia'; ctx.fillText(`${metric.label} Pareto`, pad.l, 24);
+  sorted.forEach((c, i) => {
+    const y = pad.t + i * rowH;
+    const value = Number(c[metric.key]) || 0;
+    const w = Math.abs(value) / max * (width - pad.l - pad.r);
+    ctx.fillStyle = i < 8 ? '#00c8ff' : (i < 24 ? '#ffd369' : '#4ade80');
+    ctx.globalAlpha = i < 24 ? .86 : .55;
+    ctx.fillRect(pad.l, y + 2, w, Math.max(3, rowH - 4));
+    ctx.globalAlpha = 1;
+    ctx.fillStyle = '#8ea3bf'; ctx.font = '11px Georgia'; ctx.textAlign = 'right'; ctx.fillText(`${i + 1}. ${c.name}`, pad.l - 10, y + rowH * .68);
+    ctx.textAlign = 'left'; ctx.fillStyle = '#e8edf6'; ctx.fillText(metric.format(value), pad.l + w + 8, y + rowH * .68);
+  });
+  ctx.textAlign = 'left';
+}
+function renderParetoTable(node, chars, metric) {
+  if (!node) return;
+  const sorted = chars.slice().sort((a, b) => metric.dir === 'asc' ? Number(a[metric.key]) - Number(b[metric.key]) : Number(b[metric.key]) - Number(a[metric.key]));
+  node.innerHTML = sorted.slice(0, 24).map((c, i) => `<div class="pareto-row"><span>${i + 1}</span><a href="../${c.slug}/index.html">${c.name}</a><strong>${metric.format(c[metric.key])}</strong></div>`).join('');
+}
 (function init() {
   const data = pageData();
   if (data.characters && document.getElementById('overview-chart')) {
@@ -78,5 +166,26 @@ function drawLineChart(canvas, points, title) {
     drawBarChart(document.getElementById('match-chart'), c.matches.map(m => `${m.round} M${m.match}`), [{name: c.name, color: css('--cyan'), alpha: .9, values: c.matches.map(m => m.score)}], 'Score Per Match', 'Score');
     drawLineChart(document.getElementById('rank-chart'), c.ranks, 'Rank Trajectory');
     drawBarChart(document.getElementById('round-chart'), c.roundTotals.map(r => r.round), [{name: c.name, color: css('--gold'), alpha: .86, values: c.roundTotals.map(r => r.score)}], 'Round Score Totals', 'Score');
+  }
+  if (data.characters && document.getElementById('rank-atlas-chart')) {
+    const select = document.getElementById('rank-highlight');
+    const chars = data.characters.slice().sort((a, b) => a.rank - b.rank);
+    select.innerHTML = chars.map(c => `<option value="${c.name}">${c.name} (#${c.rank})</option>`).join('');
+    select.value = chars[0].name;
+    const redraw = () => drawRankAtlas(document.getElementById('rank-atlas-chart'), chars, select.value);
+    select.addEventListener('change', redraw);
+    redraw();
+  }
+  if (data.characters && document.getElementById('pareto-chart')) {
+    const select = document.getElementById('pareto-metric');
+    select.innerHTML = PARETO_METRICS.map(m => `<option value="${m.key}">${m.label}</option>`).join('');
+    const redraw = () => {
+      const metric = PARETO_METRICS.find(m => m.key === select.value) || PARETO_METRICS[0];
+      document.getElementById('pareto-title').textContent = metric.label;
+      drawHorizontalPareto(document.getElementById('pareto-chart'), data.characters, metric);
+      renderParetoTable(document.getElementById('pareto-table'), data.characters, metric);
+    };
+    select.addEventListener('change', redraw);
+    redraw();
   }
 })();
