@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Hero | Smash | LiamMs_PandasProjects</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../../index.html">LiamMs_PandasProjects</a>
+    <nav>
+      <a href="../../Smash/index.html">Smash</a>
+      <a href="../../assets/profile_pdfs/">PDFs</a>
+    </nav>
+  </header>
+  
+<main class="fighter-page">
+  <section class="fighter-hero">
+    <div class="fighter-copy">
+      <a class="crumb" href="../index.html">Smash / Character Select</a>
+      <h1>Hero</h1>
+      <div class="hero-metrics"><div><span>Rank</span><strong>#38</strong></div>
+<div><span>Total Score</span><strong>27.38</strong></div>
+<div><span>Win Rate</span><strong>92%</strong></div>
+<div><span>Win / Loss</span><strong>12 / 1</strong></div>
+<div><span>Pts / Match</span><strong>2.910</strong></div>
+<div><span>Score Lost</span><strong>10.450</strong></div>
+<div><span>Adj Lost</span><strong>9.854</strong></div></div>
+      <div class="profile-actions"><a class="button ghost" href="../../assets/profile_pdfs/Hero_profile.pdf">Open PDF version</a><a class="button primary" href="../index.html">Back to roster</a></div>
+    </div>
+    <div class="fighter-art"><div class="profile-initial">H</div></div>
+  </section>
+
+  <section class="profile-chart-grid">
+    <article class="panel chart-panel"><h2>Score Per Match</h2><canvas id="match-chart" width="900" height="360"></canvas></article>
+    <article class="panel chart-panel"><h2>Rank Trajectory</h2><canvas id="rank-chart" width="900" height="360"></canvas></article>
+    <article class="panel chart-panel wide"><h2>Round Score Totals</h2><canvas id="round-chart" width="1200" height="360"></canvas></article>
+  </section>
+</main>
+
+  <script type="application/json" id="page-data">{&quot;character&quot;: {&quot;name&quot;: &quot;Hero&quot;, &quot;slug&quot;: &quot;Hero&quot;, &quot;rank&quot;: 38, &quot;score&quot;: 27.376, &quot;winRate&quot;: 0.9231, &quot;wins&quot;: 12, &quot;losses&quot;: 1, &quot;avgRank&quot;: 31.43, &quot;pointsPerMatch&quot;: 2.91, &quot;rawPerformance&quot;: 2.254, &quot;overperformance&quot;: 1.462, &quot;scoreLost&quot;: 10.45, &quot;adjustedScoreLost&quot;: 9.854, &quot;model&quot;: null, &quot;pdf&quot;: &quot;assets/profile_pdfs/Hero_profile.pdf&quot;, &quot;ranks&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;rank&quot;: 32}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;rank&quot;: 29}, {&quot;round&quot;: &quot;Elim 1&quot;, &quot;roundLabel&quot;: &quot;elimination_1&quot;, &quot;rank&quot;: 29}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;rank&quot;: 27}, {&quot;round&quot;: &quot;Elim 2&quot;, &quot;roundLabel&quot;: &quot;elimination_2&quot;, &quot;rank&quot;: 27}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;rank&quot;: 38}, {&quot;round&quot;: &quot;Elim 3&quot;, &quot;roundLabel&quot;: &quot;elimination_3&quot;, &quot;rank&quot;: 38}], &quot;matches&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Chrom&quot;, &quot;score&quot;: 2.535}, {&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Peach&quot;, &quot;score&quot;: 2.712}, {&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Sonic&quot;, &quot;score&quot;: 3.155}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Ike&quot;, &quot;score&quot;: 2.613}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Pikachu&quot;, &quot;score&quot;: 1.552}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Chrom&quot;, &quot;score&quot;: 3.93}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;match&quot;: 4, &quot;opponent&quot;: &quot;Snake&quot;, &quot;score&quot;: 0.587}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Palutena&quot;, &quot;score&quot;: 3.135}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;PacMan&quot;, &quot;score&quot;: 5.215}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Mr Game &amp; Watch&quot;, &quot;score&quot;: 3.6}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Zero Suit Samus&quot;, &quot;score&quot;: 4.173}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Chrom&quot;, &quot;score&quot;: 4.619}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Luigi&quot;, &quot;score&quot;: 0.0}], &quot;roundTotals&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;score&quot;: 8.402}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;score&quot;: 8.682}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;score&quot;: 11.95}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;score&quot;: 8.792}]}}</script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

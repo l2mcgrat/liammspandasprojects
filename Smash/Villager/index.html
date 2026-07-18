@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Villager | Smash | LiamMs_PandasProjects</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../../index.html">LiamMs_PandasProjects</a>
+    <nav>
+      <a href="../../Smash/index.html">Smash</a>
+      <a href="../../assets/profile_pdfs/">PDFs</a>
+    </nav>
+  </header>
+  
+<main class="fighter-page">
+  <section class="fighter-hero">
+    <div class="fighter-copy">
+      <a class="crumb" href="../index.html">Smash / Character Select</a>
+      <h1>Villager</h1>
+      <div class="hero-metrics"><div><span>Rank</span><strong>#67</strong></div>
+<div><span>Total Score</span><strong>14.33</strong></div>
+<div><span>Win Rate</span><strong>85%</strong></div>
+<div><span>Win / Loss</span><strong>11 / 2</strong></div>
+<div><span>Pts / Match</span><strong>2.547</strong></div>
+<div><span>Score Lost</span><strong>16.020</strong></div>
+<div><span>Adj Lost</span><strong>13.331</strong></div></div>
+      <div class="profile-actions"><a class="button ghost" href="../../assets/profile_pdfs/Villager_profile.pdf">Open PDF version</a><a class="button primary" href="../index.html">Back to roster</a></div>
+    </div>
+    <div class="fighter-art"><div class="profile-initial">V</div></div>
+  </section>
+
+  <section class="profile-chart-grid">
+    <article class="panel chart-panel"><h2>Score Per Match</h2><canvas id="match-chart" width="900" height="360"></canvas></article>
+    <article class="panel chart-panel"><h2>Rank Trajectory</h2><canvas id="rank-chart" width="900" height="360"></canvas></article>
+    <article class="panel chart-panel wide"><h2>Round Score Totals</h2><canvas id="round-chart" width="1200" height="360"></canvas></article>
+  </section>
+</main>
+
+  <script type="application/json" id="page-data">{&quot;character&quot;: {&quot;name&quot;: &quot;Villager&quot;, &quot;slug&quot;: &quot;Villager&quot;, &quot;rank&quot;: 67, &quot;score&quot;: 14.332, &quot;winRate&quot;: 0.8462, &quot;wins&quot;: 11, &quot;losses&quot;: 2, &quot;avgRank&quot;: 58.71, &quot;pointsPerMatch&quot;: 2.547, &quot;rawPerformance&quot;: 1.622, &quot;overperformance&quot;: 0.923, &quot;scoreLost&quot;: 16.02, &quot;adjustedScoreLost&quot;: 13.331, &quot;model&quot;: null, &quot;pdf&quot;: &quot;assets/profile_pdfs/Villager_profile.pdf&quot;, &quot;ranks&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;rank&quot;: 46}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;rank&quot;: 72}, {&quot;round&quot;: &quot;Elim 1&quot;, &quot;roundLabel&quot;: &quot;elimination_1&quot;, &quot;rank&quot;: 70}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;rank&quot;: 47}, {&quot;round&quot;: &quot;Elim 2&quot;, &quot;roundLabel&quot;: &quot;elimination_2&quot;, &quot;rank&quot;: 47}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;rank&quot;: 62}, {&quot;round&quot;: &quot;Elim 3&quot;, &quot;roundLabel&quot;: &quot;elimination_3&quot;, &quot;rank&quot;: 67}], &quot;matches&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Kirby&quot;, &quot;score&quot;: 2.986}, {&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Robin&quot;, &quot;score&quot;: 1.594}, {&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Young Link&quot;, &quot;score&quot;: 2.732}, {&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 4, &quot;opponent&quot;: &quot;Ice Climbers&quot;, &quot;score&quot;: 0.475}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Pit&quot;, &quot;score&quot;: 1.356}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Hero&quot;, &quot;score&quot;: -0.429}, {&quot;round&quot;: &quot;Elim 1&quot;, &quot;roundLabel&quot;: &quot;elimination_1&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Ken&quot;, &quot;score&quot;: 2.741}, {&quot;round&quot;: &quot;Elim 1&quot;, &quot;roundLabel&quot;: &quot;elimination_1&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;King Dedede&quot;, &quot;score&quot;: 2.076}, {&quot;round&quot;: &quot;Elim 1&quot;, &quot;roundLabel&quot;: &quot;elimination_1&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Daisy&quot;, &quot;score&quot;: 6.952}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Duck Hunt&quot;, &quot;score&quot;: 2.804}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Banjo &amp; Kazooie&quot;, &quot;score&quot;: 4.05}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Little Mac&quot;, &quot;score&quot;: 4.961}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Falco&quot;, &quot;score&quot;: 0.811}], &quot;roundTotals&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;score&quot;: 7.787}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;score&quot;: 0.927}, {&quot;round&quot;: &quot;Elim 1&quot;, &quot;roundLabel&quot;: &quot;elimination_1&quot;, &quot;score&quot;: 11.769}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;score&quot;: 11.815}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;score&quot;: 0.811}]}}</script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>

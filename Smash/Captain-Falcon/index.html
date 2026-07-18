@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Captain Falcon | Smash | LiamMs_PandasProjects</title>
+  <link rel="stylesheet" href="../../assets/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="../../index.html">LiamMs_PandasProjects</a>
+    <nav>
+      <a href="../../Smash/index.html">Smash</a>
+      <a href="../../assets/profile_pdfs/">PDFs</a>
+    </nav>
+  </header>
+  
+<main class="fighter-page">
+  <section class="fighter-hero">
+    <div class="fighter-copy">
+      <a class="crumb" href="../index.html">Smash / Character Select</a>
+      <h1>Captain Falcon</h1>
+      <div class="hero-metrics"><div><span>Rank</span><strong>#57</strong></div>
+<div><span>Total Score</span><strong>25.61</strong></div>
+<div><span>Win Rate</span><strong>86%</strong></div>
+<div><span>Win / Loss</span><strong>12 / 2</strong></div>
+<div><span>Pts / Match</span><strong>3.122</strong></div>
+<div><span>Score Lost</span><strong>18.091</strong></div>
+<div><span>Adj Lost</span><strong>13.386</strong></div></div>
+      <div class="profile-actions"><a class="button ghost" href="../../assets/profile_pdfs/Captain_Falcon_profile.pdf">Open PDF version</a><a class="button primary" href="../index.html">Back to roster</a></div>
+    </div>
+    <div class="fighter-art"><div class="profile-initial">C</div></div>
+  </section>
+
+  <section class="profile-chart-grid">
+    <article class="panel chart-panel"><h2>Score Per Match</h2><canvas id="match-chart" width="900" height="360"></canvas></article>
+    <article class="panel chart-panel"><h2>Rank Trajectory</h2><canvas id="rank-chart" width="900" height="360"></canvas></article>
+    <article class="panel chart-panel wide"><h2>Round Score Totals</h2><canvas id="round-chart" width="1200" height="360"></canvas></article>
+  </section>
+</main>
+
+  <script type="application/json" id="page-data">{&quot;character&quot;: {&quot;name&quot;: &quot;Captain Falcon&quot;, &quot;slug&quot;: &quot;Captain-Falcon&quot;, &quot;rank&quot;: 57, &quot;score&quot;: 25.611, &quot;winRate&quot;: 0.8571, &quot;wins&quot;: 12, &quot;losses&quot;: 2, &quot;avgRank&quot;: 56.57, &quot;pointsPerMatch&quot;: 3.122, &quot;rawPerformance&quot;: 1.493, &quot;overperformance&quot;: 1.643, &quot;scoreLost&quot;: 18.091, &quot;adjustedScoreLost&quot;: 13.386, &quot;model&quot;: null, &quot;pdf&quot;: &quot;assets/profile_pdfs/Captain_Falcon_profile.pdf&quot;, &quot;ranks&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;rank&quot;: 28}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;rank&quot;: 60}, {&quot;round&quot;: &quot;Elim 1&quot;, &quot;roundLabel&quot;: &quot;elimination_1&quot;, &quot;rank&quot;: 60}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;rank&quot;: 57}, {&quot;round&quot;: &quot;Elim 2&quot;, &quot;roundLabel&quot;: &quot;elimination_2&quot;, &quot;rank&quot;: 67}, {&quot;round&quot;: &quot;Round 4&quot;, &quot;roundLabel&quot;: &quot;round_4&quot;, &quot;rank&quot;: 67}, {&quot;round&quot;: &quot;Elim 3&quot;, &quot;roundLabel&quot;: &quot;elimination_3&quot;, &quot;rank&quot;: 57}], &quot;matches&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Olimar&quot;, &quot;score&quot;: 2.006}, {&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Mega Man&quot;, &quot;score&quot;: 3.3}, {&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Wario&quot;, &quot;score&quot;: 3.301}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Ike&quot;, &quot;score&quot;: 1.518}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Steve&quot;, &quot;score&quot;: 1.032}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Meta Knight&quot;, &quot;score&quot;: 1.646}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Jigglypuff&quot;, &quot;score&quot;: 3.87}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Lucario&quot;, &quot;score&quot;: 2.936}, {&quot;round&quot;: &quot;Elim 2&quot;, &quot;roundLabel&quot;: &quot;elimination_2&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Lucina&quot;, &quot;score&quot;: 3.511}, {&quot;round&quot;: &quot;Elim 2&quot;, &quot;roundLabel&quot;: &quot;elimination_2&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;PacMan&quot;, &quot;score&quot;: 3.222}, {&quot;round&quot;: &quot;Elim 2&quot;, &quot;roundLabel&quot;: &quot;elimination_2&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Wario&quot;, &quot;score&quot;: 1.402}, {&quot;round&quot;: &quot;Elim 3&quot;, &quot;roundLabel&quot;: &quot;elimination_3&quot;, &quot;match&quot;: 1, &quot;opponent&quot;: &quot;Min Min&quot;, &quot;score&quot;: 4.104}, {&quot;round&quot;: &quot;Elim 3&quot;, &quot;roundLabel&quot;: &quot;elimination_3&quot;, &quot;match&quot;: 2, &quot;opponent&quot;: &quot;Corrin&quot;, &quot;score&quot;: 6.078}, {&quot;round&quot;: &quot;Elim 3&quot;, &quot;roundLabel&quot;: &quot;elimination_3&quot;, &quot;match&quot;: 3, &quot;opponent&quot;: &quot;Kirby&quot;, &quot;score&quot;: 5.775}], &quot;roundTotals&quot;: [{&quot;round&quot;: &quot;Round 1&quot;, &quot;roundLabel&quot;: &quot;round_1&quot;, &quot;score&quot;: 8.607}, {&quot;round&quot;: &quot;Round 2&quot;, &quot;roundLabel&quot;: &quot;round_2&quot;, &quot;score&quot;: 2.55}, {&quot;round&quot;: &quot;Round 3&quot;, &quot;roundLabel&quot;: &quot;round_3&quot;, &quot;score&quot;: 8.452}, {&quot;round&quot;: &quot;Elim 2&quot;, &quot;roundLabel&quot;: &quot;elimination_2&quot;, &quot;score&quot;: 8.135}, {&quot;round&quot;: &quot;Elim 3&quot;, &quot;roundLabel&quot;: &quot;elimination_3&quot;, &quot;score&quot;: 15.957}]}}</script>
+  <script src="../../assets/site.js"></script>
+</body>
+</html>
