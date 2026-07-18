@@ -72,11 +72,12 @@ function allRounds(chars) {
   chars.forEach(c => (c.ranks || []).forEach(p => { if (!seen.has(p.roundLabel)) seen.set(p.roundLabel, p.round); }));
   return Array.from(seen, ([roundLabel, round]) => ({roundLabel, round}));
 }
-function drawRankAtlas(canvas, chars, highlightName) {
+function drawRankAtlas(canvas, chars, highlightNames) {
   if (!canvas || !chars.length) return;
   const ctx = canvas.getContext('2d');
   const width = canvas.width, height = canvas.height;
   ctx.clearRect(0, 0, width, height);
+  const highlightSet = new Set(highlightNames || []);
   const pad = {l: 70, r: 190, t: 40, b: 82};
   const rounds = allRounds(chars);
   const xAt = i => pad.l + (width - pad.l - pad.r) * (rounds.length === 1 ? .5 : i / (rounds.length - 1));
@@ -85,10 +86,14 @@ function drawRankAtlas(canvas, chars, highlightName) {
   ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 18px Georgia'; ctx.fillText('Every Character Rank Trajectory', pad.l, 24);
   rounds.forEach((r, i) => { const x = xAt(i); ctx.fillStyle = '#8ea3bf'; ctx.font = '13px Georgia'; ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.45); ctx.textAlign = 'right'; ctx.fillText(r.round, 0, 0); ctx.restore(); });
   const colors = ['#00c8ff', '#ffd369', '#4ade80', '#f87171', '#b07aa1', '#76b7b2', '#edc948', '#e15759'];
+  const highlightColors = ['#00c8ff', '#ffd369', '#4ade80', '#f87171', '#f0abfc', '#38bdf8', '#fb923c', '#c4b5fd'];
+  let highlightIndex = 0;
   chars.forEach((c, ci) => {
     const map = new Map((c.ranks || []).map(p => [p.roundLabel, p.rank]));
-    const isHi = c.name === highlightName;
-    ctx.strokeStyle = isHi ? '#00c8ff' : colors[ci % colors.length];
+    const isHi = highlightSet.has(c.name);
+    const hiColor = highlightColors[highlightIndex % highlightColors.length];
+    if (isHi) highlightIndex += 1;
+    ctx.strokeStyle = isHi ? hiColor : colors[ci % colors.length];
     ctx.globalAlpha = isHi ? 1 : 0.16;
     ctx.lineWidth = isHi ? 4 : 1.2;
     ctx.beginPath();
@@ -105,11 +110,11 @@ function drawRankAtlas(canvas, chars, highlightName) {
       rounds.forEach((r, i) => {
         if (!map.has(r.roundLabel)) return;
         const x = xAt(i), y = yAt(map.get(r.roundLabel));
-        ctx.fillStyle = '#00c8ff'; ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = hiColor; ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
         ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 12px Georgia'; ctx.fillText(map.get(r.roundLabel), x + 8, y - 8);
       });
       const last = c.ranks[c.ranks.length - 1];
-      ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 15px Georgia'; ctx.fillText(`${c.name} #${last.rank}`, width - pad.r + 20, yAt(last.rank) + 5);
+      ctx.fillStyle = hiColor; ctx.font = 'bold 15px Georgia'; ctx.fillText(`${c.name} #${last.rank}`, width - pad.r + 20, yAt(last.rank) + 5);
     }
   });
 }
@@ -171,8 +176,9 @@ function renderParetoTable(node, chars, metric) {
     const select = document.getElementById('rank-highlight');
     const chars = data.characters.slice().sort((a, b) => a.rank - b.rank);
     select.innerHTML = chars.map(c => `<option value="${c.name}">${c.name} (#${c.rank})</option>`).join('');
-    select.value = chars[0].name;
-    const redraw = () => drawRankAtlas(document.getElementById('rank-atlas-chart'), chars, select.value);
+    if (select.options.length) select.options[0].selected = true;
+    const selectedNames = () => Array.from(select.selectedOptions).map(option => option.value);
+    const redraw = () => drawRankAtlas(document.getElementById('rank-atlas-chart'), chars, selectedNames());
     select.addEventListener('change', redraw);
     redraw();
   }
