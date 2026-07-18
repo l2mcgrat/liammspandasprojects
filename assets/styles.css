@@ -32,7 +32,8 @@ a { color: inherit; text-decoration: none; }
 }
 .brand { font-weight: 800; letter-spacing: .02em; }
 .site-header nav { display: flex; gap: 18px; color: var(--muted); font-size: 14px; }
-.home-hero, .smash-page, .fighter-page, .analysis-page { width: min(1320px, calc(100% - 36px)); margin: 0 auto; }
+.home-hero, .smash-page, .analysis-page { width: min(1320px, calc(100% - 36px)); margin: 0 auto; }
+.fighter-page { width: min(1480px, calc(100% - 36px)); margin: 0 auto; }
 .home-landing { min-height: calc(100vh - 65px); display: grid; place-items: center; overflow: hidden; }
 .home-stage { width: min(1180px, calc(100% - 36px)); min-height: 680px; display: grid; grid-template-columns: .82fr 1.18fr; gap: 28px; align-items: center; }
 .home-copy { position: relative; z-index: 1; }
@@ -64,6 +65,11 @@ h2 { font-size: 28px; }
 .button.ghost { color: var(--text); background: rgba(255,255,255,.04); }
 .home-actions, .profile-actions { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 24px; }
 .smash-hero, .fighter-hero { display: grid; grid-template-columns: 1.4fr .9fr; gap: 24px; align-items: stretch; padding: 42px 0 26px; }
+.fighter-card-page { position: relative; min-height: calc(100vh - 65px); isolation: isolate; }
+.fighter-card-page::before { content: ""; position: fixed; inset: 65px 0 0; z-index: -3; background: linear-gradient(90deg, rgba(8,17,31,.98) 0%, rgba(8,17,31,.92) 46%, rgba(8,17,31,.48) 72%, rgba(8,17,31,.18) 100%); pointer-events: none; }
+.fighter-card-page::after { content: ""; position: fixed; inset: 65px 0 0; z-index: -2; background: repeating-linear-gradient(135deg, rgba(255,255,255,.045) 0 1px, transparent 1px 12px); opacity: .28; pointer-events: none; }
+.fighter-bg { position: fixed; inset: 65px 0 0; z-index: -4; background-repeat: no-repeat; background-position: right center; background-size: min(72vw, 980px) auto; opacity: .86; filter: saturate(1.08) contrast(1.04); pointer-events: none; }
+.fighter-watermark { position: fixed; right: 10vw; top: 20vh; z-index: -4; font-size: min(40vw, 540px); font-weight: 900; color: rgba(232,237,246,.08); pointer-events: none; }
 .stat-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .stat-wall div, .hero-metrics div { background: rgba(18,31,52,.74); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
 .stat-wall strong, .hero-metrics strong { display: block; font-size: 28px; color: var(--gold); }
@@ -88,13 +94,16 @@ h2 { font-size: 28px; }
 .tile-info { position: absolute; inset: auto 0 0; padding: 42px 12px 12px; background: linear-gradient(transparent, rgba(8,17,31,.96)); }
 .tile-info span { color: var(--gold); font-weight: 900; }
 .tile-info strong { display: block; font-size: 17px; }
-.fighter-hero { min-height: 430px; }
+.fighter-hero { min-height: 360px; grid-template-columns: minmax(420px, 720px) 1fr; padding: 46px 0 24px; }
 .fighter-copy { padding: 22px 0; }
+.fighter-copy h1 { max-width: 680px; font-size: clamp(58px, 7vw, 112px); line-height: .9; text-shadow: 0 4px 0 rgba(0,0,0,.45); }
 .crumb { color: var(--muted); font-size: 13px; }
-.hero-metrics { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 10px; margin-top: 26px; }
+.hero-metrics { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 10px; margin-top: 26px; max-width: 740px; }
+.fighter-card-page .hero-metrics div { background: rgba(18,31,52,.84); }
 .fighter-art { position: relative; overflow: hidden; border-radius: 8px; border: 1px solid var(--line); background: rgba(18,31,52,.65); min-height: 360px; display: grid; place-items: center; }
 .profile-model { width: 100%; height: 100%; object-fit: cover; opacity: .86; }
-.profile-chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding-bottom: 56px; }
+.profile-chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding-bottom: 56px; max-width: 1120px; }
+.fighter-card-page .chart-panel { background: rgba(17,28,47,.88); backdrop-filter: blur(6px); }
 .profile-chart-grid .wide { grid-column: 1 / -1; }
 .analysis-hero { padding: 42px 0 26px; }
 .atlas-panel, .pareto-panel { margin-bottom: 56px; }
