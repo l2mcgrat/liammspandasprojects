@@ -14,7 +14,11 @@
 body {
   margin: 0;
   font-family: Georgia, "Times New Roman", serif;
-  background: radial-gradient(circle at 78% 8%, rgba(0,200,255,.20), transparent 28%), linear-gradient(135deg, #070d18, #101b2d 56%, #0a111d);
+  background:
+    linear-gradient(115deg, rgba(118,42,210,.34), transparent 34%),
+    repeating-linear-gradient(60deg, rgba(255,255,255,.045) 0 1px, transparent 1px 34px),
+    radial-gradient(ellipse at 50% 0%, rgba(196,83,255,.42), transparent 56%),
+    linear-gradient(135deg, #170a30, #32125f 48%, #11081f);
   color: var(--text);
   min-height: 100vh;
 }
@@ -29,7 +33,25 @@ a { color: inherit; text-decoration: none; }
 .brand { font-weight: 800; letter-spacing: .02em; }
 .site-header nav { display: flex; gap: 18px; color: var(--muted); font-size: 14px; }
 .home-hero, .smash-page, .fighter-page, .analysis-page { width: min(1320px, calc(100% - 36px)); margin: 0 auto; }
-.home-hero { min-height: calc(100vh - 65px); display: grid; place-items: center; }
+.home-landing { min-height: calc(100vh - 65px); display: grid; place-items: center; overflow: hidden; }
+.home-stage { width: min(1180px, calc(100% - 36px)); min-height: 680px; display: grid; grid-template-columns: .82fr 1.18fr; gap: 28px; align-items: center; }
+.home-copy { position: relative; z-index: 1; }
+.home-copy h1 { max-width: 640px; font-size: clamp(64px, 11vw, 142px); line-height: .86; letter-spacing: 0; text-wrap: balance; }
+.home-signature { margin: 24px 0 0; font-family: "Palatino Linotype", "Book Antiqua", Palatino, serif; font-size: clamp(24px, 3vw, 46px); font-style: italic; color: #e9d7ff; }
+.hex-map { position: relative; width: min(610px, 92vw); aspect-ratio: 1; margin: 0 auto; }
+.hex-frame { position: absolute; inset: 10%; clip-path: polygon(50% 0, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%); background: linear-gradient(135deg, rgba(210,154,255,.22), rgba(82,18,156,.28)); border: 1px solid rgba(238,218,255,.36); box-shadow: inset 0 0 70px rgba(250,225,255,.14), 0 28px 100px rgba(19,6,44,.46); }
+.hex-frame::after { content: ""; position: absolute; inset: 9%; clip-path: inherit; border: 1px solid rgba(255,255,255,.26); background: repeating-linear-gradient(120deg, rgba(255,255,255,.08) 0 1px, transparent 1px 22px); }
+.hex-node { position: absolute; width: 138px; min-height: 118px; display: grid; place-items: center; align-content: center; gap: 8px; padding: 12px; clip-path: polygon(50% 0, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%); background: rgba(22,10,45,.82); border: 1px solid rgba(238,218,255,.36); text-align: center; box-shadow: 0 18px 40px rgba(0,0,0,.30); }
+.hex-node span { display: grid; place-items: center; width: 54px; height: 54px; border-radius: 50%; background: rgba(191,107,255,.16); color: #f1dcff; font-family: Georgia, serif; font-size: 28px; font-weight: 900; }
+.hex-node strong { font-size: 14px; color: #f8efff; }
+.node-gaming { left: 50%; top: 2%; transform: translateX(-50%); }
+.node-economics { right: 5%; top: 24%; }
+.node-business { right: 5%; bottom: 24%; }
+.node-physics { left: 50%; bottom: 2%; transform: translateX(-50%); }
+.node-language { left: 5%; bottom: 24%; }
+.node-miscellaneous { left: 5%; top: 24%; }
+.placeholder-page { min-height: calc(100vh - 65px); display: grid; place-items: center; }
+.placeholder-page p { margin: 0; font-size: clamp(28px, 5vw, 68px); font-weight: 900; text-align: center; color: #f2e7ff; }
 .home-panel, .panel { background: var(--panel); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 20px 80px rgba(0,0,0,.32); }
 .home-panel { padding: 48px; width: min(760px, 100%); }
 .eyebrow { margin: 0 0 10px; color: var(--cyan); text-transform: uppercase; font-size: 12px; letter-spacing: .14em; font-weight: 800; }
@@ -93,6 +115,10 @@ select { min-width: 220px; min-height: 38px; border: 1px solid var(--line); bord
 canvas { width: 100%; height: auto; display: block; }
 @media (max-width: 820px) {
   .smash-hero, .fighter-hero, .overview-grid, .profile-chart-grid, .analysis-links { grid-template-columns: 1fr; }
+  .home-stage { grid-template-columns: 1fr; min-height: auto; padding: 44px 0; }
+  .hex-node { width: 112px; min-height: 98px; }
+  .hex-node span { width: 44px; height: 44px; font-size: 22px; }
+  .hex-node strong { font-size: 12px; }
   .stat-wall, .hero-metrics { grid-template-columns: 1fr 1fr; }
   .split-heading { align-items: start; flex-direction: column; }
   h1 { font-size: 48px; }
