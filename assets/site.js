@@ -8,12 +8,20 @@ function drawAxes(ctx, width, height, pad, opts = {}) {
   ctx.lineWidth = 1;
   ctx.beginPath(); ctx.moveTo(pad.l, pad.t); ctx.lineTo(pad.l, height - pad.b); ctx.lineTo(width - pad.r, height - pad.b); ctx.stroke();
   const lines = opts.lines || 4;
+  const max = opts.max || 0;
   ctx.fillStyle = '#8ea3bf';
   ctx.font = '12px Georgia';
   for (let i = 0; i <= lines; i++) {
     const y = pad.t + (height - pad.t - pad.b) * i / lines;
     ctx.strokeStyle = 'rgba(255,255,255,.09)';
     ctx.beginPath(); ctx.moveTo(pad.l, y); ctx.lineTo(width - pad.r, y); ctx.stroke();
+    if (opts.values) {
+      const value = max - (max * i / lines);
+      ctx.fillStyle = '#8ea3bf';
+      ctx.textAlign = 'right';
+      ctx.fillText(value.toFixed(max >= 10 ? 0 : 1), pad.l - 10, y + 4);
+      ctx.textAlign = 'left';
+    }
   }
 }
 function drawBarChart(canvas, labels, series, title, yLabel) {
@@ -23,7 +31,7 @@ function drawBarChart(canvas, labels, series, title, yLabel) {
   ctx.clearRect(0, 0, width, height);
   const pad = {l: 58, r: 24, t: 30, b: 72};
   const max = Math.max(1, ...series.flatMap(s => s.values.map(v => Math.max(0, v))));
-  drawAxes(ctx, width, height, pad);
+  drawAxes(ctx, width, height, pad, {values: true, max});
   const plotW = width - pad.l - pad.r;
   const plotH = height - pad.t - pad.b;
   const cluster = plotW / labels.length;
@@ -47,6 +55,69 @@ function drawBarChart(canvas, labels, series, title, yLabel) {
   ctx.save(); ctx.translate(16, height / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(yLabel, 0, 0); ctx.restore();
   let lx = pad.l, ly = 34;
   series.forEach(s => { ctx.fillStyle = s.color; ctx.fillRect(lx, ly, 12, 8); ctx.fillStyle = '#e8edf6'; ctx.fillText(s.name, lx + 18, ly + 8); lx += ctx.measureText(s.name).width + 48; });
+}
+function matchValueMap(matches) {
+  const map = new Map();
+  (matches || []).forEach(m => map.set(`${m.round} M${m.match}`, Number(m.score) || 0));
+  return map;
+}
+function roundValueMap(roundTotals) {
+  const map = new Map();
+  (roundTotals || []).forEach(r => map.set(r.round, Number(r.score) || 0));
+  return map;
+}
+function ranksByRoundMap(ranks) {
+  const map = new Map();
+  (ranks || []).forEach(r => map.set(r.roundLabel, r));
+  return map;
+}
+function comparisonSeries(character) {
+  const c = character.comparisons || {};
+  return [
+    c.rankPlus10 && {character: c.rankPlus10, color: '#ffd369', label: '+10 rank'},
+    c.rankMinus10 && {character: c.rankMinus10, color: '#f87171', label: '-10 rank'},
+    c.rankPlus5 && {character: c.rankPlus5, color: '#d6b04d', label: '+5 rank'},
+    c.rankMinus5 && {character: c.rankMinus5, color: '#b85866', label: '-5 rank'}
+  ].filter(Boolean);
+}
+function drawRankComparisonChart(canvas, character, title) {
+  if (!canvas || !(character.ranks || []).length) return;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width, height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  const pad = {l: 58, r: 24, t: 30, b: 72};
+  const labels = character.ranks.map(p => p.roundLabel);
+  const displayLabels = character.ranks.map(p => p.round);
+  const allRanks = [character, ...comparisonSeries(character).map(s => s.character)].flatMap(c => (c.ranks || []).map(p => p.rank));
+  const min = Math.max(1, Math.min(...allRanks) - 2), max = Math.min(86, Math.max(...allRanks) + 2);
+  drawAxes(ctx, width, height, pad, {lines: 6});
+  const xAt = i => pad.l + (width - pad.l - pad.r) * (labels.length === 1 ? .5 : i / (labels.length - 1));
+  const yAt = r => pad.t + (r - min) / (max - min || 1) * (height - pad.t - pad.b);
+  const drawSeries = (series, color, widthLine, alpha, dash = []) => {
+    const rankMap = ranksByRoundMap(series.ranks);
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = widthLine; ctx.globalAlpha = alpha; ctx.setLineDash(dash); ctx.beginPath();
+    let started = false;
+    labels.forEach((label, i) => {
+      if (!rankMap.has(label)) return;
+      const x = xAt(i), y = yAt(rankMap.get(label).rank);
+      started ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      started = true;
+    });
+    ctx.stroke(); ctx.restore();
+  };
+  comparisonSeries(character).forEach((series, index) => drawSeries(series.character, series.color, 2, .7, index < 2 ? [7, 5] : [2, 4]));
+  drawSeries(character, css('--cyan'), 4, 1);
+  const own = ranksByRoundMap(character.ranks);
+  labels.forEach((label, i) => {
+    if (!own.has(label)) return;
+    const x = xAt(i), y = yAt(own.get(label).rank);
+    ctx.fillStyle = css('--cyan'); ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+    ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 12px Georgia'; ctx.fillText(own.get(label).rank, x - 8, y - 11);
+  });
+  ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 16px Georgia'; ctx.fillText(title, pad.l, 20);
+  ctx.fillStyle = '#8ea3bf'; ctx.font = '12px Georgia';
+  displayLabels.forEach((label, i) => { const x = xAt(i); ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.55); ctx.textAlign = 'right'; ctx.fillText(label, 0, 0); ctx.restore(); });
+  ctx.save(); ctx.translate(16, height / 2); ctx.rotate(-Math.PI / 2); ctx.fillText('Rank (lower = better)', 0, 0); ctx.restore();
 }
 function drawLineChart(canvas, points, title) {
   if (!canvas || !points.length) return;
@@ -158,24 +229,37 @@ function drawHorizontalPareto(canvas, chars, metric) {
 function renderParetoTable(node, chars, metric) {
   if (!node) return;
   const sorted = chars.slice().sort((a, b) => metric.dir === 'asc' ? Number(a[metric.key]) - Number(b[metric.key]) : Number(b[metric.key]) - Number(a[metric.key]));
-  node.innerHTML = sorted.slice(0, 24).map((c, i) => `<div class="pareto-row"><span>${i + 1}</span><a href="../${c.slug}/index.html">${c.name}</a><strong>${metric.format(c[metric.key])}</strong></div>`).join('');
+  node.innerHTML = sorted.slice(0, 24).map((c, i) => `<div class="pareto-row"><span>${i + 1}</span><a href="../${c.slug}/index.html">${c.displayName || c.name}</a><strong>${metric.format(c[metric.key])}</strong></div>`).join('');
 }
 (function init() {
   const data = pageData();
   if (data.characters && document.getElementById('overview-chart')) {
     const chars = data.characters.slice().sort((a, b) => a.rank - b.rank);
-    drawBarChart(document.getElementById('overview-chart'), chars.slice(0, 24).map(c => c.name), [{name: 'Score', color: css('--cyan'), alpha: .9, values: chars.slice(0, 24).map(c => c.score)}], 'Top 24 Score Spread', 'Score');
+    drawBarChart(document.getElementById('overview-chart'), chars.slice(0, 24).map(c => c.displayName || c.name), [{name: 'Score', color: css('--cyan'), alpha: .9, values: chars.slice(0, 24).map(c => c.score)}], 'Top 24 Score Spread', 'Score');
   }
   if (data.character) {
     const c = data.character;
-    drawBarChart(document.getElementById('match-chart'), c.matches.map(m => `${m.round} M${m.match}`), [{name: c.name, color: css('--cyan'), alpha: .9, values: c.matches.map(m => m.score)}], 'Score Per Match', 'Score');
-    drawLineChart(document.getElementById('rank-chart'), c.ranks, 'Rank Trajectory');
-    drawBarChart(document.getElementById('round-chart'), c.roundTotals.map(r => r.round), [{name: c.name, color: css('--gold'), alpha: .86, values: c.roundTotals.map(r => r.score)}], 'Round Score Totals', 'Score');
+    const name = c.displayName || c.name;
+    const matchLabels = c.matches.map(m => `${m.round} M${m.match}`);
+    const matchSeries = comparisonSeries(c).slice(0, 2).map(s => {
+      const values = matchValueMap(s.character.matches);
+      return {name: `${s.character.displayName || s.character.name} ${s.label}`, color: s.color, alpha: .62, values: matchLabels.map(label => values.get(label) || 0)};
+    });
+    matchSeries.push({name, color: css('--cyan'), alpha: .95, values: c.matches.map(m => m.score)});
+    drawBarChart(document.getElementById('match-chart'), matchLabels, matchSeries, 'Score Per Match', 'Score');
+    drawRankComparisonChart(document.getElementById('rank-chart'), c, 'Rank Trajectory');
+    const roundLabels = c.roundTotals.map(r => r.round);
+    const roundSeries = comparisonSeries(c).slice(2, 4).map(s => {
+      const values = roundValueMap(s.character.roundTotals);
+      return {name: `${s.character.displayName || s.character.name} ${s.label}`, color: s.color, alpha: .62, values: roundLabels.map(label => values.get(label) || 0)};
+    });
+    roundSeries.splice(1, 0, {name, color: css('--cyan'), alpha: .95, values: c.roundTotals.map(r => r.score)});
+    drawBarChart(document.getElementById('round-chart'), roundLabels, roundSeries, 'Round Score Totals vs. Rank ±5', 'Score');
   }
   if (data.characters && document.getElementById('rank-atlas-chart')) {
     const select = document.getElementById('rank-highlight');
     const chars = data.characters.slice().sort((a, b) => a.rank - b.rank);
-    select.innerHTML = chars.map(c => `<option value="${c.name}">${c.name} (#${c.rank})</option>`).join('');
+    select.innerHTML = chars.map(c => `<option value="${c.name}">${c.displayName || c.name} (#${c.rank})</option>`).join('');
     if (select.options.length) select.options[0].selected = true;
     const selectedNames = () => Array.from(select.selectedOptions).map(option => option.value);
     const redraw = () => drawRankAtlas(document.getElementById('rank-atlas-chart'), chars, selectedNames());

@@ -85,7 +85,13 @@ h2 { font-size: 28px; }
 .stat-wall div, .hero-metrics div { background: rgba(18,31,52,.74); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }
 .stat-wall strong, .hero-metrics strong { display: block; font-size: 28px; color: var(--gold); }
 .stat-wall span, .hero-metrics span { color: var(--muted); font-size: 12px; text-transform: uppercase; font-weight: 800; }
-.overview-grid { display: grid; grid-template-columns: .85fr 1.35fr; gap: 18px; }
+.overview-grid { display: grid; grid-template-columns: minmax(380px, .78fr) minmax(640px, 1.42fr); gap: 18px; align-items: stretch; }
+.leaderboard-panel, .overview-grid .chart-panel { max-height: 460px; overflow: auto; scrollbar-width: thin; scrollbar-color: rgba(0,200,255,.55) rgba(8,17,31,.42); }
+.overview-grid .chart-panel { min-height: 420px; }
+.overview-grid .chart-panel canvas { min-width: 980px; }
+.leaderboard-panel::-webkit-scrollbar, .overview-grid .chart-panel::-webkit-scrollbar { width: 10px; height: 10px; }
+.leaderboard-panel::-webkit-scrollbar-thumb, .overview-grid .chart-panel::-webkit-scrollbar-thumb { background: rgba(0,200,255,.55); border-radius: 999px; }
+.leaderboard-panel::-webkit-scrollbar-track, .overview-grid .chart-panel::-webkit-scrollbar-track { background: rgba(8,17,31,.42); }
 .analysis-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 18px 0 6px; }
 .analysis-card { display: block; padding: 22px; background: rgba(18,31,52,.76); border: 1px solid var(--line); border-radius: 8px; }
 .analysis-card span { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: .12em; }
@@ -105,17 +111,23 @@ h2 { font-size: 28px; }
 .tile-info { position: absolute; inset: auto 0 0; padding: 42px 12px 12px; background: linear-gradient(transparent, rgba(8,17,31,.96)); }
 .tile-info span { color: var(--gold); font-weight: 900; }
 .tile-info strong { display: block; font-size: 17px; }
-.fighter-hero { min-height: 360px; grid-template-columns: minmax(420px, 720px) 1fr; padding: 46px 0 24px; }
+.fighter-hero { min-height: 330px; grid-template-columns: minmax(520px, 880px) 1fr; padding: 46px 0 24px; }
 .fighter-copy { padding: 22px 0; }
 .fighter-copy h1 { max-width: 680px; font-size: clamp(58px, 7vw, 112px); line-height: .9; text-shadow: 0 4px 0 rgba(0,0,0,.45); }
+.fighter-title-row { display: flex; align-items: center; gap: 22px; }
+.profile-icon { flex: 0 0 auto; width: 118px; height: 118px; object-fit: contain; border-radius: 50%; background: rgba(8,17,31,.58); border: 1px solid rgba(238,218,255,.32); box-shadow: 0 18px 42px rgba(0,0,0,.34); }
+.profile-icon.initial { display: grid; place-items: center; font-size: 58px; }
 .crumb { color: var(--muted); font-size: 13px; }
 .hero-metrics { display: grid; grid-template-columns: repeat(4, minmax(120px, 1fr)); gap: 10px; margin-top: 26px; max-width: 740px; }
 .fighter-card-page .hero-metrics div { background: rgba(18,31,52,.84); }
 .fighter-art { position: relative; overflow: hidden; border-radius: 8px; border: 1px solid var(--line); background: rgba(18,31,52,.65); min-height: 360px; display: grid; place-items: center; }
 .profile-model { width: 100%; height: 100%; object-fit: cover; opacity: .86; }
-.profile-chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding-bottom: 56px; max-width: 1120px; }
+.profile-chart-grid { display: grid; grid-template-columns: 1.15fr .85fr; gap: 18px; padding-bottom: 56px; max-width: 1380px; }
 .fighter-card-page .chart-panel { background: rgba(17,28,47,.88); backdrop-filter: blur(6px); }
 .profile-chart-grid .wide { grid-column: 1 / -1; }
+.profile-chart-grid .chart-panel { overflow-x: auto; }
+.profile-chart-grid canvas { min-width: 820px; }
+.profile-chart-grid .wide canvas { min-width: 1180px; }
 .analysis-hero { padding: 42px 0 26px; }
 .atlas-panel, .pareto-panel { margin-bottom: 56px; }
 .split-heading { display: flex; justify-content: space-between; gap: 16px; align-items: end; margin-bottom: 16px; }
