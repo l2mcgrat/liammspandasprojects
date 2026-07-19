@@ -76,9 +76,11 @@ function drawBarChart(canvas, labels, series, title, yLabel, opts = {}) {
     ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.55); ctx.textAlign = 'right'; ctx.fillText(label, 0, 0); ctx.restore();
   });
   ctx.save(); ctx.translate(16, height / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(yLabel, 0, 0); ctx.restore();
-  let lx = pad.l, ly = 34;
-  series.forEach(s => { ctx.fillStyle = s.color; ctx.fillRect(lx, ly, 12, 8); ctx.fillStyle = '#e8edf6'; ctx.fillText(s.name, lx + 18, ly + 8); lx += ctx.measureText(s.name).width + 48; });
-  if (line) { ctx.strokeStyle = line.color || css('--gold'); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(lx, ly + 4); ctx.lineTo(lx + 18, ly + 4); ctx.stroke(); ctx.fillStyle = '#e8edf6'; ctx.fillText(line.name || line.label || 'Total Score', lx + 24, ly + 8); }
+  if (!opts.hideLegend) {
+    let lx = pad.l, ly = 34;
+    series.forEach(s => { ctx.fillStyle = s.color; ctx.fillRect(lx, ly, 12, 8); ctx.fillStyle = '#e8edf6'; ctx.fillText(s.name, lx + 18, ly + 8); lx += ctx.measureText(s.name).width + 48; });
+    if (line) { ctx.strokeStyle = line.color || css('--gold'); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(lx, ly + 4); ctx.lineTo(lx + 18, ly + 4); ctx.stroke(); ctx.fillStyle = '#e8edf6'; ctx.fillText(line.name || line.label || 'Total Score', lx + 24, ly + 8); }
+  }
 }
 function matchValueMap(matches) {
   const map = new Map();
@@ -194,10 +196,12 @@ function drawLineChart(canvas, points, title) {
   ctx.fillStyle = '#8ea3bf'; ctx.font = '12px Georgia';
   points.forEach((p, i) => { const x = xAt(i); ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.55); ctx.textAlign = 'right'; ctx.fillText(p.round, 0, 0); ctx.restore(); });
 }
+const ROUND_ORDER = {round_1:1, round_2:2, elimination_1:3, round_3:4, elimination_2:5, round_4:6, elimination_3:7, round_5:8};
 function allRounds(chars) {
   const seen = new Map();
   chars.forEach(c => (c.ranks || []).forEach(p => { if (!seen.has(p.roundLabel)) seen.set(p.roundLabel, p.round); }));
-  return Array.from(seen, ([roundLabel, round]) => ({roundLabel, round}));
+  return Array.from(seen, ([roundLabel, round]) => ({roundLabel, round}))
+    .sort((a, b) => (ROUND_ORDER[a.roundLabel] || 99) - (ROUND_ORDER[b.roundLabel] || 99));
 }
 function drawRankAtlas(canvas, chars, highlightNames) {
   if (!canvas || !chars.length) return;
@@ -296,6 +300,52 @@ function drawScoreAtlas(canvas, chars, highlightNames) {
     }
   });
 }
+function drawOppRankAtlas(canvas, opps, highlightNames) {
+  if (!canvas || !opps.length) return;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width, height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  const highlightSet = new Set(highlightNames || []);
+  const pad = {l: 70, r: 190, t: 40, b: 82};
+  const seen = new Map();
+  opps.forEach(o => (o.oppRanks || []).forEach(p => { if (!seen.has(p.roundLabel)) seen.set(p.roundLabel, p.round); }));
+  const rounds = Array.from(seen, ([rl, r]) => ({roundLabel: rl, round: r}))
+    .sort((a, b) => (ROUND_ORDER[a.roundLabel] || 99) - (ROUND_ORDER[b.roundLabel] || 99));
+  if (!rounds.length) return;
+  const xAt = i => pad.l + (width - pad.l - pad.r) * (rounds.length === 1 ? .5 : i / (rounds.length - 1));
+  const yAt = rank => pad.t + (rank - 1) / (opps.length - 1) * (height - pad.t - pad.b);
+  drawAxes(ctx, width, height, pad, {lines: 8});
+  ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 18px Georgia'; ctx.fillText('Every Opponent Rank Trajectory', pad.l, 24);
+  rounds.forEach((r, i) => { const x = xAt(i); ctx.fillStyle = '#8ea3bf'; ctx.font = '13px Georgia'; ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.45); ctx.textAlign = 'right'; ctx.fillText(r.round, 0, 0); ctx.restore(); });
+  const colors = ['#c084fc','#ffd369','#4ade80','#f87171','#b07aa1','#76b7b2','#edc948','#e15759'];
+  const highlightColors = ['#c084fc','#ffd369','#4ade80','#f87171','#f0abfc','#38bdf8','#fb923c','#c4b5fd'];
+  let highlightIndex = 0;
+  opps.forEach((o, oi) => {
+    const map = new Map((o.oppRanks || []).map(p => [p.roundLabel, p.rank]));
+    const isHi = highlightSet.has(o.name);
+    const hiColor = highlightColors[highlightIndex % highlightColors.length];
+    if (isHi) highlightIndex++;
+    ctx.strokeStyle = isHi ? hiColor : colors[oi % colors.length];
+    ctx.globalAlpha = isHi ? 1 : 0.16; ctx.lineWidth = isHi ? 4 : 1.2;
+    ctx.beginPath(); let started = false;
+    rounds.forEach((r, i) => {
+      if (!map.has(r.roundLabel)) return;
+      const x = xAt(i), y = yAt(map.get(r.roundLabel));
+      started ? ctx.lineTo(x, y) : ctx.moveTo(x, y); started = true;
+    });
+    ctx.stroke(); ctx.globalAlpha = 1;
+    if (isHi) {
+      rounds.forEach((r, i) => {
+        if (!map.has(r.roundLabel)) return;
+        const x = xAt(i), y = yAt(map.get(r.roundLabel));
+        ctx.fillStyle = hiColor; ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 12px Georgia'; ctx.fillText(map.get(r.roundLabel), x - 8, y - 11);
+      });
+      const last = o.oppRanks[o.oppRanks.length - 1];
+      ctx.fillStyle = hiColor; ctx.font = 'bold 15px Georgia'; ctx.fillText(`${o.displayName || o.name} #${last.rank}`, width - pad.r + 20, yAt(last.rank) + 5);
+    }
+  });
+}
 const PARETO_METRICS = [
   {key: 'score', label: 'Total Score', dir: 'desc', format: v => Number(v).toFixed(2)},
   {key: 'rank', label: 'Current Rank', dir: 'asc', format: v => `#${v}`},
@@ -342,11 +392,56 @@ function renderParetoTable(node, chars, metric) {
   const data = pageData();
   if (data.characters && document.getElementById('overview-chart')) {
     const chars = data.characters.slice().sort((a, b) => a.rank - b.rank);
-    drawBarChart(document.getElementById('overview-chart'), chars.slice(0, 24).map(c => c.displayName || c.name), [{name: 'Score', color: css('--cyan'), alpha: .9, values: chars.slice(0, 24).map(c => c.score)}], 'Top 24 Score Spread', 'Score');
+    // Build sorted round list from all characters' rank history
+    const seenRds = new Map();
+    chars.forEach(c => (c.ranks || []).forEach(r => { if (!seenRds.has(r.roundLabel)) seenRds.set(r.roundLabel, r.round); }));
+    const roundList = Array.from(seenRds, ([rl, r]) => ({roundLabel: rl, round: r}))
+      .sort((a, b) => (ROUND_ORDER[a.roundLabel] || 99) - (ROUND_ORDER[b.roundLabel] || 99));
+    const defaultRound = roundList.length ? roundList[roundList.length - 1].roundLabel : 'current';
+
+    function renderSmashRound(roundLabel) {
+      document.querySelectorAll('.round-pill').forEach(btn => btn.classList.toggle('active', btn.dataset.round === roundLabel));
+      let sorted;
+      if (!roundLabel || roundLabel === 'current') {
+        sorted = chars.map(c => ({...c, _rank: c.rank, _score: Number(c.score)}));
+      } else {
+        const upTo = ROUND_ORDER[roundLabel] || 99;
+        sorted = chars.map(c => {
+          const cumScore = (c.roundTotals || [])
+            .filter(rt => (ROUND_ORDER[rt.roundLabel] || 0) <= upTo && (ROUND_ORDER[rt.roundLabel] || 0) > 0)
+            .reduce((s, rt) => s + Number(rt.score), 0);
+          return {...c, _score: cumScore};
+        }).sort((a, b) => b._score - a._score).map((c, i) => ({...c, _rank: i + 1}));
+      }
+      const leaderEl = document.getElementById('smash-leader-list');
+      if (leaderEl) {
+        leaderEl.innerHTML = sorted.map(c =>
+          `<li><span>#${c._rank}</span><a href="${c.slug}/index.html">${c.displayName || c.name}</a><strong>${c._score.toFixed(2)}</strong></li>`
+        ).join('');
+      }
+      const top16 = sorted.slice(0, 16);
+      drawBarChart(document.getElementById('overview-chart'),
+        top16.map(c => c.displayName || c.name),
+        [{name: 'Score', color: css('--cyan'), alpha: .9, values: top16.map(c => c._score)}],
+        'Top 16 Score Spread', 'Score', {hideLegend: true});
+    }
+
+    const pillsEl = document.getElementById('round-pills');
+    if (pillsEl) {
+      roundList.forEach(r => {
+        const btn = document.createElement('button');
+        btn.className = 'round-pill' + (r.roundLabel === defaultRound ? ' active' : '');
+        btn.dataset.round = r.roundLabel;
+        btn.textContent = r.round;
+        btn.addEventListener('click', () => renderSmashRound(r.roundLabel));
+        pillsEl.appendChild(btn);
+      });
+    }
+    renderSmashRound(defaultRound);
   }
   if (data.opponents && document.getElementById('opp-overview-chart')) {
-    const opps = data.opponents.slice(0, 24);
-    drawBarChart(document.getElementById('opp-overview-chart'), opps.map(o => o.displayName || o.name), [{name: 'Total NT Score', color: '#c084fc', alpha: .9, values: opps.map(o => Number(o.totalNtScore))}], 'Top 24 Opponent NT Scores', 'Total NT Score');
+    const opps = data.opponents.slice(0, 16);
+    drawBarChart(document.getElementById('opp-overview-chart'), opps.map(o => o.displayName || o.name), [{name: 'Total NT Score', color: '#c084fc', alpha: .9, values: opps.map(o => Number(o.totalNtScore))}], 'Top 16 Opponent NT Scores', 'Total NT Score', {hideLegend: true});
   }
   if (data.character) {
     const c = data.character;
@@ -411,6 +506,16 @@ function renderParetoTable(node, chars, metric) {
     if (select.options.length) select.options[0].selected = true;
     const selectedNames = () => Array.from(select.selectedOptions).map(option => option.value);
     const redraw = () => drawRankAtlas(document.getElementById('rank-atlas-chart'), chars, selectedNames());
+    select.addEventListener('change', redraw);
+    redraw();
+  }
+  if (data.opponents && document.getElementById('opp-rank-atlas-chart')) {
+    const select = document.getElementById('opp-rank-highlight');
+    const opps = data.opponents.slice().sort((a, b) => a.oppRank - b.oppRank);
+    select.innerHTML = opps.map(o => `<option value="${o.name}">${o.displayName || o.name} (#${o.oppRank})</option>`).join('');
+    if (select.options.length) select.options[0].selected = true;
+    const selectedNames = () => Array.from(select.selectedOptions).map(opt => opt.value);
+    const redraw = () => drawOppRankAtlas(document.getElementById('opp-rank-atlas-chart'), opps, selectedNames());
     select.addEventListener('change', redraw);
     redraw();
   }

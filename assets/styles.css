@@ -87,12 +87,17 @@ h2 { font-size: 28px; }
 .stat-wall strong, .hero-metrics strong { display: block; font-size: 28px; color: var(--gold); }
 .stat-wall span, .hero-metrics span { color: var(--muted); font-size: 12px; text-transform: uppercase; font-weight: 800; }
 .overview-grid { display: grid; grid-template-columns: minmax(380px, .78fr) minmax(640px, 1.42fr); gap: 18px; align-items: stretch; }
-.leaderboard-panel, .overview-grid .chart-panel { max-height: 460px; overflow: auto; scrollbar-width: thin; scrollbar-color: rgba(0,200,255,.55) rgba(8,17,31,.42); }
-.overview-grid .chart-panel { min-height: 420px; }
-.overview-grid .chart-panel canvas { min-width: 980px; }
-.leaderboard-panel::-webkit-scrollbar, .overview-grid .chart-panel::-webkit-scrollbar { width: 10px; height: 10px; }
-.leaderboard-panel::-webkit-scrollbar-thumb, .overview-grid .chart-panel::-webkit-scrollbar-thumb { background: rgba(0,200,255,.55); border-radius: 999px; }
-.leaderboard-panel::-webkit-scrollbar-track, .overview-grid .chart-panel::-webkit-scrollbar-track { background: rgba(8,17,31,.42); }
+.leaderboard-panel { max-height: 460px; overflow-y: auto; scrollbar-width: thin; scrollbar-color: rgba(0,200,255,.55) rgba(8,17,31,.42); }
+.overview-grid .chart-panel { min-height: 420px; overflow: visible; }
+.leaderboard-panel::-webkit-scrollbar { width: 10px; }
+.leaderboard-panel::-webkit-scrollbar-thumb { background: rgba(0,200,255,.55); border-radius: 999px; }
+.leaderboard-panel::-webkit-scrollbar-track { background: rgba(8,17,31,.42); }
+.round-selector-bar { display: flex; align-items: center; gap: 14px; margin: 6px 0 18px; flex-wrap: wrap; }
+.round-selector-bar .eyebrow { margin: 0; white-space: nowrap; }
+.round-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+.round-pill { padding: 7px 16px; border-radius: 6px; border: 1px solid var(--line); background: rgba(18,31,52,.74); color: var(--muted); font: inherit; font-size: 13px; font-weight: 800; cursor: pointer; transition: background .14s, color .14s; }
+.round-pill:hover { background: rgba(18,31,52,1); color: var(--text); }
+.round-pill.active { background: var(--cyan); color: #06101b; border-color: transparent; }
 .analysis-links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 18px 0 6px; }
 .analysis-card { display: block; padding: 22px; background: rgba(18,31,52,.76); border: 1px solid var(--line); border-radius: 8px; }
 .analysis-card span { display: block; color: var(--muted); font-size: 12px; text-transform: uppercase; font-weight: 800; letter-spacing: .12em; }
