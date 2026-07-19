@@ -85,6 +85,38 @@ function matchValueMap(matches) {
   (matches || []).forEach(m => map.set(`${m.round} M${m.match}`, Number(m.score) || 0));
   return map;
 }
+function drawCustomBarChart(canvas, labels, values, colors, title, yLabel) {
+  if (!canvas || !labels.length) return;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width, height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  const pad = {l: 58, r: 24, t: 30, b: 72};
+  const max = Math.max(0.01, ...values.map(v => Math.abs(v)));
+  drawAxes(ctx, width, height, pad, {values: true, max});
+  const plotW = width - pad.l - pad.r;
+  const plotH = height - pad.t - pad.b;
+  const barW = Math.max(8, plotW / labels.length * 0.65);
+  values.forEach((v, i) => {
+    const x = pad.l + i * (plotW / labels.length) + (plotW / labels.length) / 2;
+    const h = Math.max(1, (Math.abs(v) / max) * plotH);
+    ctx.fillStyle = colors[i] || '#c084fc';
+    ctx.globalAlpha = 0.85;
+    ctx.fillRect(x - barW / 2, height - pad.b - h, barW, h);
+    ctx.globalAlpha = 1;
+    if (Math.abs(v) > 0.01) {
+      ctx.fillStyle = '#e8edf6'; ctx.font = '9px Georgia'; ctx.textAlign = 'center';
+      ctx.fillText(v.toFixed(2), x, height - pad.b - h - 4);
+      ctx.textAlign = 'left';
+    }
+  });
+  ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 16px Georgia'; ctx.fillText(title, pad.l, 20);
+  ctx.fillStyle = '#8ea3bf'; ctx.font = '11px Georgia';
+  labels.forEach((label, i) => {
+    const x = pad.l + i * (plotW / labels.length) + (plotW / labels.length) / 2;
+    ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.55); ctx.textAlign = 'right'; ctx.fillText(label, 0, 0); ctx.restore();
+  });
+  ctx.save(); ctx.translate(16, height / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(yLabel, 0, 0); ctx.restore();
+}
 function roundValueMap(roundTotals) {
   const map = new Map();
   (roundTotals || []).forEach(r => map.set(r.round, Number(r.score) || 0));
@@ -312,6 +344,10 @@ function renderParetoTable(node, chars, metric) {
     const chars = data.characters.slice().sort((a, b) => a.rank - b.rank);
     drawBarChart(document.getElementById('overview-chart'), chars.slice(0, 24).map(c => c.displayName || c.name), [{name: 'Score', color: css('--cyan'), alpha: .9, values: chars.slice(0, 24).map(c => c.score)}], 'Top 24 Score Spread', 'Score');
   }
+  if (data.opponents && document.getElementById('opp-overview-chart')) {
+    const opps = data.opponents.slice(0, 24);
+    drawBarChart(document.getElementById('opp-overview-chart'), opps.map(o => o.displayName || o.name), [{name: 'Total NT Score', color: '#c084fc', alpha: .9, values: opps.map(o => Number(o.totalNtScore))}], 'Top 24 Opponent NT Scores', 'Total NT Score');
+  }
   if (data.character) {
     const c = data.character;
     const name = c.displayName || c.name;
@@ -330,6 +366,43 @@ function renderParetoTable(node, chars, metric) {
     });
     roundSeries.splice(1, 0, {name, color: css('--cyan'), alpha: .95, values: c.roundTotals.map(r => r.score)});
     drawBarChart(document.getElementById('round-chart'), roundLabels, roundSeries, 'Round Score Totals vs. Rank ±5', 'Score');
+
+    // ── Opponent section ──────────────────────────────────────────────────
+    const opp = c.opponent;
+    if (opp && opp.totalAppearances) {
+      const kpiWrap = document.getElementById('opp-kpis');
+      if (kpiWrap) {
+        const kpis = [
+          ['Appearances', opp.totalAppearances],
+          ['W / L', `${opp.wins} / ${opp.losses}`],
+          ['Win Rate', `${(opp.winRate * 100).toFixed(0)}%`],
+          ['Total NT', opp.totalNtScore.toFixed(2)],
+          ['Avg NT', opp.avgNtScore.toFixed(3)],
+        ];
+        kpiWrap.innerHTML = kpis.map(([lbl, val]) =>
+          `<div class="opp-kpi"><strong>${val}</strong><span>${lbl}</span></div>`
+        ).join('');
+      }
+      const oppCanvas = document.getElementById('opp-chart');
+      if (oppCanvas && opp.appearances.length) {
+        const oppLabels = opp.appearances.map(a => `${a.round}\nM${a.matchNum}\nvs ${a.against.substring(0,7)}`);
+        const oppVals = opp.appearances.map(a => a.ntScore);
+        const oppColors = opp.appearances.map(a => a.win ? '#4ade80' : '#f87171');
+        drawCustomBarChart(oppCanvas, oppLabels, oppVals, oppColors, 'NT Score Per Appearance as Opponent  (green = won)', 'NT Score');
+      }
+      const oppRoundCanvas = document.getElementById('opp-round-chart');
+      if (oppRoundCanvas && opp.roundTotals.length) {
+        const oppRoundLabels = opp.roundTotals.map(r => r.round);
+        const oppRoundVals = opp.roundTotals.map(r => r.ntScore);
+        drawCustomBarChart(oppRoundCanvas, oppRoundLabels, oppRoundVals, Array(oppRoundVals.length).fill('#c084fc'), 'NT Score by Round as Opponent', 'Total NT Score');
+      }
+      const logEl = document.getElementById('opp-log');
+      if (logEl) {
+        logEl.innerHTML = opp.appearances.map(a =>
+          `<div class="opp-row"><span class="opp-round">${a.round} M${a.matchNum}</span><span class="${a.win ? 'opp-win' : 'opp-loss'}">${a.win ? 'W' : 'L'}</span><span>vs ${a.against}</span><span class="opp-nt">${a.ntScore.toFixed(2)}</span></div>`
+        ).join('');
+      }
+    }
   }
   if (data.characters && document.getElementById('rank-atlas-chart')) {
     const select = document.getElementById('rank-highlight');
