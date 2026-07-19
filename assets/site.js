@@ -1,6 +1,5 @@
 function pageData() {
-  const node = document.getElementById('page-data');
-  return node ? JSON.parse(node.textContent) : {};
+  return window.PAGE_DATA || {};
 }
 function css(name) { return getComputedStyle(document.documentElement).getPropertyValue(name).trim(); }
 function drawAxes(ctx, width, height, pad, opts = {}) {
