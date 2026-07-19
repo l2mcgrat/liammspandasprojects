@@ -404,13 +404,12 @@ function renderParetoTable(node, chars, metric) {
       if (!roundLabel || roundLabel === 'current') {
         sorted = chars.map(c => ({...c, _rank: c.rank, _score: Number(c.score)}));
       } else {
-        const upTo = ROUND_ORDER[roundLabel] || 99;
+        // Use the adjusted score from the rank entry (accounts for inter-round reductions)
         sorted = chars.map(c => {
-          const cumScore = (c.roundTotals || [])
-            .filter(rt => (ROUND_ORDER[rt.roundLabel] || 0) <= upTo && (ROUND_ORDER[rt.roundLabel] || 0) > 0)
-            .reduce((s, rt) => s + Number(rt.score), 0);
-          return {...c, _score: cumScore};
-        }).sort((a, b) => b._score - a._score).map((c, i) => ({...c, _rank: i + 1}));
+          const rankEntry = (c.ranks || []).find(r => r.roundLabel === roundLabel);
+          const adjustedScore = rankEntry ? Number(rankEntry.score) || 0 : 0;
+          return {...c, _score: adjustedScore};
+        }).filter(c => c._score > 0).sort((a, b) => b._score - a._score).map((c, i) => ({...c, _rank: i + 1}));
       }
       const leaderEl = document.getElementById('smash-leader-list');
       if (leaderEl) {
