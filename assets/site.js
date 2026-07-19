@@ -480,7 +480,7 @@ function renderParetoTable(node, chars, metric) {
       }
       const oppCanvas = document.getElementById('opp-chart');
       if (oppCanvas && opp.appearances.length) {
-        const oppLabels = opp.appearances.map(a => `${a.round}\nM${a.matchNum}\nvs ${a.against.substring(0,7)}`);
+        const oppLabels = opp.appearances.map(a => a.against);
         const oppVals = opp.appearances.map(a => a.ntScore);
         const oppColors = opp.appearances.map(a => a.win ? '#4ade80' : '#f87171');
         drawCustomBarChart(oppCanvas, oppLabels, oppVals, oppColors, 'NT Score Per Appearance as Opponent  (green = won)', 'NT Score');
