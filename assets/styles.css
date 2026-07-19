@@ -79,7 +79,8 @@ h2 { font-size: 28px; }
 .fighter-card-page { position: relative; min-height: calc(100vh - 65px); isolation: isolate; }
 .fighter-card-page::before { content: ""; position: fixed; inset: 65px 0 0; z-index: -3; background: linear-gradient(90deg, rgba(8,17,31,.98) 0%, rgba(8,17,31,.92) 46%, rgba(8,17,31,.48) 72%, rgba(8,17,31,.18) 100%); pointer-events: none; }
 .fighter-card-page::after { content: ""; position: fixed; inset: 65px 0 0; z-index: -2; background: repeating-linear-gradient(135deg, rgba(255,255,255,.045) 0 1px, transparent 1px 12px); opacity: .28; pointer-events: none; }
-.fighter-bg { position: fixed; inset: 65px 0 0; z-index: -4; background-repeat: no-repeat; background-position: right center; background-size: min(72vw, 980px) auto; opacity: .86; filter: saturate(1.08) contrast(1.04); pointer-events: none; }
+.fighter-bg { position: fixed; inset: 65px 0 0; z-index: -4; pointer-events: none; display: flex; align-items: flex-end; justify-content: flex-end; overflow: hidden; }
+.fighter-model-img { flex: 0 0 auto; height: min(94vh, 940px); width: auto; max-width: min(74vw, 1040px); object-fit: contain; object-position: right bottom; opacity: .92; filter: drop-shadow(-28px -6px 44px rgba(0,0,0,.56)) saturate(1.12) contrast(1.05); }
 .fighter-watermark { position: fixed; right: 10vw; top: 20vh; z-index: -4; font-size: min(40vw, 540px); font-weight: 900; color: rgba(232,237,246,.08); pointer-events: none; }
 .stat-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .stat-wall div, .hero-metrics div { background: rgba(18,31,52,.74); border: 1px solid var(--line); border-radius: 8px; padding: 18px; }

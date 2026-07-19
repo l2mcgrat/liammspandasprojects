@@ -24,12 +24,13 @@ function drawAxes(ctx, width, height, pad, opts = {}) {
     }
   }
 }
-function drawBarChart(canvas, labels, series, title, yLabel) {
+function drawBarChart(canvas, labels, series, title, yLabel, opts = {}) {
   if (!canvas || !labels.length) return;
   const ctx = canvas.getContext('2d');
   const width = canvas.width, height = canvas.height;
   ctx.clearRect(0, 0, width, height);
-  const pad = {l: 58, r: 24, t: 30, b: 72};
+  const line = opts.line || null;
+  const pad = {l: 58, r: line ? 70 : 24, t: 30, b: 72};
   const max = Math.max(1, ...series.flatMap(s => s.values.map(v => Math.max(0, v))));
   drawAxes(ctx, width, height, pad, {values: true, max});
   const plotW = width - pad.l - pad.r;
@@ -46,6 +47,28 @@ function drawBarChart(canvas, labels, series, title, yLabel) {
       ctx.globalAlpha = 1;
     });
   });
+  if (line && (line.values || []).length) {
+    const lineMax = Math.max(1, ...line.values.map(v => Math.max(0, Number(v) || 0)));
+    const xAt = i => pad.l + i * cluster + cluster / 2;
+    const yAt = v => pad.t + (1 - (Number(v) || 0) / lineMax) * plotH;
+    ctx.strokeStyle = line.color || css('--gold');
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    line.values.forEach((v, i) => { const x = xAt(i), y = yAt(v); i ? ctx.lineTo(x, y) : ctx.moveTo(x, y); });
+    ctx.stroke();
+    line.values.forEach((v, i) => {
+      const x = xAt(i), y = yAt(v);
+      ctx.fillStyle = line.color || css('--gold'); ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 10px Georgia'; ctx.textAlign = 'center'; ctx.fillText(Number(v).toFixed(1), x, y - 8); ctx.textAlign = 'left';
+    });
+    ctx.fillStyle = '#8ea3bf'; ctx.font = '12px Georgia';
+    for (let i = 0; i <= 5; i++) {
+      const value = lineMax - (lineMax * i / 5);
+      const y = pad.t + plotH * i / 5;
+      ctx.fillText(value.toFixed(lineMax >= 10 ? 0 : 1), width - pad.r + 8, y + 4);
+    }
+    ctx.save(); ctx.translate(width - 18, height / 2); ctx.rotate(Math.PI / 2); ctx.fillText(line.label || 'Total Score', 0, 0); ctx.restore();
+  }
   ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 16px Georgia'; ctx.fillText(title, pad.l, 20);
   ctx.fillStyle = '#8ea3bf'; ctx.font = '12px Georgia';
   labels.forEach((label, i) => {
@@ -55,6 +78,7 @@ function drawBarChart(canvas, labels, series, title, yLabel) {
   ctx.save(); ctx.translate(16, height / 2); ctx.rotate(-Math.PI / 2); ctx.fillText(yLabel, 0, 0); ctx.restore();
   let lx = pad.l, ly = 34;
   series.forEach(s => { ctx.fillStyle = s.color; ctx.fillRect(lx, ly, 12, 8); ctx.fillStyle = '#e8edf6'; ctx.fillText(s.name, lx + 18, ly + 8); lx += ctx.measureText(s.name).width + 48; });
+  if (line) { ctx.strokeStyle = line.color || css('--gold'); ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(lx, ly + 4); ctx.lineTo(lx + 18, ly + 4); ctx.stroke(); ctx.fillStyle = '#e8edf6'; ctx.fillText(line.name || line.label || 'Total Score', lx + 24, ly + 8); }
 }
 function matchValueMap(matches) {
   const map = new Map();
@@ -189,6 +213,57 @@ function drawRankAtlas(canvas, chars, highlightNames) {
     }
   });
 }
+function drawScoreAtlas(canvas, chars, highlightNames) {
+  if (!canvas || !chars.length) return;
+  const ctx = canvas.getContext('2d');
+  const width = canvas.width, height = canvas.height;
+  ctx.clearRect(0, 0, width, height);
+  const highlightSet = new Set(highlightNames || []);
+  const pad = {l: 76, r: 210, t: 40, b: 82};
+  const rounds = allRounds(chars);
+  const allScores = chars.flatMap(c => (c.matches || []).map(m => Number(m.accumulatedScore) || 0));
+  const max = Math.max(1, ...allScores);
+  const xAt = i => pad.l + (width - pad.l - pad.r) * (rounds.length === 1 ? .5 : i / (rounds.length - 1));
+  const yAt = score => pad.t + (1 - score / max) * (height - pad.t - pad.b);
+  drawAxes(ctx, width, height, pad, {values: true, max, lines: 8});
+  ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 18px Georgia'; ctx.fillText('Every Character Total Score Trajectory', pad.l, 24);
+  rounds.forEach((r, i) => { const x = xAt(i); ctx.fillStyle = '#8ea3bf'; ctx.font = '13px Georgia'; ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.45); ctx.textAlign = 'right'; ctx.fillText(r.round, 0, 0); ctx.restore(); });
+  const colors = ['#00c8ff', '#ffd369', '#4ade80', '#f87171', '#b07aa1', '#76b7b2', '#edc948', '#e15759'];
+  const highlightColors = ['#00c8ff', '#ffd369', '#4ade80', '#f87171', '#f0abfc', '#38bdf8', '#fb923c', '#c4b5fd'];
+  let highlightIndex = 0;
+  chars.forEach((c, ci) => {
+    const map = new Map();
+    (c.matches || []).forEach(m => map.set(m.roundLabel, Number(m.accumulatedScore) || 0));
+    const isHi = highlightSet.has(c.name);
+    const hiColor = highlightColors[highlightIndex % highlightColors.length];
+    if (isHi) highlightIndex += 1;
+    ctx.strokeStyle = isHi ? hiColor : colors[ci % colors.length];
+    ctx.globalAlpha = isHi ? 1 : 0.14;
+    ctx.lineWidth = isHi ? 4 : 1.2;
+    ctx.beginPath();
+    let started = false;
+    rounds.forEach((r, i) => {
+      if (!map.has(r.roundLabel)) return;
+      const x = xAt(i), y = yAt(map.get(r.roundLabel));
+      started ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      started = true;
+    });
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+    if (isHi) {
+      let lastScore = null;
+      rounds.forEach((r, i) => {
+        if (!map.has(r.roundLabel)) return;
+        const score = map.get(r.roundLabel);
+        const x = xAt(i), y = yAt(score);
+        lastScore = score;
+        ctx.fillStyle = hiColor; ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 12px Georgia'; ctx.fillText(score.toFixed(1), x + 8, y - 8);
+      });
+      if (lastScore !== null) { ctx.fillStyle = hiColor; ctx.font = 'bold 15px Georgia'; ctx.fillText(`${c.name} ${lastScore.toFixed(1)}`, width - pad.r + 20, yAt(lastScore) + 5); }
+    }
+  });
+}
 const PARETO_METRICS = [
   {key: 'score', label: 'Total Score', dir: 'desc', format: v => Number(v).toFixed(2)},
   {key: 'rank', label: 'Current Rank', dir: 'asc', format: v => `#${v}`},
@@ -246,7 +321,7 @@ function renderParetoTable(node, chars, metric) {
       return {name: `${s.character.displayName || s.character.name} ${s.label}`, color: s.color, alpha: .62, values: matchLabels.map(label => values.get(label) || 0)};
     });
     matchSeries.push({name, color: css('--cyan'), alpha: .95, values: c.matches.map(m => m.score)});
-    drawBarChart(document.getElementById('match-chart'), matchLabels, matchSeries, 'Score Per Match', 'Score');
+    drawBarChart(document.getElementById('match-chart'), matchLabels, matchSeries, 'Score Per Match', 'Score', {line: {name: `${name} Total`, label: 'Total Score', color: css('--gold'), values: c.matches.map(m => m.accumulatedScore)}});
     drawRankComparisonChart(document.getElementById('rank-chart'), c, 'Rank Trajectory');
     const roundLabels = c.roundTotals.map(r => r.round);
     const roundSeries = comparisonSeries(c).slice(2, 4).map(s => {
@@ -263,6 +338,16 @@ function renderParetoTable(node, chars, metric) {
     if (select.options.length) select.options[0].selected = true;
     const selectedNames = () => Array.from(select.selectedOptions).map(option => option.value);
     const redraw = () => drawRankAtlas(document.getElementById('rank-atlas-chart'), chars, selectedNames());
+    select.addEventListener('change', redraw);
+    redraw();
+  }
+  if (data.characters && document.getElementById('score-atlas-chart')) {
+    const select = document.getElementById('score-highlight');
+    const chars = data.characters.slice().sort((a, b) => a.rank - b.rank);
+    select.innerHTML = chars.map(c => `<option value="${c.name}">${c.displayName || c.name} (#${c.rank})</option>`).join('');
+    if (select.options.length) select.options[0].selected = true;
+    const selectedNames = () => Array.from(select.selectedOptions).map(option => option.value);
+    const redraw = () => drawScoreAtlas(document.getElementById('score-atlas-chart'), chars, selectedNames());
     select.addEventListener('change', redraw);
     redraw();
   }
