@@ -320,7 +320,15 @@ function drawOppRankAtlas(canvas, opps, highlightNames) {
   const highlightColors = ['#c084fc','#ffd369','#4ade80','#f87171','#f0abfc','#38bdf8','#fb923c','#c4b5fd'];
   let highlightIndex = 0;
   opps.forEach((o, oi) => {
-    const map = new Map((o.oppRanks || []).map(p => [p.roundLabel, p.rank]));
+    const rawMap = new Map((o.oppRanks || []).map(p => [p.roundLabel, p.rank]));
+    // Build carry-forward map: fill gaps with last known rank
+    const map = new Map();
+    let lastRank = null;
+    let firstSeen = false;
+    rounds.forEach(r => {
+      if (rawMap.has(r.roundLabel)) { lastRank = rawMap.get(r.roundLabel); firstSeen = true; }
+      if (firstSeen && lastRank !== null) map.set(r.roundLabel, lastRank);
+    });
     const isHi = highlightSet.has(o.name);
     const hiColor = highlightColors[highlightIndex % highlightColors.length];
     if (isHi) highlightIndex++;
@@ -337,11 +345,14 @@ function drawOppRankAtlas(canvas, opps, highlightNames) {
       rounds.forEach((r, i) => {
         if (!map.has(r.roundLabel)) return;
         const x = xAt(i), y = yAt(map.get(r.roundLabel));
-        ctx.fillStyle = hiColor; ctx.beginPath(); ctx.arc(x, y, 6, 0, Math.PI * 2); ctx.fill();
-        ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 12px Georgia'; ctx.fillText(map.get(r.roundLabel), x - 8, y - 11);
+        const isReal = rawMap.has(r.roundLabel);
+        ctx.fillStyle = hiColor; ctx.globalAlpha = isReal ? 1 : 0.4;
+        ctx.beginPath(); ctx.arc(x, y, isReal ? 6 : 4, 0, Math.PI * 2); ctx.fill();
+        ctx.globalAlpha = 1;
+        if (isReal) { ctx.fillStyle = '#e8edf6'; ctx.font = 'bold 12px Georgia'; ctx.fillText(map.get(r.roundLabel), x - 8, y - 11); }
       });
-      const last = o.oppRanks[o.oppRanks.length - 1];
-      ctx.fillStyle = hiColor; ctx.font = 'bold 15px Georgia'; ctx.fillText(`${o.displayName || o.name} #${last.rank}`, width - pad.r + 20, yAt(last.rank) + 5);
+      const finalRank = map.get(rounds[rounds.length - 1].roundLabel);
+      ctx.fillStyle = hiColor; ctx.font = 'bold 15px Georgia'; ctx.fillText(`${o.displayName || o.name} #${finalRank}`, width - pad.r + 20, yAt(finalRank) + 5);
     }
   });
 }
