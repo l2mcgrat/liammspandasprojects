@@ -195,7 +195,7 @@ function drawLineChart(canvas, points, title) {
   ctx.fillStyle = '#8ea3bf'; ctx.font = '12px Georgia';
   points.forEach((p, i) => { const x = xAt(i); ctx.save(); ctx.translate(x, height - 42); ctx.rotate(-0.55); ctx.textAlign = 'right'; ctx.fillText(p.round, 0, 0); ctx.restore(); });
 }
-const ROUND_ORDER = {round_1:1, round_2:2, elimination_1:3, round_3:4, elimination_2:5, round_4:6, elimination_3:7, round_5:8, elimination_4:9, round_6:10};
+const ROUND_ORDER = {round_1:1, round_2:2, elimination_1:3, round_3:4, elimination_2:5, round_4:6, elimination_3:7, round_5:8, elimination_4:9, round_6:10, elimination_5:11, round_7:12, elimination_6:13, round_8:14};
 function allRounds(chars) {
   const seen = new Map();
   chars.forEach(c => (c.ranks || []).forEach(p => { if (!seen.has(p.roundLabel)) seen.set(p.roundLabel, p.round); }));
