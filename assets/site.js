@@ -408,7 +408,7 @@ function renderParetoTable(node, chars, metric) {
     chars.forEach(c => (c.ranks || []).forEach(r => { if (!seenRds.has(r.roundLabel)) seenRds.set(r.roundLabel, r.round); }));
     const roundList = Array.from(seenRds, ([rl, r]) => ({roundLabel: rl, round: r}))
       .sort((a, b) => (ROUND_ORDER[a.roundLabel] || 99) - (ROUND_ORDER[b.roundLabel] || 99));
-    const defaultRound = roundList.length ? roundList[roundList.length - 1].roundLabel : 'current';
+    const defaultRound = 'current';
 
     function renderSmashRound(roundLabel) {
       document.querySelectorAll('.round-pill').forEach(btn => btn.classList.toggle('active', btn.dataset.round === roundLabel));
@@ -438,9 +438,15 @@ function renderParetoTable(node, chars, metric) {
 
     const pillsEl = document.getElementById('round-pills');
     if (pillsEl) {
+      const currentBtn = document.createElement('button');
+      currentBtn.className = 'round-pill active';
+      currentBtn.dataset.round = 'current';
+      currentBtn.textContent = 'Current';
+      currentBtn.addEventListener('click', () => renderSmashRound('current'));
+      pillsEl.appendChild(currentBtn);
       roundList.forEach(r => {
         const btn = document.createElement('button');
-        btn.className = 'round-pill' + (r.roundLabel === defaultRound ? ' active' : '');
+        btn.className = 'round-pill';
         btn.dataset.round = r.roundLabel;
         btn.textContent = r.round;
         btn.addEventListener('click', () => renderSmashRound(r.roundLabel));
