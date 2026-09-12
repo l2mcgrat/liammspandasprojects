@@ -414,7 +414,9 @@ function renderParetoTable(node, chars, metric) {
       document.querySelectorAll('.round-pill').forEach(btn => btn.classList.toggle('active', btn.dataset.round === roundLabel));
       let sorted;
       if (!roundLabel || roundLabel === 'current') {
-        sorted = chars.map(c => ({...c, _rank: c.rank, _score: Number(c.score)}));
+        sorted = chars.map(c => ({...c, _score: Number(c.score)}))
+          .sort((a, b) => b._score - a._score)
+          .map((c, i) => ({...c, _rank: i + 1}));
       } else {
         // Use the adjusted score from the rank entry (accounts for inter-round reductions)
         sorted = chars.map(c => {
