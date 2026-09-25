@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Dipole Atlas · demo_tp_20260925</title>
+  <link rel="stylesheet" href="viewer.css">
+  <script src="trajectory.js" defer></script><script src="viewer.js" defer></script>
+</head>
+<body>
+<header><a href="http://liammspandasprojects.org/Physics/index.html">LIAM MCGRATH / PHYSICS</a><span>OPENMM · MOLECULAR EXPLORER</span></header>
+<main>
+  <section class="hero">
+    <div><p class="eyebrow">MATTER, IN MOTION</p><h1>Dipole<span>Atlas.</span></h1>
+    <p class="intro">From locked-in directions to a cloud of possibilities. Explore the changing geometry of molecular order.</p></div>
+    <div class="hero-aside"><span class="orbit">μ</span><p>REAL SIMULATION<br>ILLUSTRATIVE MATERIALS</p></div>
+  </section>
+  <div class="notice"><strong>A model, not a material prediction.</strong> Short runs can retain their starting structure. These visuals do not certify a phase transition.</div>
+  <section class="toolbar"><label for="condition">EXPERIMENT<select id="condition"></select></label><p id="condition-detail"></p></section>
+  <section class="stats" aria-label="Instantaneous simulation diagnostics">
+    <div><span>MULTIPOLAR ORDER · O₆</span><strong id="order">—</strong></div>
+    <div><span>FCC REFERENCE ORDER</span><strong id="fcc">—</strong></div>
+    <div><span>DENSITY · g/cm³</span><strong id="density">—</strong></div>
+    <div><span>POTENTIAL · kJ/mol molecule</span><strong id="energy">—</strong></div>
+  </section>
+  <section class="laboratory">
+    <article class="panel stage"><div class="panel-title"><h2>The molecular box</h2><span id="clock"></span></div>
+      <canvas id="scene" width="900" height="640" aria-label="Interactive 3D projection of molecular centers and dipoles"></canvas>
+      <div class="controls"><button id="play" type="button">Play</button><input id="frame" type="range" min="0" value="0" aria-label="Trajectory frame">
+      <label>Speed <select id="speed"><option value="6">Slow</option><option value="15" selected>Normal</option><option value="30">Fast</option></select></label></div>
+      <p class="caption">Drag to rotate · arrow points −q → +q · color encodes azimuth φ · box normalized to view (check density for expansion) · sampled frames, not physical playback speed</p>
+    </article>
+    <aside class="side">
+      <article class="panel"><div class="panel-title"><h2>Directional fingerprint</h2><span>LIVE FRAME</span></div><canvas id="angles" width="480" height="300" aria-label="Equal-solid-angle dipole orientation histogram"></canvas>
+      <p class="caption">Equal areas in cos(θ), φ. A uniform sphere is not uniform in θ. Small frames are noisy; see pooled maps below.</p></article>
+      <article class="panel"><div class="panel-title"><h2>Order through time</h2><span>PRODUCTION ONLY</span></div><canvas id="trace" width="480" height="240" aria-label="Multipolar and crystalline order versus time"></canvas>
+      <p class="caption"><i class="cyan"></i>Multipolar O₆ <i class="gold"></i>FCC reference · both range 0–1</p></article>
+    </aside>
+  </section>
+  <section class="downloads"><a class="primary" href="figures/dipole_atlas.pdf" download>Download figure book ↗</a><a href="records.zip" download>All records · ZIP</a><a href="summary.csv" download>Summary · CSV</a><a href="metadata.json" download>Run metadata · JSON</a></section>
+  <section class="gallery"><p class="eyebrow">THE BIG PICTURE</p><h2>Patterns across conditions.</h2><p>Every point comes from a simulated plateau. Error bars are exploratory block standard errors, not proof of equilibrium.</p><div class="figures"><a href="figures/order_fingerprint.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/order_fingerprint.png" alt="order fingerprint"></a>
+<a href="figures/dmso_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/dmso_angles.png" alt="dmso angles"></a>
+<a href="figures/dmso_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/dmso_surface.png" alt="dmso surface"></a>
+<a href="figures/ethylene_glycol_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/ethylene_glycol_angles.png" alt="ethylene glycol angles"></a>
+<a href="figures/ethylene_glycol_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/ethylene_glycol_surface.png" alt="ethylene glycol surface"></a>
+<a href="figures/glycerol_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/glycerol_angles.png" alt="glycerol angles"></a>
+<a href="figures/glycerol_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/glycerol_surface.png" alt="glycerol surface"></a></div></section>
+  <section class="method panel"><p class="eyebrow">READ THE MODEL</p><h2>Order is a clue, not a verdict.</h2>
+    <div class="method-grid"><div><h3>Why more than a single angle?</h3><p>Six narrow directional populations can have almost no net polarization. We retain spherical-harmonic degrees 1–6 using pairwise Legendre polynomials. O₆ combines their positive, self-pair-corrected powers. It detects several kinds of orientational order, not an exact number of Gaussian modes.</p></div>
+    <div><h3>What would suggest melting?</h3><p>Loss of crystal order alongside sustained molecular displacement and a change in energy or density. A dilute state additionally needs strong density loss. Dipole disorder alone can also be a rotating solid. Short trajectories and hysteresis can be misleading.</p></div>
+    <div><h3>What this run cannot claim</h3><p>Qualitative two-site polar Lennard-Jones surrogates, not atomistic models of the named chemicals. Interaction scales are illustrative; hydrogen bonds, molecular flexibility, chemical reactions and decomposition are absent. Short finite periodic-box heating/cooling runs do not establish melting points, boiling points, vapour pressures or phase boundaries. High-temperature results are model behavior, not predictions for stable real molecules.</p></div></div>
+    <p class="caption">MSD removes affine box scaling and resets at each plateau. Pooled angular KL has positive finite-sample bias. The multipolar display score also has a small positive noise floor; signed spectra are retained in CSV. Browser preview is capped at 120 frames and 256 molecules per condition; full saved samples remain in the ZIP.</p>
+  </section>
+  <footer>demo_tp_20260925 · SEEDED DYNAMICS / NO FORCED PHASE LABELS / NO EXTERNAL VIEWER REQUIRED</footer>
+</main>
+<noscript>Enable JavaScript to play trajectories. The static reports and CSV downloads remain available.</noscript>
+</body></html>
