@@ -15,35 +15,56 @@
     <div class="hero-aside"><span class="orbit">μ</span><p>REAL SIMULATION<br>ILLUSTRATIVE MATERIALS</p></div>
   </section>
   <div class="notice"><strong>A model, not a material prediction.</strong> Short runs can retain their starting structure. These visuals do not certify a phase transition.</div>
-  <section class="toolbar"><label for="condition">EXPERIMENT<select id="condition"></select></label><p id="condition-detail"></p></section>
+  <section class="toolbar" aria-label="Select precomputed experiment">
+    <label>MOLECULE<select id="molecule"></select></label>
+    <label>INTERACTION POTENTIAL<select id="potential"></select></label>
+    <label>TEMPERATURE<select id="temperature"></select></label>
+    <label>PRESSURE<select id="pressure"></select></label>
+    <label>DIAGNOSTIC<select id="metric"></select></label>
+    <label>MOLECULAR DISPLAY<select id="display"><option value="dipoles">Dipole arrows</option><option value="sites">Two charge sites</option><option value="centers">Molecular centers</option></select></label>
+  </section>
+  <p id="selection-status" role="status"></p><p id="condition-detail" class="caption"></p>
+  <nav id="experiments" aria-label="Other boundary experiments">Other experiments: <a href="../interaction_atlas_v2/index.html">periodic / NPT · interaction_atlas_v2</a> · <a href="../wall_atlas_v2/index.html">walls / NVT · wall_atlas_v2</a></nav>
+  <p class="caption">Controls select saved simulations—not a live force-field calculation. Changing the diagnostic or display does not change the dynamics. <a id="share" href="#">Link to this selection ↗</a> · <a href="theory.html">Theory &amp; design ↗</a></p>
   <section class="stats" aria-label="Instantaneous simulation diagnostics">
-    <div><span>MULTIPOLAR ORDER · O₆</span><strong id="order">—</strong></div>
+    <div><span id="metric-label">MULTIPOLAR ORDER · O₆</span><strong id="order">—</strong></div>
     <div><span>FCC REFERENCE ORDER</span><strong id="fcc">—</strong></div>
     <div><span>DENSITY · g/cm³</span><strong id="density">—</strong></div>
     <div><span>POTENTIAL · kJ/mol molecule</span><strong id="energy">—</strong></div>
+    <div><span>EMPIRICAL POTENTIAL · selected T/P</span><strong class="small">Unavailable</strong><p id="empirical-reason"></p></div>
   </section>
+  <section class="panel reference-panel"><h2>Model energy ↔ experimental context</h2><div class="method-grid">
+    <div><h3>Literature vaporization enthalpy</h3><p id="empirical-value"></p><a id="empirical-source" target="_blank" rel="noopener">Reference source ↗</a></div>
+    <div><h3>Same selected T and P?</h3><p id="empirical-match"></p><p id="energy-proxy"></p></div>
+    <div><h3>Density anchor</h3><p id="density-reference"></p><a id="density-source" target="_blank" rel="noopener">Density source ↗</a></div>
+  </div><p class="caption">ΔHᵥₐₚ is not absolute potential energy. No missing value is filled with zero or extrapolated. <a href="theory.html#empirical">Reference states, assumptions and comparison limits ↗</a></p></section>
   <section class="laboratory">
     <article class="panel stage"><div class="panel-title"><h2>The molecular box</h2><span id="clock"></span></div>
       <canvas id="scene" width="900" height="640" aria-label="Interactive 3D projection of molecular centers and dipoles"></canvas>
       <div class="controls"><button id="play" type="button">Play</button><input id="frame" type="range" min="0" value="0" aria-label="Trajectory frame">
       <label>Speed <select id="speed"><option value="6">Slow</option><option value="15" selected>Normal</option><option value="30">Fast</option></select></label></div>
-      <p class="caption">Drag to rotate · arrow points −q → +q · color encodes azimuth φ · box normalized to view (check density for expansion) · sampled frames, not physical playback speed</p>
+      <p class="caption">Drag to rotate · charged-model arrows point −q → +q; uncharged arrows show the geometric axis · site separation/arrows enlarged for visibility, not to scale · color encodes azimuth φ · box normalized to view (check density for expansion) · sampled frames, not physical playback speed</p>
     </article>
     <aside class="side">
       <article class="panel"><div class="panel-title"><h2>Directional fingerprint</h2><span>LIVE FRAME</span></div><canvas id="angles" width="480" height="300" aria-label="Equal-solid-angle dipole orientation histogram"></canvas>
       <p class="caption">Equal areas in cos(θ), φ. A uniform sphere is not uniform in θ. Small frames are noisy; see pooled maps below.</p></article>
       <article class="panel"><div class="panel-title"><h2>Order through time</h2><span>PRODUCTION ONLY</span></div><canvas id="trace" width="480" height="240" aria-label="Multipolar and crystalline order versus time"></canvas>
-      <p class="caption"><i class="cyan"></i>Multipolar O₆ <i class="gold"></i>FCC reference · both range 0–1</p></article>
+      <p class="caption" id="trace-caption">Selected diagnostic · saved frames</p></article>
     </aside>
   </section>
-  <section class="downloads"><a class="primary" href="figures/dipole_atlas.pdf" download>Download figure book ↗</a><a href="records.zip" download>All records · ZIP</a><a href="summary.csv" download>Summary · CSV</a><a href="metadata.json" download>Run metadata · JSON</a></section>
-  <section class="gallery"><p class="eyebrow">THE BIG PICTURE</p><h2>Patterns across conditions.</h2><p>Every point comes from a simulated plateau. Error bars are exploratory block standard errors, not proof of equilibrium.</p><div class="figures"><a href="figures/order_fingerprint.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/order_fingerprint.png" alt="order fingerprint"></a>
-<a href="figures/dmso_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/dmso_angles.png" alt="dmso angles"></a>
-<a href="figures/dmso_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/dmso_surface.png" alt="dmso surface"></a>
-<a href="figures/ethylene_glycol_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/ethylene_glycol_angles.png" alt="ethylene glycol angles"></a>
-<a href="figures/ethylene_glycol_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/ethylene_glycol_surface.png" alt="ethylene glycol surface"></a>
-<a href="figures/glycerol_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/glycerol_angles.png" alt="glycerol angles"></a>
-<a href="figures/glycerol_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/glycerol_surface.png" alt="glycerol surface"></a></div></section>
+  <section class="panel surface-panel"><p class="eyebrow">TEMPERATURE × PRESSURE</p><h2 id="surface-title">Response surface</h2>
+    <label>Surface <select id="surface-mode"><option value="smooth">Smooth interpolation</option><option value="samples">Sampled grid only</option></select></label>
+    <canvas id="surface" width="1000" height="620" aria-label="Selected diagnostic surface over temperature and log pressure"></canvas>
+    <p id="surface-caption" class="caption"></p></section>
+  <section class="panel"><h2>Beyond orientation</h2><p id="diagnostics"></p><p class="caption">Fluctuation responses and MSD slope are exploratory estimates from short, correlated trajectories—not converged heat capacities, diffusion coefficients or transition temperatures. <a href="theory.html#diagnostics">How to interpret them ↗</a></p></section>
+  <section class="downloads"><a class="primary" href="figures/dipole_atlas.pdf" download>Download figure book ↗</a><a href="records.zip" download>All records · ZIP</a><a href="summary.csv" download>Summary · CSV</a><a href="metadata.json" download>Run metadata · JSON</a><a href="theory.html">Read theory ↗</a><a href="theory.pdf" download>Theory · PDF</a></section>
+  <section class="gallery"><p class="eyebrow">THE BIG PICTURE</p><h2>Patterns across conditions.</h2><p>Every point comes from a simulated plateau. Error bars are exploratory block standard errors, not proof of equilibrium.</p><div class="figures"><a data-potential="all" href="figures/order_fingerprint.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/order_fingerprint.png" alt="order fingerprint"></a>
+<a data-potential="all" href="figures/dmso_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/dmso_angles.png" alt="dmso angles"></a>
+<a data-potential="all" href="figures/dmso_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/dmso_surface.png" alt="dmso surface"></a>
+<a data-potential="all" href="figures/ethylene_glycol_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/ethylene_glycol_angles.png" alt="ethylene glycol angles"></a>
+<a data-potential="all" href="figures/ethylene_glycol_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/ethylene_glycol_surface.png" alt="ethylene glycol surface"></a>
+<a data-potential="all" href="figures/glycerol_angles.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/glycerol_angles.png" alt="glycerol angles"></a>
+<a data-potential="all" href="figures/glycerol_surface.png" target="_blank" rel="noopener"><img loading="lazy" src="figures/glycerol_surface.png" alt="glycerol surface"></a></div></section>
   <section class="method panel"><p class="eyebrow">READ THE MODEL</p><h2>Order is a clue, not a verdict.</h2>
     <div class="method-grid"><div><h3>Why more than a single angle?</h3><p>Six narrow directional populations can have almost no net polarization. We retain spherical-harmonic degrees 1–6 using pairwise Legendre polynomials. O₆ combines their positive, self-pair-corrected powers. It detects several kinds of orientational order, not an exact number of Gaussian modes.</p></div>
     <div><h3>What would suggest melting?</h3><p>Loss of crystal order alongside sustained molecular displacement and a change in energy or density. A dilute state additionally needs strong density loss. Dipole disorder alone can also be a rotating solid. Short trajectories and hysteresis can be misleading.</p></div>
