@@ -1,0 +1,520 @@
+songId,path,number,family,label,score,cue,text,start,end,tokenStart,tokenEnd,negated,weight
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,5,Sad,Lonely,1,alone,alone,137,142,30,31,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,5,Depressed,Empty,1,depressed,depressed,146,155,32,33,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,9,Afraid,Anxious,1,nervous,nervous,280,287,57,58,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,15,Afraid,Anxious,1,worried,Worried,0,7,0,1,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,16,Loving,Affectionate,1,love,love,122,126,25,26,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,17,Loving,Affectionate,1,love,love,124,128,23,24,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,29,Loving,Affectionate,1,love,love,145,149,30,31,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,29,Afraid,Anxious,1,worried,Worried,0,7,0,1,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,30,Loving,Affectionate,1,love,love,124,128,23,24,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,42,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,43,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,44,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,45,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,47,Trusting,Hopeful,2,hope,Hope,0,4,0,1,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,47,Trusting,Hopeful,2,hope,hope,78,82,18,19,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,47,Loving,Affectionate,1,love,love,136,140,32,33,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,47,Surprised,Confused,1,perplexed,perplexed,103,112,25,26,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,47,Afraid,Scared,1,fear,fear,9,13,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,48,Sad,Hurt,1,sad,sad,7,10,1,2,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,48,Angry,Furious,1,angry,angry,0,5,0,1,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,51,Afraid,Scared,1,scared,scared,31,37,6,7,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,54,Afraid,Scared,1,fear,fear,255,259,54,55,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,54,Angry,Furious,1,rage,rage,335,339,70,71,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,59,Loving,Affectionate,1,love,love,5,9,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,60,Trusting,Hopeful,1,hope,hope,7,11,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,60,Loving,Affectionate,1,love,love,61,65,13,14,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,62,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,63,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,64,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,65,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+can-t-go-back-4d6164655f696e5f41627973732f43616e277420476f204261636b2e747874,Made_in_Abyss/Can't Go Back.txt,14,Afraid,Scared,1,fear,fear,18,22,3,4,False,1
+can-t-go-back-4d6164655f696e5f41627973732f43616e277420476f204261636b2e747874,Made_in_Abyss/Can't Go Back.txt,41,Loving,Compassionate,1,caring,caring,104,110,19,20,False,1
+can-t-go-back-4d6164655f696e5f41627973732f43616e277420476f204261636b2e747874,Made_in_Abyss/Can't Go Back.txt,42,Afraid,Scared,1,fear,fear,52,56,10,11,False,1
+can-t-go-back-4d6164655f696e5f41627973732f43616e277420476f204261636b2e747874,Made_in_Abyss/Can't Go Back.txt,59,Sad,Hurt,1,sad,sad,17,20,4,5,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,1,Trusting,Hopeful,1,hope,Hope,7,11,1,2,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,1,Afraid,Scared,1,fear,Fear,0,4,0,1,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,11,Depressed,Hopeless,1,despair,despair,0,7,0,1,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,13,Afraid,Anxious,1,anxiety,anxiety,29,36,5,6,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,14,Trusting,Hopeful,1,hope,hope,29,33,6,7,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,14,Surprised,Amazed,0,surprise,surprise,51,59,11,12,True,0
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,25,Sad,Grieving,1,tears,Tears,0,5,0,1,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,34,Depressed,Empty,1,depressed,depressed,12,21,2,3,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,37,Depressed,Hopeless,1,out of hope,out of hope,13,24,3,6,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,37,Afraid,Scared,1,fear,fear,279,283,55,56,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,43,Depressed,Hopeless,1,out of hope,out of hope,38,49,10,13,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,45,Depressed,Empty,1,depressed,depressed,14,23,4,5,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,48,Angry,Resentful,1,resentful,resentful,17,26,4,5,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,58,Depressed,Hopeless,1,out of hope,out of hope,38,49,10,13,False,1
+fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874,Made_in_Abyss/Fear & Hope.txt,61,Trusting,Hopeful,1,hope,hope,84,88,18,19,False,1
+final-layer-2-4d6164655f696e5f41627973732f46696e616c204c6179657220322e747874,Made_in_Abyss/Final Layer 2.txt,5,Proud,Confident,1,confident,confident,0,9,0,1,False,1
+final-layer-2-4d6164655f696e5f41627973732f46696e616c204c6179657220322e747874,Made_in_Abyss/Final Layer 2.txt,5,Loving,Affectionate,1,in love,in love,479,486,95,97,False,1
+final-layer-2-4d6164655f696e5f41627973732f46696e616c204c6179657220322e747874,Made_in_Abyss/Final Layer 2.txt,5,Angry,Resentful,1,resent,resent,409,415,81,82,False,1
+final-layer-2-4d6164655f696e5f41627973732f46696e616c204c6179657220322e747874,Made_in_Abyss/Final Layer 2.txt,21,Disgusted,Disapproving,1,scorn,scorn,43,48,8,9,False,1
+into-the-abyss-4d6164655f696e5f41627973732f496e746f207468652041627973732e747874,Made_in_Abyss/Into the Abyss.txt,3,Loving,Affectionate,1,adore,adore,29,34,6,7,False,1
+into-the-abyss-4d6164655f696e5f41627973732f496e746f207468652041627973732e747874,Made_in_Abyss/Into the Abyss.txt,18,Depressed,Empty,1,numb,numb,9,13,2,3,False,1
+into-the-abyss-4d6164655f696e5f41627973732f496e746f207468652041627973732e747874,Made_in_Abyss/Into the Abyss.txt,22,Sad,Hurt,1,sad,sad,0,3,0,1,False,1
+into-the-abyss-4d6164655f696e5f41627973732f496e746f207468652041627973732e747874,Made_in_Abyss/Into the Abyss.txt,29,Afraid,Scared,1,scared,scared,6,12,2,3,False,1
+into-the-abyss-4d6164655f696e5f41627973732f496e746f207468652041627973732e747874,Made_in_Abyss/Into the Abyss.txt,34,Trusting,Hopeful,2,hope,hope,9,13,2,3,False,1
+into-the-abyss-4d6164655f696e5f41627973732f496e746f207468652041627973732e747874,Made_in_Abyss/Into the Abyss.txt,34,Trusting,Hopeful,2,faith,faith,32,37,6,7,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,5,Sad,Hurt,1,sad,sad,19,22,5,6,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,9,Trusting,Hopeful,1,hope,Hope,0,4,0,1,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,14,Sad,Hurt,1,hurting,hurting,7,14,1,2,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,18,Angry,Furious,1,enraged,enraged,6,13,1,2,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,20,Trusting,Hopeful,1,hope,hope,8,12,2,3,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,22,Trusting,Safe,1,trust,trust,12,17,3,4,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,32,Afraid,Scared,1,scared,scared,22,28,4,5,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,34,Sad,Hurt,1,hurting,hurting,15,22,4,5,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,37,Joyful,Happy,1,happy,happy,3,8,1,2,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,56,Afraid,Scared,1,fear,fear,12,16,2,3,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,60,Trusting,Accepted,1,accepted,accepted,9,17,1,2,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,61,Grateful,Blessed,0,blessing,blessing,24,32,5,6,True,0
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,80,Sad,Hurt,1,sad,sad,20,23,5,6,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,85,Sad,Hurt,1,sad,sad,25,28,6,7,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,107,Depressed,Hopeless,1,defeated,defeated,20,28,5,6,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,109,Depressed,Exhausted,1,exhausted,exhausted,21,30,5,6,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,113,Afraid,Scared,1,fear,fear,7,11,2,3,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,125,Angry,Resentful,1,resent,resent,16,22,4,5,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,130,Trusting,Safe,1,safe,safe,17,21,5,6,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,152,Depressed,Empty,1,empty,empty,44,49,10,11,False,1
+lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874,Made_in_Abyss/Lost Boy.txt,156,Afraid,Scared,1,fearful,fearful,14,21,3,4,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,4,Afraid,Scared,1,scared,scared,0,6,0,1,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,8,Grateful,Blessed,1,blessed,blessed,22,29,5,6,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,12,Trusting,Hopeful,1,hope,hope,3,7,1,2,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,18,Trusting,Hopeful,1,hope,hope,0,4,0,1,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,20,Trusting,Hopeful,1,hope,hope,0,4,0,1,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,22,Trusting,Hopeful,1,hope,hope,0,4,0,1,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,33,Afraid,Insecure,1,self doubt,self doubt,0,10,0,2,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,42,Loving,Affectionate,2,in love,in love,75,82,14,16,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,42,Loving,Affectionate,2,love,love,166,170,35,36,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,42,Grateful,Blessed,1,blessed,blessed,143,150,30,31,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,42,Afraid,Scared,1,scared,scared,0,6,0,1,False,1
+strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874,Made_in_Abyss/Strain of the Abyss.txt,52,Afraid,Insecure,1,self doubt,self doubt,0,10,0,2,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,8,Afraid,Scared,2,scared,scared,129,135,30,31,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,8,Afraid,Scared,2,fear,fear,155,159,36,37,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,8,Sad,Hurt,1,sad,sad,30,33,7,8,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,8,Sad,Lonely,1,alone,alone,49,54,12,13,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,10,Afraid,Scared,1,fear,fear,29,33,5,6,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,19,Proud,Confident,1,proud,proud,29,34,7,8,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,21,Afraid,Scared,1,scared,scared,30,36,8,9,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,26,Sad,Hurt,1,hurt,hurt,64,68,11,12,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,28,Sad,Hurt,1,hurting,hurting,7,14,2,3,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,31,Sad,Grieving,1,crying,crying,47,53,11,12,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,33,Loving,Affectionate,1,adore,adore,4,9,1,2,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,35,Depressed,Empty,1,depressed,depressed,20,29,4,5,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,38,Loving,Affectionate,1,love,love,29,33,7,8,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,39,Intrigued,Inspired,1,inspired,inspired,157,165,32,33,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,39,Sad,Lonely,1,alone,alone,139,144,28,29,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,48,Loving,Compassionate,1,compassion,compassion,30,40,5,6,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,50,Proud,Successful,1,achieved,achieved,186,194,30,31,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,50,Joyful,Happy,1,happiness,happiness,176,185,29,30,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,50,Depressed,Hopeless,1,hopeless,Hopeless,0,8,0,1,False,1
+warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874,Made_in_Abyss/Warning Signs.txt,50,Depressed,Exhausted,1,exhausted,exhausted,456,465,80,81,False,1
+freestyles-are-written-4d795f4865726f5f41636164656d69612f467265657374796c657320617265205772697474656e2e747874,My_Hero_Academia/Freestyles are Written.txt,36,Trusting,Safe,1,trust,Trust,0,5,0,1,False,1
+freestyles-are-written-4d795f4865726f5f41636164656d69612f467265657374796c657320617265205772697474656e2e747874,My_Hero_Academia/Freestyles are Written.txt,56,Surprised,Amazed,1,amazing,amazing,0,7,0,1,False,1
+freestyles-are-written-4d795f4865726f5f41636164656d69612f467265657374796c657320617265205772697474656e2e747874,My_Hero_Academia/Freestyles are Written.txt,67,Joyful,Content,1,at peace,at peace,19,27,5,7,False,1
+growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874,My_Hero_Academia/Growing Up.txt,3,Loving,Compassionate,1,caring,caring,3,9,1,2,False,1
+growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874,My_Hero_Academia/Growing Up.txt,16,Sad,Hurt,1,hurt,hurt,50,54,11,12,False,1
+growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874,My_Hero_Academia/Growing Up.txt,21,Afraid,Scared,0,fear,fear,51,55,9,10,True,0
+growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874,My_Hero_Academia/Growing Up.txt,24,Angry,Furious,1,irate,irate,36,41,8,9,False,1
+growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874,My_Hero_Academia/Growing Up.txt,26,Proud,Worthy,1,worthy,worthy,5,11,2,3,False,1
+growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874,My_Hero_Academia/Growing Up.txt,31,Depressed,Unworthy,1,helpless,helpless,20,28,5,6,False,1
+growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874,My_Hero_Academia/Growing Up.txt,35,Loving,Compassionate,1,caring,caring,30,36,6,7,False,1
+growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874,My_Hero_Academia/Growing Up.txt,37,Afraid,Scared,1,scared,scared,33,39,6,7,False,1
+meditate-4d795f4865726f5f41636164656d69612f4d656469746174652e747874,My_Hero_Academia/Meditate.txt,12,Angry,Furious,1,irate,irate,16,21,3,4,False,1
+meditate-4d795f4865726f5f41636164656d69612f4d656469746174652e747874,My_Hero_Academia/Meditate.txt,16,Sad,Hurt,1,hurt,hurt,28,32,6,7,False,1
+meditate-4d795f4865726f5f41636164656d69612f4d656469746174652e747874,My_Hero_Academia/Meditate.txt,46,Sad,Hurt,0,sad,sad,9,12,2,3,True,0
+meditate-4d795f4865726f5f41636164656d69612f4d656469746174652e747874,My_Hero_Academia/Meditate.txt,48,Sad,Hurt,1,sad,sad,11,14,2,3,False,1
+meditate-4d795f4865726f5f41636164656d69612f4d656469746174652e747874,My_Hero_Academia/Meditate.txt,61,Disgusted,Repulsed,1,disgusting,disgusting,3,13,1,2,False,1
+meditate-4d795f4865726f5f41636164656d69612f4d656469746174652e747874,My_Hero_Academia/Meditate.txt,66,Joyful,Content,1,peaceful,peaceful,30,38,5,6,False,1
+soundcloud-social-media-4d795f4865726f5f41636164656d69612f536f756e64436c6f756420536f6369616c204d656469612e747874,My_Hero_Academia/SoundCloud Social Media.txt,3,Loving,Affectionate,1,love,love,52,56,12,13,False,1
+soundcloud-social-media-4d795f4865726f5f41636164656d69612f536f756e64436c6f756420536f6369616c204d656469612e747874,My_Hero_Academia/SoundCloud Social Media.txt,4,Loving,Affectionate,0,love,love,50,54,12,13,True,0
+soundcloud-social-media-4d795f4865726f5f41636164656d69612f536f756e64436c6f756420536f6369616c204d656469612e747874,My_Hero_Academia/SoundCloud Social Media.txt,13,Loving,Affectionate,1,love,love,32,36,6,7,False,1
+soundcloud-social-media-4d795f4865726f5f41636164656d69612f536f756e64436c6f756420536f6369616c204d656469612e747874,My_Hero_Academia/SoundCloud Social Media.txt,18,Loving,Affectionate,1,love,love,49,53,10,11,False,1
+soundcloud-social-media-4d795f4865726f5f41636164656d69612f536f756e64436c6f756420536f6369616c204d656469612e747874,My_Hero_Academia/SoundCloud Social Media.txt,19,Joyful,Happy,1,happy,happy,6,11,1,2,False,1
+soundcloud-social-media-4d795f4865726f5f41636164656d69612f536f756e64436c6f756420536f6369616c204d656469612e747874,My_Hero_Academia/SoundCloud Social Media.txt,19,Afraid,Anxious,1,worry,worry,77,82,15,16,False,1
+soundcloud-social-media-4d795f4865726f5f41636164656d69612f536f756e64436c6f756420536f6369616c204d656469612e747874,My_Hero_Academia/SoundCloud Social Media.txt,21,Loving,Affectionate,1,love,love,116,120,27,28,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,3,Sad,Hurt,1,sadness,Sadness,8,15,2,3,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,14,Grateful,Blessed,1,blessing,blessing,12,20,2,3,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,24,Proud,Worthy,1,strength,strength,5,13,1,2,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,27,Sad,Hurt,1,sadness,sadness,24,31,5,6,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,30,Surprised,Amazed,1,amazing,amazing,270,277,58,59,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,39,Loving,Affectionate,1,love,love,40,44,9,10,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,53,Depressed,Empty,1,depressed,depressed,24,33,5,6,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,55,Sad,Grieving,1,cry,cry,47,50,10,11,False,1
+x-4d795f4865726f5f41636164656d69612f582e747874,My_Hero_Academia/X.txt,61,Proud,Successful,1,made it,made it,50,57,11,13,False,1
+you-saved-me-4d795f4865726f5f41636164656d69612f596f75205361766564204d652e747874,My_Hero_Academia/You Saved Me.txt,18,Sad,Disappointed,1,let down,let down,34,42,8,10,False,1
+you-saved-me-4d795f4865726f5f41636164656d69612f596f75205361766564204d652e747874,My_Hero_Academia/You Saved Me.txt,25,Sad,Grieving,1,cry,cry,23,26,4,5,False,1
+you-saved-me-4d795f4865726f5f41636164656d69612f596f75205361766564204d652e747874,My_Hero_Academia/You Saved Me.txt,29,Joyful,Playful,1,laugh,laugh,47,52,8,9,False,1
+you-saved-me-4d795f4865726f5f41636164656d69612f596f75205361766564204d652e747874,My_Hero_Academia/You Saved Me.txt,29,Disgusted,Averse,1,makes me sick,makes me sick,32,45,5,8,False,1
+you-saved-me-4d795f4865726f5f41636164656d69612f596f75205361766564204d652e747874,My_Hero_Academia/You Saved Me.txt,61,Grateful,Blessed,1,blessing,blessing,40,48,7,8,False,1
+you-should-know-4d795f4865726f5f41636164656d69612f596f752053686f756c64204b6e6f772e747874,My_Hero_Academia/You Should Know.txt,10,Grateful,Blessed,1,blessed,blessed,4,11,1,2,False,1
+you-should-know-4d795f4865726f5f41636164656d69612f596f752053686f756c64204b6e6f772e747874,My_Hero_Academia/You Should Know.txt,51,Disgusted,Ashamed,1,shame,shame,40,45,9,10,False,1
+you-should-know-4d795f4865726f5f41636164656d69612f596f752053686f756c64204b6e6f772e747874,My_Hero_Academia/You Should Know.txt,64,Sad,Disappointed,1,disappointed,disappointed,13,25,4,5,False,1
+you-should-know-4d795f4865726f5f41636164656d69612f596f752053686f756c64204b6e6f772e747874,My_Hero_Academia/You Should Know.txt,67,Loving,Tender,1,warmth,warmth,13,19,2,3,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,15,Trusting,Safe,1,trust,trust,25,30,6,7,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,30,Loving,Affectionate,1,love,love,32,36,7,8,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,33,Loving,Affectionate,1,in love,in love,11,18,2,4,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,38,Loving,Affectionate,1,love,love,5,9,1,2,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,41,Depressed,Empty,1,detached,detached,10,18,3,4,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,46,Afraid,Scared,1,fear,fear,14,18,3,4,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,50,Joyful,Content,0,cheer,cheer,14,19,3,4,True,0
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,51,Afraid,Scared,0,fear,fear,12,16,3,4,True,0
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,58,Loving,Affectionate,1,love,love,32,36,7,8,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,61,Loving,Affectionate,1,in love,in love,11,18,2,4,False,1
+fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874,Old_Classics/fuckboi 2.txt,66,Loving,Affectionate,1,love,love,5,9,1,2,False,1
+fuckboi-4f6c645f436c6173736963732f6675636b626f692e747874,Old_Classics/fuckboi.txt,5,Depressed,Empty,1,depressed,depressed,29,38,6,7,False,1
+fuckboi-4f6c645f436c6173736963732f6675636b626f692e747874,Old_Classics/fuckboi.txt,6,Grateful,Blessed,1,blessed,blessed,34,41,8,9,False,1
+fuckboi-4f6c645f436c6173736963732f6675636b626f692e747874,Old_Classics/fuckboi.txt,16,Afraid,Insecure,1,insecure,insecure,4,12,1,2,False,1
+fuckboi-4f6c645f436c6173736963732f6675636b626f692e747874,Old_Classics/fuckboi.txt,49,Afraid,Anxious,1,nervous,nervous,4,11,1,2,False,1
+fuckboi-4f6c645f436c6173736963732f6675636b626f692e747874,Old_Classics/fuckboi.txt,50,Loving,Compassionate,1,empathy,empathy,21,28,4,5,False,1
+fuckboi-4f6c645f436c6173736963732f6675636b626f692e747874,Old_Classics/fuckboi.txt,52,Sad,Hurt,1,hurting,hurting,8,15,2,3,False,1
+gclm-feat-graeme-cracker-4f6c645f436c6173736963732f47434c4d2028666561742e20477261656d6520437261636b6572292e747874,Old_Classics/GCLM (feat. Graeme Cracker).txt,6,Trusting,Hopeful,1,hope,hope,25,29,5,6,False,1
+gclm-feat-graeme-cracker-4f6c645f436c6173736963732f47434c4d2028666561742e20477261656d6520437261636b6572292e747874,Old_Classics/GCLM (feat. Graeme Cracker).txt,8,Grateful,Thankful,0,thanks,thanks,75,81,14,15,True,0
+gclm-feat-graeme-cracker-4f6c645f436c6173736963732f47434c4d2028666561742e20477261656d6520437261636b6572292e747874,Old_Classics/GCLM (feat. Graeme Cracker).txt,26,Sad,Lonely,1,lonely,lonely,49,55,11,12,False,1
+gclm-feat-graeme-cracker-4f6c645f436c6173736963732f47434c4d2028666561742e20477261656d6520437261636b6572292e747874,Old_Classics/GCLM (feat. Graeme Cracker).txt,31,Joyful,Playful,1,fun,fun,27,30,6,7,False,1
+happens-4f6c645f436c6173736963732f48617070656e732e747874,Old_Classics/Happens.txt,4,Proud,Worthy,1,strong,strong,6,12,1,2,False,1
+happens-4f6c645f436c6173736963732f48617070656e732e747874,Old_Classics/Happens.txt,9,Sad,Hurt,1,hurt,hurt,31,35,6,7,False,1
+happens-4f6c645f436c6173736963732f48617070656e732e747874,Old_Classics/Happens.txt,11,Sad,Hurt,1,hurting,hurting,41,48,8,9,False,1
+happens-4f6c645f436c6173736963732f48617070656e732e747874,Old_Classics/Happens.txt,14,Depressed,Hopeless,1,hopeless,hopeless,18,26,3,4,False,1
+happens-4f6c645f436c6173736963732f48617070656e732e747874,Old_Classics/Happens.txt,24,Afraid,Insecure,0,doubt,doubt,32,37,7,8,True,0
+happens-4f6c645f436c6173736963732f48617070656e732e747874,Old_Classics/Happens.txt,35,Trusting,Safe,1,trust,trust,30,35,7,8,False,1
+happens-4f6c645f436c6173736963732f48617070656e732e747874,Old_Classics/Happens.txt,37,Proud,Worthy,1,strength,strength,8,16,2,3,False,1
+picture-me-trolling-4f6c645f436c6173736963732f50696374757265204d652054726f6c6c696e672e747874,Old_Classics/Picture Me Trolling.txt,3,Sad,Grieving,1,sorrow,sorrow,394,400,78,79,False,1
+picture-me-trolling-4f6c645f436c6173736963732f50696374757265204d652054726f6c6c696e672e747874,Old_Classics/Picture Me Trolling.txt,11,Sad,Hurt,1,hurt,hurt,16,20,3,4,False,1
+picture-me-trolling-4f6c645f436c6173736963732f50696374757265204d652054726f6c6c696e672e747874,Old_Classics/Picture Me Trolling.txt,25,Sad,Grieving,1,sorrow,sorrow,387,393,77,78,False,1
+picture-me-trolling-4f6c645f436c6173736963732f50696374757265204d652054726f6c6c696e672e747874,Old_Classics/Picture Me Trolling.txt,30,Trusting,Safe,1,safe,safe,22,26,5,6,False,1
+picture-me-trolling-4f6c645f436c6173736963732f50696374757265204d652054726f6c6c696e672e747874,Old_Classics/Picture Me Trolling.txt,33,Depressed,Unworthy,1,worthless,worthless,18,27,3,4,False,1
+picture-me-trolling-4f6c645f436c6173736963732f50696374757265204d652054726f6c6c696e672e747874,Old_Classics/Picture Me Trolling.txt,34,Depressed,Unworthy,1,worthless,worthless,46,55,9,10,False,1
+smash-4f6c645f436c6173736963732f534d4153482e747874,Old_Classics/SMASH.txt,23,Joyful,Happy,2,happy,Happy,0,5,0,1,False,1
+smash-4f6c645f436c6173736963732f534d4153482e747874,Old_Classics/SMASH.txt,23,Joyful,Happy,2,happy,happy,53,58,11,12,False,1
+v6-4f6c645f436c6173736963732f56362e747874,Old_Classics/V6.txt,5,Proud,Confident,1,confident,confident,28,37,6,7,False,1
+v6-4f6c645f436c6173736963732f56362e747874,Old_Classics/V6.txt,13,Surprised,Amazed,1,amazing,amazing,4,11,1,2,False,1
+envy-536576656e5f446561646c795f53696e732f456e76792e747874,Seven_Deadly_Sins/Envy.txt,8,Afraid,Anxious,1,worried,worried,14,21,4,5,False,1
+envy-536576656e5f446561646c795f53696e732f456e76792e747874,Seven_Deadly_Sins/Envy.txt,9,Disgusted,Ashamed,1,shame,shame,43,48,9,10,False,1
+envy-536576656e5f446561646c795f53696e732f456e76792e747874,Seven_Deadly_Sins/Envy.txt,32,Trusting,Hopeful,1,hope,hope,15,19,3,4,False,1
+envy-536576656e5f446561646c795f53696e732f456e76792e747874,Seven_Deadly_Sins/Envy.txt,58,Depressed,Hopeless,1,defeated,defeated,31,39,7,8,False,1
+envy-536576656e5f446561646c795f53696e732f456e76792e747874,Seven_Deadly_Sins/Envy.txt,60,Loving,Connected,1,close,close,28,33,5,6,False,1
+envy-536576656e5f446561646c795f53696e732f456e76792e747874,Seven_Deadly_Sins/Envy.txt,64,Sad,Grieving,1,cry,Cry,0,3,0,1,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,4,Trusting,Safe,1,safe,safe,28,32,4,5,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,4,Afraid,Anxious,1,nervous,nervous,51,58,9,10,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,9,Depressed,Empty,1,numb,numb,75,79,15,16,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,14,Trusting,Hopeful,1,hope,hope,10,14,2,3,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,23,Proud,Confident,1,proud,proud,29,34,7,8,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,25,Afraid,Insecure,1,insecure,insecure,17,25,4,5,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,50,Trusting,Safe,1,safe,safe,28,32,4,5,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,50,Afraid,Anxious,1,nervous,nervous,51,58,9,10,False,1
+gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874,Seven_Deadly_Sins/Gluttony.txt,56,Trusting,Hopeful,1,hope,hope,25,29,5,6,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,5,Proud,Confident,1,proud,Proud,0,5,0,1,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,9,Proud,Confident,1,proud,Proud,0,5,0,1,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,16,Proud,Confident,1,proud,Proud,0,5,0,1,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,21,Proud,Confident,1,confidence,confidence,18,28,3,4,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,24,Trusting,Hopeful,1,hope,hope,24,28,6,7,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,30,Loving,Connected,1,close,close,17,22,3,4,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,37,Sad,Hurt,1,sad,sad,7,10,2,3,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,41,Trusting,Safe,0,trust,trust,12,17,3,4,True,0
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,45,Proud,Confident,1,proud,Proud,0,5,0,1,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,49,Proud,Confident,1,proud,Proud,0,5,0,1,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,56,Proud,Confident,1,proud,Proud,0,5,0,1,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,60,Proud,Confident,1,confidence,confidence,18,28,3,4,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,63,Trusting,Hopeful,1,hope,hope,24,28,6,7,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,65,Trusting,Hopeful,1,hope,hope,26,30,5,6,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,77,Depressed,Hopeless,1,hopeless,hopeless,30,38,7,8,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,78,Sad,Hurt,1,hurt,hurt,10,14,2,3,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,90,Loving,Compassionate,1,empathy,Empathy,0,7,0,1,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,93,Afraid,Insecure,0,second guessing,second guessing,7,22,2,4,True,0
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,96,Sad,Hurt,1,hurting,hurting,7,14,2,3,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,115,Sad,Hurt,1,hurt,hurt,10,14,2,3,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,139,Afraid,Insecure,1,insecure,insecure,3,11,1,2,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,143,Sad,Hurt,1,hurt,hurt,8,12,2,3,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,151,Sad,Hurt,1,hurt,hurt,8,12,2,3,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,163,Trusting,Hopeful,1,hope,hope,0,4,0,1,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,164,Afraid,Scared,1,scared,scared,17,23,3,4,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,175,Sad,Hurt,1,hurt,hurt,10,14,2,3,False,1
+greed-536576656e5f446561646c795f53696e732f47726565642e747874,Seven_Deadly_Sins/Greed.txt,183,Sad,Hurt,1,hurt,hurt,10,14,2,3,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,9,Trusting,Secure,1,secure,secure,20,26,4,5,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,9,Afraid,Insecure,1,insecure,insecure,0,8,0,1,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,18,Trusting,Safe,1,trust,Trust,0,5,0,1,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,19,Loving,Affectionate,1,love,love,34,38,5,6,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,19,Disgusted,Repulsed,1,disgust,disgust,15,22,2,3,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,20,Loving,Affectionate,0,love,love,26,30,5,6,True,0
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,33,Depressed,Empty,1,numb,numb,14,18,3,4,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,39,Loving,Affectionate,1,love,love,12,16,3,4,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,42,Sad,Hurt,1,hurt,hurt,7,11,2,3,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,48,Trusting,Hopeful,1,hope,hope,10,14,3,4,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,63,Afraid,Vulnerable,1,exposed,exposed,7,14,1,2,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,66,Sad,Hurt,1,sadness,Sadness,0,7,0,1,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,67,Afraid,Scared,1,fear,fear,36,40,6,7,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,72,Loving,Affectionate,1,love,love,8,12,2,3,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,75,Sad,Lonely,1,alone,alone,30,35,6,7,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,85,Sad,Hurt,1,sad,sad,19,22,4,5,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,88,Trusting,Hopeful,1,faith,faith,11,16,2,3,False,1
+lust-536576656e5f446561646c795f53696e732f4c7573742e747874,Seven_Deadly_Sins/Lust.txt,90,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+nanatsu-no-taizai-536576656e5f446561646c795f53696e732f4e616e61747375206e6f205461697a61692e747874,Seven_Deadly_Sins/Nanatsu no Taizai.txt,4,Surprised,Amazed,1,amazing,amazing,203,210,38,39,False,1
+nanatsu-no-taizai-536576656e5f446561646c795f53696e732f4e616e61747375206e6f205461697a61692e747874,Seven_Deadly_Sins/Nanatsu no Taizai.txt,6,Loving,Affectionate,1,in love,in love,9,16,2,4,False,1
+nanatsu-no-taizai-536576656e5f446561646c795f53696e732f4e616e61747375206e6f205461697a61692e747874,Seven_Deadly_Sins/Nanatsu no Taizai.txt,13,Trusting,Hopeful,1,hope,hope,37,41,8,9,False,1
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,7,Joyful,Playful,1,fun,Fun,0,3,0,1,False,1
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,22,Loving,Affectionate,0,love,love,18,22,4,5,True,0
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,26,Loving,Affectionate,0,love,love,18,22,4,5,True,0
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,39,Loving,Affectionate,0,love,love,18,22,4,5,True,0
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,43,Loving,Affectionate,0,love,love,18,22,4,5,True,0
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,47,Proud,Confident,1,confident,Confident,0,9,0,1,False,1
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,65,Loving,Affectionate,0,love,love,18,22,4,5,True,0
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,69,Loving,Affectionate,0,love,love,18,22,4,5,True,0
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,83,Loving,Affectionate,0,love,love,18,22,4,5,True,0
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,87,Loving,Affectionate,0,love,love,18,22,4,5,True,0
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,92,Loving,Affectionate,1,love,love,37,41,8,9,False,1
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,97,Sad,Hurt,1,hurt,hurt,0,4,0,1,False,1
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,100,Sad,Hurt,1,hurting,hurting,15,22,3,4,False,1
+pride-536576656e5f446561646c795f53696e732f50726964652e747874,Seven_Deadly_Sins/Pride.txt,100,Afraid,Anxious,1,anxious,anxious,7,14,2,3,False,1
+sloth-536576656e5f446561646c795f53696e732f536c6f74682e747874,Seven_Deadly_Sins/Sloth.txt,12,Depressed,Empty,1,depressed,depressed,21,30,4,5,False,1
+sloth-536576656e5f446561646c795f53696e732f536c6f74682e747874,Seven_Deadly_Sins/Sloth.txt,15,Depressed,Unworthy,1,worthless,worthless,17,26,3,4,False,1
+sloth-536576656e5f446561646c795f53696e732f536c6f74682e747874,Seven_Deadly_Sins/Sloth.txt,16,Grateful,Blessed,1,blessed,blessed,7,14,1,2,False,1
+sloth-536576656e5f446561646c795f53696e732f536c6f74682e747874,Seven_Deadly_Sins/Sloth.txt,30,Trusting,Safe,1,safe,safe,7,11,1,2,False,1
+sloth-536576656e5f446561646c795f53696e732f536c6f74682e747874,Seven_Deadly_Sins/Sloth.txt,47,Disgusted,Ashamed,0,shame,shame,13,18,3,4,True,0
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,21,Surprised,Amazed,1,in awe,in awe,15,21,4,6,False,1
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,24,Afraid,Scared,1,scared,scared,6,12,2,3,False,1
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,40,Joyful,Happy,1,glad,glad,31,35,6,7,False,1
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,61,Trusting,Hopeful,1,hope,hope,20,24,5,6,False,1
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,65,Trusting,Safe,0,trust,trust,51,56,11,12,True,0
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,66,Loving,Affectionate,0,love,love,56,60,11,12,True,0
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,84,Proud,Confident,1,proud,proud,6,11,1,2,False,1
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,84,Trusting,Safe,1,trust,trust,182,187,34,35,False,1
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,87,Surprised,Confused,1,confused,confused,16,24,3,4,False,1
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,88,Afraid,Scared,1,panic,panic,22,27,4,5,False,1
+wrath-536576656e5f446561646c795f53696e732f57726174682e747874,Seven_Deadly_Sins/Wrath.txt,92,Loving,Affectionate,1,love,love,53,57,12,13,False,1
+envy-v1-536576656e5f446561646c795f53696e73325f76312f456e76795f56312e747874,Seven_Deadly_Sins2_v1/Envy_V1.txt,43,Afraid,Anxious,1,anxiety,anxiety,4,11,1,2,False,1
+envy-v1-536576656e5f446561646c795f53696e73325f76312f456e76795f56312e747874,Seven_Deadly_Sins2_v1/Envy_V1.txt,45,Afraid,Anxious,1,nervous,nervous,7,14,1,2,False,1
+envy-v1-536576656e5f446561646c795f53696e73325f76312f456e76795f56312e747874,Seven_Deadly_Sins2_v1/Envy_V1.txt,46,Trusting,Hopeful,1,hope,hope,21,25,5,6,False,1
+gluttony-v1-536576656e5f446561646c795f53696e73325f76312f476c7574746f6e795f56312e747874,Seven_Deadly_Sins2_v1/Gluttony_V1.txt,12,Afraid,Insecure,1,uncertain,uncertain,8,17,2,3,False,1
+greed-v1-536576656e5f446561646c795f53696e73325f76312f47726565645f56312e747874,Seven_Deadly_Sins2_v1/Greed_V1.txt,33,Trusting,Accepted,1,accepted,accepted,25,33,5,6,False,1
+greed-v1-536576656e5f446561646c795f53696e73325f76312f47726565645f56312e747874,Seven_Deadly_Sins2_v1/Greed_V1.txt,42,Sad,Hurt,1,hurt,hurt,42,46,8,9,False,1
+greed-v1-536576656e5f446561646c795f53696e73325f76312f47726565645f56312e747874,Seven_Deadly_Sins2_v1/Greed_V1.txt,43,Proud,Confident,1,confidence,confidence,7,17,2,3,False,1
+greed-v1-536576656e5f446561646c795f53696e73325f76312f47726565645f56312e747874,Seven_Deadly_Sins2_v1/Greed_V1.txt,45,Grateful,Blessed,1,lucky,lucky,44,49,8,9,False,1
+greed-v1-536576656e5f446561646c795f53696e73325f76312f47726565645f56312e747874,Seven_Deadly_Sins2_v1/Greed_V1.txt,58,Afraid,Scared,1,fear,fear,28,32,8,9,False,1
+lust-v1-536576656e5f446561646c795f53696e73325f76312f4c7573745f56312e747874,Seven_Deadly_Sins2_v1/Lust_V1.txt,8,Surprised,Amazed,1,amazing,amazing,26,33,5,6,False,1
+lust-v1-536576656e5f446561646c795f53696e73325f76312f4c7573745f56312e747874,Seven_Deadly_Sins2_v1/Lust_V1.txt,9,Trusting,Hopeful,1,faithful,faithful,24,32,6,7,False,1
+lust-v1-536576656e5f446561646c795f53696e73325f76312f4c7573745f56312e747874,Seven_Deadly_Sins2_v1/Lust_V1.txt,11,Loving,Affectionate,1,love,love,5,9,1,2,False,1
+lust-v1-536576656e5f446561646c795f53696e73325f76312f4c7573745f56312e747874,Seven_Deadly_Sins2_v1/Lust_V1.txt,23,Sad,Hurt,1,sad,sad,7,10,2,3,False,1
+lust-v1-536576656e5f446561646c795f53696e73325f76312f4c7573745f56312e747874,Seven_Deadly_Sins2_v1/Lust_V1.txt,23,Joyful,Happy,0,happy,happy,20,25,5,6,True,0
+pride-v1-536576656e5f446561646c795f53696e73325f76312f50726964655f56312e747874,Seven_Deadly_Sins2_v1/Pride_V1.txt,14,Loving,Tender,0,embrace,embrace,8,15,2,3,True,0
+pride-v1-536576656e5f446561646c795f53696e73325f76312f50726964655f56312e747874,Seven_Deadly_Sins2_v1/Pride_V1.txt,23,Proud,Successful,1,made it,made it,7,14,2,4,False,1
+pride-v1-536576656e5f446561646c795f53696e73325f76312f50726964655f56312e747874,Seven_Deadly_Sins2_v1/Pride_V1.txt,40,Loving,Affectionate,1,love,love,16,20,4,5,False,1
+pride-v1-536576656e5f446561646c795f53696e73325f76312f50726964655f56312e747874,Seven_Deadly_Sins2_v1/Pride_V1.txt,41,Loving,Affectionate,1,love,love,16,20,4,5,False,1
+pride-v1-536576656e5f446561646c795f53696e73325f76312f50726964655f56312e747874,Seven_Deadly_Sins2_v1/Pride_V1.txt,42,Trusting,Safe,1,safe,safe,17,21,3,4,False,1
+pride-v1-536576656e5f446561646c795f53696e73325f76312f50726964655f56312e747874,Seven_Deadly_Sins2_v1/Pride_V1.txt,51,Proud,Successful,1,made it,Made it,0,7,0,2,False,1
+pride-v1-536576656e5f446561646c795f53696e73325f76312f50726964655f56312e747874,Seven_Deadly_Sins2_v1/Pride_V1.txt,57,Proud,Successful,1,made it,made it,7,14,2,4,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,5,Afraid,Insecure,0,doubt,doubt,27,32,4,5,True,0
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,14,Afraid,Insecure,0,doubt,doubt,27,32,4,5,True,0
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,28,Depressed,Hopeless,1,hopeless,hopeless,6,14,1,2,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,38,Joyful,Happy,1,elated,elated,26,32,6,7,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,62,Depressed,Empty,1,depressed,Depressed,0,9,0,1,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,65,Proud,Successful,1,made it,made it,18,25,4,6,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,73,Joyful,Content,1,at peace,at peace,20,28,5,7,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,84,Grateful,Thankful,1,thank,thank,2,7,1,2,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,88,Trusting,Accepted,1,fit in,fit in,14,20,3,5,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,94,Trusting,Hopeful,1,hope,hope,7,11,2,3,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,109,Grateful,Thankful,1,thank,thank,2,7,1,2,False,1
+sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874,Seven_Deadly_Sins2_v1/Sloth_V1.txt,136,Grateful,Thankful,1,thank,thank,2,7,1,2,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,10,Joyful,Playful,1,fun,fun,23,26,6,7,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,12,Loving,Tender,1,warmth,warmth,21,27,5,6,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,13,Joyful,Playful,0,fun,fun,3,6,1,2,True,0
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,23,Proud,Worthy,1,strong,strong,7,13,1,2,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,28,Afraid,Vulnerable,1,defenseless,defenseless,4,15,1,2,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,33,Trusting,Hopeful,1,hope,hope,2,6,1,2,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,52,Joyful,Playful,1,fun,fun,23,26,6,7,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,61,Joyful,Playful,1,fun,fun,23,26,6,7,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,75,Loving,Affectionate,1,love,Love,0,4,0,1,False,1
+wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874,Seven_Deadly_Sins2_v1/Wrath_V1.txt,75,Angry,Resentful,1,bitter,bitter,19,25,5,6,False,1
+charity-v2-536576656e5f446561646c795f53696e73325f76322f436861726974795f56322e747874,Seven_Deadly_Sins2_v2/Charity_V2.txt,23,Sad,Grieving,1,sorrow,sorrow,34,40,7,8,False,1
+charity-v2-536576656e5f446561646c795f53696e73325f76322f436861726974795f56322e747874,Seven_Deadly_Sins2_v2/Charity_V2.txt,27,Trusting,Hopeful,1,hope,hope,22,26,4,5,False,1
+charity-v2-536576656e5f446561646c795f53696e73325f76322f436861726974795f56322e747874,Seven_Deadly_Sins2_v2/Charity_V2.txt,38,Angry,Resentful,1,resentment,resentment,26,36,6,7,False,1
+charity-v2-536576656e5f446561646c795f53696e73325f76322f436861726974795f56322e747874,Seven_Deadly_Sins2_v2/Charity_V2.txt,39,Angry,Furious,1,anger,Anger,0,5,0,1,False,1
+charity-v2-536576656e5f446561646c795f53696e73325f76322f436861726974795f56322e747874,Seven_Deadly_Sins2_v2/Charity_V2.txt,48,Sad,Lonely,1,loneliness,loneliness,8,18,2,3,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,6,Loving,Affectionate,1,love,Love,0,4,0,1,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,28,Loving,Affectionate,1,love,Love,0,4,0,1,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,31,Loving,Affectionate,1,love,love,14,18,4,5,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,34,Loving,Connected,1,intimacy,intimacy,15,23,2,3,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,34,Sad,Grieving,1,crying,crying,8,14,1,2,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,38,Loving,Affectionate,1,love,Love,0,4,0,1,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,39,Trusting,Safe,1,safe,safe,45,49,8,9,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,41,Loving,Affectionate,1,love,love,34,38,8,9,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,46,Loving,Affectionate,1,love,Love,0,4,0,1,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,51,Loving,Affectionate,1,love,Love,0,4,0,1,False,1
+chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874,Seven_Deadly_Sins2_v2/Chastity_V2.txt,56,Loving,Affectionate,1,love,Love,0,4,0,1,False,1
+humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874,Seven_Deadly_Sins2_v2/Humility_V2.txt,13,Grateful,Blessed,1,blessed,blessed,18,25,4,5,False,1
+humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874,Seven_Deadly_Sins2_v2/Humility_V2.txt,16,Joyful,Playful,1,fun,fun,11,14,2,3,False,1
+humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874,Seven_Deadly_Sins2_v2/Humility_V2.txt,21,Angry,Furious,1,irate,irate,26,31,6,7,False,1
+humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874,Seven_Deadly_Sins2_v2/Humility_V2.txt,22,Joyful,Playful,1,playful,playful,29,36,6,7,False,1
+humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874,Seven_Deadly_Sins2_v2/Humility_V2.txt,43,Loving,Affectionate,1,adored,adored,28,34,6,7,False,1
+humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874,Seven_Deadly_Sins2_v2/Humility_V2.txt,57,Trusting,Safe,1,safe,safe,6,10,2,3,False,1
+humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874,Seven_Deadly_Sins2_v2/Humility_V2.txt,60,Loving,Connected,1,close,close,22,27,5,6,False,1
+humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874,Seven_Deadly_Sins2_v2/Humility_V2.txt,68,Angry,Resentful,1,jealousy,jealousy,6,14,2,3,False,1
+kindness-v2-536576656e5f446561646c795f53696e73325f76322f4b696e646e6573735f56322e747874,Seven_Deadly_Sins2_v2/Kindness_V2.txt,1,Loving,Compassionate,1,kindness,Kindness,0,8,0,1,False,1
+kindness-v2-536576656e5f446561646c795f53696e73325f76322f4b696e646e6573735f56322e747874,Seven_Deadly_Sins2_v2/Kindness_V2.txt,4,Afraid,Insecure,1,insecure,insecure,29,37,5,6,False,1
+kindness-v2-536576656e5f446561646c795f53696e73325f76322f4b696e646e6573735f56322e747874,Seven_Deadly_Sins2_v2/Kindness_V2.txt,11,Loving,Compassionate,1,kindness,Kindness,0,8,0,1,False,1
+kindness-v2-536576656e5f446561646c795f53696e73325f76322f4b696e646e6573735f56322e747874,Seven_Deadly_Sins2_v2/Kindness_V2.txt,23,Loving,Compassionate,1,kindness,kindness,13,21,3,4,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,4,Trusting,Hopeful,1,faith,faith,35,40,8,9,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,17,Loving,Connected,1,close,close,21,26,4,5,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,20,Trusting,Safe,1,safe,safe,15,19,4,5,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,23,Trusting,Accepted,0,fit in,fit in,11,17,3,5,True,0
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,23,Trusting,Hopeful,0,hope,hope,3,7,1,2,True,0
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,26,Angry,Furious,1,anger,anger,28,33,6,7,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,30,Disgusted,Ashamed,1,shameful,shameful,30,38,6,7,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,31,Disgusted,Ashamed,1,shame,shame,10,15,2,3,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,37,Sad,Hurt,1,hurt,hurt,28,32,7,8,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,53,Joyful,Happy,1,happiness,Happiness,0,9,0,1,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,60,Sad,Hurt,1,hurting,hurting,23,30,4,5,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,61,Afraid,Vulnerable,1,fragile,Fragile,0,7,0,1,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,73,Depressed,Empty,1,empty,Empty,0,5,0,1,False,1
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,82,Proud,Worthy,0,strong,strong,12,18,2,3,True,0
+patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874,Seven_Deadly_Sins2_v2/Patience_V2.txt,97,Surprised,Amazed,1,surprised,surprised,9,18,3,4,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,13,Grateful,Blessed,1,blessed,blessed,16,23,3,4,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,15,Joyful,Happy,1,happy,Happy,0,5,0,1,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,19,Proud,Worthy,1,strong,strong,35,41,7,8,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,24,Proud,Worthy,1,strong,strong,23,29,5,6,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,25,Depressed,Empty,1,empty,empty,6,11,1,2,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,26,Trusting,Hopeful,1,hope,hope,16,20,4,5,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,28,Trusting,Safe,1,safe,safe,13,17,2,3,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,30,Trusting,Safe,1,safe,safe,41,45,8,9,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,39,Trusting,Hopeful,1,faith,faith,9,14,1,2,False,1
+temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874,Seven_Deadly_Sins2_v2/Temperance_V2.txt,42,Trusting,Safe,1,safe,safe,38,42,5,6,False,1
+hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874,Seven_Deadly_Sins2_v3/Hungry_V3.txt,4,Surprised,Amazed,1,surprise,surprise,23,31,5,6,False,1
+hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874,Seven_Deadly_Sins2_v3/Hungry_V3.txt,23,Sad,Lonely,1,lonely,lonely,35,41,8,9,False,1
+hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874,Seven_Deadly_Sins2_v3/Hungry_V3.txt,26,Trusting,Hopeful,1,hope,hope,27,31,4,5,False,1
+hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874,Seven_Deadly_Sins2_v3/Hungry_V3.txt,30,Grateful,Thankful,1,grateful,grateful,0,8,0,1,False,1
+hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874,Seven_Deadly_Sins2_v3/Hungry_V3.txt,44,Afraid,Scared,1,fear,fear,0,4,0,1,False,1
+hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874,Seven_Deadly_Sins2_v3/Hungry_V3.txt,48,Joyful,Happy,1,joy,joy,34,37,6,7,False,1
+hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874,Seven_Deadly_Sins2_v3/Hungry_V3.txt,50,Intrigued,Curious,1,wondering,wondering,0,9,0,1,False,1
+hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874,Seven_Deadly_Sins2_v3/Hungry_V3.txt,57,Surprised,Amazed,1,surprise,surprise,23,31,5,6,False,1
+love-v3-536576656e5f446561646c795f53696e73325f76332f4c6f76655f56332e747874,Seven_Deadly_Sins2_v3/Love_V3.txt,1,Loving,Affectionate,1,love,Love,0,4,0,1,False,1
+love-v3-536576656e5f446561646c795f53696e73325f76332f4c6f76655f56332e747874,Seven_Deadly_Sins2_v3/Love_V3.txt,3,Loving,Affectionate,1,love,love,2,6,1,2,False,1
+love-v3-536576656e5f446561646c795f53696e73325f76332f4c6f76655f56332e747874,Seven_Deadly_Sins2_v3/Love_V3.txt,41,Proud,Successful,1,made it,made it,7,14,2,4,False,1
+love-v3-536576656e5f446561646c795f53696e73325f76332f4c6f76655f56332e747874,Seven_Deadly_Sins2_v3/Love_V3.txt,65,Proud,Worthy,1,strength,strength,11,19,2,3,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,11,Loving,Affectionate,1,loved,loved,19,24,3,4,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,12,Trusting,Hopeful,1,hope,hope,54,58,10,11,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,16,Afraid,Scared,1,fear,fear,3,7,1,2,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,31,Sad,Lonely,1,lonely,lonely,8,14,2,3,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,44,Loving,Affectionate,1,love,love,42,46,8,9,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,55,Loving,Affectionate,1,loved,loved,19,24,3,4,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,56,Trusting,Hopeful,1,hope,hope,54,58,10,11,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,60,Afraid,Scared,1,fear,fear,3,7,1,2,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,89,Afraid,Scared,1,terrified,terrified,91,100,16,17,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,103,Sad,Lonely,1,isolated,isolated,101,109,17,18,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,103,Afraid,Anxious,1,anxious,anxious,115,122,19,20,False,1
+power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874,Seven_Deadly_Sins2_v3/Power_V3.txt,117,Joyful,Content,1,content,content,227,234,40,41,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,8,Grateful,Blessed,1,blessings,blessings,46,55,8,9,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,9,Sad,Lonely,0,lonely,lonely,17,23,3,4,True,0
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,11,Joyful,Content,1,peaceful,peaceful,36,44,7,8,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,11,Depressed,Empty,1,hollow,hollow,19,25,4,5,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,12,Afraid,Scared,1,fearful,fearful,42,49,8,9,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,18,Sad,Grieving,1,crying,crying,43,49,9,10,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,19,Afraid,Anxious,0,nervous,nervous,40,47,8,9,True,0
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,28,Sad,Lonely,1,alone,alone,4,9,1,2,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,36,Afraid,Scared,1,fearful,fearful,8,15,2,3,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,37,Depressed,Hopeless,1,hopeless,Hopeless,0,8,0,1,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,38,Sad,Lonely,1,lonely,Lonely,0,6,0,1,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,49,Surprised,Startled,1,speechless,speechless,44,54,6,7,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,52,Depressed,Hopeless,1,defeated,defeated,48,56,10,11,False,1
+2526-54726166616c6761722f323532362e747874,Trafalgar/2526.txt,55,Grateful,Blessed,1,blessing,blessing,56,64,11,12,False,1
+data-freestyle-54726166616c6761722f446174615f467265657374796c652e747874,Trafalgar/Data_Freestyle.txt,3,Trusting,Hopeful,2,faith,Faith,0,5,0,1,False,1
+data-freestyle-54726166616c6761722f446174615f467265657374796c652e747874,Trafalgar/Data_Freestyle.txt,3,Trusting,Hopeful,2,faith,faith,14,19,2,3,False,1
+data-freestyle-54726166616c6761722f446174615f467265657374796c652e747874,Trafalgar/Data_Freestyle.txt,19,Angry,Furious,1,anger,anger,4,9,1,2,False,1
+data-freestyle-54726166616c6761722f446174615f467265657374796c652e747874,Trafalgar/Data_Freestyle.txt,26,Loving,Compassionate,1,compassion,compassion,25,35,5,6,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,4,Afraid,Scared,1,fear,fear,34,38,6,7,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,4,Afraid,Scared,1,afraid,afraid,47,53,9,10,True,0
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,10,Trusting,Accepted,1,supported,supported,37,46,8,9,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,12,Trusting,Hopeful,1,hope,hope,6,10,1,2,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,18,Disgusted,Ashamed,1,guilt,guilt,37,42,6,7,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,20,Trusting,Accepted,1,supported,supported,47,56,11,12,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,22,Disgusted,Ashamed,1,shame,shame,4,9,1,2,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,31,Joyful,Happy,1,elated,elated,27,33,6,7,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,34,Loving,Tender,0,embrace,embrace,49,56,9,10,True,0
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,42,Disgusted,Ashamed,1,shame,shame,13,18,3,4,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,48,Angry,Furious,1,anger,anger,27,32,4,5,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,49,Trusting,Hopeful,1,faithful,faithful,38,46,8,9,False,1
+distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874,Trafalgar/Distancing_Myself.txt,57,Trusting,Hopeful,1,faith,faith,17,22,3,4,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,4,Angry,Provoked,1,offended,offended,30,38,6,7,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,14,Joyful,Playful,1,fun,fun,42,45,8,9,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,31,Loving,Affectionate,1,loving,loving,26,32,6,7,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,33,Afraid,Anxious,0,worry,worry,35,40,7,8,True,0
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,41,Intrigued,Curious,1,intrigued,intrigued,31,40,5,6,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,42,Intrigued,Curious,1,curious,Curious,0,7,0,1,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,44,Loving,Affectionate,1,love,love,13,17,3,4,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,46,Angry,Furious,1,enraged,enraged,9,16,2,3,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,51,Loving,Affectionate,1,love,love,2,6,1,2,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,53,Angry,Resentful,1,resentment,resentment,35,45,8,9,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,54,Grateful,Blessed,1,blessing,blessing,34,42,7,8,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,67,Joyful,Playful,1,fun,fun,31,34,7,8,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,77,Depressed,Exhausted,1,exhausted,exhausted,5,14,1,2,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,80,Afraid,Scared,1,fear,fear,36,40,7,8,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,115,Loving,Affectionate,1,love,love,13,17,2,3,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,118,Joyful,Happy,1,happiness,Happiness,0,9,0,1,False,1
+finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874,Trafalgar/Finish_My_Sentance.txt,121,Grateful,Blessed,1,blessings,blessings,37,46,8,9,False,1
+glass-cannon-54726166616c6761722f476c6173735f43616e6e6f6e2e747874,Trafalgar/Glass_Cannon.txt,3,Afraid,Vulnerable,1,fragile,fragile,13,20,2,3,False,1
+glass-cannon-54726166616c6761722f476c6173735f43616e6e6f6e2e747874,Trafalgar/Glass_Cannon.txt,9,Afraid,Vulnerable,1,fragile,fragile,13,20,2,3,False,1
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,6,Sad,Lonely,1,alone,alone,13,18,3,4,False,1
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,7,Trusting,Hopeful,0,hope,hope,3,7,1,2,True,0
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,27,Trusting,Hopeful,2,faith,faith,13,18,4,5,False,1
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,27,Trusting,Hopeful,2,faith,faith,46,51,11,12,False,1
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,32,Afraid,Scared,1,scared,scared,32,38,7,8,False,1
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,45,Sad,Lonely,1,alone,alone,13,18,3,4,False,1
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,46,Trusting,Hopeful,0,hope,hope,3,7,1,2,True,0
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,66,Trusting,Hopeful,2,faith,faith,13,18,4,5,False,1
+phoenix-54726166616c6761722f50686f656e69782e747874,Trafalgar/Phoenix.txt,66,Trusting,Hopeful,2,faith,faith,46,51,11,12,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,5,Loving,Affectionate,1,love,love,178,182,34,35,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,5,Grateful,Blessed,1,blessed,blessed,156,163,31,32,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,13,Surprised,Confused,1,confusion,confusion,113,122,21,22,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,21,Loving,Compassionate,1,merciful,merciful,275,283,58,59,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,21,Surprised,Overwhelmed,1,overcome,overcome,466,474,95,96,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,21,Angry,Furious,1,anger,anger,262,267,55,56,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,42,Proud,Worthy,1,strength,strength,452,460,80,81,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,42,Joyful,Happy,1,delighted,delighted,216,225,37,38,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,42,Grateful,Thankful,1,grateful,grateful,132,140,23,24,False,1
+section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874,Trafalgar/Section_1_Review.txt,42,Grateful,Blessed,1,blessings,blessings,105,114,18,19,False,1
+wise-ones-54726166616c6761722f576973655f4f6e65732e747874,Trafalgar/Wise_Ones.txt,3,Loving,Affectionate,1,love,love,2,6,1,2,False,1
+wise-ones-54726166616c6761722f576973655f4f6e65732e747874,Trafalgar/Wise_Ones.txt,6,Intrigued,Curious,1,intrigued,Intrigued,0,9,0,1,False,1
+wise-ones-54726166616c6761722f576973655f4f6e65732e747874,Trafalgar/Wise_Ones.txt,23,Loving,Affectionate,0,cherished,cherished,36,45,6,7,True,0
+wise-ones-54726166616c6761722f576973655f4f6e65732e747874,Trafalgar/Wise_Ones.txt,37,Loving,Connected,1,devoted,devoted,30,37,6,7,False,1
+wise-ones-54726166616c6761722f576973655f4f6e65732e747874,Trafalgar/Wise_Ones.txt,40,Trusting,Safe,1,trust,Trust,0,5,0,1,False,1
+wise-ones-54726166616c6761722f576973655f4f6e65732e747874,Trafalgar/Wise_Ones.txt,41,Trusting,Hopeful,1,faith,Faith,0,5,0,1,False,1
+wise-ones-54726166616c6761722f576973655f4f6e65732e747874,Trafalgar/Wise_Ones.txt,45,Proud,Confident,1,confidence,confidence,6,16,1,2,False,1
+dragon-fruit-56616761626f6e642f447261676f6e5f46727569742e747874,Vagabond/Dragon_Fruit.txt,37,Loving,Compassionate,1,kindness,Kindness,0,8,0,1,False,1
+freedom-56616761626f6e642f66726565646f6d2e747874,Vagabond/freedom.txt,7,Joyful,Happy,1,happy,happy,9,14,3,4,False,1
+freedom-56616761626f6e642f66726565646f6d2e747874,Vagabond/freedom.txt,10,Surprised,Confused,1,confused,confused,10,18,3,4,False,1
+freedom-56616761626f6e642f66726565646f6d2e747874,Vagabond/freedom.txt,13,Angry,Resentful,1,bitter,bitter,38,44,7,8,False,1
+freedom-56616761626f6e642f66726565646f6d2e747874,Vagabond/freedom.txt,20,Loving,Compassionate,2,kindness,kindness,7,15,2,3,False,1
+freedom-56616761626f6e642f66726565646f6d2e747874,Vagabond/freedom.txt,20,Loving,Compassionate,2,kindness,kindness,20,28,4,5,False,1
+freedom-56616761626f6e642f66726565646f6d2e747874,Vagabond/freedom.txt,29,Sad,Hurt,1,hurt,hurt,5,9,1,2,False,1
+halt-56616761626f6e642f48414c542e747874,Vagabond/HALT.txt,1,Sad,Lonely,1,lonely,Lonely,13,19,2,3,False,1
+halt-56616761626f6e642f48414c542e747874,Vagabond/HALT.txt,1,Angry,Furious,1,angry,Angry,7,12,1,2,False,1
+halt-56616761626f6e642f48414c542e747874,Vagabond/HALT.txt,5,Angry,Furious,1,angry,angry,0,5,0,1,False,1
+liminal-56616761626f6e642f4c696d696e616c2e747874,Vagabond/Liminal.txt,10,Sad,Lonely,1,alone,alone,12,17,3,4,False,1
+liminal-56616761626f6e642f4c696d696e616c2e747874,Vagabond/Liminal.txt,13,Trusting,Safe,1,safe,safe,48,52,10,11,False,1
+liminal-56616761626f6e642f4c696d696e616c2e747874,Vagabond/Liminal.txt,17,Trusting,Accepted,1,welcomed,Welcomed,0,8,0,1,False,1
+liminal-56616761626f6e642f4c696d696e616c2e747874,Vagabond/Liminal.txt,27,Loving,Affectionate,0,love,love,8,12,2,3,True,0
+liminal-56616761626f6e642f4c696d696e616c2e747874,Vagabond/Liminal.txt,39,Sad,Lonely,1,lonely,lonely,15,21,3,4,False,1
+liminal-56616761626f6e642f4c696d696e616c2e747874,Vagabond/Liminal.txt,49,Loving,Affectionate,1,love,love,14,18,3,4,False,1
+liminal-56616761626f6e642f4c696d696e616c2e747874,Vagabond/Liminal.txt,50,Joyful,Playful,1,fun,fun,14,17,3,4,False,1
+obsession-56616761626f6e642f4f6273657373696f6e2e747874,Vagabond/Obsession.txt,6,Trusting,Secure,1,steady,steady,23,29,5,6,False,1
+obsession-56616761626f6e642f4f6273657373696f6e2e747874,Vagabond/Obsession.txt,41,Trusting,Safe,1,safety,safety,10,16,2,3,False,1
+obsession-56616761626f6e642f4f6273657373696f6e2e747874,Vagabond/Obsession.txt,49,Proud,Confident,1,fearless,fearless,8,16,1,2,False,1
+preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.txt,7,Proud,Successful,1,made it,made it,37,44,6,8,False,1
+preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.txt,16,Trusting,Safe,1,safe,safe,29,33,4,5,False,1
+preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.txt,34,Proud,Worthy,1,capable,capable,18,25,4,5,False,1
+preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.txt,37,Loving,Affectionate,1,loving,loving,31,37,7,8,False,1
+preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.txt,40,Loving,Affectionate,1,love,love,14,18,4,5,False,1
+target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,15,Intrigued,Curious,1,wondering,wondering,30,39,7,8,False,1
+target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,65,Sad,Lonely,0,lonely,lonely,20,26,4,5,True,0
+target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,95,Intrigued,Curious,1,wondering,wondering,30,39,7,8,False,1
+target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,145,Sad,Lonely,0,lonely,lonely,20,26,4,5,True,0
+type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,9,Depressed,Unworthy,1,powerless,Powerless,0,9,0,1,False,1
+type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,23,Joyful,Happy,1,happy,happy,45,50,10,11,False,1
+type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,31,Grateful,Blessed,1,blessings,blessings,30,39,6,7,False,1
+type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,32,Grateful,Thankful,1,grateful,Grateful,0,8,0,1,False,1
+type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,37,Loving,Affectionate,1,love,love,10,14,2,3,False,1
+type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,40,Loving,Affectionate,1,love,love,15,19,4,5,False,1
+unconscious-56616761626f6e642f556e636f6e7363696f75732e747874,Vagabond/Unconscious.txt,12,Proud,Worthy,1,strong,strong,22,28,4,5,False,1
+unconscious-56616761626f6e642f556e636f6e7363696f75732e747874,Vagabond/Unconscious.txt,33,Afraid,Scared,1,scared,scared,18,24,3,4,False,1
+unconscious-56616761626f6e642f556e636f6e7363696f75732e747874,Vagabond/Unconscious.txt,51,Disgusted,Ashamed,1,shame,shame,0,5,0,1,False,1
