@@ -1,6 +1,6 @@
 (() => {
   "use strict";
-  const descriptions = { gaming: "Gaming — competition, measured.", economics: "Economics — systems of exchange.", business: "Business — from process to insight.", physics: "Physics — models of the world.", language: "Language — words, rhythm & meaning.", miscellaneous: "Miscellaneous — room for curiosity.", "mental-map": "Mental Map — the thread connecting every field." };
+  const descriptions = { gaming: "Gaming — competition, measured.", economics: "Economics — systems of exchange.", business: "Business — from process to insight.", physics: "Physics — models of the world.", language: "Language — words, rhythm & meaning.", miscellaneous: "Miscellaneous — room for curiosity.", sports: "Sports — house rules, court stories & data.", "mental-map": "Mental Map — the thread connecting every field." };
   const map = document.querySelector('.hex-map');
   if (map) {
     const activate = (topic) => {

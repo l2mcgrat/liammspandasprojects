@@ -1,0 +1,103 @@
+\documentclass{article}
+\usepackage{amsmath,amssymb,graphicx,hyperref}
+
+\title{Quantum Mechanics}
+\author{Liam McGrath}
+\date{November 2023}
+
+\begin{document}
+
+\maketitle
+
+\section{Quantum Mechanics Solutions}
+
+\subsection{Hydrogen Atom}
+
+\textit{Editorially corrected reader edition.} The November 2023 manuscript is preserved byte-for-byte in the repository archive. This edition corrects its radial separation, angular equation and radial exponential, distinguishes mass from magnetic quantum number, and supplies normalization and model assumptions. These are AI-assisted corrections rather than a claim that the original derivation was already verified.
+
+We consider a nonrelativistic electron and proton interacting through an unscreened Coulomb potential in vacuum. Separate centre-of-mass motion and use reduced mass $\mu=m_e m_p/(m_e+m_p)$ for their relative coordinate. Using $m_e$ instead corresponds to the fixed-proton approximation. Spin, fine structure, hyperfine structure, the Lamb shift and external fields are omitted. The relative Hamiltonian is
+
+\begin{equation}
+\hat H = -\frac{\hbar^2}{2\mu}\nabla^2 - \frac{e^2}{4\pi\epsilon_0r},\qquad \hat H\psi=E\psi.
+\label{hydrogen-hamiltonian}
+\end{equation}
+
+Here $e>0$ is the elementary-charge magnitude and $\epsilon_0$ is vacuum permittivity. Spherical symmetry suggests $\psi(r,\theta,\phi)=R(r)Y(\theta,\phi)$ and
+
+\begin{equation}
+\nabla^2=\frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2\frac{\partial}{\partial r}\right)
++\frac{1}{r^2\sin\theta}\frac{\partial}{\partial\theta}\left(\sin\theta\frac{\partial}{\partial\theta}\right)
++\frac{1}{r^2\sin^2\theta}\frac{\partial^2}{\partial\phi^2}.
+\end{equation}
+
+\subsubsection{Angular equation and convention}
+Dividing the angular part by $Y$ produces the dimensionless separation constant $-\ell(\ell+1)$; it does not produce an extra factor of $Y/\hbar^2$. Equivalently,
+
+\begin{equation}
+\left[\frac{1}{\sin\theta}\frac{\partial}{\partial\theta}\left(\sin\theta\frac{\partial}{\partial\theta}\right)
++\frac{1}{\sin^2\theta}\frac{\partial^2}{\partial\phi^2}\right]Y_{\ell m_\ell}
+=-\ell(\ell+1)Y_{\ell m_\ell}.
+\label{hydrogen-angular}
+\end{equation}
+
+The angular momentum operators have eigenvalues $\hbar^2\ell(\ell+1)$ and $\hbar m_\ell$ for $\hat L^2$ and $\hat L_z$. Integer $\ell\geq0$ and $m_\ell=-\ell,\ldots,\ell$ enforce single-valued regular angular functions. For $m_\ell\geq0$, defining $P_\ell^{m_\ell}$ \emph{without} the Condon--Shortley phase, normalized spherical harmonics are
+
+\begin{equation}
+Y_{\ell m_\ell}(\theta,\phi)=(-1)^{m_\ell}
+\sqrt{\frac{2\ell+1}{4\pi}\frac{(\ell-m_\ell)!}{(\ell+m_\ell)!}}
+P_\ell^{m_\ell}(\cos\theta)e^{im_\ell\phi},\qquad
+Y_{\ell,-m_\ell}=(-1)^{m_\ell}Y_{\ell m_\ell}^{*}.
+\end{equation}
+
+If a library already includes that phase in its associated Legendre functions, do not insert it twice. Angular normalization means $\int |Y|^2\,d\Omega=1$.
+
+\subsubsection{Radial equation, boundary conditions and quantization}
+The correctly separated radial equation contains one centrifugal term:
+
+\begin{equation}
+\frac{d^2R}{dr^2}+\frac{2}{r}\frac{dR}{dr}
++\left[\frac{2\mu}{\hbar^2}\left(E+\frac{e^2}{4\pi\epsilon_0r}\right)
+-\frac{\ell(\ell+1)}{r^2}\right]R=0.
+\label{hydrogen-radial}
+\end{equation}
+
+Every bracketed term has dimensions of inverse length squared. For $u=rR$, this becomes a one-dimensional equation with effective potential $V_{eff}=-e^2/(4\pi\epsilon_0r)+\hbar^2\ell(\ell+1)/(2\mu r^2)$. Regularity at the origin and decay at infinity select square-integrable bound states.
+
+Let $a_\mu=4\pi\epsilon_0\hbar^2/(\mu e^2)$ and $\rho=2r/(na_\mu)$. Factoring out $\rho^\ell e^{-\rho/2}$ leaves an associated Laguerre equation. Requiring termination of its series gives $n=1,2,\ldots$ and $0\leq\ell\leq n-1$. The normalized radial function is
+
+\begin{equation}
+R_{n\ell}(r)=\left(\frac{2}{na_\mu}\right)^{3/2}
+\sqrt{\frac{(n-\ell-1)!}{2n(n+\ell)!}}
+e^{-\rho/2}\rho^\ell L_{n-\ell-1}^{2\ell+1}(\rho),\qquad
+\int_0^\infty |R_{n\ell}|^2r^2\,dr=1.
+\label{hydrogen-normalization}
+\end{equation}
+
+For this definition of $\rho$, the decaying exponential is $e^{-\rho/2}$, not the draft's $e^{-\rho}$. The polynomial can equivalently be written using the confluent hypergeometric function ${}_1F_1(-n+\ell+1;2\ell+2;\rho)$ with the appropriate proportionality and normalization factors. Energies are
+
+\begin{equation}
+E_n=-\frac{\mu e^4}{2(4\pi\epsilon_0)^2\hbar^2 n^2}.
+\label{hydrogen-energy}
+\end{equation}
+
+\subsubsection{Ground-state check and physical interpretation}
+The full normalized stationary states are $\psi_{n\ell m_\ell}=R_{n\ell}Y_{\ell m_\ell}$; their time dependence is $e^{-iE_nt/\hbar}$. For $n=1$, $\ell=m_\ell=0$,
+
+\begin{equation}
+\psi_{100}=\frac{e^{-r/a_\mu}}{\sqrt{\pi a_\mu^3}},\qquad
+P(r)=4\pi r^2|\psi_{100}|^2=\frac{4r^2}{a_\mu^3}e^{-2r/a_\mu}.
+\label{hydrogen-ground-state}
+\end{equation}
+
+Integrating $P(r)$ gives unity, and its maximum occurs at $r=a_\mu$. Probability \emph{density per volume} is instead largest at the origin: these statements concern different measures. These functions describe quantum states, not a classical electron orbit. Within this ideal spin-free Coulomb model each energy has $n^2$ orbital states; omitted interactions split degeneracies.
+
+\subsection{Checking the derivation}
+Substitute the radial solution into equation \eqref{hydrogen-radial}, check both normalization integrals, confirm energy has joule units and evaluate the $n=1$ limit. The radial normalization scales as length to the power $-3/2$, while $Y$ is dimensionless. For dimensionless $x=r/a_\mu$, the ground-state radial equation reduces to an immediate analytic check:
+\begin{equation}
+R''(x)+\frac{2}{x}R'(x)+\left(-1+\frac{2}{x}\right)R(x)=0,
+\qquad R(x)\propto e^{-x}.
+\end{equation}
+
+For reference and context see \href{https://openstax.org/books/university-physics-volume-3/pages/8-2-the-hydrogen-atom}{OpenStax University Physics, Volume 3: The Hydrogen Atom}. The original archive and editorial history are documented in the repository notebook-source guide. These analytical corrections do not imply that every older quantum derivation in the Mental Map has been independently checked.
+
+\end{document}

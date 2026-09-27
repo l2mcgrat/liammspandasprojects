@@ -1,0 +1,886 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Liam McGrath’s connected notebook of science, language, data analysis and creative projects.">
+<meta name="theme-color" content="#0d101b"><title>Waters in a 1D Carbon Nanotube | Liam McGrath</title>
+<link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/styles.css"><link rel="stylesheet" href="../../assets/portfolio.css"><link rel="stylesheet" href="../../assets/career.css">
+<script defer src="../../assets/math-config.js"></script><script defer id="MathJax-script" src="../../assets/vendor/mathjax/tex-chtml.js"></script></head><body><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header">
+      <a class="brand" href="../../index.html" aria-label="Liam McGrath home"><span class="brand-mark" aria-hidden="true">LM</span><span>LIAM McGRATH<small>AN OPEN NOTEBOOK</small></span></a>
+    <nav aria-label="Primary navigation"><a href="../../Mental-Map/index.html">Mental Map</a><a href="../../Language/index.html">Language</a><a href="../../Sports/index.html">Sports</a><a href="../../Smash/index.html">Smash</a><a href="../../About/index.html">About me <span aria-hidden="true">↗</span></a></nav>
+    </header><main id="main-content" class="document-page"><div class="reader-top"><div><p class="eyebrow">The connected notebook / LaTeX edition</p><h1>Waters in a 1D Carbon Nanotube</h1><p>Liam McGrath · Historical 3B Nanotechnology Engineering work-term report · Completion date unverified</p></div><div class="toolbar"><a class="button primary" href="../../assets/documents/work-term-report/document.pdf" download>Compiled article · PDF ↓</a><a class="button ghost" href="../../assets/documents/work-term-report/source-bundle.zip" download>Source + images · ZIP ↓</a><button class="button ghost print-reader" type="button">Print / Save PDF</button></div></div>
+    <div class="reader-layout"><aside class="reader-sidebar"><details class="contents-panel" open><summary>Contents <span>37 headings</span></summary><label class="toc-search-label" for="toc-search">Find a section<input id="toc-search" type="search" placeholder="Search the contents…"></label><div id="reader-toc"><nav aria-label="Table of contents" class="tex-toc"><ol><li data-level="1"><a href="#work-report-edition">Public edition note</a></li><li data-level="1"><a href="#wr-front-letter-1">Letter of submittal</a></li><li data-level="1"><a href="#wr-front-contributions-1">Contributions</a></li><li data-level="1"><a href="#wr-front-summary-1">Summary</a></li><li data-level="1"><a href="#introduction">1 Introduction</a><ol><li data-level="2"><a href="#economic-considerations">1.1 Economic Considerations</a></li></ol></li><li data-level="1"><a href="#background">2 Background</a><ol><li data-level="2"><a href="#pimc">2.1 PIMC</a><ol><li data-level="3"><a href="#energies">2.1.1 Energies</a></li><li data-level="3"><a href="#density-matrix-approach-to-calculating-energies">2.1.2 Density Matrix Approach to Calculating Energies</a></li></ol></li><li data-level="2"><a href="#waters-in-a-nanotube-system">2.2 Waters in a Nanotube System</a><ol><li data-level="3"><a href="#rotational-density-matrix">2.2.1 Rotational Density Matrix</a></li><li data-level="3"><a href="#potential-energy-density-matricies">2.2.2 Potential Energy Density Matricies</a><ol><li data-level="4"><a href="#lj-potential">2.2.2.1 LJ Potential</a></li><li data-level="4"><a href="#mbpol-potential">2.2.2.2 MBPol Potential</a></li></ol></li></ol></li></ol></li><li data-level="1"><a href="#simulation-software">3 Simulation Software</a><ol><li data-level="2"><a href="#the-submit-and-start-scripts">3.1 The Submit and Start Scripts</a></li><li data-level="2"><a href="#the-integrator-and-potentials-scripts">3.2 The Integrator and Potentials Scripts</a></li><li data-level="2"><a href="#analysis-consolidator-and-plotter-scripts">3.3 Analysis, Consolidator and Plotter Scripts</a></li></ol></li><li data-level="1"><a href="#simulation-results-and-discussion">4 Simulation Results and Discussion</a><ol><li data-level="2"><a href="#simulation-validation">4.1 Simulation Validation</a><ol><li data-level="3"><a href="#comparison-of-translational-energy-outputs">4.1.1 Comparison of Translational Energy Outputs</a></li><li data-level="3"><a href="#comparison-of-rotational-energy-values">4.1.2 Comparison of Rotational Energy Values</a></li></ol></li><li data-level="2"><a href="#energy-outputs">4.2 Energy Outputs</a></li><li data-level="2"><a href="#ordering-parameter-outputs">4.3 Ordering Parameter Outputs</a></li></ol></li><li data-level="1"><a href="#conclusions">Conclusions</a></li><li data-level="1"><a href="#recommendations">Recommendations</a></li><li data-level="1"><a href="#wr-front-glossary-1">Glossary</a></li><li data-level="1"><a href="#wr-front-references-1">References</a></li><li data-level="1"><a href="#wr-app-firstappx-1">Appendix A: Evaluation of the Translation Density Matrix</a></li><li data-level="1"><a href="#wr-app-scdappx-1">Appendix B: Rotational Density Matrix Derivation</a></li><li data-level="1"><a href="#wr-app-thrdappx-1">Appendix C: Proof of Approximation</a></li><li data-level="1"><a href="#wr-app-fthappx-1">Appendix D: Energy Eigenvalues from Operators Proof</a></li><li data-level="1"><a href="#wr-app-Eappx-1">Appendix E: Simplification of Asymmetric Top Hamiltonian</a></li><li data-level="1"><a href="#wr-app-potengc-1">Appendix F: Coulomb Potential</a></li><li data-level="1"><a href="#wr-app-potengdd-1">Appendix G: Dipole-Dipole Interaction Potential</a></li><li data-level="1"><a href="#wr-app-eulang-1">Appendix H: Euler angles for Rotation Matrix Functions</a></li></ol></nav></div><p id="toc-empty" hidden>No matching sections.</p></details></aside>
+    <div class="reader-column"><nav class="topic-links" aria-label="Deeper topic pages"><strong>Follow a thread ↗</strong><a href="../index.html">About Liam ↗</a><a href="../Resume/index.html">Public résumé ↗</a><a href="../../Physics/index.html">Physics collection ↗</a><a href="../../assets/documents/work-term-report/edition-manifest.json" download>Edition audit · JSON ↓</a></nav><p class="reader-note">Privacy-safe public article, not the original ECE template. Scientific text, equations, figures, appendices and references are retained. Administrative/contact details are excluded; ambiguous historical references are marked for review. The compiled PDF uses article pagination; its successful compilation is not a new scientific validation.</p><p class="math-status" role="status">Typesetting equations locally…</p><article class="tex-paper"><h1 class="unnumbered" id="work-report-edition">Public edition note</h1>
+<p>This is an undated historical 3B work-term report. The original used an automatically generated date; no completion date has been inferred. The author’s substantive letter, acknowledgments, contributions, summary, scientific discussion, mathematical expressions, appendices and eleven manually written references are retained. Statements about simulation validation and scientific results are historical claims of the report, not new verification or assurances of correctness.</p>
+<p>Administrative student identifiers and postal/contact details have been removed. This standalone article does not distribute the original custom document class. The student work is not public domain, and no license or broader reuse permission is asserted. The template’s author header is not a verified license; the absence of a confidentiality flag does not establish permission to publish or redistribute.</p>
+<p>Repeated equation labels have distinct namespaced identifiers. Missing or ambiguous historical references remain visible review notes rather than guessed links. Appendix letters and the original section-prefixed figure and table numbering are explicit in this edition.</p>
+<h1 class="unnumbered" id="wr-front-letter-1">Letter of submittal</h1>
+<p>This report, entitled "Waters in a 1D Carbon Nanotube" was prepared as my 3B Work Report for the University of Waterloo. This report is in fulfillment of the course WKRPT 400. The purpose of this report is to develop and validate a Monte Carlo/Molecular Dynamics simulation software package, specially designed for nanoscale systems, which generates trajectory files based on chosen input parameters and uses them to calculate the time averages of physical properties.</p>
+<p>I worked under the Roy group, who works within the physics department of the University of Waterloo, with my employer being Professor Roy. The Roy Group is focused on developing theoretical approaches and numerical algorithms for computer simulations. Professor Roy performs sets of simulations which range from small, low temperature situations such as quantum clusters or quantum fluids where quantum mechanical effects must be taken into account (such as dispersion and quantum statistical mechanics effects), to semi-classical systems where purely classical mechanical implementations fail but approximate quantum treatment is sufficient for accurate results, to larger biochemical systems which are implemented using classical molecular dynamics.</p>
+<p>I would like to acknowledge Professor Roy and his team for teaching me several classical and statistical mechanics principles, the principles of PIMC and PIMD, and their implementation into simulation software. I would also like to thank professor Roy for introducing me to the <em>nlogn</em> and <em>graham.computecanada.ca</em> servers. I’d especially like to thank Tapas Sahoo for assisting me with automating my simulation submission process so that I could submit multiple simulations with different parameters simultaneously (temperature, bead number, lattice spacing, etc), and I would like to thank Xichen Lou for assisting me with debugging code and clarifying details of the mechanics that were implemented in the software. I hereby confirm that I have received no further help other than what is mentioned above in writing this report. I also confirm this report has not been previously submitted for academic credit at this or any other academic institution.</p>
+<p>Sincerely,</p>
+<p>Liam McGrath</p>
+<h1 class="unnumbered" id="wr-front-contributions-1">Contributions</h1>
+<p>The team I worked with on this particular project was relatively small and consisted of 3 members; a masters student, Xichen Lou, a postdoctoral fellow, Tapas Sahoo, and the Tier 1 Canada Research Chair in Quantum Molecular Dynamics, Professor Roy. The team members each had backgrounds in theoretical chemistry.</p>
+<p>The team’s main goal were to develop and validate a simulation software that implements translation of molecules using PIMD and rotation of molecules using PIMC, and compare the energy outputs from this simulation software to the outputs from fully validated simulator, MoRiBS, which implements both translation and rotation using PIMC. Additionally, we wanted to test the simulation software to determine if it could accurately replicate an observed phase transition in a system consisting of water molecules inside a carbon nanotube, with the radius of the nanotube being such that the water molecules are confined in 1D space.</p>
+<p>My tasks consisted of developing and validating a simulation software focused on modelling nano-scale systems. I was responsible for developing an integrator script, which models the dynamics of a system using PIMD and PIMC, and stores positions and velocities and Euler angles for each time step in trajectory. I was responsible for developing analysis scripts, which calculated observables such as energies from trajectory files. I was also responsible for developing consolidator and plotting scripts, which will consolidate outputs for variables of interest so that they can be visually represented as functions of 1 or 2 variables (using plotting scripts), while keeping other variables constant. I was responsible for validating the software by comparing our simulators results with theoretical and experimentally determined results, as well as results from the MoRiBS simulator.</p>
+<p>The purpose of this report in relation to my work term is to illustrate how the software developed can accurately model a set of simple systems. With this report, I was able to demonstrate the my ability to apply knowledge attained from my first year physics and third year statistical mechanics courses to develop a simulation which accurately models nano-scale systems. This report has also allowed me to improve my writing skills through practice, and provided a record of my work term experience.</p>
+<p>The purpose of the simulator is to model nano-scale systems using computational algorithms derived from physical principles of nano-scale systems. This report will serve as an example for how someone might approach development and validation of software used to simulate a nano-scale system. The requirements outlined in the report are general for all types of simulators, and can be applied to simulations of chemical, biochemical, biological, and economical systems.</p>
+<h1 class="unnumbered" id="wr-front-summary-1">Summary</h1>
+<p>The main purpose of the report is to provide an understanding of the utility of simulators, the trade offs that go into designing simulators, and the requirements a simulation software must fulfill before it be released publicly.</p>
+<p>The structure of the report is as follows. Firstly, there will be a general introduction followed by an introduction to theoretical background, which will provide explanations of the governing equations of nano-scale systems and how they are implemented using computer algorithms. Secondly, there will be a description of the architecture of the software which will go over importance of each script in the simulator, and how they are designed to maximize the use-ability of the software. Finally, results generated using the simulator will be discussed, which will illustrate how developers determine the validity of the simulator software, and whether or not it is ready to be released publicly. This report will focus on analyzing outputs from simpler systems.</p>
+<p>The main ideas of this report are the theories of PIMD and PIMC, and the reason why these descriptions of nature were chosen to simulate nano-scale systems. The math describing density matricies and the method by which the software calculates energies using density matricies will be covered, along with the Trotter expansion which will outline the importance of how bead numbers model the "quantumness" of a system. The results from simulations will be compared to theoretical and experimentally determined values, as well as , to confirm the validity of the simulator developed and described in this report.</p>
+<p>The major conclusions of the report are that the software has been partially validated after sets of simulation results were generated and compared to theoretical and experimental results, as well as results generated from the MoRiBS simulator. These sets simulations include those that implement only translation with no potential, only rotation with no potential, and rotation with a LJ and MBPol potential. It has been concluded that the software is sufficiently usable for users who are familiar with <em>github</em> and <em>Unix</em>. Difficult processes such as submission of multiple simulation, analysis of multiple trajectories, and consolidation of multiple analysis output files has been automated to improve the use-ability of the software.</p>
+<p>The major recommendations from this report to future developers are to improve the software by making further improvements to its use-ability, and to validate the simulator further by analyzing energy outputs for systems by simultaneously implementing translation, rotation, and potential energy components and comparing the results to the MoRiBS energy outputs for the same system. Additionally, future users should look for more experimental results that are within the limit of what the software can simulate accurately within a reasonable amount of computation time, and determine if the simulation can replicated their results.</p>
+<h1 data-number="1" id="introduction"><span class="header-section-number">1</span> Introduction</h1>
+<p>The field of simulations is said to lie between experimentation and theory, because simulations are themselves interpreted as computational experiments performed using algorithms. These algorithms are designed based on theories of the natural world. The aim of all types of simulation software (simulators) are to replicate the physical/chemical/biological/economical observables seen in the outside world by applying theory using algorithms implemented on a computer. There great utility in computationally replicating a nano-scale system because it is far less expensive to perform experiments using computational simulations than it is to perform the same experiments in a laboratory. The purpose of the software described in this report is to replicate the experimental observables from research papers that study physical properties of 1D systems with small numbers of molecules (i.e. <span class="math inline">\( N \leq 10 \)</span>). The main problems focused on in the report are the validation of the simulator, the minimization of computational time, and the usability of the software. Computational efficiency, use-ability and accuracy are required before the simulator can effectively be used to replicate nano-scale systems. It is required that the outputs of the simulations are sufficiently close to theoretically and experimentally determined results. Simulations applied using governing equations that describe physical systems generate trajectories as outputs by proposing initial positions and velocities all atoms present in a system, and computing subsequent values using governing equations implemented using computer algorithms. The method by which the software computes physical observables from trajectories is based on statistical mechanics, and so the trajectories are obtained by implementing the translations using PIMD and rotations using PIMC. Molecular dynamics was chosen to model translation because it is easier, and more computationally efficient to implement due to the fact translation in 1D systems can only occur in the positive or negative <span class="math inline">\( x \)</span> direction. Molecular dynamics applies classical equations of motion (<span class="math inline">\(\frac{d \vec{x}}{dt} \hspace{0.125cm} = \hspace{0.125cm} \vec{v} \hspace{0.025cm} , \hspace{0.225cm} m \frac{d \vec{v}}{dt} \hspace{0.125cm} = \hspace{0.125cm} \vec{F} \hspace{0.125cm} = \hspace{0.125cm} - \nabla{U} \)</span>) to generate the positions and velocities for each time step to be stored in the trajectory for a particular simulation.</p>
+<p>Changes in positions are calculated using velocities, and forces are used to determine the change in velocity between time steps. Forces are calculated using knowledge of the gradients of a the potential energy functions chosen by user. The Langevin equation is used to keep <span class="math inline">\( \langle v^2 \rangle \)</span> at a certain value such that the equation <span class="math inline">\( \frac{1}{2} m \langle v^2 \rangle = \frac{3}{2} k_B T \)</span> remains valid for whatever temperature was chosen for the particular simulation [1]. This is done because the software is modelling Canonical systems (which requires a constant number of particles <span class="math inline">\( N \)</span>, volume <span class="math inline">\( V \)</span>, and temperature <span class="math inline">\( T \)</span>), and because the PIMC rotation implemented requires a constant temperature to be able to easily and efficiently calculate the acceptance criterion. Rotation of molecules were implemented using PIMC’s implementation of the Metropolis Hastings algorithm, with the acceptance criterion is calculated as <span class="math inline">\( \frac{\rho_{new}}{\rho_{old}} e^{- \tau ( V_{new} - V_{old} )} \)</span>, where the density matricies and potential energy are functions of the positions of the atoms and the orientations of the molecules [2]. PIMC is chosen to model rotation because the outputs of the simulation are dependant on temperature, so users may take advantage of this to run simulations at multiple temperatures and determine at what temperature a phase change occurs, which is seen by looking for rapid changes in physical properties with respect to changes in temperature. PIMC is also required to accurately model systems where quantum effects are present, which occurs frequently for small systems of molecules.</p>
+<h2 data-number="1.1" id="economic-considerations"><span class="header-section-number">1.1</span> Economic Considerations</h2>
+<p>Thoroughly tested simulation software can be used in place of real world experiments, which save on both material and human resources, which may be allocated to other experiments. Simulators could also be used to help a research department narrow down what types of systems (molecules/materials) show promising properties, and are worthy fabricating and/or performing experimentation. A well known example of this is DESRES, which simulates protein folding and drug binding to help pharmaceutical industries determine what bio-molecules are worthy of further experimental testing [3]. Simulations can be a cheaper method of performing experiments. This depends mostly on whether or not the computational cost of performing a simulation is greater or less than performing the actual experiments itself. For nano-scale systems, as long as the simulation can be performed in a reasonable amount of time (less than a week), it will cost less than it would to perform the experiment. There is also an inherit trade off between the number of molecules a program can accurately simulate in a reasonable amount of time and the versatility of the software. Simulations with large numbers of molecules tend to have less governing equations. A simulator that models protein dynamics can be performed in a reasonable amount of time as long as quantum effects don’t need to be modelled. Systems which require quantum mechanics for accurate modelling require small numbers of molecules to obtain accurate outputs in a reasonable amount of time because they will be modelled using more governing equations, which will inevitably lead to more computation time per particle. Its worth noting that the simulation must run for a certain number of time steps before sufficiently accurate results can be obtained. According to the law of large numbers, the more time steps taken in a simulation (the more data points gathered), the closer the time average of observables are to the true values (seen in figure Figure <a class="tex-reference" href="#wr-fig-LawofbigN-1">1-1</a>) [4].</p>
+<figure data-latex-placement="ht!" id="wr-fig-LawofbigN-1">
+<p><img alt="Average Energy vs. Time Contrasted with a graph depicting the Law of Large Numbers." src="../../assets/documents/work-term-report/LawofLargeNumbers.png" style="width:60.0%"/></p>
+<figcaption><span class="work-report-caption-number">Figure 1-1: </span>Average Energy vs. Time Contrasted with a graph depicting the Law of Large Numbers.</figcaption>
+</figure>
+<h1 data-number="2" id="background"><span class="header-section-number">2</span> Background</h1>
+<p>To fully understand how to go from a Hamiltonian to the (translational, rotational, and potential) energy outputs, its instructive to go over principles of statistical mechanics and PIMC.</p>
+<h2 data-number="2.1" id="pimc"><span class="header-section-number">2.1</span> PIMC</h2>
+<p>The quantum mechanical partition function can be used to calculate all thermodynamic quantities, and it can be defined using a density matrix as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-2-1}
+Z \hspace{0.125cm} = \hspace{0.125cm} Tr \hat{\rho} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>The trace operator is a sum over the diagonal elements of the density matrix (which we define as <span class="math inline">\( \hat{\rho} \hspace{0.125cm} \equiv \hspace{0.125cm} e^{-\beta \hat{H}} \)</span>), and it can be calculated as an integral in the continuous coordinate basis <span class="math inline">\( \ket{q} \)</span>;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-3-1}
+Z \hspace{0.125cm} = \hspace{0.125cm} \int dq \bra{q} e^{-\beta \hat{H}} \ket{q} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>The Hamiltonian <span class="math inline">\( \hat{H} \)</span> can be represented generally as having a kinetic term <span class="math inline">\( \hat{T} \)</span> and a potential term <span class="math inline">\( \hat{V} \)</span>, so the previous formulae can be re-expressed as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-4-1}
+Z  \hspace{0.125cm} = \hspace{0.125cm} \int dq \bra{q} e^{-\beta ( \hat{T} + \hat{V} )}\ket{q} \hspace{0.125cm} , 
+\end{equation}\]</span>
+</div>
+<p>The exponential shown above can be expanded into a product of exponentials so that each operator in the Hamiltonian can be treated independently, as long as the <span class="math inline">\( \beta \)</span> is sufficiently small (i.e. temperature is sufficiently large <span class="math inline">\( \beta = \frac{1}{k_B T} \)</span>);</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-5-1}
+e^{-\beta ( \frac{\hat{V}}{2} + \hat{T} + \frac{\hat{V}}{2} )} \hspace{0.125cm} \simeq \hspace{0.125cm} e^{-\beta \frac{\hat{V}}{2}} e^{-\beta \hat{T}} e^{-\beta \frac{\hat{V}}{2}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>The details of this approximation can be found in <a href="#wr-appendix-c">Appendix C</a>. The Trotter expansion makes this approximation exact. It is defined as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-10-1}
+e^{-\beta ( \frac{\hat{V}}{2} + \hat{T} + \frac{\hat{V}}{2} )} \hspace{0.125cm} = \hspace{0.125cm} \lim_{P \rightarrow \infty} \bigg[ e^{- \frac{\beta \hat{V}}{2P}} e^{- \frac{\beta \hat{T}}{P}} e^{- \frac{\beta \hat{V}}{2P}} \bigg]^P \hspace{0.125cm} .  
+\end{equation}\]</span>
+</div>
+<p>It is appropriate to define <span class="math inline">\( \Xi \)</span> so that the mathematics look cleaner and less overwhelming;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-11-1}
+\Xi \hspace{0.125cm} = \hspace{0.125cm} e^{-\frac{\beta \hat{V}}{2 P}} e^{- \frac{\beta \hat{T}}{P}} e^{- \frac{\beta \hat{V}}{2 P}} \hspace{0.125cm} = \hspace{0.125cm}  e^{-\frac{\tau \hat{V}}{2}} e^{- \tau \hat{T}}  e^{-\frac{\tau \hat{V}}{2}} \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>using this notation one can more cleanly represent the partition function as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-12-1}
+Z \hspace{0.125cm} = \hspace{0.125cm}  \lim_{P \rightarrow \infty} \int dq \bra{q} \Xi^P \ket{q} \hspace{0.125cm} , 
+\end{equation}\]</span>
+</div>
+<p>One can employ the resolution of the identity to this expression after reinterpreting <span class="math inline">\( \ket{q} \)</span> as <span class="math inline">\( \ket{q_1}\)</span> to obtain;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-13-1}
+\int dq_1 \bra{q_1} \Xi^2 \ket{q_1} \hspace{0.125cm} = \hspace{0.125cm} \int dq_1 \int dq_2 \bra{q_1} \Xi \ket{q_2} \bra{q_2} \Xi \ket{q_1} \hspace{0.125cm} , 
+\end{equation}\]</span>
+</div>
+<p>which gives the partition function as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-14-1}
+Z \hspace{0.125cm} = \hspace{0.125cm}  \lim_{P \rightarrow \infty} \int dq_1 \int dq_2 ... \int dq_{P - 1} \int dq_P \Big[ \prod_{i=1}^{P} \bra{q_i} \Xi \ket{q_{i+1}} \Big]_{q_{P+1} = q_1} \hspace{0.125cm} , 
+\end{equation}\]</span>
+</div>
+<p>Now, focusing on the potential terms;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-15-1}
+\bra{q_i} e^{-\frac{\beta \hat{V}}{2 P}} \hspace{0.125cm} = \hspace{0.125cm} e^{-\frac{\beta \hat{V}(q_i)}{2 P}} \hspace{0.425cm} , \hspace{0.425cm} e^{-\frac{\beta \hat{V}}{2 P}} \ket{q_{i+1}} \hspace{0.125cm} = \hspace{0.125cm} e^{-\frac{\beta \hat{V}(q_{i+1})}{2 P}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Using the equations in <span class="math inline">\(\ref{wr-eq-15-1}\)</span>, the expression <span class="math inline">\( \bra{q_i} \Omega \ket{q_{i+1}} \)</span> becomes;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-17-1}
+\bra{q_i} \Omega \ket{q_{i+1}} \hspace{0.125cm} = \hspace{0.125cm}  e^{-\frac{\beta \hat{V}(q_i)}{2 P}} \bra{q_i} e^{- \frac{\beta \hat{p}^2}{2 m P}} \ket{q_{i+1}} e^{-\frac{\beta \hat{V}(q_{i+1})}{2 P}}  \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>The evaluation of the translational partition function is shown in <a href="#wr-appendix-a">Appendix A</a>. The final form of the partition function is;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-29-1}
+Z \hspace{0.125cm} = \hspace{0.125cm} \lim_{P \rightarrow \infty} \Bigg[ \bigg(\sqrt{\frac{m P}{2 \pi \hbar^2 \beta}}\bigg)^{P} \bigg[ \prod_{i=1}^{P} \int d q_i \bigg] e^{- \sum_{i = 1}^{P} \Big[ \frac{ m P (q_i - q_{i+1})^2}{2 \hbar^2 \beta} + \frac{\beta}{P} V(q_i) \Big] \bigg)} \Bigg]_{q_{P + 1} \hspace{0.05cm} = \hspace{0.05cm} q_1} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>It would require infinite computation power to perfectly replicate the quantum system, so instead an approximate partition function is calculated, where the accuracy of the approximation is proportional to the number of beads <span class="math inline">\( P \)</span> used in the simulation. The approximate partition function is;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-29-2}
+Z \hspace{0.125cm} \simeq \hspace{0.125cm} \Bigg[ \bigg(\sqrt{\frac{m P}{2 \pi \hbar^2 \beta}}\bigg)^{P} \bigg[ \prod_{i=1}^{P} \int d q_i \bigg] e^{- \sum_{i = 1}^{P} \Big[ \frac{ m P (q_i - q_{i+1})^2}{2 \hbar^2 \beta} + \frac{\beta}{P} V(q_i) \Big] \bigg)} \Bigg]_{q_{P + 1} \hspace{0.05cm} = \hspace{0.05cm} q_1} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>When the change in the value of some time averaged observable with respect to increase in bead number is sufficiently small (i.e <span class="math inline">\( \frac{\langle \partial{\hat{O}} \rangle}{\partial{P}} \leq \Delta_{diff} \)</span>), that bead number is chosen as a simulation parameter in the system. This minimizes the computational time, which is favourable for users because it also minimizes the time cost of the simulation.</p>
+<h3 data-number="2.1.1" id="energies"><span class="header-section-number">2.1.1</span> Energies</h3>
+<p>Energies in a statistical mechanical system are traditionally calculated as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-30-1}
+E \hspace{0.125cm} = \hspace{0.125cm} \sum_{i = 1}^{\infty} g_i p_i \epsilon_{i} \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>where <span class="math inline">\( p_i \)</span>, is the probability of a particle being in a given quantum state <span class="math inline">\( \epsilon_{i} \)</span> with degeneracy <span class="math inline">\( g_{i} \)</span>. The probability distribution is normalized by the partition function, and is expressed as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-31-1}
+p_i \hspace{0.125cm} = \hspace{0.125cm} \frac{ e^{-\frac{ \epsilon_i}{k_B T}}}{Z}  \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>The partition function in its most basic form has the expression;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-32-1}
+Z \hspace{0.125cm} = \hspace{0.125cm} \sum_{i = 1}^{\infty} g_i e^{-\frac{ \epsilon_i}{k_B T}} \hspace{0.125cm} = \hspace{0.125cm} \sum_{i = 1}^{\infty} g_i e^{- \beta \epsilon_i} \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>where <span class="math inline">\( \beta \hspace{0.025cm} = \hspace{0.025cm} \frac{1}{k_B T} \)</span>. It can be shown that the energy of the system can be calculated using the partition function by taking its negative derivative with respect to <span class="math inline">\( \beta \)</span> and dividing by <span class="math inline">\( Z \)</span>;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-33-1}
+E \hspace{0.125cm} = \hspace{0.125cm} \sum_{i = 1}^{\infty} \frac{g_i \epsilon_{i} \exp \big(- \beta \epsilon_i \big)}{Z} \hspace{0.125cm} = \hspace{0.125cm} - \frac{\partial}{\partial{\beta}}\sum_{i = 1}^{\infty} \frac{g_i \exp \big(- \beta \epsilon_i \big)}{Z} \hspace{0.125cm} = \hspace{0.125cm} - \frac{1}{Z} \frac{\partial Z}{\partial{\beta}}   \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Energies can also be calculated using density matrices and a variable <span class="math inline">\( \tau \)</span>, which is analogous <span class="math inline">\( \beta \)</span>.</p>
+<h3 data-number="2.1.2" id="density-matrix-approach-to-calculating-energies"><span class="header-section-number">2.1.2</span> Density Matrix Approach to Calculating Energies</h3>
+<p>Energy outputs can be calculated using density matricies. The density matrices for the system (generally speaking) depend on a partitioned product of density matrices for simpler systems, which are treated independent so that they are more easily and efficiently solvable than they would be as a collection (this is analogous to the partition functions being constructed from partition functions <span class="math inline">\( Z \hspace{0.025cm} = \hspace{0.025cm} Z_{trans} Z_{rot} Z_{pot} \)</span>). For systems with more than one spacial dimension, one must define the basis vector <span class="math inline">\( \vec{R} \hspace{0.025cm} = \hspace{0.025cm} (\vec{r};\vec{\Omega})  \hspace{0.025cm} = \hspace{0.025cm} (x,y,z;\phi,\theta,\chi) \)</span>, where <span class="math inline">\( \vec{\Omega} = [\phi,\theta,\chi] \)</span> are Euler angles, explained further in <a href="#wr-appendix-h">Appendix H</a>. This basis vector is used to calculate the density matrices for a given Hamiltonian;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-36-1}
+\hat{\rho} \hspace{0.125cm} = \hspace{0.125cm} \bra{\vec{R}} \exp \big( - \beta \hat{H} \big) \ket{\vec{R}} \hspace{0.025cm} , 
+\end{equation}\]</span>
+</div>
+<p>where the Hamiltonian for the systems being studied are defined as having translational, rotational, and potential energy components.</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-37-1}
+\hat{H} \hspace{0.125cm} = \hspace{0.125cm} \hat{T}_{trans} + \hat{T}_{rot} + \hat{V}_{pot} \hspace{0.025cm} .
+\end{equation}\]</span>
+</div>
+<p>Density matrices are typically written with two half potential terms, one which operates on bead <span class="math inline">\( i \)</span>, and bead <span class="math inline">\( (i+1) \)</span> bead <span class="math inline">\( (i+1) \)</span>;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-38-1}
+\hat{\rho} \hspace{0.125cm} = \hspace{0.125cm} \bra{\vec{R}}  e^{ - \beta \big( \frac{\hat{V}_{pot}}{2} + \hat{T}_{trans} + \hat{T}_{rot} + \frac{\hat{V}_{pot}}{2} \big)} \ket{\vec{R}} \hspace{0.025cm} . 
+\end{equation}\]</span>
+</div>
+<p>For high temperature systems (small <span class="math inline">\( \beta \)</span> systems), the exponentials can be expanded into a product of exponentials for each operator in the Hamiltonian (shown in <a href="#wr-appendix-c">Appendix C</a>), which each independently operate on the basis vector <span class="math inline">\( \ket{\vec{R}} \)</span>;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-45-1}
+\hat{\rho} \hspace{0.125cm} \simeq \hspace{0.125cm} \bra{\vec{R}} e^{- \frac{ \beta \hat{V}_{pot}}{2}} e^{- \frac{\beta \hat{p}^2}{2 m}} e^{-\beta \hat{T}_{rot}} e^{- \frac{ \beta \hat{V}_{pot}}{2}}  \ket{\vec{R}} \hspace{0.025cm} . \end{equation}\]</span>
+</div>
+<p>The bra and ket (basic vectors) act differently on the translational, rotational, and potential terms in each case. The tranlational terms are independant of the Euler angles <span class="math inline">\( \vec{\Omega} \)</span>, and the rotational terms are independant of Cartesian Coordinates <span class="math inline">\( \vec{r} \)</span>, and the potential density matrix will have the full set of basis coordinates <span class="math inline">\( \vec{R} \)</span>. It’s approapriate to express the density matrices as having only their respective basis vectors acting upon them. The previous term can also be represented as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-46-1}
+\hat{\rho} \hspace{0.125cm} \simeq \hspace{0.125cm} \bra{\vec{r}} \exp \Big( - \frac{\beta \hat{p}^2}{2 m} \Big) \ket{\vec{r}} \bra{\vec{\Omega}} \exp \Big( - \beta \hat{T}_{rot} \Big) \ket{\vec{\Omega}} \bra{\vec{R}} \exp \Big( - \beta \hat{V}_{pot} \Big) \ket{\vec{R}} \hspace{0.025cm} . \end{equation}\]</span>
+</div>
+<p>Performing the Trotter expansion, one can re-express our old result as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-53-1}
+Z \hspace{0.125cm} = \hspace{0.125cm}  \lim_{P \rightarrow \infty} \int d \vec{R}_1 \int d \vec{R}_2 ... \int d \vec{R}_{P - 1} \int d \vec{R}_P \Big[ \prod_{i=1}^{P} \bra{\vec{R}_i} \Xi \ket{\vec{R}_{i+1}} \Big]_{\vec{R}_{P+1} = \vec{R}_1} \hspace{0.125cm} , 
+\end{equation}\]</span>
+</div>
+<p>Now notation is important. One can say that;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-54-1}
+\hat{\rho}_i \hspace{0.125cm} = \hspace{0.125cm} \bra{\vec{R}_i} \Xi \ket{\vec{R}_{i+1}} \hspace{0.125cm} = \hspace{0.125cm} \hat{\rho}_{trans_i} \hat{\rho}_{rot_i} \hat{\rho}_{pot_i} \hspace{0.125cm} . 
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-56-1}
+\hat{\rho}_i \hspace{0.125cm} = \hspace{0.125cm} \bra{\vec{R}_i} e^{ - \tau \big( \hat{T}_{trans} + \hat{T}_{rot} + \hat{V}_{pot} ) } \ket{\vec{R}_{i+1}}  \hspace{0.125cm} \simeq \hspace{0.125cm} \bra{\vec{R}_{i}} e^{- \frac{ \tau \hat{V}_{pot}}{2}} e^{- \frac{\tau \hat{p}^2}{2 m}} e^{-\tau \hat{T}_{rot}} e^{- \frac{ \tau \hat{V}_{pot}}{2}}  \ket{\vec{R}_{i+1}}
+\end{equation}\]</span>
+</div>
+<p>The operators act independently on the basis vectors (<span class="math inline">\( \bra{\vec{R}_i} \)</span> and <span class="math inline">\( \ket{\vec{R}_{i+1}} \)</span>) to give the energy eigenvalues. A proof of this is shown in <a href="#wr-appendix-d">Appendix D</a>.</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-57-1}
+\hat{\rho} \hspace{0.125cm} = \hspace{0.125cm} \bra{\vec{R}_i} e^{ - \tau \big( E_{trans} + E_{rot} + V(\vec{R})\big) } \ket{\vec{R}_{i+1}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Much like how <span class="math inline">\( E \hspace{0.025cm} = \hspace{0.025cm} - \frac{\partial{\ln{Z}}}{\partial{\beta}} \)</span>, a similar expression is true for <span class="math inline">\( \tau \)</span> when trying to find the partial energy contributions from <span class="math inline">\( \hat{\rho}_{trans_i}^t \)</span>, <span class="math inline">\( \hat{\rho}_{rot_i}^t \)</span> and <span class="math inline">\( \hat{\rho}_{pot_i}^t \)</span>, where <span class="math inline">\( i \)</span> and <span class="math inline">\( t \)</span> are the indices for bead number and time step respectively. Its instructive to name these energies <span class="math inline">\( \epsilon_{trans_i}^t \)</span>, <span class="math inline">\( \epsilon_{rot_i}^t \)</span>, and <span class="math inline">\( \epsilon_{pot_i}^t \)</span>, respectively;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-58-1}
+\epsilon_{trans_i}^t \hspace{0.125cm} = \hspace{0.125cm} - \frac{\partial{\ln{\hat{\rho}_{trans_i}^t}}}{\partial{\tau}} \hspace{0.225cm} , \hspace{0.225cm} \epsilon_{rot_i}^t \hspace{0.125cm} = \hspace{0.125cm} - \frac{\partial{\ln{\hat{\rho}_{rot_i}^t}}}{\partial{\tau}} \hspace{0.225cm} , \hspace{0.225cm} \epsilon_{pot_i}^t \hspace{0.125cm} = \hspace{0.125cm} - \frac{\partial{\ln{\hat{\rho}_{pot_i}^t}}}{\partial{\tau}}\hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>The energy outputs of the simulations are translational energy, rotational energy, potential energy, and the total energy, which are calculated as [1];</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} 
+\langle \epsilon_{trans} \rangle \hspace{0.125cm} = \hspace{0.125cm} \sum_{t = 1}^{N_{timesteps}} \sum_{i = 1}^{P} \frac{\epsilon_{trans_i}^t}{N_{steps} N_{timesteps}} \hspace{0.125cm} = \hspace{0.125cm} \frac{3 P N }{2 \beta} - \frac{mP}{2 \hbar^2 \beta^2} \sum_{t = 1}^{N_{timesteps}} \sum_{i = 1}^{P} \frac{\epsilon_{trans_i}^t}{N_{timesteps}} \hspace{0.125cm} 
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} 
+\langle \epsilon_{rot} \rangle \hspace{0.125cm} = \hspace{0.125cm} \sum_{t = 1}^{N_{timesteps}} \sum_{i = 1}^{P} \frac{\epsilon_{rot_i}^t}{N_{timesteps} P} \hspace{0.225cm} , \hspace{0.225cm} \langle \epsilon_{pot} \rangle \hspace{0.125cm} = \hspace{0.125cm} \sum_{t = 1}^{N_{timesteps}} \sum_{i = 1}^{P} \frac{\epsilon_{pot_i}^t}{N_{timesteps} P}
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{multline*}
+\langle \epsilon_{total} \rangle \hspace{0.125cm} = \frac{3 P N }{2 \beta} - \frac{mP}{2 \hbar^2 \beta^2} \sum_{t = 1}^{N_{timesteps}} \sum_{i = 1}^{P} \frac{\epsilon_{trans_i}^t}{N_{timesteps}} \\ + \sum_{t = 1}^{N_{timesteps}} \sum_{i = 1}^{P} \frac{\epsilon_{rot_i}^t}{N_{timesteps} P} + \sum_{t = 1}^{N_{timesteps}} \sum_{i = 1}^{P} \frac{\epsilon_{pot_i}^t}{N_{timesteps} P} \hspace{0.125cm} 
+\end{multline*}\]</span>
+</div>
+<h2 data-number="2.2" id="waters-in-a-nanotube-system"><span class="header-section-number">2.2</span> Waters in a Nanotube System</h2>
+<p>The Hamiltonian used to obtain the results discussed in this report contains rotational kinetic energy and potential energy components, and describes pinned water molecules (asymmetric tops) in a 1D lattice;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-61-1}
+\hat{H} \hspace{0.125cm} = \hspace{0.125cm} \hat{T}_{rot} + \hat{V}_{pot} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>The rotational kinetic energy operator is used to calculate the rotational density matrix <span class="math inline">\( \rho_{rot} \)</span>, and the potential energy operator is used to calculate the potential energy density matrix <span class="math inline">\( \rho_{pot} \)</span>. The translation density matrix <span class="math inline">\( \rho_{trans} \)</span> is calculated based on the separation distance between the <span class="math inline">\( i-1^{th} \)</span> and <span class="math inline">\( i+1^{th} \)</span> beads.</p>
+<p>Generally, the Hamiltonian used this particular simulation software contains translational and rotational kinetic energy and potential energy components, and describes free moving water molecules (asymmetric tops) in a 1D chain;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-61-2}
+\hat{H} \hspace{0.125cm} = \hspace{0.125cm} \hat{T}_{trans} + \hat{T}_{rot} + \hat{V}_{pot} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>This implementation of the software has yet to have its energy outputs tested against the thoroughly tested benchmark software, MoRiBS.</p>
+<h3 data-number="2.2.1" id="rotational-density-matrix"><span class="header-section-number">2.2.1</span> Rotational Density Matrix</h3>
+<p>The kinetic energy operator for water molecules is what is known as an asymmetric top can be written as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-66-1}
+\hat{T}_{rot} \hspace{0.125cm} = \hspace{0.125cm} A \hat{J}^{2}_{a} + B \hat{J}^{2}_{b} + C \hat{J}^{2}_{c} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>The rotational density matrix is difficult and lengthy to evaluate analytically. Details of how this is derived can be found in <a href="#wr-appendix-e">Appendix E</a>. The equation for the rotational density matrix is shown in Figure <a class="tex-reference" href="#wr-fig-eq1-1">2-2</a> [5]. The derivation for this formulae from the Hamiltonian above is shown in <a href="#wr-appendix-b">Appendix B</a>.</p>
+<figure data-latex-placement="ht!" id="wr-fig-eq1-1">
+<p><img alt="Rotational Energy Density Matrix" src="../../assets/documents/work-term-report/eq1.png" style="width:100.0%"/></p>
+<figcaption><span class="work-report-caption-number">Figure 2-2: </span>Rotational Energy Density Matrix</figcaption>
+</figure>
+<h3 data-number="2.2.2" id="potential-energy-density-matricies"><span class="header-section-number">2.2.2</span> Potential Energy Density Matricies</h3>
+<p>The potential energy operator can be one of many different potentials, depending on what type of system the user of the simulation software wants to simulate. The potentials featured in this software consist of a coulomb potential, a LJ potential, a dipole-dipole potential, and an empty potential which is used when the user wants to study systems with purely kinetic energy. These potential are all explained further in <a href="#wr-appendix-f">Appendix F</a>, and <a href="#wr-appendix-g">Appendix G</a>. There is also a MBPol potential which is the most accurate, and it is the potential used alongside the LJ potential to obtain some of the outputs discussed in the results section of this report.</p>
+<h4 data-number="2.2.2.1" id="lj-potential"><span class="header-section-number">2.2.2.1</span> LJ Potential</h4>
+<p>The LJ potential is used when the user wants to model potential interactions between purely neutral molecules as well as any potential interaction that fails have any form of repulsive forces between atoms or molecules. The LJ potential is mathematically represented as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-68-1}
+\hat{V}_{LJ} \hspace{0.125cm} = \hspace{0.125cm} \sum_{i = 1}^{N} \sum_{j \neq i}^{N} 4 \epsilon \Bigg[ \Big( \frac{\sigma}{r_{ij}} \Big)^{12} - \Big( \frac{\sigma}{r_{ij}} \Big)^{6} \Bigg] \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>This potential is also know as the 12-6 potential, called this because there is an attractive term represented as <span class="math inline">\( \frac{1}{r^6} \)</span> and a repulsive term represented as <span class="math inline">\( \frac{1}{r^{12}} \)</span> [6]. The repulsive 12 potential acts as a hard wall, having little effect (relative to the 6 potential) when molecules are far away, and having a strong effect when molecules are closer together. The minimum energy <span class="math inline">\( -\epsilon \)</span> occurs at <span class="math inline">\( 2^{\frac{1}{6}} \sigma \)</span>, represented in Figure <a class="tex-reference" href="#wr-fig-lenJ-1">2-3</a>.</p>
+<figure data-latex-placement="ht!" id="wr-fig-lenJ-1">
+<p><img alt="Energy vs. Seperation Distance." src="../../assets/documents/work-term-report/LJpotential.png" style="width:50.0%"/></p>
+<figcaption><span class="work-report-caption-number">Figure 2-3: </span>Energy vs. Seperation Distance.</figcaption>
+</figure>
+<p>In cases where the LJ potential is used, superimposed on other potentials, if <span class="math inline">\( \epsilon \)</span> is sufficiently small, then the potential can be considered weak compared to all other potentials (except in the hard wall cases where two molecules come very close together) and will barely contribute to the output.</p>
+<h4 data-number="2.2.2.2" id="mbpol-potential"><span class="header-section-number">2.2.2.2</span> MBPol Potential</h4>
+<p>The most sophisticed and accurate potential is a "black box code" named MBPol (many-body polarizable) which calculates to potential energy between many molecules, taking into account the polarizability of molecules. This code was written by another individual who is not a direct member of the Roy research group. It is useful when studying the energy and ordering parameters outputs from simulations, which can be useful for determining phase changes in systems. This is because accurate results are required, and they cannot necessarily be generated using simpler, less exact potentials such as the dipole-dipole interaction potential.</p>
+<h1 data-number="3" id="simulation-software"><span class="header-section-number">3</span> Simulation Software</h1>
+<p>The simulation software that was been developed utilizes a software package known as MMTK (created by Konrad Hinsen) to store the trajectories [7]. The benefits of using MMTK to do this is that MMTK includes the ability to visualize molecular motion using a VMD package which requires MMTK trajectories as inputs. Simulations of this system are performed using the PIMC and PIMD sampling techniques, which were outlined in the background.</p>
+<p>PIMD is used to translate the molecules according to the equation of motion <span class="math inline">\( \vec{F} = -\nabla{U} \)</span>, where we know <span class="math inline">\( \vec{F} = \frac{d \vec{p}}{dt} \)</span>, and <span class="math inline">\( d \vec{p} = m d \vec{v} \)</span>, so one can isolate the change in velocity between time steps as <span class="math inline">\( d \vec{v} = \vec{v}_{i+1} - \vec{v}_i = - \frac{dt}{m} \nabla{U} \)</span> and update the velocity accordingly (i.e. <span class="math inline">\( v_{i+1} = v_i + d \vec{v} \)</span>. The velocities are adjusted at the end of molecular dynamics simulation loop using the Langevin equation, which is used to keep <span class="math inline">\( \langle v^2 \rangle \)</span> at a certain value such that the equation <span class="math inline">\( \frac{1}{2} m \langle v^2 \rangle = \frac{3}{2} k_B T \)</span> remains valid for whatever temperature was chosen for the particular simulation [1].</p>
+<p>The Metropolis-Hastings algorithm PIMC is used for the rotation of water molecules around their centre of mass [2]. This is done by randomly perturbing the values of each of the water’s Euler angles from their previous state, and accepting proposed rotations based on if the acceptance criterion <span class="math inline">\( \frac{\rho_{new}}{\rho_{old}} e^{- \tau ( V_{new} - V_{old} )} \)</span> is greater than a random number generated between 0 and 1 [2]. If this proposed Euler angles are accepted, they are stored in the trajectory, otherwise the previous values are stored in the trajectory in their place. This sampling process is chosen with the intent of modelling phase transitions in systems with small numbers of molecules. This is because the acceptance criterion, and therefore the outputs, are dependant on the temperature chosen for the simulation (<span class="math inline">\( \tau = \frac{1}{P k_B T} \)</span>).</p>
+<p>While this implementation seems simple in concept, the drive for efficiency makes what could be a simple set of nested for loops in a python script a more challenging task, involving using cython coding language for the integrator, then a compiler to convert the integrator script into .so files (machine code files) for maximum efficiency. This slows down the debugging process slightly but speeds up the rate at which we can perform simulation steps 10 fold. The potential files are written in c++ for efficiency, and are also compiled into .so files using compiler scripts for efficiency purposes.</p>
+<p>A simulation software package consists of a Unix directory that contains several different file types that each serve a purpose that is integral to the function and efficiency of the software as a whole. These scripts serve a variety of functions, but generally the scripts are simulation (integrator script) or potential scripts, or they are used to either submit simulations, analyze trajectories outputted from simulation scripts. The simulation script is known as the integrator script, named so because PIMD and PIMC essentially calculates observables using integrals (or averages) to calculate partition functions using density matrices, which are then used to calculate time average energy outputs as well as other observables. The scripts that used for submitting simulations for sets of inputs parameters (sets of temperature, bead number, lattice spacing, and number of molecules) are known as the submitter scripts and simstart scripts. The scripts used to analyse and plot the trajectories of simulations are the analysis scripts, consolidator scripts, and plotter scripts.</p>
+<h2 data-number="3.1" id="the-submit-and-start-scripts"><span class="header-section-number">3.1</span> The Submit and Start Scripts</h2>
+<p>The submit script, <code>submitscript.py</code>, is used to perform multiple simulations which use the same potential energies as inputs, but vary input parameters such as temperature, bead number, lattice spacing, and number of particles. The submit script simulates all variations of simulations by looping (using nested loops) through lists of the input parameters and submitting simulations using the values in these lists the user chose as input arguments, which are submitted to the <code>simstart.py</code> script. Each of the combinations of simulations are submitted to a server (nlogn or compute canada) as <code>submitscript.py</code> loops through the lists of input values. This script takes several input arguments including, but not limited to density matrix files, rotational energy files, rotational energy squared files, number of particles, lattice spacing, and integers which indicate whether a potential energy script is to be used in the <code>simstart.py</code> script. Density matrix files, rotational energy files, and rotational energy squared files (i.e. <span class="math inline">\( T = 155.0 K \)</span> and <span class="math inline">\( P = 8 \)</span> would look like; <code>H2O_T155P6.rho</code>, <code>H2O_T155P6.eng</code>, <code>H2O_T155P6.esq</code>) are obtained by running a <code>asymrho.f</code> code (which calculates the values derived in <a href="#wr-appendix-b">Appendix B</a>), and using temperature and bead number as input arguments. These input parameters are incorporated into the names of their respective output files. This implementation was chosen to increase the usability of the software. Users can easy perform multiple simulations simultaneously by simply submitting lists of each of the input parameters as arguments to be submitted to the <code>submitscript.py</code> script. The order of the arguments is specified in README file, and the <code>submitterfile.py</code> is designed to automatically chose the proper density matrix type files (stored in a separate directory) from temperature and bead inputs chosen by the user, which to be submitted alongside their respective lattice spacing and number of particles input arguments.</p>
+<p>The <code>simstart.py</code> script is what creates and fills the trajectories for the molecules present in the simulation. It starts simulations and outputs trajectory files which are used themselves as input arguments for analysis scripts. Analysis scripts calculate output files containing a particular simulation observable such as translational energy, rotational energy, potential energy, ordering parameters, etc. The <code>simstart.py</code> script starts by importing integrator scripts and the set of potential energy scripts chosen by the user using input arguments. It then initializes particle trajectories and simulation parameters using information gathered from input arguments (such as temperature, bead number, lattice spacing, etc). Afterwards, the <code>simstart.py</code> script defines the initial conditions for the molecules before calling the integrator script to start the simulation loop. Before the main simulation loop is run, 300 equilibration steps are performed so that the trajectory file doesn’t include the first 300 positions, velocities, and Euler angles. This equilibration process is performed such the outputted trajectory files to be analyzed will have more accurate observable files outputted, than if the first 300 positions, velocities, and Euler angles were included in the trajectory file. The energy output files are calculated by averaging over all time steps. The initial 300 time step values would likely deviate greatly from the equilibrium trajectory values, so including them in the time average would likely skew the average and increase the deviation of the observable.</p>
+<h2 data-number="3.2" id="the-integrator-and-potentials-scripts"><span class="header-section-number">3.2</span> The Integrator and Potentials Scripts</h2>
+<p>This script contains the main simulation loop and several functions that are called on during the main simulation loop. The main loop is executed <span class="math inline">\( N_{timesteps} \)</span> number of times, and translational steps are performed each time during this loop (in the cases they are performed at all). Monte Carlo rotation steps are performed about once every 50 molecular dynamics steps, which was chosen because this matches the implementation of the MoRiBS simulator.</p>
+<p>In the Monte Carlo rotation loop, there is a loop for the number of molecules and the number of beads. New Euler angles for <span class="math inline">\( \phi^{t+1}_i \)</span> and <span class="math inline">\( \chi^{t+1}_i \)</span> are proposed by adding <span class="math inline">\( 2 \pi \cdot \delta \)</span> times a random number between -1 and 1 to <span class="math inline">\( \phi^{t}_i \)</span> and <span class="math inline">\( \chi^{t}_i \)</span>, and the new Euler angle <span class="math inline">\( \theta^{t+1}_i \)</span> is proposed by adding <span class="math inline">\( \pi \cdot \delta \)</span> times a random number between -1 and 1 to <span class="math inline">\( \theta^{t}_i \)</span>. The value of <span class="math inline">\( \delta \)</span> is chosen such that the probability of accepting newly proposed Euler angle values is between 0.3 and 0.5. If statements are placed to push values proposed outside of the ranges <span class="math inline">\( \phi \epsilon [0 , 2 \pi]  \)</span>, <span class="math inline">\( \theta \epsilon [0 , \pi] \)</span>, and <span class="math inline">\( \chi \epsilon [0 , 2 \pi] \)</span>, back inside the range. The new Euler angles for the loop bead are used alongside the Euler angles for the <span class="math inline">\( (i+1)^{th} \)</span> and <span class="math inline">\( (i-1)^{th} \)</span> beads to calculate the rotation matrices. These matrices are used to calculate the relative Euler angles between beads, which are also used to calculate; <span class="math inline">\( \epsilon_{rot}^{t+1} \)</span>, and <span class="math inline">\( ( \epsilon_{rot}^{t+1} )^2 \)</span>.</p>
+<p>These values are inefficient to calculate them each time, so instead a function is used to obtain a previously calculated value for the values above, which has been stored in a specially marked file. The rotatioanl density matrix, energy, and energy squared files are used as an input arguments prior to submitting the simulation. There are 23 588 101 values stored in each of these files, which correspond to the <span class="math inline">\( 361 \times 181 \times 361 \)</span> different integer values in the range of <span class="math inline">\( \phi \)</span>, <span class="math inline">\( \theta \)</span>, and <span class="math inline">\( \chi\)</span>. Once the builtin cython function <span class="math inline">\( int( \phi + 1 ) \)</span>, <span class="math inline">\( int( \theta + 1 ) \)</span>, <span class="math inline">\( int( \chi + 1 ) \)</span> is applied to relative Euler Angles, the rotational density matrix, energy, and energy squared can be retrieved and used in the rotational part of the simulation loop. The <span class="math inline">\( \rho_{rot}^{t+1} \)</span> value is used to calculate the <span class="math inline">\( \rho_{new} \)</span> value which is needed in the equation for the acceptance criterion (<span class="math inline">\( \frac{\rho_{new}}{\rho_{old}} e^{- \tau ( V_{new} - V_{old} )} \)</span>). Similarily, <span class="math inline">\( \rho_{old} \)</span> is calculated using <span class="math inline">\( \phi_{i} \)</span>, <span class="math inline">\( \theta_{i} \)</span>, and <span class="math inline">\( \chi_{i} \)</span>. If the proposed Euler angles are accepted, <span class="math inline">\( \epsilon_{rot}^{t+1} \)</span>, and <span class="math inline">\( ( \epsilon_{rot}^{t+1} )^2 \)</span> are stored in the trajectory, otherwise <span class="math inline">\( \epsilon_{rot}^{t} \)</span>, and <span class="math inline">\( ( \epsilon_{rot}^{t} )^2 \)</span> are stored in its place.</p>
+<p><span class="math inline">\( V_{new} \)</span> and <span class="math inline">\( V_{old} \)</span> are calculated by calling potential scripts using all the atoms positions, and the molecules orientation as inputs. Potential scripts contain methods that use equations to calculate potential energy, and the gradient of potential energy using all the positions of the atoms in the simulation as input arguments. The potential energy is used for the PIMC part of the integrator, and the gradients are used for the PIMD part.</p>
+<h2 data-number="3.3" id="analysis-consolidator-and-plotter-scripts"><span class="header-section-number">3.3</span> Analysis, Consolidator and Plotter Scripts</h2>
+<p>Two specifically designed analysis scripts were used to calculate the results displayed in the following section from trajectories generated from simulations performed in the<br/>
+<code>H20Rigid3DRotor_PINormalModeIntegrator.pyx</code> integrator script. One was designed for calculating energy outputs trajectories, and the other used for calculating ordering parameter outputs from trajectories. Energy outputs could be the total energy, rotational energy, transnational energy, potential energy, etc. The trajectories submitted as arguments to the analysis scripts will have the temperature, bead number, lattice spacing, and number of particles in their file name. An example of this is; <code>N2H20T95.0P8R0.4Dip.nc</code>, which contains the specific temperature, lattice spacing, number of molecules, and bead number (<span class="math inline">\( T = 95.0 K \)</span>, <span class="math inline">\( R = 0.4 nm \)</span>, <span class="math inline">\( N = 2 \)</span>, <span class="math inline">\( P = 8 \)</span>). The analysis script extracts these parameters from the file name, and incorporates all these parameters into the output file name along with the name of the observable being calculated from the trajectory. The output file will just contain one value, the output from analysis of the trajectory.</p>
+<p>Consolidator scripts consolidate several outputs into one consolidated script, keeping two or three of the parameters (temperature, bead number, lattice spacing, and number of particles) constant. The loop goes through files in order of lowest to highest parameter size, which keeps the values sorted in the final consolidated script so that the plotter doesn’t have to perform a sorting proceedure. Implementing a sorting procedure in the plotter scripts which would cost the user valuable time. They gather all outputs for parameters that aren’t kept constant into one file which is given a file name based the output of interest, and the two (or three) the parameters that were kept constant. An example of this is for the three parameter case is <code>energy-T155.0nmolecules2nbeads10.file</code>, which has all the energy outputs for all the different simulations with different lattice spacings that have that specific temperature, number of molecules, and bead number respectively (<span class="math inline">\( T = 155.0 K \)</span>, <span class="math inline">\( N = 2 \)</span>, <span class="math inline">\( P = 10 \)</span>).</p>
+<p>There are two types of plotter scripts. One is named <code>plotter.py</code>, and it is used to output 2D plots, given a set of files as input arguments that want to be plotted by the user. These types of input arguments were consolidated keeping three variables constant. The other script is named <code>surfaceplotter.py</code>, and it outputs a 3D surface plot given 1 file as an input argument. These types of input arguments were consolidated keeping two variables constant. Results from the next sections were all generated using one of these two plotting scripts.</p>
+<h1 data-number="4" id="simulation-results-and-discussion"><span class="header-section-number">4</span> Simulation Results and Discussion</h1>
+<p>The simulation software for the asymmetric top was tested by comparing the energy outputs to a similar software named MoRiBS, which implements both translation and rotation using Monte Carlo methods. The MoRiBS Monte Carlo simulator has been validated by confirming its energy outputs match theoretical calculations and experimental data, so it is used as a benchmark to validate this simulator. Once a set of validation tests are performed on the simulator (which is currently still being developed), sufficient confidence will be built with the software, and it can be advertised to potential users. The first steps towards validating the simulator are confirming that the translational and rotational energy outputs are close to their theoretical values for the asymmetric top. This has been completed, and the results will be discussed. The simulator was also used to replicate experimental data by creating and analyzing the outputs of the energies and ordering parameters of the system as a functions of temperature, bead number, lattice spacing, and number of particles. 2D and 3D plots were used to visually represent the data to aid in interpreting the results.</p>
+<p>The translational energy outputs were obtained by running the simulation for a system with no potential using temperatures <span class="math inline">\( T = [10.0 K, 20.0 K, 30.0 K, 50.0 K, 100.0 K] \)</span> (as well as <span class="math inline">\( N = [1] \)</span>), <span class="math inline">\( P = [1] \)</span>, <span class="math inline">\( R = [0.3 nm] \)</span>. The rotational energy outputs were obtained by running the simulation for a system with no potential using temperatures <span class="math inline">\( T = [10.0 K, 20.0 K, 30.0 K, 50.0 K] \)</span>. The input parameters chosen to analyze energy outputs and ordering parameters were combinations of the temperatures <span class="math inline">\( T = [15.0 K, 70.0 K, 95.0 K, 140.0 K, 145.0 K, 150.0 K, 155.0 K, 160.0 K, 293.0 K] \)</span>, bead numbers <span class="math inline">\( P = [2, 4, 6, 8, 10] \)</span>, lattice spacings <span class="math inline">\( R = [2.4 nm, 2.55 nm, 2.7 nm, 2.85 nm, 3.0 nm, 3.25 nm, 3.5 nm, 3.75 nm,  4.0 nm]  \)</span>, and number of molecules <span class="math inline">\( N = [2, 4, 6, 8, 10] \)</span>.</p>
+<h2 data-number="4.1" id="simulation-validation"><span class="header-section-number">4.1</span> Simulation Validation</h2>
+<h3 data-number="4.1.1" id="comparison-of-translational-energy-outputs"><span class="header-section-number">4.1.1</span> Comparison of Translational Energy Outputs</h3>
+<p>When validating whether the software is modelling translation properly, one may simply compare the translational energy outputs to the theoretical value which is proportionate to <span class="math inline">\( \frac{3}{2} N k_B T \)</span>. The units of the energy are in Kelvin rather than Joules or electron volts (where <span class="math inline">\( 1 K \hspace{0.125cm} = \hspace{0.125cm} \frac{1}{1.38 \times 10^{-23}} J \hspace{0.125cm} = \hspace{0.125cm} \frac{1.6 \times 10^{-19}}{1.38 \times 10^{-23}} eV \)</span>). The translational energy outputs are in good agreement with the theoretical values for all simulated temperatures, so the simulator has passed this validation test. The MMTK simulator results and theoretical energies are compared in Table <a class="tex-reference" href="#wr-tab-transeng-1">4-1</a>.</p>
+<div id="wr-tab-transeng-1">
+<table>
+<caption><span class="work-report-caption-number">Table 4-1: </span>Expected Output vs. Simulation Output 1 000 000 steps</caption>
+<thead>
+<tr>
+<th style="text-align: center;"><strong>Temperature</strong></th>
+<th style="text-align: center;"><strong>Theoretical Value</strong></th>
+<th style="text-align: center;"><strong>Etrans MMTK Value</strong></th>
+<th style="text-align: center;"><strong>Error</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">10.0 K</td>
+<td style="text-align: right;">15.0 K</td>
+<td style="text-align: right;">15.148 K</td>
+<td style="text-align: right;">0.020 K</td>
+</tr>
+<tr>
+<td style="text-align: left;">20.0 K</td>
+<td style="text-align: right;">30.0 K</td>
+<td style="text-align: right;">30.104 K</td>
+<td style="text-align: right;">0.043 K</td>
+</tr>
+<tr>
+<td style="text-align: left;">30.0 K</td>
+<td style="text-align: right;">45.0 K</td>
+<td style="text-align: right;">44.068 K</td>
+<td style="text-align: right;">0.063 K</td>
+</tr>
+<tr>
+<td style="text-align: left;">50.0 K</td>
+<td style="text-align: right;">75.0 K</td>
+<td style="text-align: right;">74.359 K</td>
+<td style="text-align: right;">0.106 K</td>
+</tr>
+<tr>
+<td style="text-align: left;">100.0 K</td>
+<td style="text-align: right;">150.0 K</td>
+<td style="text-align: right;">147.904</td>
+<td style="text-align: right;">0.214 K</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 data-number="4.1.2" id="comparison-of-rotational-energy-values"><span class="header-section-number">4.1.2</span> Comparison of Rotational Energy Values</h3>
+<p>The asymmetric top rotational energy can has been calculated theoretically using the asymmetric top eigenvalues for water molecules. These values was used to validate the MoRiBS software [5]. The simulator being developed used the simulator MoRiBS as a benchmark, and compared its rotational energy outputs to theirs. The rotational energy outputs from MMTK are in good agreement with the rotational energy outputs from MoRiBS for all simulation temperatures, so the simulator has passed this validation test. The simulation was ran for 200 000 times steps and 2 000 000 steps, and the results from MMTKcand MoRiBS are compared in Figure <a class="tex-reference" href="#wr-fig-GOODErotvsT-1">4-4</a>.</p>
+<figure data-latex-placement="ht!" id="wr-fig-GOODErotvsT-1">
+<p><img alt="Rotational Energy vs Temperature" src="../../assets/documents/work-term-report/GOODErotvsT.png" style="width:60.0%"/></p>
+<figcaption><span class="work-report-caption-number">Figure 4-4: </span>Rotational Energy vs Temperature</figcaption>
+</figure>
+<h2 data-number="4.2" id="energy-outputs"><span class="header-section-number">4.2</span> Energy Outputs</h2>
+<p>The expectation value of the distance between water molecules occurs when the molecules are at their minimum potential energy. When water is in a solid state, they form a lattice where their center of masses are some distance apart from each other. It has been stated in literature that the expectation value of the distance between water molecules is <span class="math inline">\( 2.85 nm \)</span>, which was calculated from first principles by assuming the ice has a density of <span class="math inline">\( 1 \frac{g}{cm} \)</span> and a molar mass of <span class="math inline">\( \frac{1 g}{18.02 \frac{g}{mol}} \)</span> [8]. Figure <a class="tex-reference" href="#wr-fig-EnergiesvsLatticeSpacing-1">4-5</a> displays all the rotational and potential energy outputs from simulations at temperatures <span class="math inline">\( T = [15.0 K, 70.0 K, 95.0 K, 293.0 K] \)</span>, bead numbers <span class="math inline">\( P = [10] \)</span>, lattice spacings <span class="math inline">\( R = [2.4 nm, 2.55 nm, 2.7 nm, 2.85 nm, 3.0 nm, 3.25 nm, 3.5 nm, 3.75 nm, 4.0 nm]  \)</span>, and number of molecules <span class="math inline">\( N = [2] \)</span>. The minimum potential energy for these systems seem to lie around <span class="math inline">\( R = 2.85 nm \)</span>, which is in good agreement with the literature result. Most of the rotational energy outputs seem to increase linearly with temperature (for the same lattice spacing), much like the rotational energy results from MoRiBS. The rotational energy outputs seem to show minor deviation in value with respect to lattice spacing, with increasing deviation from increasing temperature.</p>
+<figure data-latex-placement="ht!" id="wr-fig-EnergiesvsLatticeSpacing-1">
+<p><img alt="Energy vs. Seperation Distance." src="../../assets/documents/work-term-report/EnergiesvsLatticeSpacing.png" style="width:60.0%"/></p>
+<figcaption><span class="work-report-caption-number">Figure 4-5: </span>Energy vs. Seperation Distance.</figcaption>
+</figure>
+<h2 data-number="4.3" id="ordering-parameter-outputs"><span class="header-section-number">4.3</span> Ordering Parameter Outputs</h2>
+<p>The ordering parameter is defined as the expectation value of the absolute value of the dot product between the axis of the nanotube vector and the direction of the dipole of the molecule vector (i.e. <span class="math inline">\( \langle \Theta \rangle \hspace{0.125cm} = \hspace{0.125cm} \sum_{i = 1}^{P} \sum_{j = 1}^{N} \sum_{i = k}^{N_{timesteps}} \frac{| \vec{e}_{nanotube} \cdot \vec{e}_{dipole} |_{ijk}}{P N N_{timesteps}} \hspace{0.125cm} \)</span>). Its purpose is to determine how ordered the system is, where a large change in the value of the ordering parameter with respect to temperature or lattice spacing could be characterized as a phase change in a system. A similar system was analyzed experimentally, and a spectral shift occurred around <span class="math inline">\( T = 150.0 K \)</span>, indicating a phase change [9]. The <code>submitscript.py</code> script was used to run combinations of simulations using LJ and MBPol potentials, and varying input parameters such temperatures, bead numbers, lattice spacing’s and number of particles. The trajectories were analyzed and ordering parameter files where outputted. The outputted files were consolidated into separate files that would each keep number of beads and number of particles constant. The bead number was chosen because it gave a sufficiently good interpretation of the quantum effects of water molecules while not being too computationally expensive. The software’s surface plotting feature has be used create Figure <a class="tex-reference" href="#wr-fig-OrderingParametervsTemperature-1">4-6</a>. Looking at the figure, a phase transition seems to occur around <span class="math inline">\( T = 140.0 - 160.0 K \)</span>, which is in good agreement with the literature results. From the lattice spacing side of the surface plot shown in Figure <a class="tex-reference" href="#wr-fig-OrderingParametervsLatticeSpacing-1">4-7</a>), one may observe a peak at 0.285 nm, and a rapid drop off while trending towards 0.4 nm.</p>
+<figure data-latex-placement="ht!" id="wr-fig-OrderingParametervsTemperature-1">
+<p><img alt="Ordering Parameter vs Temperature Representation" src="../../assets/documents/work-term-report/OrderingParametervsTemperature.png" style="width:60.0%"/></p>
+<figcaption><span class="work-report-caption-number">Figure 4-6: </span>Ordering Parameter vs Temperature Representation</figcaption>
+</figure>
+<figure data-latex-placement="ht!" id="wr-fig-OrderingParametervsLatticeSpacing-1">
+<p><img alt="Ordering Parameter vs Lattice Spacing Representation" src="../../assets/documents/work-term-report/OrderingParametervsLatticeSpacing.png" style="width:60.0%"/></p>
+<figcaption><span class="work-report-caption-number">Figure 4-7: </span>Ordering Parameter vs Lattice Spacing Representation</figcaption>
+</figure>
+<p>It is worth noting that the trend was very similar for systems with larger number of particles (i.e. <span class="math inline">\( N = [4, 6, 8, 10] \)</span>) but different for smaller number of beads (i.e. combinations of <span class="math inline">\( P = [2, 4, 6, 8] \)</span>.</p>
+<h1 class="unnumbered" id="conclusions">Conclusions</h1>
+<p>The development of the simulation software is ongoing. The more the system is tested, the more it proves what it can reliably model, and the more its developers will learn what it can’t. The utility of the software is associated with the number of situations the system can accurately model, and the accuracy of each of those simulations. The utility also depends on the software use-ability. The software has been tested in a variety of situations, and has proven to match theoretical and experimental results in each of these situations.</p>
+<p>README files were added so that future users and developers could better use or develop the simulator in the future. The software was set up so that users could use the README files as guides, so it has a fairly decent use-ability. If users want study the simulation of asymmetric top system with a particular potential energy function, but varying input parameters, they can use README files find out how to perfrom multiple simulations by submitting lists of input parameters to <code>submitscript.py</code>. The outputs of the simulations are contained in files stored in a separate directory, and the output files can be consolidated using consolidator files in order to prepare data for line or surface plots. This also increases the use-ability of the software because new users don’t have to gather results themselves.The software is accessible on github, and it can be effectively used by users who can navigate through Unix directories, use github commands to clone the software, and read README files.</p>
+<p>The translational and rotational energy outputs were close to correct theoretical values for the set of temperatures tested. This validated the modelling of basic dynamics of the system. The energy and ordering parameter outputs were in good agreement with what was observed in experiments. The waters rotational energy seemed to increase appropriately with respect to temperature, with a variation with respect to lattice spacing that increased with respect to temperature. The waters potential energy seemed to be minimum at 0.285 nm, which seemed to agree with experimental findings and theoretical calculations [8]. The potential energy with respect to lattice spacing curves seems to vary more for higher temperatures, with the minimum energy being around 0.285 nm for the lowest temperature case. The ordering parameter plots seemed to show a phase change around 150.0 K which was in good correspondence with experimental observation [9]. The magnitude of the ordering parameter seemed to peak at a lattice spacing of 0.285 nm, and decline slowly afterwards, which also seemed to agree with experimental findings and theoretical calculations [8].</p>
+<h1 class="unnumbered" id="recommendations">Recommendations</h1>
+<p>The major recommendations from this report are make improvements to the software by increasing its use-ability, and utility. The utility can be improved by simulating systems that implement translation, rotation, and potential energy components simultaneously, and comparing the results to the MoRiBS energy outputs for the same system. This will further validate the software. Additionally, future users should look for more experimental results that are within the limit of what the software can simulate accurately (within a reasonable amount of computation time), and determine if the simulation can replicate the literature results.</p>
+<p>The use-ability of the software is sufficient for future developers and users to use it, however there are improvements to be made. It is recommended that future developers adapt the README files so their more understandable, if they are not currently understandable. Future developers should ensure that there are no errors within any of the scripts for all possible test case, and they should improve on the efficiency of the scripts to minimize the computational cost of the software.</p>
+<p>The translational and rotational energy outputs from the software are sufficiently close to the theoretical results, however, the translational, rotational, and potential energy outputs still must be tested with a potential energy function present. This testing will involve a comparison between all of the energy outputs with the energy outputs of an equivalent system simulated in MoRiBS.</p>
+<p>The system has already been tested against theoretically and experimentally determined results, its minimum energy and maximum ordering parameter occurs when the the particles are placed 0.285 nm apart from each other. The more the software can replicate theoretical and experimental results, the more valid it appears to its users. It is recommended that future users should look for more experimental results that are within the limit of what the software can simulate accurately, and determine if the simulation can replicate their results.</p>
+<h1 class="unnumbered" id="wr-front-glossary-1">Glossary</h1>
+<dl>
+<dt>WKRPT 400</dt>
+<dd>
+<p>Work-term report</p>
+</dd>
+<dt>PIMD</dt>
+<dd>
+<p>Path Integral Molecular Dynamics</p>
+</dd>
+<dt>PIMC</dt>
+<dd>
+<p>Path Integral Monte Carlo</p>
+</dd>
+<dt>MMTK</dt>
+<dd>
+<p>Molecular Modelling Tool Kit</p>
+</dd>
+<dt>MBPol</dt>
+<dd>
+<p>Many Body Polarizable</p>
+</dd>
+<dt>VMD</dt>
+<dd>
+<p>Visual Molecular Dynamics</p>
+</dd>
+<dt>LJ</dt>
+<dd>
+<p>Lennard Jones</p>
+</dd>
+<dt>BFF</dt>
+<dd>
+<p>Body Fixed Frame</p>
+</dd>
+<dt>MoRiBS</dt>
+<dd>
+<p>Molecular Rotation in Bosonic Solvents</p>
+</dd>
+</dl>
+<h1 class="unnumbered" id="wr-front-references-1">References</h1>
+<p>[1] C. Ing, K. Hinsen, J. Yang, T. Zeng, H. Li and P. Roy, "A path-integral Langevin equation treatment of low-temperature doped helium clusters", The Journal of Chemical Physics, vol. 136, no. 22, p. 224309, 2012. Available: 10.1063/1.4726507.</p>
+<p>[2] “Metropolis Hastings algorithm,” Wikipedia, 29-Dec-2018. [Online].<br/>
+Available: <a class="uri" href="https://en.wikipedia.org/wiki/Metropolis–Hastings_algorithm">https://en.wikipedia.org/wiki/Metropolis–Hastings_algorithm</a>. [Accessed: 07-Jan-2019].</p>
+<p>[3] "D. E. Shaw Research", Deshawresearch.com, 2019. [Online]. Available: <a class="uri" href="https://www.deshawresearch.com/">https://www.deshawresearch.com/</a>. [Accessed: 09- Jan- 2019].</p>
+<p>[4] "Law of large numbers | statistics", Encyclopedia Britannica, 2019. [Online]. Available: <a class="uri" href="https://www.britannica.com/science/law-of-large-numbers">https://www.britannica.com/science/law-of-large-numbers</a>. [Accessed: 08- Jan- 2019].</p>
+<p>[5] T. Zeng, N. Blinov, G. Guillon, H. Li, K. Bishop and P. Roy, "MoRiBS-PIMC: A program to simulate molecular rotors in bosonic solvents using path-integral Monte Carlo", Computer Physics Communications, vol. 204, pp. 170-188, 2016. Available: 10.1016/j.cpc.2016.02.025.</p>
+<p>[6] Libretexts, “Lennard-Jones Potential,” Chemistry LibreTexts, 26-Nov-2018. [Online]. Available: <a class="uri" href="https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Supplemental_Modules_(Physical_and_Theoretical_Chemistry)/Physical_Properties_of_Matter/Atomic_and_Molecular_Properties/Intermolecular_Forces/Specific_Interactions/Lennard-Jones_Potential">https://chem.libretexts.org/Bookshelves/Physical_and_Theoretical_Chemistry_Textbook_Maps/Supplemental_Modules_(Physical_and_Theoretical_Chemistry)/Physical_Properties_of_Matter/Atomic_and_Molecular_Properties/Intermolecular_Forces/Specific_Interactions/Lennard-Jones_Potential</a>. [Accessed: 07-Jan-2019].</p>
+<p>[7] “The Molecular Modeling Toolkit,” Atom. [Online]. Available: <a class="uri" href="http://dirac.cnrs-orleans.fr/MMTK.html">http://dirac.cnrs-orleans.fr/MMTK.html</a>. [Accessed: 07-Jan-2019].</p>
+<p>[8] G. Bell, "Statistical mechanics of water: lattice model with directed bonding", Journal of Physics C: Solid State Physics, vol. 5, no. 9, pp. 889-905, 1972. Available: 10.1088/0022-3719/5/9/004.</p>
+<p>[9] X. Ma, S. Cambré, W. Wenseleers, S. Doorn and H. Htoon, "Quasiphase Transition in a Single File of Water Molecules Encapsulated in (6,5) Carbon Nanotubes Observed by Temperature-Dependent Photoluminescence Spectroscopy", Physical Review Letters, vol. 118, no. 2, 2017. Available: 10.1103/physrevlett.118.027402.</p>
+<p>[10] "3.37. Wigner D Function — Theoretical Physics Reference 0.5 documentation", Theoretical-physics.net, 2019. [Online]. Available: <a class="uri" href="https://www.theoretical-physics.net/dev/math/wigner.html">https://www.theoretical-physics.net/dev/math/wigner.html</a>. [Accessed: 09- Jan- 2019].</p>
+<p>[11] M. Ragab<sup>*</sup> and K. Wong<sup>**</sup>, "ROTATION WITHIN CAMERA PROJECTION MATRIX USING EULER ANGLES, QUATERNIONS, AND ANGLE-AXES", International Journal of Robotics and Automation, vol. 24, no. 4, 2009. Available: 10.2316/journal.206.2009.4.206-3174.</p>
+<div id="wr-appendix-a">
+</div>
+<h1 class="unnumbered" id="wr-app-firstappx-1">Appendix A: Evaluation of the Translation Density Matrix</h1>
+<p>The kinetic energy term can be evaluated by inserting momentum basis states using the resolution of the identity (i.e. <span class="math inline">\( 1 \hspace{0.025cm} = \hspace{0.025cm} \int d^n p \ket{p} \bra{p} \)</span>), but some background is required on the inner product of coordinate and momentum states;</p>
+<p>The statement;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-18-1}
+\langle q | p \rangle \hspace{0.125cm} = \hspace{0.125cm} \frac{1}{(2 \pi \hbar)^{\frac{n}{2}}} e^{\frac{i p q}{\hbar}} \hspace{0.125cm} , 
+\end{equation}\]</span>
+</div>
+<p>must be true such that;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-19-1}
+\langle q | q' \rangle \hspace{0.125cm} = \hspace{0.125cm} \int d^n p \langle q | p \rangle \langle p | q' \rangle \hspace{0.125cm} = \hspace{0.125cm} \delta ( x - x' )  \hspace{0.125cm} , 
+\end{equation}\]</span>
+</div>
+<p>remains valid. Note <span class="math inline">\( \langle p | q' \rangle  \hspace{0.025cm} = \hspace{0.025cm} \langle q' | p \rangle^{*} \hspace{0.025cm} = \hspace{0.025cm} \frac{1}{(2 \pi \hbar)^{\frac{n}{2}}} e^{\frac{- i p q'}{\hbar}}  \)</span>, so equation <span class="math inline">\(\ref{wr-eq-19-1}\)</span> now becomes;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-20-1}
+\langle q | q' \rangle \hspace{0.125cm} = \hspace{0.125cm} \frac{1}{(2 \pi \hbar)^{n}} \int d^n p \hspace{0.05cm} e^{\frac{i p (q - q')}{\hbar}} \hspace{0.125cm} \equiv \hspace{0.125cm} \delta ( x - x' ) \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Now, continuing with the process of solving <span class="math inline">\( \bra{q_i} e^{ - \frac{ \beta p^2}{2 m P}} \ket{q_{i+1}} \)</span>;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-21-1}
+\bra{q_i} e^{ - \frac{ \beta p^2}{2 m P}} \ket{q_{i+1}} \hspace{0.125cm} = \hspace{0.125cm} \int d^n p \hspace{0.05cm} \bra{q_i} e^{ - \frac{ \beta \hat{p}^2}{2 m P}} \ket{p} \langle p | q_{i+1} \rangle \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Note that;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-22-1}
+\bra{q} e^{ - \frac{ \beta \hat{p}^2}{2 m P}} \ket{p} \hspace{0.025cm} = \hspace{0.025cm} \bra{q} e^{ - \frac{ \beta p^2}{2 m P}} \ket{p} \hspace{0.025cm} = \hspace{0.025cm} \langle q | p \rangle e^{ - \frac{ \beta p^2}{2 m P}} \hspace{0.025cm} ,
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-23-1}
+\bra{q_i} e^{ - \frac{ \beta p^2}{2 m P}} \ket{q_{i+1}} \hspace{0.125cm} = \hspace{0.125cm} \frac{1}{(2 \pi \hbar)^{n}} \int d^n p \hspace{0.05cm} e^{{ - \frac{ \beta \hat{p}^2}{2 m P}}}  e^{{\frac{i p (q_i - q_{i+1})}{\hbar}}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Note that this has the form of a Gaussian integral, which has the solution;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-24-1}
+\int_{- \infty}^{\infty} e^{{ -a p^2 + b p}} dp \hspace{0.125cm} = \hspace{0.125cm} \sqrt{\frac{\pi}{a}} e^{{\frac{b^2}{4 a}}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Noting that in this scenario, <span class="math inline">\( a \hspace{0.025cm} = \hspace{0.025cm} \frac{\beta}{2 m P} \)</span> and <span class="math inline">\( b \hspace{0.025cm} = \hspace{0.025cm} \frac{i (q_i - q_{i + 1})}{\hbar} \)</span>, so;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-25-1}
+\bra{q_i} e^{ - \frac{ \beta p^2}{2 m P}} \ket{q_{i+1}} \hspace{0.125cm} = \hspace{0.125cm} \frac{1}{(2 \pi \hbar)} \sqrt{\frac{2 \pi m P}{\beta}}   e^{ \frac{ - m P (q_i - q_{i+1})^2}{2 \hbar^2 \beta}}  \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-26-1}
+\bra{q_i} e^{ - \frac{ \beta p^2}{2 m P}} \ket{q_{i+1}} \hspace{0.125cm} = \hspace{0.125cm} \sqrt{\frac{m P}{2 \pi \hbar^2 \beta}} e^{ \frac{ - m P (q_i - q_{i+1})^2}{2 \hbar^2 \beta}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>If we state that <span class="math inline">\( \kappa \hspace{0.025cm} = \hspace{0.025cm} \frac{m P}{2 \pi \hbar^2 \beta} \)</span> (note <span class="math inline">\( \kappa \hspace{0.025cm} \equiv \hspace{0.025cm} \Big[ \frac{kg \cdot \frac{kg m^2}{s^2}}{\frac{kg^2 m^4}{s^4} \cdot s^2}  \Big] \hspace{0.025cm} \equiv \hspace{0.025cm} \Big[ \frac{1}{m^2} \Big]  \)</span> ), then the above expression becomes;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-27-1}
+\bra{q_i} e^{ - \frac{ \beta p^2}{2 m P}} \ket{q_{i+1}} \hspace{0.125cm} = \hspace{0.125cm} \sqrt{\frac{\kappa}{\pi}} e^{- \kappa (q_i - q_{i+1})^2} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Using this result we can write Z as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-28-1}
+Z \hspace{0.125cm} = \hspace{0.125cm} \lim_{P \rightarrow \infty} \Bigg[ \bigg(\sqrt{\frac{m P}{2 \pi \hbar^2 \beta}}\bigg)^{P} \bigg[ \prod_{i=1}^{P} \int d q_i \bigg] e^{- \sum_{i = 1}^{P} \bigg[ \frac{ m P (q_i - q_{i+1})^2}{2 \hbar^2 \beta} + \frac{\beta}{2P} \Big( V(q_i) + V(q_{i + 1}) \Big) \bigg]} \Bigg]_{q_{P + 1} \hspace{0.05cm} = \hspace{0.05cm} q_1} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Noting that <span class="math inline">\( V(q_i) \)</span> is always counted twice in the sum <span class="math inline">\( \sum_{i = 1}^{P} \Big( V(q_i) + V(q_{i + 1}) \Big) \)</span> because <span class="math inline">\( V(q_1) \hspace{0.025cm} = \hspace{0.025cm} V(q_{i + 1}) \)</span>, we can rewrite the partition function as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-29-3}
+Z \hspace{0.125cm} = \hspace{0.125cm} \lim_{P \rightarrow \infty} \Bigg[ \bigg(\sqrt{\frac{m P}{2 \pi \hbar^2 \beta}}\bigg)^{P} \bigg[ \prod_{i=1}^{P} \int d q_i \bigg] e^{- \sum_{i = 1}^{P} \Big[ \frac{ m P (q_i - q_{i+1})^2}{2 \hbar^2 \beta} + \frac{\beta}{P} V(q_i) \Big] \bigg)} \Bigg]_{q_{P + 1} \hspace{0.05cm} = \hspace{0.05cm} q_1} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<div id="wr-appendix-b">
+</div>
+<h1 class="unnumbered" id="wr-app-scdappx-1">Appendix B: Rotational Density Matrix Derivation</h1>
+<p>The density matrix for an individual free rotor can be evaluated using the following expression:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \rho_{rot^{i, i+1}} ( \tau ) \hspace{0.125cm} = \hspace{0.125cm} \langle \Omega_{i} | e^{- \tau \hat{T}_{rot}} | \Omega_{i+1} \rangle  
+\end{equation}\]</span>
+</div>
+<p>Proceeding by expanding the eigenfunctions of <span class="math inline">\( | \Omega_{i+1} \rangle \)</span> in a basis set of eigenfunctions of the asymmetric top <span class="math inline">\( | JM\hat{K} \rangle  \)</span>;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    | \Omega_{i+1} \rangle \hspace{0.125cm} = \hspace{0.125cm} \sum_{J M \hat{K}} \langle JM\hat{K} | \Omega_{i+1} | JM\hat{K} \rangle  
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \rho^{rot_{i, i+1}} ( \tau ) \hspace{0.125cm} = \hspace{0.125cm} \langle \Omega_{i} | e^{- \tau \hat{T}_{rot}} \sum_{J M \hat{K}} \langle JM\hat{K} | \Omega_{i+1} | JM\hat{K} \rangle | \Omega_{i+1} \rangle 
+\end{equation}\]</span>
+</div>
+<p>Since <span class="math inline">\( | JM\hat{K} \rangle  \)</span> are eigenfunctions of the Schrodinger equation for the asymetric top, so it follows that;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+ e^{- \tau \hat{T}_{rot}}| JM\hat{K} \rangle \hspace{0.125cm} = \hspace{0.125cm}  e^{- \tau E_{\hat{K}}^{(JM)}}| JM\hat{K} \rangle 
+\end{equation}\]</span>
+</div>
+<p>where <span class="math inline">\( E_{\hat{K}}^{(JM)} \)</span> are the rotational energy eigenvalues of the asymmetric top. Using this as constant allows us to rearrange it to obtain;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \rho^{rot_{i, i+1}} ( \tau ) \hspace{0.125cm} = \hspace{0.125cm} \langle \Omega_{i} \sum_{J M \hat{K}} \Big( e^{- \tau E_{\hat{K}}^{(JM)}}  \langle JM\hat{K} | \Omega_{i+1} \rangle  \Big) | JM\hat{K} \rangle 
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \rho^{rot_{i, i+1}} ( \tau ) \hspace{0.125cm} = \hspace{0.125cm}  \sum_{J M \hat{K}} \langle \Omega_{i} | JM\hat{K} \rangle  e^{- \tau E_{\hat{K}}^{(JM)}} \langle JM\hat{K} | \Omega_{i+1} \rangle 
+\end{equation}\]</span>
+</div>
+<p>The choice for the BFF Euler angles (see Appendix B) is arbitrary, so for convenience, the body fixed frame coordinates are chosen to be such that <span class="math inline">\( \vec{\omega} = ( \phi_i , \theta_{i} , \chi_i ) = ( 0 , 0 , 0 ) \)</span> which leads to;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    | \Omega_{i} \rangle \hspace{0.125cm} = \hspace{0.125cm} \delta ( \vec{\omega} - \vec{\omega}_i ) \hspace{0.125cm} = \hspace{0.125cm} \delta ( \vec{\omega} )
+\end{equation}\]</span>
+</div>
+<p>and so tilde’s are added to remind ourselves that we are in the space fixed frame for the <span class="math inline">\( | \Omega_{i+1} \rangle \)</span> bead;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    | \Omega_{i} \rangle \hspace{0.125cm} = \hspace{0.125cm} \delta ( \Tilde{\vec{\omega}} - \Tilde{\vec{\omega}}_{i+1} )  
+\end{equation}\]</span>
+</div>
+<p>The next step in solving this expression, the asymmetric top eigenfunctions (i.e. <span class="math inline">\( | JM\hat{K} \rangle  \)</span> ) are expanded in a basis set formed by the eigenfunctions of the symmetric top (i.e. <span class="math inline">\( | JMK \rangle  \)</span> );</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    | JM\hat{K} \rangle \hspace{0.125cm} = \hspace{0.125cm} \sum_{K} C_{K \hat{K}}^{(JK)} | JM\hat{K} \rangle  
+\end{equation}\]</span>
+</div>
+<p>This gives our new expression for <span class="math inline">\(  \rho^{rot_{i, i+1}} ( \tau ) \)</span> as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \rho^{rot_{i, i+1}} ( \tau ) \hspace{0.125cm} = \hspace{0.125cm} \sum_{J M \hat{K}} \Big[ \int \delta ( \vec{\omega} ) \sum_{K^{'}} C_{\hat{K} K^{'}}^{(JK)} | JM\hat{K}  \rangle d \vec{\omega} \Big] \Big( e^{- \tau E_{\hat{K}}^{(JM)}} \Big) \Big[ \int \delta ( \Tilde{\vec{\omega}} - \Tilde{\vec{\omega}}_{i+1} ) \Big( \sum_{K} C_{\hat{K} K}^{(JK)} | JM\hat{K}  \rangle \Big)^{*} d \vec{\Tilde{\omega}} \Big]
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \rho^{rot_{i, i+1}} ( \tau ) \hspace{0.125cm} = \hspace{0.125cm} \sum_{J M \hat{K}} \Big( \sum_{K^{'}} C_{\hat{K} K^{'}}^{(JK)} \Psi_{JMK} ( [0, 0, 0] ) \Big) \Big( e^{- \tau E_{\hat{K}}^{(JM)}} \Big) \Big( \sum_{K} C_{\hat{K} K}^{(JK)} \Psi_{JMK} ( \Tilde{\vec{\omega}}_{i+1} ) \Big)^{*} 
+\end{equation}\]</span>
+</div>
+<p>The eigenvalues of the symmetric top are given by;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+   \Psi_{JMK} ( \Tilde{\vec{\omega}} ) \hspace{0.125cm} = \hspace{0.125cm} \Psi_{JMK} ( \phi , \theta, \chi ) \hspace{0.125cm} = \hspace{0.125cm} \Big( \frac{2 J + 1}{8 \pi^2} \Big)^{\frac{1}{2}} e^{i m \phi} d_{MK}^{J} (\theta )  e^{i k \chi}
+\end{equation}\]</span>
+</div>
+<p>where <span class="math inline">\( d_{MK}^{J} (\theta ) \)</span> is Wigner’s reduced d-matrix. Noting <span class="math inline">\( d_{MK}^{J} ( 0 ) = \delta_{MK} \)</span>, we obtain the solutions to the wavefunctions above;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \Psi_{JMK} ( \phi_{i} , \theta_{i}, \chi_{i} ) \hspace{0.125cm} = \hspace{0.125cm} \Psi_{JMK} ( 0 , 0 , 0 ) \hspace{0.125cm} = \hspace{0.125cm} \Big( \frac{2 J + 1}{8 \pi^2} \Big)^{\frac{1}{2}} \delta_{MK}
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \Psi_{JMK} ( \phi_{i+1} , \theta_{i+1}, \chi_{i+1} ) \hspace{0.125cm} = \hspace{0.125cm} \Big( \frac{2 J + 1}{8 \pi^2} \Big)^{\frac{1}{2}} e^{i m \phi_{i+1}} d_{MK}^{J} (\theta_{i+1} )  e^{i k \chi_{i+1}}
+\end{equation}\]</span>
+</div>
+<p>Substituting these back into the rotational density matrix equations one will obtain;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \langle \Omega_{i} | e^{- \tau \hat{T}_{rot}} | \Omega_{i+1} \rangle \hspace{0.125cm} = \hspace{0.125cm} \sum_{J M \hat{K}} \Big( \frac{2 J + 1}{8 \pi^2} \Big) C_{\hat{K} M}^{(JK)} e^{- \tau E_{\hat{K}}^{(JM)}} \Big[ \sum_{K} C_{\hat{K} K}^{(JK)} e^{i m \phi_{i+1}} d_{MK}^{J} (\theta_{i+1} )  e^{i k \chi_{i+1}} \Big]
+\end{equation}\]</span>
+</div>
+<p>Taking the real parts of the complex exponentials it resembles Figure <a class="tex-reference" href="#wr-fig-eq1-1">2-2</a> [5]. The energy eigenvalues of this sytem are calculated by using <em>[unresolved historical reference: eq:59]</em> along with <span class="math inline">\( \rho_{rot}^{i, i+1} ( \tau ) \)</span> to obtain the energies for that bead, and time step, then averaging the values over all beads and time steps;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+     \epsilon_{rot}^{i, i+1} \hspace{0.125cm} = \hspace{0.125cm} - \frac{1}{\rho_{rot}^{i, i+1}} \frac{\partial{\rho_{rot}^{i, i+1}}}{\partial{\tau}} 
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\epsilon_{rot}^{i, i+1} \hspace{0.125cm} = \hspace{0.125cm}  \frac{1}{\rho^{rot_{i, i+1}}} \sum_{J M \hat{K}} \Big( \frac{2 J + 1}{8 \pi^2} \Big) C_{\hat{K} M}^{(JK)} E_{\hat{K}}^{(JM)} e^{- \tau E_{\hat{K}}^{(JM)}} \Big[ \sum_{K} C_{\hat{K} K}^{(JK)} e^{i m \phi_{i+1}} d_{MK}^{J} (\theta_{i+1} )  e^{i k \chi_{i+1}} \Big]
+\end{equation}\]</span>
+</div>
+<p>The Wigner small d function can be found in literature <span class="math inline">\(.^{10} \)</span> It is defined as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{multline*}
+d_{MK}^{J} ( \theta ) \hspace{0.125cm} = \hspace{0.125cm}  \Big[ (J + M)! (J - M)! (J + K)! (J - K)! \Big]^{\frac{1}{2}} \\ \Big[ \sum_{\chi} \frac{(-1)^{^{\chi}}}{(J - M - K)!(J + K - \chi)! (\chi)! (\chi + M - K)!} \Big] \\ \Big[ \cos{ \frac{\theta}{2}} \Big]^{2J - 2 \chi - M + K} \Big[ - \sin{ \frac{\theta}{2}} \Big]^{2\chi + M - K}
+\end{multline*}\]</span>
+</div>
+<p>With all this information it is possible to calculate the rotational energy for a system as a function of temperature. <span class="math inline">\( \tau \hspace{0.125cm} = \hspace{0.125cm} \frac{1}{P k_B T} \)</span>.</p>
+<div id="wr-appendix-c">
+</div>
+<h1 class="unnumbered" id="wr-app-thrdappx-1">Appendix C: Proof of Approximation</h1>
+<p>Starting from;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} 
+e^{-\beta ( \frac{\hat{V}}{2} + \hat{T} + \frac{\hat{V}}{2} )} \hspace{0.125cm} \simeq \hspace{0.125cm} e^{-\beta \frac{\hat{V}}{2}} e^{-\beta \hat{T}} e^{-\beta \frac{\hat{V}}{2}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Performing a Taylor series expansion to the RHS here we obtain;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-6-1}
+e^{-\beta \frac{\hat{V}}{2}} e^{-\beta \hat{T}} e^{-\beta \frac{\hat{V}}{2}} \hspace{0.125cm} = \hspace{0.125cm} \Big( 1 - \beta \frac{\hat{V}}{2} + \beta^2 \frac{\hat{V}^2}{8} \Big) \Big( 1 - \beta \hat{T} + \beta^2 \frac{\hat{T}^2}{2} \Big) \Big( 1 - \beta \frac{\hat{V}}{2} + \beta^2 \frac{\hat{V}^2}{8} \Big) \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>and we neglect terms <span class="math inline">\( \mathcal{O}(\beta^3) \)</span> or greater because a large <span class="math inline">\( T \)</span> means a small <span class="math inline">\( \beta \)</span>. For smaller temperature cases we require a mathematical tool known as the Trotter expansion, finishing off this expansion;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-7-1}
+= \hspace{0.125cm} 1 - \beta \Big( \frac{\hat{V}}{2} + \hat{T} + \frac{\hat{V}}{2} \Big) + \frac{\beta^2}{2} \Big( \frac{\hat{V^2}}{4} + \hat{T} + \frac{\hat{V^2}}{4} \Big) +  \frac{\beta^2}{2} \Big( \hat{V} \hat{T} + \hat{T} \hat{V} \Big) \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-8-1}
+e^{-\beta \frac{\hat{V}}{2}} e^{-\beta \hat{T}} e^{-\beta \frac{\hat{V}}{2}} \hspace{0.125cm} = \hspace{0.125cm} e^{-\beta ( \frac{\hat{V}}{2} + \hat{T} + \frac{\hat{V}}{2} )} + \frac{\beta^2}{2} \{ \hat{V} , \hat{T} \}  \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-9-1}
+\therefore  \hspace{0.225cm}  e^{-\beta \frac{\hat{V}}{2}} e^{-\beta \hat{T}} e^{-\beta \frac{\hat{V}}{2}} \hspace{0.125cm} \simeq \hspace{0.125cm} e^{-\beta ( \frac{\hat{V}}{2} + \hat{T} + \frac{\hat{V}}{2} )} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>which can be computed exactly using a Trotter expansion;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-10-2}
+e^{-\beta ( \frac{\hat{V}}{2} + \hat{T} + \frac{\hat{V}}{2} )} \hspace{0.125cm} = \hspace{0.125cm} \lim_{P \rightarrow \infty} \bigg[ e^{- \frac{\beta \hat{V}}{2P}} e^{- \frac{\beta \hat{T}}{P}} e^{- \frac{\beta \hat{V}}{2P}} \bigg]^P \hspace{0.125cm} .  
+\end{equation}\]</span>
+</div>
+<p>This formalism is exact for all values of <span class="math inline">\( \beta \)</span>.</p>
+<div id="wr-appendix-d">
+</div>
+<h1 class="unnumbered" id="wr-app-fthappx-1">Appendix D: Energy Eigenvalues from Operators Proof</h1>
+<p>The goal of this section is to show how to go from the operator notation of the density matrices to the energy eigenvalue notation of the density matrices;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} 
+\hat{\rho} \hspace{0.125cm} \simeq \hspace{0.125cm} \bra{\vec{R}} e^{- \frac{ \beta \hat{V}_{pot}}{2}} e^{- \frac{\beta \hat{p}^2}{2 m}} e^{-\beta \hat{T}_{rot}} e^{- \frac{ \beta \hat{V}_{pot}}{2}} \ket{\vec{R}} \hspace{0.125cm} = \hspace{0.125cm} \bra{\vec{R}} e^{ - \beta \big( E_{trans} + E_{rot} + V(\vec{R})\big)} \ket{\vec{R}} \hspace{0.125cm} . 
+\end{equation}\]</span>
+</div>
+<p>One can start by noting that the second terms in the Taylor Series expansion of the exponential are much larger than the third terms from the Taylor expansion.</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-40-1}
+\beta \big( \frac{\hat{V}_{pot}}{2} + \hat{T}_{trans} + \hat{T}_{rot} + \frac{\hat{V}_{pot}}{2} \big)  \hspace{0.125cm} \gg \hspace{0.125cm} \frac{\beta^2}{2} \big( \frac{\hat{V}_{pot}}{2} + \hat{T}_{trans} + \hat{T}_{rot} + \frac{\hat{V}_{pot}}{2} \big)^2 \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>and so it is a valid assumption to state that</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-41-1}
+e^{- \beta \big( \frac{\hat{V}_{pot}}{2} + \hat{T}_{trans} + \hat{T}_{rot} + \frac{\hat{V}_{pot}}{2} \big) } \hspace{0.125cm} \simeq \hspace{0.075cm} 1 \hspace{0.075cm} - \hspace{0.125cm} \beta \big( \frac{\hat{V}_{pot}}{2} + \hat{T}_{trans} + \hat{T}_{rot} + \frac{\hat{V}_{pot}}{2} \big) \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>and operating on the ket, then having the bra operate on the resulting term we obtain;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-42-1}
+\hat{\rho} \hspace{0.125cm} \simeq \hspace{0.125cm} \bra{\vec{R}} \bigg[ 1 \hspace{0.075cm} - \hspace{0.125cm} \beta \big( \frac{\hat{V}_{pot}}{2} + \hat{T}_{trans} + \hat{T}_{rot} + \frac{\hat{V}_{pot}}{2} \big) \hspace{0.125cm} \bigg] \ket{\vec{R}} \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>and these operators transform into their respective energy eigenvalue representation;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-43-1}
+\hat{\rho} \hspace{0.125cm} \simeq \hspace{0.125cm} \bra{\vec{R}} \bigg[ 1 \hspace{0.075cm} - \hspace{0.125cm} \beta \big( E_{trans} + E_{rot} + V(\vec{R})\big) \hspace{0.125cm} \bigg] \ket{\vec{R}} \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>which can be re-represented exactly in an exponential form as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-44-1}
+\hat{\rho} \hspace{0.125cm} = \hspace{0.125cm} \bra{\vec{R}} e^{ - \beta \big( E_{trans} + E_{rot} + V(\vec{R})\big)} \ket{\vec{R}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<div id="wr-appendix-e">
+</div>
+<h1 class="unnumbered" id="wr-app-Eappx-1">Appendix E: Simplification of Asymmetric Top Hamiltonian</h1>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-62-1}
+\hat{T}_{rot} \hspace{0.125cm} = \hspace{0.125cm} - \frac{\hbar^2}{2 \mu_{a}} \nabla^2 - \frac{\hbar^2}{2 \mu_{b}} \nabla^2 - \frac{\hbar^2}{2 \mu_{c}} \nabla^2 \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>For linear rotors, the Laplacian in spherical coordinates (used for angular momentum operators) is;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-63-1}
+\nabla^{2}_{r \phi \theta} \hspace{0.125cm} = \hspace{0.125cm} \frac{1}{r^2_0} \Big[ \frac{1}{\sin{\theta}} \frac{\partial}{\partial{\theta}} \Big( \sin{\theta} \frac{\partial}{\partial{\theta}} \Big) + \frac{1}{\sin^2 \theta} \frac{\partial^2}{\partial{\phi}^2} \Big] \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>and note that <span class="math inline">\( \mu_a r^2_0 \hspace{0.025cm} = \hspace{0.025cm} I_a \)</span>, equation <span class="math inline">\(\ref{wr-eq-62-1}\)</span> can be rewritten as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-64-1}
+\hat{T}_{rot} \hspace{0.125cm} = \hspace{0.125cm} - \Big[ \frac{\hbar^2}{2 I_{a}} + \frac{\hbar^2}{2 I_{b}} + \frac{\hbar^2}{2 I_{c}} \Big] \Big[ \frac{1}{\sin{\theta}} \frac{\partial}{\partial{\theta}} \Big( \sin{\theta} \frac{\partial}{\partial{\theta}} \Big) + \frac{1}{\sin^2 \theta} \frac{\partial^2}{\partial{\phi}^2} \Big] \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<p>Defining rotational constants A, B, and C as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-65-1}
+A \hspace{0.125cm} = \hspace{0.125cm} \frac{\hbar^2}{2 I_{a}} \hspace{0.125cm} , \hspace{0.125cm} B \hspace{0.125cm} = \hspace{0.125cm} \frac{\hbar^2}{2 I_{b}} \hspace{0.125cm} , \hspace{0.125cm} C \hspace{0.125cm} = \hspace{0.125cm} \frac{\hbar^2}{2 I_{c}} \hspace{0.125cm} ,
+\end{equation}\]</span>
+</div>
+<p>one can more cleanly express the kinetic part of the Hamiltonian as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-66-2}
+\hat{T}_{rot} \hspace{0.125cm} = \hspace{0.125cm} A \hat{J}^{2}_{a} + B \hat{J}^{2}_{b} + C \hat{J}^{2}_{c} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<div id="wr-appendix-f">
+</div>
+<h1 class="unnumbered" id="wr-app-potengc-1">Appendix F: Coulomb Potential</h1>
+<p>The coulomb potential is used when the user wants to model the potential interaction between molecules using their partial charges, and calculating the potential interaction between all the partial charges while neglecting the "self interactions" of the molecules partial charges with each other. This is mathematically represented as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-67-1}
+\hat{V}_{coulomb} \hspace{0.125cm} = \hspace{0.125cm} \sum_{i = 1}^{N} \sum_{j \neq i}^{N} \frac{q_i q_j}{4 \pi \epsilon r_{ij}} \hspace{0.125cm} .
+\end{equation}\]</span>
+</div>
+<div id="wr-appendix-g">
+</div>
+<h1 class="unnumbered" id="wr-app-potengdd-1">Appendix G: Dipole-Dipole Interaction Potential</h1>
+<p>The dipole-dipole interaction potential is to be used when the user wants to implement a simulation when they know dipoles will be sufficiently far apart, and possibly also when they want to studying the ordering parameters of water molecules without knowledge of the exact distributions of the orientation of the dipoles.</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation} \label{wr-eq-69-1}
+\hat{V}_{dipole-dipole} \hspace{0.125cm} = \hspace{0.125cm} \sum_{i = 1}^{N} \sum_{j \neq i}^{N} \frac{\mu_{1} \mu_{2}}{4 \pi \epsilon_{0} r_{i, j}^{3}} \bigg( \vec{e_i} \cdot \vec{e}_{j} - \frac{3(\vec{e}_{i} \cdot \vec{r}_{i, j})( \vec{e}_{j} \cdot \vec{r}_{i, j})}{r_{i, j}^{2}} \bigg)
+\end{equation}\]</span>
+</div>
+<p>The dipoles must be sufficiently far apart because the derivation of this (simpler) form of the dipole-dipole interaction potential assumes that the length of the dipole is much smaller than the distance between dipoles. For this reason, this potential is particularly useful when the dipoles are pinned some relatively large distance away from each other such that this condition is met.</p>
+<div id="wr-appendix-h">
+</div>
+<h1 class="unnumbered" id="wr-app-eulang-1">Appendix H: Euler angles for Rotation Matrix Functions</h1>
+<p>Start by defining the rotation matrix using Zares definitions of the Euler angles <span class="math inline">\(.^{11} \)</span> The full rotation matrix is the product of simpler unitary matricies, making the product of the rotation matricies <span class="math inline">\( \vec{\vec{R}} ( \vec{\Phi} )  \)</span> also unitary.</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \vec{\vec{R}} ( \vec{\Phi} ) \hspace{0.125cm} \equiv \hspace{0.125cm} \vec{\vec{R}} ( \chi , \theta , \phi ) \hspace{0.125cm} \equiv \hspace{0.125cm}  \vec{\vec{R}}_{\chi} \cdot \vec{\vec{R}}_{\theta} \cdot \vec{\vec{R}}_{\phi} 
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\vec{\vec{R}} ( \vec{\Phi} ) \hspace{0.125cm} \equiv \hspace{0.125cm} 
+\begin{pmatrix}
+\cos{\chi} &amp; \sin{\chi} &amp; 0 \\
+-\sin{\chi} &amp; \cos{\chi} &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\begin{pmatrix}
+\cos{\theta} &amp; 0 &amp; -\sin{\theta} \\
+0 &amp; 1 &amp; 0 \\
+\sin{\theta} &amp; 0 &amp; \cos{\theta}
+\end{pmatrix}
+\begin{pmatrix}
+\cos{\phi} &amp; \sin{\phi} &amp; 0 \\
+-\sin{\phi} &amp; \cos{\phi} &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\end{equation}\]</span>
+</div>
+<p>A property of unitary matricies is that the transpose of a unitary matrix is equivalent to the inverse of the same matrix. It can be seen that;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \vec{\vec{R}} ( \vec{\Phi} )  \vec{\vec{R}}^{-1} ( \vec{\Phi} ) \hspace{0.125cm} = \hspace{0.125cm}
+    \vec{\vec{R}} ( \vec{\Phi} )  \vec{\vec{R}}^{T} ( \vec{\Phi} ) \hspace{0.125cm} = \hspace{0.125cm}  \vec{\vec{R}}_{\chi} \cdot \vec{\vec{R}}_{\theta} \cdot \vec{\vec{R}}_{\phi} \cdot \Big[ \vec{\vec{R}}_{\chi} \cdot \vec{\vec{R}}_{\theta} \cdot \vec{\vec{R}}_{\phi} \Big]^{T} \hspace{0.125cm} = \hspace{0.125cm} \vec{\vec{R}}_{\chi} \cdot \vec{\vec{R}}_{\theta} \cdot \vec{\vec{R}}_{\phi} \cdot \vec{\vec{R}}_{\phi}^{T} \cdot \vec{\vec{R}}_{\theta}^{T} \cdot \vec{\vec{R}}_{\chi}^{T} 
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \vec{\vec{R}} ( \vec{\Phi} )  \vec{\vec{R}}^{-1} ( \vec{\Phi} ) \hspace{0.125cm} = \hspace{0.125cm} \vec{\vec{R}}_{\chi} \cdot \vec{\vec{R}}_{\theta} \cdot \vec{\vec{R}}_{\phi} \cdot
+    \vec{\vec{R}}_{\phi}^{T} \cdot \vec{\vec{R}}_{\theta}^{T} \cdot \vec{\vec{R}}_{\chi}^{T} \hspace{0.125cm} = \hspace{0.125cm} \vec{\vec{R}}_{\chi} \cdot \vec{\vec{R}}_{\theta} \cdot \vec{\vec{R}}_{\phi} \cdot \vec{\vec{R}}_{\phi}^{-1} \cdot \vec{\vec{R}}_{\theta}^{-1} \cdot \vec{\vec{R}}_{\chi}^{-1} 
+\end{equation}\]</span>
+</div>
+<p>Evaluating the <span class="math inline">\( \vec{\vec{R}}_{\phi} \vec{\vec{R}}_{\phi}^{-1} \)</span> terms one will see;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\vec{\vec{R}}_{\phi} \vec{\vec{R}}_{\phi}^{-1} \hspace{0.125cm} = \hspace{0.125cm} 
+\begin{pmatrix}
+\cos{\phi} &amp; \sin{\phi} &amp; 0 \\
+-\sin{\phi} &amp; \cos{\phi} &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\begin{pmatrix}
+\cos{\phi} &amp; -\sin{\phi} &amp; 0 \\
+\sin{\phi} &amp; \cos{\phi} &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\vec{\vec{R}}_{\phi} \vec{\vec{R}}_{\phi}^{-1} 
+\hspace{0.125cm} = \hspace{0.125cm} 
+\begin{pmatrix}
+\cos^{2}{\phi} + \sin^{2}{\phi} &amp; \cos{\phi} \sin{\phi} - \sin{\phi} \cos{\phi} &amp; 0 \\
+- \sin{\phi} \cos{\phi} + \cos{\phi} \sin{\phi} &amp; \cos^{2}{\phi} + \sin^{2}{\phi} &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\hspace{0.125cm} = \hspace{0.125cm} \vec{\vec{I}}
+\end{equation}\]</span>
+</div>
+<p>Where the identity matrix <span class="math inline">\( \vec{\vec{I}} \)</span> is defined as;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+ \vec{\vec{I}}
+\hspace{0.125cm} = \hspace{0.125cm} 
+\begin{pmatrix}
+1 &amp; 0 &amp; 0 \\
+0 &amp; 1 &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\end{equation}\]</span>
+</div>
+<p>The same can be proved for <span class="math inline">\( \vec{\vec{R}}_{\theta} \vec{\vec{R}}_{\theta}^{-1} \)</span> and <span class="math inline">\( \vec{\vec{R}}_{\chi} \vec{\vec{R}}_{\chi}^{-1} \)</span></p>
+<p>Evaluating the <span class="math inline">\( \vec{\vec{R}}_{\phi} \vec{\vec{R}}_{\phi}^{-1} \)</span> terms one will see;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\vec{\vec{R}}_{\theta} \vec{\vec{R}}_{\theta}^{-1}  \hspace{0.125cm} = \hspace{0.125cm} 
+\begin{pmatrix}
+\cos{\theta} &amp; 0 &amp; \sin{\theta} \\
+0 &amp; 1 &amp; 0 \\
+-\sin{\theta} &amp; 0 &amp; \cos{\theta} 
+\end{pmatrix}
+\begin{pmatrix}
+\cos{\theta} &amp; 0 &amp; -\sin{\theta} \\
+0 &amp; 1 &amp; 0 \\
+\sin{\theta} &amp; 0 &amp; \cos{\theta} 
+\end{pmatrix}
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\vec{\vec{R}}_{\phi} \vec{\vec{R}}_{\phi}^{-1} 
+\hspace{0.125cm} = \hspace{0.125cm} 
+\begin{pmatrix}
+\cos^{2}{\theta} + \sin^{2}{\theta} &amp; 0 &amp; \cos{\theta} \sin{\theta} - \sin{\theta} \cos{\theta}  \\
+0 &amp; 1 &amp; 0 \\
+- \sin{\theta} \cos{\theta} + \cos{\theta} \sin{\theta}  &amp; 0 &amp; \cos^{2}{\theta} + \sin^{2}{\theta} 
+\end{pmatrix}
+\hspace{0.125cm} = \hspace{0.125cm} \vec{\vec{I}}
+\end{equation}\]</span>
+</div>
+<p>Evaluating the <span class="math inline">\( \vec{\vec{R}}_{\chi} \vec{\vec{R}}_{\chi}^{-1} \)</span> terms one will see;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\vec{\vec{R}}_{\chi} \vec{\vec{R}}_{\chi}^{-1} \hspace{0.125cm} = \hspace{0.125cm} 
+\begin{pmatrix}
+\cos{\chi} &amp; \sin{\chi} &amp; 0 \\
+-\sin{\chi} &amp; \cos{\chi} &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\begin{pmatrix}
+\cos{\chi} &amp; -\sin{\chi} &amp; 0 \\
+\sin{\chi} &amp; \cos{\chi} &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\end{equation}\]</span>
+</div>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\vec{\vec{R}}_{\chi} \vec{\vec{R}}_{\chi}^{-1} 
+\hspace{0.125cm} = \hspace{0.125cm} 
+\begin{pmatrix}
+\cos^{2}{\chi} + \sin^{2}{\chi} &amp; \cos{\chi} \sin{\chi} - \sin{\chi} \cos{\chi} &amp; 0 \\
+- \sin{\chi} \cos{\chi} + \cos{\chi} \sin{\chi} &amp; \cos^{2}{\chi} + \sin^{2}{\chi} &amp; 0 \\
+0 &amp; 0 &amp; 1 
+\end{pmatrix}
+\hspace{0.125cm} = \hspace{0.125cm} \vec{\vec{I}}
+\end{equation}\]</span>
+</div>
+<p>Which proves that;</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \vec{\vec{R}} ( \vec{\Phi} )  \vec{\vec{R}}^{-1} ( \vec{\Phi} ) \hspace{0.125cm} = \hspace{0.125cm} \vec{\vec{I}}  \hspace{0.125cm} = \hspace{0.125cm}  \vec{\vec{R}}^{-1} ( \vec{\Phi} )  \vec{\vec{R}} ( \vec{\Phi} )
+\end{equation}\]</span>
+</div>
+<p>These concepts are used to find the relative Euler angles between beads in order to calculate the rotational energy value for that bead in the integrator script.</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+    \Delta \vec{\vec{R}}_{i+1, i} ( \vec{\Phi} )  \hspace{0.125cm} = \hspace{0.125cm} \vec{\vec{R}} ( \vec{\Phi_{i+1}} )  \vec{\vec{R}}^{-1} ( \vec{\Phi_{i}} ) 
+\end{equation}\]</span>
+</div>
+<p class="tex-source-download"><a download="" href="../../assets/documents/work-term-report/work_term_report.tex">Download sanitized public LaTeX source</a></p></article><noscript><p>JavaScript is required for equation typesetting. The contents, text and images remain available; download the LaTeX source for the original formulas.</p></noscript><a class="back-top" href="#main-content">Back to the top ↑</a></div></div></main>
+<footer class="site-footer"><a href="../../index.html">Liam McGrath · An open notebook</a><span>Ideas are better connected.</span><a href="../../About/index.html">About &amp; documents ↗</a></footer>
+<script src="../../assets/site.js"></script><script defer src="../../assets/portfolio.js"></script>
+</body></html>

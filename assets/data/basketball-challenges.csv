@@ -1,0 +1,8 @@
+id,label,played,winRateDenominator,seriesWithChallenge,notPlayed,duplicateSeriesCount,winsL,winsO,winRateL,winRateO
+shooting,Shooting,13,13,13,0,0,7,6,0.5384615384615384,0.46153846153846156
+bump,Bump,11,11,11,2,0,10,1,0.9090909090909091,0.09090909090909091
+horse,HORSE,9,9,9,4,0,3,6,0.3333333333333333,0.6666666666666666
+backboard,Backboard,12,12,12,1,0,10,2,0.8333333333333334,0.16666666666666666
+three-point,3 Point,12,12,12,1,0,9,3,0.75,0.25
+rim,Rim,10,10,10,3,0,7,3,0.7,0.3
+one-on-one,1v1,6,6,6,7,0,4,2,0.6666666666666666,0.3333333333333333

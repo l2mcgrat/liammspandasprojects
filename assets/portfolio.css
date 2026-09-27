@@ -18,11 +18,11 @@ p { overflow-wrap:anywhere; }
 .skip-link { position:fixed; z-index:100; left:16px; top:-100px; padding:12px 20px; background:#ecf0ff; color:#121727; border-radius:8px; }
 .skip-link:focus { top:12px; }
 .site-header { display:flex; align-items:center; justify-content:space-between; gap:24px; min-height:87px; padding:16px max(28px,calc((100vw - 1320px)/2)); background:#0d101bdd; border-bottom:1px solid #ffffff0d; backdrop-filter:blur(20px); position:sticky; top:0; z-index:20; }
-.site-header .brand { display:flex; gap:12px; align-items:center; font-size:12px; letter-spacing:.1em; line-height:1.7; color:#efeff8; font-weight:650; }
+.site-header .brand { display:flex; gap:12px; align-items:center; min-height:44px; font-size:12px; letter-spacing:.1em; line-height:1.7; color:#efeff8; font-weight:650; }
 .brand small { display:block; font-size:9px; font-weight:400; color:var(--muted); letter-spacing:.19em; }
 .brand-mark { display:grid; place-items:center; width:38px; height:42px; color:#c6bfff; border:1px solid #a69fff70; clip-path:polygon(50% 0,100% 24%,100% 76%,50% 100%,0 76%,0 24%); background:#a99cff1a; font-family:Georgia,serif; letter-spacing:-.1em; font-size:15px; }
 .site-header nav { display:flex; gap:28px; font-size:12px; font-weight:500; align-items:center; }
-.site-header nav a { color:#b4bad0; transition:color .2s; }
+.site-header nav a { display:inline-flex; align-items:center; justify-content:center; gap:4px; min-width:44px; min-height:44px; white-space:nowrap; color:#b4bad0; transition:color .2s; }
 .site-header nav a:last-child { border:1px solid #ffffff1f; padding:7px 15px; border-radius:30px; color:#e7e9f8; }
 .site-header nav a:hover,.site-header nav a[aria-current="page"] { color:#d0c6ff; }
 .eyebrow { color:#ac9ee9; text-transform:uppercase; font-size:10px; font-weight:600; letter-spacing:.19em; margin:0 0 17px; }
@@ -54,23 +54,26 @@ p { overflow-wrap:anywhere; }
 .map-ring { fill:none; stroke:#a390dc28; stroke-width:.7; stroke-dasharray:2 7; }
 .map-spoke { fill:none; stroke:#87779f77; stroke-width:1.4; transition:stroke .3s,filter .3s; }
 .map-spoke.active { stroke:#c5afff; filter:drop-shadow(0 0 4px #a68aff); stroke-dasharray:6 5; animation:thread-flow 2s linear infinite; }
-.hex-map .hex-node { --node-color:#b49ae8; position:absolute; width:26%; height:25%; min-height:0; padding:0; display:grid; place-items:stretch; gap:0; background:transparent; border:0; box-shadow:none; clip-path:none; transform:translate(-50%,-50%); isolation:isolate; text-align:center; }
+.hex-map .hex-node { --node-color:#b49ae8; position:absolute; width:24%; height:23%; min-width:44px; min-height:44px; padding:0; display:grid; place-items:stretch; gap:0; background:transparent; border:0; box-shadow:none; clip-path:none; transform:translate(-50%,-50%); isolation:isolate; text-align:center; }
 .hex-node::before,.hex-node::after { content:""; position:absolute; inset:0; z-index:-2; clip-path:polygon(50% 0,96% 25%,96% 75%,50% 100%,4% 75%,4% 25%); }
 .hex-node::before { background:linear-gradient(150deg,#87799b6b,#49435738 45%,#7c769961); transition:background .25s; }
 .hex-node::after { inset:1px; background:linear-gradient(145deg,#28243a,#171b2a 80%); z-index:-1; }
 .hex-node:hover,.hex-node:focus-visible { filter:drop-shadow(0 0 12px color-mix(in srgb,var(--node-color) 30%,transparent)); outline:none; }
 .hex-node:hover::before,.hex-node:focus-visible::before { background:conic-gradient(from var(--glow-angle),#36314d,var(--node-color),#ffffff,var(--node-color),#36314d 70%); animation:border-turn 3s linear infinite; }
+.hex-node:focus-visible::before { background:#e9ddff; animation:none; }
 .hex-node:focus-visible::after { inset:3px; }
 .hex-map .hex-inner { width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; border-radius:0; box-shadow:none; background:transparent; color:var(--node-color); font-family:inherit; font-weight:400; font-size:inherit; }
-.hex-map .hex-node strong { color:#c4c6db; font-size:clamp(10px,1.02vw,13px); font-weight:500; }
+.hex-map .hex-node strong { color:#c4c6db; font-size:clamp(10px,1.02vw,13px); font-weight:500; white-space:nowrap; }
 .hex-map .topic-icon { width:37px; height:37px; }
-.hex-map .node-gaming { left:50%; top:13%; bottom:auto; right:auto; --node-color:#bba1ff; }
-.hex-map .node-economics { left:82%; top:31.5%; bottom:auto; right:auto; --node-color:#dbc390; }
-.hex-map .node-business { left:82%; top:68.5%; bottom:auto; right:auto; --node-color:#9dc7df; }
-.hex-map .node-physics { left:50%; top:87%; bottom:auto; right:auto; --node-color:#9ddacf; }
-.hex-map .node-language { left:18%; top:68.5%; bottom:auto; right:auto; --node-color:#daadd8; }
-.hex-map .node-miscellaneous { left:18%; top:31.5%; bottom:auto; right:auto; --node-color:#a6bbf6; }
-.hex-map .node-mental-map { left:50%; top:50%; width:34%; height:33%; --node-color:#d0b6ff; filter:drop-shadow(0 0 22px #9c76e62e); }
+/* Centres / 600 * 100: keep in sync with the publisher's fixed SVG spokes. */
+.hex-map .node-gaming { left:50%; top:11.6666667%; bottom:auto; right:auto; --node-color:#bba1ff; }
+.hex-map .node-economics { left:80%; top:26.1666667%; bottom:auto; right:auto; --node-color:#dbc390; }
+.hex-map .node-business { left:87.3333333%; top:58.5%; bottom:auto; right:auto; --node-color:#9dc7df; }
+.hex-map .node-physics { left:66.6666667%; top:84.5%; bottom:auto; right:auto; --node-color:#9ddacf; }
+.hex-map .node-language { left:33.3333333%; top:84.5%; bottom:auto; right:auto; --node-color:#daadd8; }
+.hex-map .node-miscellaneous { left:12.6666667%; top:58.5%; bottom:auto; right:auto; --node-color:#a6bbf6; }
+.hex-map .node-sports { left:20%; top:26.1666667%; bottom:auto; right:auto; --node-color:#f7ab65; }
+.hex-map .node-mental-map { left:50%; top:50%; width:30%; height:29%; --node-color:#d0b6ff; filter:drop-shadow(0 0 22px #9c76e62e); }
 .node-mental-map::before { background:linear-gradient(130deg,#dcc8ffaa,#7e5ab83b,#c9b1ff77); }
 .node-mental-map::after { background:radial-gradient(ellipse at 45% 20%,#4c3461,#242032 85%); }
 .hex-map .node-mental-map .topic-icon { width:47px; height:47px; }
@@ -82,7 +85,14 @@ p { overflow-wrap:anywhere; }
 .icon-orbit { transform-origin:32px 32px; animation:orbit 24s linear infinite; }
 .icon-wave { animation:wave 3s ease-in-out infinite; transform-origin:center; }
 .icon-draw { stroke-dasharray:80; animation:draw-line 6s ease-in-out infinite; }
-.hex-node:hover .topic-icon,.hex-node:focus-visible .topic-icon { animation:lift 2s ease-in-out infinite; }
+.hex-node:not(.node-sports):hover .topic-icon,.hex-node:not(.node-sports):focus-visible .topic-icon { animation:lift 2s ease-in-out infinite; }
+/* Home-map artwork only; the Sports page keeps its own illustration behaviour. */
+.hex-map .sports-topic-icon > g { stroke-width:3; }
+.hex-map .sports-topic-icon .net-board { opacity:.5; }
+.hex-map .sports-topic-icon .net-ball circle { fill:#28243a; }
+.hex-map .sports-topic-icon .net-weave { transform-box:view-box; transform-origin:160px 139px; }
+.hex-map .node-sports:is(:hover,:focus-visible) .net-ball { animation:portfolio-net-drop 1.5s ease-in-out 1 both; }
+.hex-map .node-sports:is(:hover,:focus-visible) .net-weave { animation:portfolio-net-swish 1.5s ease-in-out 1 both; }
 @property --glow-angle { syntax:'<angle>'; inherits:false; initial-value:0deg; }
 @keyframes border-turn { to { --glow-angle:360deg; } }
 @keyframes orbit { to { transform:rotate(360deg); } }
@@ -90,6 +100,21 @@ p { overflow-wrap:anywhere; }
 @keyframes draw-line { 0%,100% { stroke-dashoffset:0; } 50% { stroke-dashoffset:35; } }
 @keyframes lift { 50% { transform:translateY(-3px); } }
 @keyframes thread-flow { to { stroke-dashoffset:-22; } }
+/* Ball centre starts at y=65; +74 reaches the rim, then it falls through. */
+@keyframes portfolio-net-drop {
+  0%,12% { transform:translateY(0); opacity:1; }
+  48% { transform:translateY(74px); opacity:1; }
+  76% { transform:translateY(164px); opacity:1; }
+  86% { transform:translateY(195px); opacity:0; }
+  87% { transform:translateY(0); opacity:0; }
+  100% { transform:translateY(0); opacity:1; }
+}
+@keyframes portfolio-net-swish {
+  0%,40%,100% { transform:rotate(0deg) scale(1); }
+  60% { transform:rotate(-3deg) scale(1.025,1.06); }
+  78% { transform:rotate(2deg) scale(.99,1.035); }
+  92% { transform:rotate(-1deg) scale(1); }
+}
 .home-discover { width:min(1224px,calc(100% - 96px)); margin:20px auto 80px; padding-top:34px; border-top:1px solid #ffffff12; }
 .section-heading { display:flex; justify-content:space-between; align-items:end; gap:20px; margin-bottom:26px; }
 .section-heading .eyebrow { font-size:9px; margin-bottom:8px; }
@@ -232,6 +257,8 @@ caption { text-align:left; font-size:11px; color:#969db5; padding:14px; }
 .tex-paper thead { background:#eaeaf1; }
 .tex-paper figcaption { font-size:13px; text-align:center; color:#606070; }
 .tex-paper .tex-display-math { overflow-x:auto; overflow-y:hidden; padding:6px 0; margin:22px 0; }
+/* A sidebar can make a tablet reader narrower than a phone's full-width paper. */
+.tex-paper .math.inline { display:inline-block; max-width:100%; overflow-x:auto; overflow-y:hidden; vertical-align:middle; }
 .tex-paper mjx-container { font-size:108%!important; max-width:100%; }
 .tex-paper mjx-container[display="true"] { margin:1em 0!important; }
 .tex-paper .topic-callout { font-family:"Segoe UI",sans-serif; border-left:3px solid #4476cb; background:#eef2fb; padding:17px 20px; margin:22px 0; font-size:13px; }
@@ -267,13 +294,13 @@ caption { text-align:left; font-size:11px; color:#969db5; padding:14px; }
 }
 @media(max-width:760px) {
   html { scroll-padding-top:125px; }
-  .site-header { min-height:97px; padding:13px 20px; flex-wrap:wrap; gap:10px; }
+  .site-header { min-height:97px; padding:10px 20px; flex-wrap:wrap; gap:8px; }
   .site-header .brand { font-size:10px; }
-  .site-header nav { gap:20px; font-size:11px; width:100%; justify-content:space-between; }
+  .site-header nav { flex-wrap:wrap; gap:0 4px; font-size:11px; width:100%; justify-content:space-between; }
   .site-header nav a:last-child { padding:0; border:0; }
   .brand small { display:none; }
   .brand-mark { width:25px; height:28px; font-size:11px; }
-  .home-stage { grid-template-columns:1fr; width:calc(100% - 40px); padding:40px 0 22px; }
+  .home-stage { grid-template-columns:1fr; width:calc(100vw - 40px); max-width:calc(100% - 24px); padding:40px 0 22px; }
   .home-copy h1 { font-size:clamp(46px,11vw,72px); margin:23px 0; }
   .home-copy>.eyebrow { font-size:8px; }
   .home-description { max-width:400px; font-size:14px; }
@@ -290,6 +317,7 @@ caption { text-align:left; font-size:11px; color:#969db5; padding:14px; }
   .home-discover { width:calc(100% - 40px); margin:20px auto 45px; }
   .section-heading { display:block; }
   .section-heading>.text-link { display:inline-block; margin-top:18px; }
+  .home-landing .text-link { display:inline-flex; align-items:center; min-width:44px; min-height:44px; }
   .card-grid { grid-template-columns:1fr; }
   .collection-page,.document-page { width:calc(100% - 32px); padding-top:28px; }
   .page-intro h1 { font-size:40px; }
@@ -312,12 +340,27 @@ caption { text-align:left; font-size:11px; color:#969db5; padding:14px; }
   .tex-paper { font-size:15px; padding:22px; }
   .tex-paper h1 { font-size:25px; }
   .tex-paper h2 { font-size:21px; }
-  .tex-paper .math.inline { display:inline-block; max-width:100%; overflow-x:auto; overflow-y:hidden; vertical-align:middle; }
   .site-footer { width:calc(100% - 40px); flex-wrap:wrap; gap:12px; }
+  .site-footer a { display:inline-flex; align-items:center; min-width:44px; min-height:44px; }
   .site-footer span { display:none; }
   .overview-grid,.smash-hero,.fighter-hero,.profile-chart-grid { grid-template-columns:minmax(0,1fr); }
   .fighter-title-row { flex-wrap:wrap; }
   .hero-metrics { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:480px) {
+  .hex-map .hex-inner { gap:4px; }
+  .hex-map .topic-icon { width:26px; height:26px; }
+  .hex-map .node-mental-map .topic-icon { width:26px; height:26px; }
+  .hex-map .node-mental-map strong { font-size:clamp(14px,4.3vw,20px); }
+  .hex-map .node-mental-map small,.hex-map .node-mental-map .map-enter { display:none; }
+}
+@media(max-width:399px) {
+  /* Also fit all five links when a desktop browser reserves a scrollbar. */
+  .site-header { padding-inline:12px; }
+  .hex-map .node-miscellaneous strong { font-size:8px; }
+}
+@media(forced-colors:active) {
+  .hex-map .hex-node:focus-visible { outline:3px solid Highlight; outline-offset:3px; }
 }
 @media(prefers-reduced-motion:reduce) {
   html { scroll-behavior:auto; }

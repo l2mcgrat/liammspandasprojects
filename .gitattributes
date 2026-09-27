@@ -1,0 +1,6 @@
+# Keep downloadable source consistent with the compiled PDF/source bundles.
+assets/documents/**/*.tex -text
+*.pdf -text
+*.zip -text
+*.png -text
+*.jpg -text
