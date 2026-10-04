@@ -4,3 +4,7 @@ assets/documents/**/*.tex -text
 *.zip -text
 *.png -text
 *.jpg -text
+# Publish generated pages/assets byte-for-byte (readers keep authored CRLF inside math).
+*.html -text
+*.css -text
+*.js -text

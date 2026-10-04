@@ -1,0 +1,817 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Liam McGrath’s connected notebook of science, language, data analysis and creative projects.">
+<meta name="theme-color" content="#0d101b"><title>Feelings explorer | Liam McGrath</title>
+<link rel="icon" href="../../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/styles.css"><link rel="stylesheet" href="../../../assets/portfolio.css"><link rel="stylesheet" href="../../../assets/career.css"><link rel="stylesheet" href="../../../assets/atlas-icons.css">
+</head><body><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header">
+      <a class="brand" href="../../../index.html" aria-label="Liam McGrath home"><span class="brand-mark" aria-hidden="true">LM</span><span>LIAM McGRATH<small>AN OPEN NOTEBOOK</small></span></a>
+    <nav aria-label="Primary navigation"><a href="../../../Mental-Map/index.html">Mental Map</a><a href="../../../Atlas/index.html">Atlas</a><a href="../../../index.html#creator-3blue1brown">Creators</a><a href="../../../Smash/index.html">Smash</a><a href="../../../About/index.html">About me <span aria-hidden="true">↗</span></a></nav>
+    </header><main id="main-content" class="collection-page"><div class="atlas-strip tone-language"><span class="atlas-strip-icon atlas-hover"><svg class="atlas-icon ai-2d2ab57f" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M10 44a22 22 0 0 1 44 0"/><path d="M32 22v4M16.4 28.4l2.9 2.9M47.6 28.4l-2.9 2.9" opacity=".6"/><circle cx="32" cy="44" r="3"/><path class="a" d="M32 41V27"/><path class="c" d="M10 53h7"/><path class="b" d="M47 53h7M50.5 49.5v7"/></svg></span><nav class="atlas-crumbs" aria-label="Breadcrumb"><ol><li><a href="../../../index.html">Home</a></li><li><a href="../../../Language-and-Programming/index.html">Language &amp; Programming</a></li><li><a href="../../../Language-and-Programming/Text-Analysis/index.html">Text Analysis</a></li><li aria-current="page">Sentiment</li></ol></nav><span class="atlas-strip-meta">Destination 1 of 6</span></div><div id="feelings-app">
+      <div class="page-intro">
+      <p class="eyebrow">Text Analysis / Source notebook</p>
+      <h1>Feelings, read line by line</h1><p class="lede">Follow textual cues through the songs, then inspect the words behind every label.</p>
+      <nav class="toolbar" aria-label="Collection navigation">
+        <a class="button ghost" href="../index.html">Back to Text Analysis</a>
+        <a class="button ghost" href="../../../Mental-Map/index.html">Mental map</a>
+      </nav></div>
+      <p class="method-note"><strong>Exploratory text heuristics, not mental states or diagnoses.</strong>
+      Family names, including “Depressed”, label lexicon cues only. Scores are occurrence counts, never confidence probabilities.
+      Sarcasm, narrative voice, quotations and metaphor are not resolved.</p>
+      <div class="metric-grid"><div class="metric-card"><p class="metric-label"><strong>Song versions</strong></p>
+      <p class="metric-value">66</p><p>Differing versions retained.</p></div>
+      <div class="metric-card"><p class="metric-label"><strong>Retained lines</strong></p>
+      <p class="metric-value">4,064</p><p>Original physical order; blank/header/timestamp-only lines excluded.</p></div>
+      <div class="metric-card"><p class="metric-label"><strong>Unclassified</strong></p>
+      <p class="metric-value">3,635</p><p>No active cues, not neutral emotion.</p></div>
+      <div class="metric-card"><p class="metric-label"><strong>Ambiguous lines</strong></p>
+      <p class="metric-value">29</p><p>Multiple active families or tied primary branches.</p></div></div>
+      <section class="panel" aria-labelledby="feelings-filter-title"><h2 id="feelings-filter-title">Choose a reading</h2>
+      <fieldset id="feelings-controls" class="toolbar" disabled><legend>Line filters</legend>
+        <label for="feelings-song">Song version<select id="feelings-song"><option value="">All song versions · corpus</option><option value="bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874">Bunny Girl · Made_in_Abyss</option><option value="can-t-go-back-4d6164655f696e5f41627973732f43616e277420476f204261636b2e747874">Can&#x27;t Go Back · Made_in_Abyss</option><option value="fear-hope-4d6164655f696e5f41627973732f46656172202620486f70652e747874">Fear &amp; Hope · Made_in_Abyss</option><option value="final-layer-2-4d6164655f696e5f41627973732f46696e616c204c6179657220322e747874">Final Layer 2 · Made_in_Abyss</option><option value="into-the-abyss-4d6164655f696e5f41627973732f496e746f207468652041627973732e747874">Into the Abyss · Made_in_Abyss</option><option value="lost-boy-4d6164655f696e5f41627973732f4c6f737420426f792e747874">Lost Boy · Made_in_Abyss</option><option value="strain-of-the-abyss-4d6164655f696e5f41627973732f53747261696e206f66207468652041627973732e747874">Strain of the Abyss · Made_in_Abyss</option><option value="warning-signs-4d6164655f696e5f41627973732f5761726e696e67205369676e732e747874">Warning Signs · Made_in_Abyss</option><option value="freestyles-are-written-4d795f4865726f5f41636164656d69612f467265657374796c657320617265205772697474656e2e747874">Freestyles are Written · My_Hero_Academia</option><option value="growing-up-4d795f4865726f5f41636164656d69612f47726f77696e672055702e747874">Growing Up · My_Hero_Academia</option><option value="meditate-4d795f4865726f5f41636164656d69612f4d656469746174652e747874">Meditate · My_Hero_Academia</option><option value="soundcloud-social-media-4d795f4865726f5f41636164656d69612f536f756e64436c6f756420536f6369616c204d656469612e747874">SoundCloud Social Media · My_Hero_Academia</option><option value="x-4d795f4865726f5f41636164656d69612f582e747874">X · My_Hero_Academia</option><option value="you-saved-me-4d795f4865726f5f41636164656d69612f596f75205361766564204d652e747874">You Saved Me · My_Hero_Academia</option><option value="you-should-know-4d795f4865726f5f41636164656d69612f596f752053686f756c64204b6e6f772e747874">You Should Know · My_Hero_Academia</option><option value="beast-boy-4f6c645f436c6173736963732f424541535420424f592e747874">BEAST BOY · Old_Classics</option><option value="freaks-feat-graeme-cracker-4f6c645f436c6173736963732f467265616b732028666561742e20477261656d6520437261636b6572292e747874">Freaks (feat. Graeme Cracker) · Old_Classics</option><option value="fuckboi-2-4f6c645f436c6173736963732f6675636b626f6920322e747874">fuckboi 2 · Old_Classics</option><option value="fuckboi-4f6c645f436c6173736963732f6675636b626f692e747874">fuckboi · Old_Classics</option><option value="gclm-feat-graeme-cracker-4f6c645f436c6173736963732f47434c4d2028666561742e20477261656d6520437261636b6572292e747874">GCLM (feat. Graeme Cracker) · Old_Classics</option><option value="happens-4f6c645f436c6173736963732f48617070656e732e747874">Happens · Old_Classics</option><option value="picture-me-trolling-4f6c645f436c6173736963732f50696374757265204d652054726f6c6c696e672e747874">Picture Me Trolling · Old_Classics</option><option value="smash-4f6c645f436c6173736963732f534d4153482e747874">SMASH · Old_Classics</option><option value="v6-4f6c645f436c6173736963732f56362e747874">V6 · Old_Classics</option><option value="envy-536576656e5f446561646c795f53696e732f456e76792e747874">Envy · Seven_Deadly_Sins</option><option value="gluttony-536576656e5f446561646c795f53696e732f476c7574746f6e792e747874">Gluttony · Seven_Deadly_Sins</option><option value="greed-536576656e5f446561646c795f53696e732f47726565642e747874">Greed · Seven_Deadly_Sins</option><option value="lust-536576656e5f446561646c795f53696e732f4c7573742e747874">Lust · Seven_Deadly_Sins</option><option value="nanatsu-no-taizai-536576656e5f446561646c795f53696e732f4e616e61747375206e6f205461697a61692e747874">Nanatsu no Taizai · Seven_Deadly_Sins</option><option value="pride-536576656e5f446561646c795f53696e732f50726964652e747874">Pride · Seven_Deadly_Sins</option><option value="sloth-536576656e5f446561646c795f53696e732f536c6f74682e747874">Sloth · Seven_Deadly_Sins</option><option value="wrath-536576656e5f446561646c795f53696e732f57726174682e747874">Wrath · Seven_Deadly_Sins</option><option value="envy-v1-536576656e5f446561646c795f53696e73325f76312f456e76795f56312e747874">Envy V1 · Seven_Deadly_Sins2_v1</option><option value="gluttony-v1-536576656e5f446561646c795f53696e73325f76312f476c7574746f6e795f56312e747874">Gluttony V1 · Seven_Deadly_Sins2_v1</option><option value="greed-v1-536576656e5f446561646c795f53696e73325f76312f47726565645f56312e747874">Greed V1 · Seven_Deadly_Sins2_v1</option><option value="lust-v1-536576656e5f446561646c795f53696e73325f76312f4c7573745f56312e747874">Lust V1 · Seven_Deadly_Sins2_v1</option><option value="pride-v1-536576656e5f446561646c795f53696e73325f76312f50726964655f56312e747874">Pride V1 · Seven_Deadly_Sins2_v1</option><option value="sloth-v1-536576656e5f446561646c795f53696e73325f76312f536c6f74685f56312e747874">Sloth V1 · Seven_Deadly_Sins2_v1</option><option value="wrath-v1-536576656e5f446561646c795f53696e73325f76312f57726174685f56312e747874">Wrath V1 · Seven_Deadly_Sins2_v1</option><option value="charity-v2-536576656e5f446561646c795f53696e73325f76322f436861726974795f56322e747874">Charity V2 · Seven_Deadly_Sins2_v2</option><option value="chastity-v2-536576656e5f446561646c795f53696e73325f76322f43686173746974795f56322e747874">Chastity V2 · Seven_Deadly_Sins2_v2</option><option value="humility-v2-536576656e5f446561646c795f53696e73325f76322f48756d696c6974795f56322e747874">Humility V2 · Seven_Deadly_Sins2_v2</option><option value="kindness-v2-536576656e5f446561646c795f53696e73325f76322f4b696e646e6573735f56322e747874">Kindness V2 · Seven_Deadly_Sins2_v2</option><option value="patience-v2-536576656e5f446561646c795f53696e73325f76322f50617469656e63655f56322e747874">Patience V2 · Seven_Deadly_Sins2_v2</option><option value="temperance-v2-536576656e5f446561646c795f53696e73325f76322f54656d706572616e63655f56322e747874">Temperance V2 · Seven_Deadly_Sins2_v2</option><option value="hungry-v3-536576656e5f446561646c795f53696e73325f76332f48756e6772795f56332e747874">Hungry V3 · Seven_Deadly_Sins2_v3</option><option value="love-v3-536576656e5f446561646c795f53696e73325f76332f4c6f76655f56332e747874">Love V3 · Seven_Deadly_Sins2_v3</option><option value="power-v3-536576656e5f446561646c795f53696e73325f76332f506f7765725f56332e747874">Power V3 · Seven_Deadly_Sins2_v3</option><option value="2526-54726166616c6761722f323532362e747874">2526 · Trafalgar</option><option value="data-freestyle-54726166616c6761722f446174615f467265657374796c652e747874">Data Freestyle · Trafalgar</option><option value="distancing-myself-54726166616c6761722f44697374616e63696e675f4d7973656c662e747874">Distancing Myself · Trafalgar</option><option value="finish-my-sentance-54726166616c6761722f46696e6973685f4d795f53656e74616e63652e747874">Finish My Sentance · Trafalgar</option><option value="glass-cannon-54726166616c6761722f476c6173735f43616e6e6f6e2e747874">Glass Cannon · Trafalgar</option><option value="phoenix-54726166616c6761722f50686f656e69782e747874">Phoenix · Trafalgar</option><option value="section-1-review-54726166616c6761722f53656374696f6e5f315f5265766965772e747874">Section 1 Review · Trafalgar</option><option value="wise-ones-54726166616c6761722f576973655f4f6e65732e747874">Wise Ones · Trafalgar</option><option value="isabelle-56616761626f6e642f2749736162656c6c65272e747874">&#x27;Isabelle&#x27; · Vagabond</option><option value="dragon-fruit-56616761626f6e642f447261676f6e5f46727569742e747874">Dragon Fruit · Vagabond</option><option value="freedom-56616761626f6e642f66726565646f6d2e747874">freedom · Vagabond</option><option value="halt-56616761626f6e642f48414c542e747874">HALT · Vagabond</option><option value="liminal-56616761626f6e642f4c696d696e616c2e747874">Liminal · Vagabond</option><option value="obsession-56616761626f6e642f4f6273657373696f6e2e747874">Obsession · Vagabond</option><option value="preference-56616761626f6e642f507265666572656e63652e747874">Preference · Vagabond</option><option value="target-56616761626f6e642f5461726765742e747874">Target · Vagabond</option><option value="type-shit-56616761626f6e642f547970655f536869742e747874">Type Shit · Vagabond</option><option value="unconscious-56616761626f6e642f556e636f6e7363696f75732e747874">Unconscious · Vagabond</option></select></label>
+        <label for="feelings-search">Search lyric text<input id="feelings-search" type="search" placeholder="Find a phrase…" maxlength="200" autocomplete="off"></label>
+        <label for="feelings-family">Cue family<select id="feelings-family"><option value="">All families</option><option>Proud</option><option>Joyful</option><option>Intrigued</option><option>Trusting</option><option>Loving</option><option>Grateful</option><option>Disgusted</option><option>Sad</option><option>Depressed</option><option>Surprised</option><option>Afraid</option><option>Angry</option><option>Unclassified</option></select></label>
+        <label for="feelings-branch">Supporting branch<select id="feelings-branch"><option value="">All branches</option></select></label>
+        <label for="feelings-polarity">VADER polarity<select id="feelings-polarity"><option value="">All polarities</option><option value="positive">Positive</option><option value="neutral">Neutral</option><option value="negative">Negative</option></select></label>
+        <button id="feelings-reset" class="button ghost" type="button">Reset filters</button>
+      </fieldset><p id="feelings-data-status" role="status">Interactive filters require the local analysis data and JavaScript.</p>
+      <p class="method-note">Family/branch filters include <strong>any active supporting match</strong>, not only the primary label; negated cues remain visible in evidence but do not match those filters.
+      Positive compound ≥ 0.05; negative ≤ −0.05; otherwise neutral. VADER polarity is separate from cue families.</p></section>
+      <section class="panel" aria-labelledby="feelings-wheel-heading"><h2 id="feelings-wheel-heading">A map of textual cues</h2>
+        <div class="emotion-layout"><div><svg id="feelings-wheel" class="emotion-wheel" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 720"
+      width="720" height="720" style="width:100%;height:auto" role="group" aria-labelledby="wheel-title wheel-description">
+      <title id="wheel-title">An original map of 12 text-cue families and 48 branches</title>
+      <desc id="wheel-description">Equal-sized sectors are categories, not quantities. Select a sector to filter active supporting cues.
+      Use arrow keys, Home and End within the wheel, then Enter or Space. The labeled controls below provide the same filters.</desc>
+      <a href="#feelings-results" role="button" tabindex="0"
+              class="wheel-sector" data-emotion="Proud" data-branch=""
+              aria-label="Filter active cues: Proud" aria-pressed="false">
+              <title>Proud</title><path d="M 361.356,138.004 A 222,222 0 0 1 469.824,167.068 L 420.353,253.974 A 122,122 0 0 0 360.745,238.002 Z" fill="#A16207" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="404.517" y="193.861" transform="rotate(15.000 404.517 193.861)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#ffffff" pointer-events="none">Proud</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Proud" data-branch="Confident"
+              aria-label="Filter active cues: Proud / Confident" aria-pressed="false">
+              <title>Proud / Confident</title><path d="M 362.114,14.006 A 346,346 0 0 1 403.066,16.691 L 388.130,135.757 A 226,226 0 0 0 361.381,134.004 Z" fill="#A16207" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="378.705" y="74.612" transform="rotate(-86.250 378.705 74.612)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Confident</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Proud" data-branch="Successful"
+              aria-label="Filter active cues: Proud / Successful" aria-pressed="false">
+              <title>Proud / Successful</title><path d="M 407.257,17.242 A 346,346 0 0 1 447.508,25.249 L 417.159,141.348 A 226,226 0 0 0 390.867,136.118 Z" fill="#A16207" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="415.796" y="79.495" transform="rotate(-78.750 415.796 79.495)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Successful</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Proud" data-branch="Respected"
+              aria-label="Filter active cues: Proud / Respected" aria-pressed="false">
+              <title>Proud / Respected</title><path d="M 451.591,26.343 A 346,346 0 0 1 490.453,39.535 L 445.209,150.679 A 226,226 0 0 0 419.826,142.062 Z" fill="#A16207" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="451.932" y="89.178" transform="rotate(-71.250 451.932 89.178)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Respected</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Proud" data-branch="Worthy"
+              aria-label="Filter active cues: Proud / Worthy" aria-pressed="false">
+              <title>Proud / Worthy</title><path d="M 494.359,41.152 A 346,346 0 0 1 531.166,59.304 L 471.802,163.592 A 226,226 0 0 0 447.760,151.735 Z" fill="#A16207" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="486.495" y="103.494" transform="rotate(-63.750 486.495 103.494)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Worthy</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Joyful" data-branch=""
+              aria-label="Filter active cues: Joyful" aria-pressed="false">
+              <title>Joyful</title><path d="M 472.172,168.424 A 222,222 0 0 1 551.576,247.828 L 465.281,298.356 A 122,122 0 0 0 421.644,254.719 Z" fill="#CA8A04" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="481.622" y="238.378" transform="rotate(45.000 481.622 238.378)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#000000" pointer-events="none">Joyful</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Joyful" data-branch="Happy"
+              aria-label="Filter active cues: Joyful / Happy" aria-pressed="false">
+              <title>Joyful / Happy</title><path d="M 534.827,61.418 A 346,346 0 0 1 568.951,84.218 L 496.482,179.865 A 226,226 0 0 0 474.193,164.972 Z" fill="#CA8A04" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="518.893" y="122.200" transform="rotate(-56.250 518.893 122.200)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Happy</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Joyful" data-branch="Excited"
+              aria-label="Filter active cues: Joyful / Excited" aria-pressed="false">
+              <title>Joyful / Excited</title><path d="M 572.304,86.792 A 346,346 0 0 1 603.160,113.851 L 518.827,199.221 A 226,226 0 0 0 498.673,181.546 Z" fill="#CA8A04" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="548.573" y="144.974" transform="rotate(-48.750 548.573 144.974)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Excited</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Joyful" data-branch="Playful"
+              aria-label="Filter active cues: Joyful / Playful" aria-pressed="false">
+              <title>Joyful / Playful</title><path d="M 606.149,116.840 A 346,346 0 0 1 633.208,147.696 L 538.454,221.327 A 226,226 0 0 0 520.779,201.173 Z" fill="#CA8A04" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="575.026" y="171.427" transform="rotate(-41.250 575.026 171.427)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Playful</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Joyful" data-branch="Content"
+              aria-label="Filter active cues: Joyful / Content" aria-pressed="false">
+              <title>Joyful / Content</title><path d="M 635.782,151.049 A 346,346 0 0 1 658.582,185.173 L 555.028,245.807 A 226,226 0 0 0 540.135,223.518 Z" fill="#CA8A04" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="597.800" y="201.107" transform="rotate(-33.750 597.800 201.107)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Content</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Intrigued" data-branch=""
+              aria-label="Filter active cues: Intrigued" aria-pressed="false">
+              <title>Intrigued</title><path d="M 552.932,250.176 A 222,222 0 0 1 581.996,358.644 L 481.998,359.255 A 122,122 0 0 0 466.026,299.647 Z" fill="#65A30D" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="526.139" y="315.483" transform="rotate(75.000 526.139 315.483)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#000000" pointer-events="none">Intrigued</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Intrigued" data-branch="Curious"
+              aria-label="Filter active cues: Intrigued / Curious" aria-pressed="false">
+              <title>Intrigued / Curious</title><path d="M 660.696,188.834 A 346,346 0 0 1 678.848,225.641 L 568.265,272.240 A 226,226 0 0 0 556.408,248.198 Z" fill="#65A30D" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="616.506" y="233.505" transform="rotate(-26.250 616.506 233.505)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Curious</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Intrigued" data-branch="Fascinated"
+              aria-label="Filter active cues: Intrigued / Fascinated" aria-pressed="false">
+              <title>Intrigued / Fascinated</title><path d="M 680.465,229.547 A 346,346 0 0 1 693.657,268.409 L 577.938,300.174 A 226,226 0 0 0 569.321,274.791 Z" fill="#65A30D" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="630.822" y="268.068" transform="rotate(-18.750 630.822 268.068)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Fascinated</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Intrigued" data-branch="Interested"
+              aria-label="Filter active cues: Intrigued / Interested" aria-pressed="false">
+              <title>Intrigued / Interested</title><path d="M 694.751,272.492 A 346,346 0 0 1 702.758,312.743 L 583.882,329.133 A 226,226 0 0 0 578.652,302.841 Z" fill="#65A30D" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="640.505" y="304.204" transform="rotate(-11.250 640.505 304.204)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Interested</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Intrigued" data-branch="Inspired"
+              aria-label="Filter active cues: Intrigued / Inspired" aria-pressed="false">
+              <title>Intrigued / Inspired</title><path d="M 703.309,316.934 A 346,346 0 0 1 705.994,357.886 L 585.996,358.619 A 226,226 0 0 0 584.243,331.870 Z" fill="#65A30D" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="645.388" y="341.295" transform="rotate(-3.750 645.388 341.295)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Inspired</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Trusting" data-branch=""
+              aria-label="Filter active cues: Trusting" aria-pressed="false">
+              <title>Trusting</title><path d="M 581.996,361.356 A 222,222 0 0 1 552.932,469.824 L 466.026,420.353 A 122,122 0 0 0 481.998,360.745 Z" fill="#0D9488" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="526.139" y="404.517" transform="rotate(-75.000 526.139 404.517)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#000000" pointer-events="none">Trusting</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Trusting" data-branch="Safe"
+              aria-label="Filter active cues: Trusting / Safe" aria-pressed="false">
+              <title>Trusting / Safe</title><path d="M 705.994,362.114 A 346,346 0 0 1 703.309,403.066 L 584.243,388.130 A 226,226 0 0 0 585.996,361.381 Z" fill="#0D9488" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="645.388" y="378.705" transform="rotate(3.750 645.388 378.705)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Safe</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Trusting" data-branch="Secure"
+              aria-label="Filter active cues: Trusting / Secure" aria-pressed="false">
+              <title>Trusting / Secure</title><path d="M 702.758,407.257 A 346,346 0 0 1 694.751,447.508 L 578.652,417.159 A 226,226 0 0 0 583.882,390.867 Z" fill="#0D9488" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="640.505" y="415.796" transform="rotate(11.250 640.505 415.796)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Secure</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Trusting" data-branch="Accepted"
+              aria-label="Filter active cues: Trusting / Accepted" aria-pressed="false">
+              <title>Trusting / Accepted</title><path d="M 693.657,451.591 A 346,346 0 0 1 680.465,490.453 L 569.321,445.209 A 226,226 0 0 0 577.938,419.826 Z" fill="#0D9488" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="630.822" y="451.932" transform="rotate(18.750 630.822 451.932)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Accepted</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Trusting" data-branch="Hopeful"
+              aria-label="Filter active cues: Trusting / Hopeful" aria-pressed="false">
+              <title>Trusting / Hopeful</title><path d="M 678.848,494.359 A 346,346 0 0 1 660.696,531.166 L 556.408,471.802 A 226,226 0 0 0 568.265,447.760 Z" fill="#0D9488" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="616.506" y="486.495" transform="rotate(26.250 616.506 486.495)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Hopeful</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Loving" data-branch=""
+              aria-label="Filter active cues: Loving" aria-pressed="false">
+              <title>Loving</title><path d="M 551.576,472.172 A 222,222 0 0 1 472.172,551.576 L 421.644,465.281 A 122,122 0 0 0 465.281,421.644 Z" fill="#DB2777" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="481.622" y="481.622" transform="rotate(-45.000 481.622 481.622)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#ffffff" pointer-events="none">Loving</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Loving" data-branch="Affectionate"
+              aria-label="Filter active cues: Loving / Affectionate" aria-pressed="false">
+              <title>Loving / Affectionate</title><path d="M 658.582,534.827 A 346,346 0 0 1 635.782,568.951 L 540.135,496.482 A 226,226 0 0 0 555.028,474.193 Z" fill="#DB2777" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="597.800" y="518.893" transform="rotate(33.750 597.800 518.893)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Affectionate</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Loving" data-branch="Connected"
+              aria-label="Filter active cues: Loving / Connected" aria-pressed="false">
+              <title>Loving / Connected</title><path d="M 633.208,572.304 A 346,346 0 0 1 606.149,603.160 L 520.779,518.827 A 226,226 0 0 0 538.454,498.673 Z" fill="#DB2777" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="575.026" y="548.573" transform="rotate(41.250 575.026 548.573)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Connected</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Loving" data-branch="Tender"
+              aria-label="Filter active cues: Loving / Tender" aria-pressed="false">
+              <title>Loving / Tender</title><path d="M 603.160,606.149 A 346,346 0 0 1 572.304,633.208 L 498.673,538.454 A 226,226 0 0 0 518.827,520.779 Z" fill="#DB2777" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="548.573" y="575.026" transform="rotate(48.750 548.573 575.026)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Tender</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Loving" data-branch="Compassionate"
+              aria-label="Filter active cues: Loving / Compassionate" aria-pressed="false">
+              <title>Loving / Compassionate</title><path d="M 568.951,635.782 A 346,346 0 0 1 534.827,658.582 L 474.193,555.028 A 226,226 0 0 0 496.482,540.135 Z" fill="#DB2777" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="518.893" y="597.800" transform="rotate(56.250 518.893 597.800)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Compassionate</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Grateful" data-branch=""
+              aria-label="Filter active cues: Grateful" aria-pressed="false">
+              <title>Grateful</title><path d="M 469.824,552.932 A 222,222 0 0 1 361.356,581.996 L 360.745,481.998 A 122,122 0 0 0 420.353,466.026 Z" fill="#7C3AED" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="404.517" y="526.139" transform="rotate(-15.000 404.517 526.139)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#ffffff" pointer-events="none">Grateful</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Grateful" data-branch="Thankful"
+              aria-label="Filter active cues: Grateful / Thankful" aria-pressed="false">
+              <title>Grateful / Thankful</title><path d="M 531.166,660.696 A 346,346 0 0 1 494.359,678.848 L 447.760,568.265 A 226,226 0 0 0 471.802,556.408 Z" fill="#7C3AED" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="486.495" y="616.506" transform="rotate(63.750 486.495 616.506)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Thankful</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Grateful" data-branch="Appreciative"
+              aria-label="Filter active cues: Grateful / Appreciative" aria-pressed="false">
+              <title>Grateful / Appreciative</title><path d="M 490.453,680.465 A 346,346 0 0 1 451.591,693.657 L 419.826,577.938 A 226,226 0 0 0 445.209,569.321 Z" fill="#7C3AED" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="451.932" y="630.822" transform="rotate(71.250 451.932 630.822)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Appreciative</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Grateful" data-branch="Relieved"
+              aria-label="Filter active cues: Grateful / Relieved" aria-pressed="false">
+              <title>Grateful / Relieved</title><path d="M 447.508,694.751 A 346,346 0 0 1 407.257,702.758 L 390.867,583.882 A 226,226 0 0 0 417.159,578.652 Z" fill="#7C3AED" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="415.796" y="640.505" transform="rotate(78.750 415.796 640.505)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Relieved</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Grateful" data-branch="Blessed"
+              aria-label="Filter active cues: Grateful / Blessed" aria-pressed="false">
+              <title>Grateful / Blessed</title><path d="M 403.066,703.309 A 346,346 0 0 1 362.114,705.994 L 361.381,585.996 A 226,226 0 0 0 388.130,584.243 Z" fill="#7C3AED" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="378.705" y="645.388" transform="rotate(86.250 378.705 645.388)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Blessed</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Disgusted" data-branch=""
+              aria-label="Filter active cues: Disgusted" aria-pressed="false">
+              <title>Disgusted</title><path d="M 358.644,581.996 A 222,222 0 0 1 250.176,552.932 L 299.647,466.026 A 122,122 0 0 0 359.255,481.998 Z" fill="#4D7C0F" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="315.483" y="526.139" transform="rotate(15.000 315.483 526.139)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#ffffff" pointer-events="none">Disgusted</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Disgusted" data-branch="Repulsed"
+              aria-label="Filter active cues: Disgusted / Repulsed" aria-pressed="false">
+              <title>Disgusted / Repulsed</title><path d="M 357.886,705.994 A 346,346 0 0 1 316.934,703.309 L 331.870,584.243 A 226,226 0 0 0 358.619,585.996 Z" fill="#4D7C0F" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="341.295" y="645.388" transform="rotate(-86.250 341.295 645.388)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Repulsed</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Disgusted" data-branch="Disapproving"
+              aria-label="Filter active cues: Disgusted / Disapproving" aria-pressed="false">
+              <title>Disgusted / Disapproving</title><path d="M 312.743,702.758 A 346,346 0 0 1 272.492,694.751 L 302.841,578.652 A 226,226 0 0 0 329.133,583.882 Z" fill="#4D7C0F" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="304.204" y="640.505" transform="rotate(-78.750 304.204 640.505)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Disapproving</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Disgusted" data-branch="Averse"
+              aria-label="Filter active cues: Disgusted / Averse" aria-pressed="false">
+              <title>Disgusted / Averse</title><path d="M 268.409,693.657 A 346,346 0 0 1 229.547,680.465 L 274.791,569.321 A 226,226 0 0 0 300.174,577.938 Z" fill="#4D7C0F" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="268.068" y="630.822" transform="rotate(-71.250 268.068 630.822)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Averse</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Disgusted" data-branch="Ashamed"
+              aria-label="Filter active cues: Disgusted / Ashamed" aria-pressed="false">
+              <title>Disgusted / Ashamed</title><path d="M 225.641,678.848 A 346,346 0 0 1 188.834,660.696 L 248.198,556.408 A 226,226 0 0 0 272.240,568.265 Z" fill="#4D7C0F" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="233.505" y="616.506" transform="rotate(-63.750 233.505 616.506)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Ashamed</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Sad" data-branch=""
+              aria-label="Filter active cues: Sad" aria-pressed="false">
+              <title>Sad</title><path d="M 247.828,551.576 A 222,222 0 0 1 168.424,472.172 L 254.719,421.644 A 122,122 0 0 0 298.356,465.281 Z" fill="#2563EB" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="238.378" y="481.622" transform="rotate(45.000 238.378 481.622)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#ffffff" pointer-events="none">Sad</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Sad" data-branch="Hurt"
+              aria-label="Filter active cues: Sad / Hurt" aria-pressed="false">
+              <title>Sad / Hurt</title><path d="M 185.173,658.582 A 346,346 0 0 1 151.049,635.782 L 223.518,540.135 A 226,226 0 0 0 245.807,555.028 Z" fill="#2563EB" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="201.107" y="597.800" transform="rotate(-56.250 201.107 597.800)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Hurt</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Sad" data-branch="Lonely"
+              aria-label="Filter active cues: Sad / Lonely" aria-pressed="false">
+              <title>Sad / Lonely</title><path d="M 147.696,633.208 A 346,346 0 0 1 116.840,606.149 L 201.173,520.779 A 226,226 0 0 0 221.327,538.454 Z" fill="#2563EB" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="171.427" y="575.026" transform="rotate(-48.750 171.427 575.026)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Lonely</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Sad" data-branch="Disappointed"
+              aria-label="Filter active cues: Sad / Disappointed" aria-pressed="false">
+              <title>Sad / Disappointed</title><path d="M 113.851,603.160 A 346,346 0 0 1 86.792,572.304 L 181.546,498.673 A 226,226 0 0 0 199.221,518.827 Z" fill="#2563EB" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="144.974" y="548.573" transform="rotate(-41.250 144.974 548.573)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Disappointed</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Sad" data-branch="Grieving"
+              aria-label="Filter active cues: Sad / Grieving" aria-pressed="false">
+              <title>Sad / Grieving</title><path d="M 84.218,568.951 A 346,346 0 0 1 61.418,534.827 L 164.972,474.193 A 226,226 0 0 0 179.865,496.482 Z" fill="#2563EB" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="122.200" y="518.893" transform="rotate(-33.750 122.200 518.893)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Grieving</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Depressed" data-branch=""
+              aria-label="Filter active cues: Depressed" aria-pressed="false">
+              <title>Depressed</title><path d="M 167.068,469.824 A 222,222 0 0 1 138.004,361.356 L 238.002,360.745 A 122,122 0 0 0 253.974,420.353 Z" fill="#475569" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="193.861" y="404.517" transform="rotate(75.000 193.861 404.517)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#ffffff" pointer-events="none">Depressed</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Depressed" data-branch="Empty"
+              aria-label="Filter active cues: Depressed / Empty" aria-pressed="false">
+              <title>Depressed / Empty</title><path d="M 59.304,531.166 A 346,346 0 0 1 41.152,494.359 L 151.735,447.760 A 226,226 0 0 0 163.592,471.802 Z" fill="#475569" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="103.494" y="486.495" transform="rotate(-26.250 103.494 486.495)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Empty</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Depressed" data-branch="Hopeless"
+              aria-label="Filter active cues: Depressed / Hopeless" aria-pressed="false">
+              <title>Depressed / Hopeless</title><path d="M 39.535,490.453 A 346,346 0 0 1 26.343,451.591 L 142.062,419.826 A 226,226 0 0 0 150.679,445.209 Z" fill="#475569" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="89.178" y="451.932" transform="rotate(-18.750 89.178 451.932)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Hopeless</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Depressed" data-branch="Exhausted"
+              aria-label="Filter active cues: Depressed / Exhausted" aria-pressed="false">
+              <title>Depressed / Exhausted</title><path d="M 25.249,447.508 A 346,346 0 0 1 17.242,407.257 L 136.118,390.867 A 226,226 0 0 0 141.348,417.159 Z" fill="#475569" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="79.495" y="415.796" transform="rotate(-11.250 79.495 415.796)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Exhausted</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Depressed" data-branch="Unworthy"
+              aria-label="Filter active cues: Depressed / Unworthy" aria-pressed="false">
+              <title>Depressed / Unworthy</title><path d="M 16.691,403.066 A 346,346 0 0 1 14.006,362.114 L 134.004,361.381 A 226,226 0 0 0 135.757,388.130 Z" fill="#475569" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="74.612" y="378.705" transform="rotate(-3.750 74.612 378.705)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Unworthy</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Surprised" data-branch=""
+              aria-label="Filter active cues: Surprised" aria-pressed="false">
+              <title>Surprised</title><path d="M 138.004,358.644 A 222,222 0 0 1 167.068,250.176 L 253.974,299.647 A 122,122 0 0 0 238.002,359.255 Z" fill="#C026D3" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="193.861" y="315.483" transform="rotate(-75.000 193.861 315.483)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#ffffff" pointer-events="none">Surprised</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Surprised" data-branch="Amazed"
+              aria-label="Filter active cues: Surprised / Amazed" aria-pressed="false">
+              <title>Surprised / Amazed</title><path d="M 14.006,357.886 A 346,346 0 0 1 16.691,316.934 L 135.757,331.870 A 226,226 0 0 0 134.004,358.619 Z" fill="#C026D3" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="74.612" y="341.295" transform="rotate(3.750 74.612 341.295)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Amazed</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Surprised" data-branch="Startled"
+              aria-label="Filter active cues: Surprised / Startled" aria-pressed="false">
+              <title>Surprised / Startled</title><path d="M 17.242,312.743 A 346,346 0 0 1 25.249,272.492 L 141.348,302.841 A 226,226 0 0 0 136.118,329.133 Z" fill="#C026D3" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="79.495" y="304.204" transform="rotate(11.250 79.495 304.204)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Startled</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Surprised" data-branch="Confused"
+              aria-label="Filter active cues: Surprised / Confused" aria-pressed="false">
+              <title>Surprised / Confused</title><path d="M 26.343,268.409 A 346,346 0 0 1 39.535,229.547 L 150.679,274.791 A 226,226 0 0 0 142.062,300.174 Z" fill="#C026D3" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="89.178" y="268.068" transform="rotate(18.750 89.178 268.068)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Confused</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Surprised" data-branch="Overwhelmed"
+              aria-label="Filter active cues: Surprised / Overwhelmed" aria-pressed="false">
+              <title>Surprised / Overwhelmed</title><path d="M 41.152,225.641 A 346,346 0 0 1 59.304,188.834 L 163.592,248.198 A 226,226 0 0 0 151.735,272.240 Z" fill="#C026D3" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="103.494" y="233.505" transform="rotate(26.250 103.494 233.505)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Overwhelmed</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Afraid" data-branch=""
+              aria-label="Filter active cues: Afraid" aria-pressed="false">
+              <title>Afraid</title><path d="M 168.424,247.828 A 222,222 0 0 1 247.828,168.424 L 298.356,254.719 A 122,122 0 0 0 254.719,298.356 Z" fill="#EA580C" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="238.378" y="238.378" transform="rotate(-45.000 238.378 238.378)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#000000" pointer-events="none">Afraid</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Afraid" data-branch="Scared"
+              aria-label="Filter active cues: Afraid / Scared" aria-pressed="false">
+              <title>Afraid / Scared</title><path d="M 61.418,185.173 A 346,346 0 0 1 84.218,151.049 L 179.865,223.518 A 226,226 0 0 0 164.972,245.807 Z" fill="#EA580C" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="122.200" y="201.107" transform="rotate(33.750 122.200 201.107)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Scared</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Afraid" data-branch="Anxious"
+              aria-label="Filter active cues: Afraid / Anxious" aria-pressed="false">
+              <title>Afraid / Anxious</title><path d="M 86.792,147.696 A 346,346 0 0 1 113.851,116.840 L 199.221,201.173 A 226,226 0 0 0 181.546,221.327 Z" fill="#EA580C" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="144.974" y="171.427" transform="rotate(41.250 144.974 171.427)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Anxious</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Afraid" data-branch="Insecure"
+              aria-label="Filter active cues: Afraid / Insecure" aria-pressed="false">
+              <title>Afraid / Insecure</title><path d="M 116.840,113.851 A 346,346 0 0 1 147.696,86.792 L 221.327,181.546 A 226,226 0 0 0 201.173,199.221 Z" fill="#EA580C" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="171.427" y="144.974" transform="rotate(48.750 171.427 144.974)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Insecure</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Afraid" data-branch="Vulnerable"
+              aria-label="Filter active cues: Afraid / Vulnerable" aria-pressed="false">
+              <title>Afraid / Vulnerable</title><path d="M 151.049,84.218 A 346,346 0 0 1 185.173,61.418 L 245.807,164.972 A 226,226 0 0 0 223.518,179.865 Z" fill="#EA580C" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="201.107" y="122.200" transform="rotate(56.250 201.107 122.200)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#000000" pointer-events="none">Vulnerable</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Angry" data-branch=""
+              aria-label="Filter active cues: Angry" aria-pressed="false">
+              <title>Angry</title><path d="M 250.176,167.068 A 222,222 0 0 1 358.644,138.004 L 359.255,238.002 A 122,122 0 0 0 299.647,253.974 Z" fill="#DC2626" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="315.483" y="193.861" transform="rotate(-15.000 315.483 193.861)"
+              text-anchor="middle" dominant-baseline="middle" font-size="13" fill="#ffffff" pointer-events="none">Angry</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Angry" data-branch="Furious"
+              aria-label="Filter active cues: Angry / Furious" aria-pressed="false">
+              <title>Angry / Furious</title><path d="M 188.834,59.304 A 346,346 0 0 1 225.641,41.152 L 272.240,151.735 A 226,226 0 0 0 248.198,163.592 Z" fill="#DC2626" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="233.505" y="103.494" transform="rotate(63.750 233.505 103.494)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Furious</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Angry" data-branch="Frustrated"
+              aria-label="Filter active cues: Angry / Frustrated" aria-pressed="false">
+              <title>Angry / Frustrated</title><path d="M 229.547,39.535 A 346,346 0 0 1 268.409,26.343 L 300.174,142.062 A 226,226 0 0 0 274.791,150.679 Z" fill="#DC2626" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="268.068" y="89.178" transform="rotate(71.250 268.068 89.178)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Frustrated</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Angry" data-branch="Resentful"
+              aria-label="Filter active cues: Angry / Resentful" aria-pressed="false">
+              <title>Angry / Resentful</title><path d="M 272.492,25.249 A 346,346 0 0 1 312.743,17.242 L 329.133,136.118 A 226,226 0 0 0 302.841,141.348 Z" fill="#DC2626" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="304.204" y="79.495" transform="rotate(78.750 304.204 79.495)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Resentful</text></a><a href="#feelings-results" role="button" tabindex="-1"
+              class="wheel-sector" data-emotion="Angry" data-branch="Provoked"
+              aria-label="Filter active cues: Angry / Provoked" aria-pressed="false">
+              <title>Angry / Provoked</title><path d="M 316.934,16.691 A 346,346 0 0 1 357.886,14.006 L 358.619,134.004 A 226,226 0 0 0 331.870,135.757 Z" fill="#DC2626" stroke="currentColor" stroke-width="0.4"/>
+              <text class="wheel-label" x="341.295" y="74.612" transform="rotate(86.250 341.295 74.612)"
+              text-anchor="middle" dominant-baseline="middle" font-size="10" fill="#ffffff" pointer-events="none">Provoked</text></a><circle cx="360" cy="360" r="110" fill="none" stroke="currentColor"/>
+      <text x="360" y="352" text-anchor="middle" fill="currentColor" font-size="22">Text cues</text>
+      <text x="360" y="382" text-anchor="middle" fill="currentColor" font-size="14">not a diagnosis</text></svg><p class="method-note">Original equal-angle design, not copied artwork. Sector area is not frequency.
+        Arrow keys navigate the wheel; Enter or Space selects. Family buttons and the branch selector offer the same actions.</p></div>
+        <div><div id="feelings-legend" class="emotion-legend" role="group" aria-label="Filter by cue family"><button class="button ghost emotion-legend-button" type="button" data-emotion="Proud" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#A16207" aria-hidden="true"></span>Proud</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Joyful" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#CA8A04" aria-hidden="true"></span>Joyful</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Intrigued" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#65A30D" aria-hidden="true"></span>Intrigued</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Trusting" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#0D9488" aria-hidden="true"></span>Trusting</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Loving" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#DB2777" aria-hidden="true"></span>Loving</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Grateful" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#7C3AED" aria-hidden="true"></span>Grateful</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Disgusted" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#4D7C0F" aria-hidden="true"></span>Disgusted</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Sad" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#2563EB" aria-hidden="true"></span>Sad</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Depressed" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#475569" aria-hidden="true"></span>Depressed</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Surprised" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#C026D3" aria-hidden="true"></span>Surprised</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Afraid" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#EA580C" aria-hidden="true"></span>Afraid</button><button class="button ghost emotion-legend-button" type="button" data-emotion="Angry" data-branch="" aria-pressed="false" disabled><span class="emotion-swatch" style="background-color:#DC2626" aria-hidden="true"></span>Angry</button>
+        <button class="button ghost emotion-legend-button" type="button" data-emotion="Unclassified" data-branch="" aria-pressed="false" disabled>Unclassified</button>
+        <button class="button ghost emotion-legend-button" type="button" data-emotion="" data-branch="" aria-pressed="true" disabled>All families</button></div>
+        <h3>Lines with active cues</h3><p id="feelings-chart-note">4,064 lines in the current selection. A line may support several families; Unclassified has no active family.</p>
+        <div id="feelings-chart" class="chart-bars"><div class="bar-row"><span class="bar-label">Proud</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:0.99%"></span></span>
+        <span class="bar-count">36</span></div><div class="bar-row"><span class="bar-label">Joyful</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:0.83%"></span></span>
+        <span class="bar-count">30</span></div><div class="bar-row"><span class="bar-label">Intrigued</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:0.19%"></span></span>
+        <span class="bar-count">7</span></div><div class="bar-row"><span class="bar-label">Trusting</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:1.98%"></span></span>
+        <span class="bar-count">72</span></div><div class="bar-row"><span class="bar-label">Loving</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:2.42%"></span></span>
+        <span class="bar-count">88</span></div><div class="bar-row"><span class="bar-label">Grateful</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:0.61%"></span></span>
+        <span class="bar-count">22</span></div><div class="bar-row"><span class="bar-label">Disgusted</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:0.33%"></span></span>
+        <span class="bar-count">12</span></div><div class="bar-row"><span class="bar-label">Sad</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:1.79%"></span></span>
+        <span class="bar-count">65</span></div><div class="bar-row"><span class="bar-label">Depressed</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:0.96%"></span></span>
+        <span class="bar-count">35</span></div><div class="bar-row"><span class="bar-label">Surprised</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:0.41%"></span></span>
+        <span class="bar-count">15</span></div><div class="bar-row"><span class="bar-label">Afraid</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:1.65%"></span></span>
+        <span class="bar-count">60</span></div><div class="bar-row"><span class="bar-label">Angry</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:0.63%"></span></span>
+        <span class="bar-count">23</span></div><div class="bar-row"><span class="bar-label">Unclassified</span>
+        <span class="bar-track" aria-hidden="true"><span class="bar-fill" style="display:block;width:100.00%"></span></span>
+        <span class="bar-count">3,635</span></div></div></div></div>
+      </section>
+      <section id="feelings-timeline-panel" class="panel" aria-labelledby="feelings-timeline-title"><h2 id="feelings-timeline-title">Track timeline</h2>
+                <div id="feelings-track-source">Choose one song version to see its physical-line timeline.</div>
+        <p class="method-note">Each numbered strip is a retained line, colored by heuristic primary family. The text label is also available on focus.
+        Selecting a strip clears other line filters and opens that exact line. Missing numbers are excluded source lines.</p>
+                <p id="feelings-timeline-label" class="line-meta" role="status">Use arrow keys, Home and End to move between timeline strips.</p>
+        <div id="feelings-timeline" class="line-timeline" role="group" aria-label="Jump to a physical lyric line"></div>
+      </section>
+      <section class="panel" aria-labelledby="feelings-results-title"><h2 id="feelings-results-title">Line browser</h2>
+        <p>Song order follows sorted source paths; lines stay in physical input order. Showing at most 40 line cards at once.</p>
+        <p id="feelings-navigation-note" class="method-note" role="status"></p>
+        <div id="feelings-results"><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-1" tabindex="-1" data-line-number="1">
+      <h3>Bunny Girl · Line 1</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L1" class="" rel="noopener noreferrer">Source line 1</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-1">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Bunny Girl</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-3" tabindex="-1" data-line-number="3">
+      <h3>Bunny Girl · Line 3</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L3" class="" rel="noopener noreferrer">Source line 3</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-3">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Hippity hop huh get what we want, huh</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.077</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-4" tabindex="-1" data-line-number="4">
+      <h3>Bunny Girl · Line 4</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L4" class="" rel="noopener noreferrer">Source line 4</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-4">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">making me pause heavy breaths every breath</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-5" tabindex="-1" data-line-number="5">
+      <h3>Bunny Girl · Line 5</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L5" class="" rel="noopener noreferrer">Source line 5</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-5">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">and we rest when we grind so we can grind when we rest every time that she smile there’s a spike in my chest, im just, half my best when alone im depressed </p>
+      <p><strong>Heuristic primary:</strong> Sad / Lonely
+      · VADER polarity: Positive · compound +0.340</p>
+      <p class="method-note">Multiple active families or tied primary branches; the primary label is a heuristic. Top-family tie: Sad, Depressed.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 2 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Sad: 1; Depressed: 1.</p>
+        <ul><li class="evidence-chip">Sad / Lonely: “alone” — active cue (+1)</li><li class="evidence-chip">Depressed / Empty: “depressed” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-6" tabindex="-1" data-line-number="6">
+      <h3>Bunny Girl · Line 6</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L6" class="" rel="noopener noreferrer">Source line 6</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-6">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">stress takes toles toke a bowl im a mess, huh</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Negative · compound -0.649</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-7" tabindex="-1" data-line-number="7">
+      <h3>Bunny Girl · Line 7</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L7" class="" rel="noopener noreferrer">Source line 7</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-7">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">can’t take control cause this holes so wet, huh</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-8" tabindex="-1" data-line-number="8">
+      <h3>Bunny Girl · Line 8</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L8" class="" rel="noopener noreferrer">Source line 8</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-8">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">can’t take control so my soul forfeits for ya;</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-9" tabindex="-1" data-line-number="9">
+      <h3>Bunny Girl · Line 9</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L9" class="" rel="noopener noreferrer">Source line 9</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-9">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">my employer thinks im working for his check, no sweat, I go here for this bread, oh yeah, one day i’ll have kids a big house four pets, I just gotta get better big fix mode flex no stress, its energies enemy its time, our chemistry is getting ahead of me its fine, im meant to be nervous on this quest to be perfect, so im trying my best while I stress that she worth it, yuh</p>
+      <p><strong>Heuristic primary:</strong> Afraid / Anxious
+      · VADER polarity: Positive · compound +0.853</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Afraid: 1.</p>
+        <ul><li class="evidence-chip">Afraid / Anxious: “nervous” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-11" tabindex="-1" data-line-number="11">
+      <h3>Bunny Girl · Line 11</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L11" class="" rel="noopener noreferrer">Source line 11</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-11">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">(Beat Switch)</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-13" tabindex="-1" data-line-number="13">
+      <h3>Bunny Girl · Line 13</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L13" class="" rel="noopener noreferrer">Source line 13</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-13">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Bunny girl oh bunny girl</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-14" tabindex="-1" data-line-number="14">
+      <h3>Bunny Girl · Line 14</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L14" class="" rel="noopener noreferrer">Source line 14</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-14">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Got me thinking bout money girl</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-15" tabindex="-1" data-line-number="15">
+      <h3>Bunny Girl · Line 15</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L15" class="" rel="noopener noreferrer">Source line 15</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-15">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Worried how to pay but</p>
+      <p><strong>Heuristic primary:</strong> Afraid / Anxious
+      · VADER polarity: Negative · compound -0.202</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Afraid: 1.</p>
+        <ul><li class="evidence-chip">Afraid / Anxious: “Worried” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-16" tabindex="-1" data-line-number="16">
+      <h3>Bunny Girl · Line 16</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L16" class="" rel="noopener noreferrer">Source line 16</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-16">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">lemme tell you what I think about your bunny suit lace big chest thin waist lemme give you what I got on top switch place love me, </p>
+      <p><strong>Heuristic primary:</strong> Loving / Affectionate
+      · VADER polarity: Positive · compound +0.718</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Loving: 1.</p>
+        <ul><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-17" tabindex="-1" data-line-number="17">
+      <h3>Bunny Girl · Line 17</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L17" class="" rel="noopener noreferrer">Source line 17</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-17">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">think its funny people bloody tryna die blind and rich, lifes a bitch rising high’s like a fix then they think they’ll find love while they tryna buy a bitch and them gold diggers fold totem pole so legit no you </p>
+      <p><strong>Heuristic primary:</strong> Loving / Affectionate
+      · VADER polarity: Negative · compound -0.749</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Loving: 1.</p>
+        <ul><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-18" tabindex="-1" data-line-number="18">
+      <h3>Bunny Girl · Line 18</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L18" class="" rel="noopener noreferrer">Source line 18</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-18">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">showed me your different</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-19" tabindex="-1" data-line-number="19">
+      <h3>Bunny Girl · Line 19</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L19" class="" rel="noopener noreferrer">Source line 19</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-19">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">all these phonies have missed it</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Negative · compound -0.296</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-20" tabindex="-1" data-line-number="20">
+      <h3>Bunny Girl · Line 20</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L20" class="" rel="noopener noreferrer">Source line 20</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-20">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">know I see you as perfect</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.572</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-21" tabindex="-1" data-line-number="21">
+      <h3>Bunny Girl · Line 21</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L21" class="" rel="noopener noreferrer">Source line 21</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-21">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">all my homies admit it</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.202</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-22" tabindex="-1" data-line-number="22">
+      <h3>Bunny Girl · Line 22</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L22" class="" rel="noopener noreferrer">Source line 22</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-22">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">when u catching me hurthing you </p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-23" tabindex="-1" data-line-number="23">
+      <h3>Bunny Girl · Line 23</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L23" class="" rel="noopener noreferrer">Source line 23</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-23">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">heal me wholly with kisses so </p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.511</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-24" tabindex="-1" data-line-number="24">
+      <h3>Bunny Girl · Line 24</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L24" class="" rel="noopener noreferrer">Source line 24</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-24">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">if you ask if your worth it </p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.226</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-25" tabindex="-1" data-line-number="25">
+      <h3>Bunny Girl · Line 25</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L25" class="" rel="noopener noreferrer">Source line 25</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-25">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">I make you hold me and listen</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-27" tabindex="-1" data-line-number="27">
+      <h3>Bunny Girl · Line 27</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L27" class="" rel="noopener noreferrer">Source line 27</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-27">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Bunny girl oh bunny girl</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-28" tabindex="-1" data-line-number="28">
+      <h3>Bunny Girl · Line 28</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L28" class="" rel="noopener noreferrer">Source line 28</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-28">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Why you thinking so fuzzy girl,</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-29" tabindex="-1" data-line-number="29">
+      <h3>Bunny Girl · Line 29</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L29" class="" rel="noopener noreferrer">Source line 29</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-29">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Worried mind in pain but let me tell you   I think about your bunny suit lace big chest thin waist lemme give you what I got on top switch place love me, </p>
+      <p><strong>Heuristic primary:</strong> Loving / Affectionate
+      · VADER polarity: Positive · compound +0.739</p>
+      <p class="method-note">Multiple active families or tied primary branches; the primary label is a heuristic. Top-family tie: Loving, Afraid.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 2 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Loving: 1; Afraid: 1.</p>
+        <ul><li class="evidence-chip">Afraid / Anxious: “Worried” — active cue (+1)</li><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-30" tabindex="-1" data-line-number="30">
+      <h3>Bunny Girl · Line 30</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L30" class="" rel="noopener noreferrer">Source line 30</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-30">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">think its funny people bloody tryna die blind and rich, lifes a bitch rising high’s like a fix then they think they’ll find love while they tryna buy a bitch and them gold diggers fold totem pole so legit no you </p>
+      <p><strong>Heuristic primary:</strong> Loving / Affectionate
+      · VADER polarity: Negative · compound -0.749</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Loving: 1.</p>
+        <ul><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-31" tabindex="-1" data-line-number="31">
+      <h3>Bunny Girl · Line 31</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L31" class="" rel="noopener noreferrer">Source line 31</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-31">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">showed me your different</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-32" tabindex="-1" data-line-number="32">
+      <h3>Bunny Girl · Line 32</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L32" class="" rel="noopener noreferrer">Source line 32</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-32">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">all these phonies have missed it</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Negative · compound -0.296</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-33" tabindex="-1" data-line-number="33">
+      <h3>Bunny Girl · Line 33</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L33" class="" rel="noopener noreferrer">Source line 33</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-33">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">know I see you as perfect</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.572</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-34" tabindex="-1" data-line-number="34">
+      <h3>Bunny Girl · Line 34</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L34" class="" rel="noopener noreferrer">Source line 34</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-34">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">all my homies admit it</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.202</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-35" tabindex="-1" data-line-number="35">
+      <h3>Bunny Girl · Line 35</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L35" class="" rel="noopener noreferrer">Source line 35</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-35">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">when u catching me hurthing you </p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-36" tabindex="-1" data-line-number="36">
+      <h3>Bunny Girl · Line 36</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L36" class="" rel="noopener noreferrer">Source line 36</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-36">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">heal me wholly with kisses so </p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.511</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-37" tabindex="-1" data-line-number="37">
+      <h3>Bunny Girl · Line 37</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L37" class="" rel="noopener noreferrer">Source line 37</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-37">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">if you ask if your worth it </p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Positive · compound +0.226</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-38" tabindex="-1" data-line-number="38">
+      <h3>Bunny Girl · Line 38</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L38" class="" rel="noopener noreferrer">Source line 38</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-38">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">I make you hold me and listen, yuh</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-40" tabindex="-1" data-line-number="40">
+      <h3>Bunny Girl · Line 40</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L40" class="" rel="noopener noreferrer">Source line 40</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-40">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">(Beat Switch)</p>
+      <p><strong>Heuristic primary:</strong> Unclassified
+      · VADER polarity: Neutral · compound +0.000</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 0 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): none.</p>
+        <ul></ul><p>No lexicon cues matched. Unclassified does not mean neutral feelings.</p>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-42" tabindex="-1" data-line-number="42">
+      <h3>Bunny Girl · Line 42</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L42" class="" rel="noopener noreferrer">Source line 42</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-42">Link to this line</a></p>
+      <p class="lyric-text" dir="auto"> I’d even love you if you wasn’t there</p>
+      <p><strong>Heuristic primary:</strong> Loving / Affectionate
+      · VADER polarity: Positive · compound +0.637</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Loving: 1.</p>
+        <ul><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-43" tabindex="-1" data-line-number="43">
+      <h3>Bunny Girl · Line 43</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L43" class="" rel="noopener noreferrer">Source line 43</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-43">Link to this line</a></p>
+      <p class="lyric-text" dir="auto"> I’d even love you if you wasn’t there</p>
+      <p><strong>Heuristic primary:</strong> Loving / Affectionate
+      · VADER polarity: Positive · compound +0.637</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Loving: 1.</p>
+        <ul><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-44" tabindex="-1" data-line-number="44">
+      <h3>Bunny Girl · Line 44</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L44" class="" rel="noopener noreferrer">Source line 44</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-44">Link to this line</a></p>
+      <p class="lyric-text" dir="auto"> I’d even love you if you wasn’t there</p>
+      <p><strong>Heuristic primary:</strong> Loving / Affectionate
+      · VADER polarity: Positive · compound +0.637</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Loving: 1.</p>
+        <ul><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-45" tabindex="-1" data-line-number="45">
+      <h3>Bunny Girl · Line 45</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L45" class="" rel="noopener noreferrer">Source line 45</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-45">Link to this line</a></p>
+      <p class="lyric-text" dir="auto"> I’d even love you if you wasn’t there, yuh</p>
+      <p><strong>Heuristic primary:</strong> Loving / Affectionate
+      · VADER polarity: Positive · compound +0.637</p>
+      <p class="method-note">No competing active label recorded; this is not certainty.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 1 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Loving: 1.</p>
+        <ul><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article><article class="line-card" id="line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-47" tabindex="-1" data-line-number="47">
+      <h3>Bunny Girl · Line 47</h3><p class="line-meta">Made_in_Abyss · <a href="https://github.com/l2mcgrat/music_work/blob/d00b6fefd7caafb63b36037cff98665c548fa8f1/Made_in_Abyss/Bunny%20Girl.txt#L47" class="" rel="noopener noreferrer">Source line 47</a>
+      · <a class="line-permalink" href="#line-bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874-47">Link to this line</a></p>
+      <p class="lyric-text" dir="auto">Hope and fear you go with me but I don’t know whats next, yo you sober my put hope in me but I been so perplexed yo you hate me and you love me and I need the way you judge me but you fucked me when you talked up me as daddy after sex, yuh,  </p>
+      <p><strong>Heuristic primary:</strong> Trusting / Hopeful
+      · VADER polarity: Negative · compound -0.767</p>
+      <p class="method-note">Multiple active families or tied primary branches; the primary label is a heuristic.</p>
+      <details class="line-evidence"><summary>Supporting evidence · 5 cue mappings</summary>
+        <p>Family occurrence scores (not probabilities): Trusting: 2; Loving: 1; Surprised: 1; Afraid: 1.</p>
+        <ul><li class="evidence-chip">Trusting / Hopeful: “Hope” — active cue (+1)</li><li class="evidence-chip">Afraid / Scared: “fear” — active cue (+1)</li><li class="evidence-chip">Trusting / Hopeful: “hope” — active cue (+1)</li><li class="evidence-chip">Surprised / Confused: “perplexed” — active cue (+1)</li><li class="evidence-chip">Loving / Affectionate: “love” — active cue (+1)</li></ul>
+      </details></article></div>
+        <div class="toolbar pagination" aria-label="Lines pagination">
+      <button class="button ghost" id="feelings-previous" type="button" disabled>Previous</button>
+      <p id="feelings-status" role="status" aria-live="polite" aria-atomic="true">1–40 of 4,064 lines · Page 1 of 102</p>
+      <button class="button ghost" id="feelings-next" type="button" disabled>Next</button>
+    </div>
+      </section><noscript><p class="method-note">Showing the first 40 retained lines in source order. All lines and evidence are available in the downloads below.</p></noscript>
+      <section class="panel method-note" aria-labelledby="analysis-method-title">
+      <h2 id="analysis-method-title">Method, provenance &amp; limits</h2>
+      <p><a href="https://github.com/l2mcgrat/music_work" class="" rel="noopener noreferrer">Source repository</a> · Revision:
+      <code class="source-commit">d00b6fefd7caafb63b36037cff98665c548fa8f1</code>.</p>
+      <p>The input is the local working tree. A recorded HEAD commit is provenance, not
+      proof of a clean checkout; linked source may differ from the analyzed text.</p>
+      <p>66 lyric files → 66 retained song versions;
+      0 normalized duplicate files are aliases, not extra observations.
+      <strong>All versions with differing text are kept.</strong> Repeated verses remain counted.</p>
+      <details><summary>Read the exact analysis rules</summary><p>Local UTF-8 text working tree; .git, ._ metadata, symlinks/junctions and non-.txt files excluded. No source is executed or modified.</p><p>NFC/casefold letter forms with internal normalized apostrophes; digits, punctuation, underscores and hyphens delimit. Timestamps and standalone section headers excluded. No stemming; stopwords flagged, never removed.</p><p>One record per nonblank physical line except standalone headers/timestamps; original text and 1-based line number preserved. No sentence segmentation, even for long paragraphs.</p><p>Exact equality after NFC/apostrophe normalization, timestamp/header/blank-line removal and per-line whitespace collapse. Case, punctuation and lyric-line boundaries retained. First sorted path is canonical; aliases excluded from all corpus metrics.</p><p>Nonidentical versions, repeated verses and shared phrases remain, so revisions/repetition and collection sizes bias frequencies. Counts are not independent songs or representative language samples.</p><p>Custom English lexicon text categories, not diagnosis or an emotion model. Every longest nonoverlapping cue occurrence scores 1 per mapped branch; negated cues score 0 and stay in evidence. Scores are not probabilities; unclassified means no active cues, not neutral feelings.</p><p>Suppress on a negator in the preceding 3 tokens, stopping at . ! ? ; : , em dash or contrast words. Internal n&#x27;t contractions included; &#x27;not only/just&#x27; exempt. No inversion, double-negation logic or post-cue negation; multiword cues do not cross clause punctuation.</p><p>Sum branch scores by family; choose largest family total then largest branch. Ties use checked-in family/branch order only. All matches and family scores retained; tiedEmotions lists top family ties. ambiguous means multiple active families or tied primary branches.</p><p>Exploratory heuristic, not calibrated confidence: no syntax, sarcasm, figurative/slang, speaker or quotation resolution. Family/branch names including Depressed describe text cues only; omissions and false matches are expected.</p><p>vaderSentiment on timestamp-cleaned original physical lines (case/punctuation retained); compound/neg/neu/pos are VADER polarity outputs only, not feelings-wheel classification.</p></details>
+      <nav class="toolbar analysis-downloads" aria-label="Download music analysis">
+      <a class="button ghost" href="../../../assets/data/music-frequencies.csv" download>Word frequencies · CSV</a>
+      <a class="button ghost" href="../../../assets/data/music-songs.csv" download>Song metrics · CSV</a>
+      <a class="button ghost" href="../../../assets/data/music-lines.csv" download>Line results · CSV</a>
+      <a class="button ghost" href="../../../assets/data/music-analysis.json" download>Full evidence · JSON (large)</a>
+    </nav></section></div></main>
+<footer class="site-footer"><a href="../../../index.html">Liam McGrath · An open notebook</a><span>Ideas are better connected.</span><a href="../../../About/index.html">About &amp; documents ↗</a></footer>
+<script defer src="../../../assets/data/music-analysis.js"></script><script defer src="../../../assets/analysis.js"></script><script src="../../../assets/site.js"></script><script defer src="../../../assets/portfolio.js"></script>
+</body></html>

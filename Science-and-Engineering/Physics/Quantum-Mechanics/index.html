@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Liam McGrath’s connected notebook of science, language, data analysis and creative projects.">
+<meta name="theme-color" content="#0d101b"><title>Quantum mechanics | Liam McGrath</title>
+<link rel="icon" href="../../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../assets/styles.css"><link rel="stylesheet" href="../../../assets/portfolio.css"><link rel="stylesheet" href="../../../assets/career.css"><link rel="stylesheet" href="../../../assets/atlas-icons.css">
+<script defer src="../../../assets/math-config.js"></script><script defer id="MathJax-script" src="../../../assets/vendor/mathjax/tex-chtml.js"></script></head><body><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header">
+      <a class="brand" href="../../../index.html" aria-label="Liam McGrath home"><span class="brand-mark" aria-hidden="true">LM</span><span>LIAM McGRATH<small>AN OPEN NOTEBOOK</small></span></a>
+    <nav aria-label="Primary navigation"><a href="../../../Mental-Map/index.html">Mental Map</a><a href="../../../Atlas/index.html">Atlas</a><a href="../../../index.html#creator-3blue1brown">Creators</a><a href="../../../Smash/index.html">Smash</a><a href="../../../About/index.html">About me <span aria-hidden="true">↗</span></a></nav>
+    </header><main id="main-content" class="document-page"><div class="atlas-strip tone-science"><span class="atlas-strip-icon atlas-hover"><svg class="atlas-icon ai-cd5e0b77" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path stroke-width="2.2" d="M10 8v46h44V8"/><path opacity=".45" stroke-width="1.2" stroke-dasharray="2 3" d="M10 22h44M10 42h44"/><path class="a" d="M10 42C28.7 30 35.3 30 54 42"/><path class="b" d="M10 22C19.3 12.7 22.7 12.7 32 22S44.7 31.3 54 22"/></svg></span><nav class="atlas-crumbs" aria-label="Breadcrumb"><ol><li><a href="../../../index.html">Home</a></li><li><a href="../../../Science-and-Engineering/index.html">Science &amp; Engineering</a></li><li><a href="../../../Science-and-Engineering/Physics/index.html">Physics</a></li><li aria-current="page">Quantum Mechanics</li></ol></nav><span class="atlas-strip-meta">Destination 2 of 6</span></div><div class="reader-top"><div><p class="eyebrow">The connected notebook / LaTeX edition</p><h1>Quantum mechanics</h1><p>By Liam McGrath · A living document, not a finished textbook.</p></div><div class="toolbar"><a class="button ghost" href="../../../assets/documents/quantum-mechanics/source-bundle.zip" download>Source + images · ZIP ↓</a><button class="button ghost print-reader" type="button">Print / Save PDF</button></div></div>
+    <div class="reader-layout"><aside class="reader-sidebar"><details class="contents-panel" open><summary>Contents <span>6 headings</span></summary><label class="toc-search-label" for="toc-search">Find a section<input id="toc-search" type="search" placeholder="Search the contents…"></label><div id="reader-toc"><nav aria-label="Table of contents" class="tex-toc"><ol><li data-level="1"><a href="#quantum-mechanics-solutions">1 Quantum Mechanics Solutions</a><ol><li data-level="2"><a href="#hydrogen-atom">1.1 Hydrogen Atom</a><ol><li data-level="3"><a href="#angular-equation-and-convention">1.1.1 Angular equation and convention</a></li><li data-level="3"><a href="#radial-equation-boundary-conditions-and-quantization">1.1.2 Radial equation, boundary conditions and quantization</a></li><li data-level="3"><a href="#ground-state-check-and-physical-interpretation">1.1.3 Ground-state check and physical interpretation</a></li></ol></li><li data-level="2"><a href="#checking-the-derivation">1.2 Checking the derivation</a></li></ol></li></ol></nav></div><p id="toc-empty" hidden>No matching sections.</p></details></aside>
+    <div class="reader-column"><nav class="topic-links" aria-label="Deeper topic pages"><strong>Follow a thread ↗</strong><a href="../../../Mental-Map/index.html#quantum-mechanics">Mental Map ↗</a><a href="../index.html">Physics ↗</a><a href="../../../Career-and-Education/Job-Experiences/Quantum-Molecular-Dynamics-Simulations/index.html">Work-term report ↗</a></nav><p class="reader-note">Section links stay in this document. Blue topic links open separate readers. Historical writing, editorial corrections and AI-assisted study additions are distinguished in the text. Numbering follows this reader’s order; historical claims still need review.</p><p class="math-status" role="status">Typesetting equations locally…</p><article class="tex-paper"><h1 data-number="1" id="quantum-mechanics-solutions"><span class="header-section-number">1</span> Quantum Mechanics Solutions</h1>
+<h2 data-number="1.1" id="hydrogen-atom"><span class="header-section-number">1.1</span> Hydrogen Atom</h2>
+<p><em>Editorially corrected reader edition.</em> The November 2023 manuscript is preserved byte-for-byte in the repository archive. This edition corrects its radial separation, angular equation and radial exponential, distinguishes mass from magnetic quantum number, and supplies normalization and model assumptions. These are AI-assisted corrections rather than a claim that the original derivation was already verified.</p>
+<p>We consider a nonrelativistic electron and proton interacting through an unscreened Coulomb potential in vacuum. Separate centre-of-mass motion and use reduced mass <span class="math inline">\(\mu=m_e m_p/(m_e+m_p)\)</span> for their relative coordinate. Using <span class="math inline">\(m_e\)</span> instead corresponds to the fixed-proton approximation. Spin, fine structure, hyperfine structure, the Lamb shift and external fields are omitted. The relative Hamiltonian is</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\hat H = -\frac{\hbar^2}{2\mu}\nabla^2 - \frac{e^2}{4\pi\epsilon_0r},\qquad \hat H\psi=E\psi.
+\label{hydrogen-hamiltonian}
+\end{equation}\]</span>
+</div>
+<p>Here <span class="math inline">\(e&gt;0\)</span> is the elementary-charge magnitude and <span class="math inline">\(\epsilon_0\)</span> is vacuum permittivity. Spherical symmetry suggests <span class="math inline">\(\psi(r,\theta,\phi)=R(r)Y(\theta,\phi)\)</span> and</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\nabla^2=\frac{1}{r^2}\frac{\partial}{\partial r}\left(r^2\frac{\partial}{\partial r}\right)
++\frac{1}{r^2\sin\theta}\frac{\partial}{\partial\theta}\left(\sin\theta\frac{\partial}{\partial\theta}\right)
++\frac{1}{r^2\sin^2\theta}\frac{\partial^2}{\partial\phi^2}.
+\end{equation}\]</span>
+</div>
+<h3 data-number="1.1.1" id="angular-equation-and-convention"><span class="header-section-number">1.1.1</span> Angular equation and convention</h3>
+<p>Dividing the angular part by <span class="math inline">\(Y\)</span> produces the dimensionless separation constant <span class="math inline">\(-\ell(\ell+1)\)</span>; it does not produce an extra factor of <span class="math inline">\(Y/\hbar^2\)</span>. Equivalently,</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\left[\frac{1}{\sin\theta}\frac{\partial}{\partial\theta}\left(\sin\theta\frac{\partial}{\partial\theta}\right)
++\frac{1}{\sin^2\theta}\frac{\partial^2}{\partial\phi^2}\right]Y_{\ell m_\ell}
+=-\ell(\ell+1)Y_{\ell m_\ell}.
+\label{hydrogen-angular}
+\end{equation}\]</span>
+</div>
+<p>The angular momentum operators have eigenvalues <span class="math inline">\(\hbar^2\ell(\ell+1)\)</span> and <span class="math inline">\(\hbar m_\ell\)</span> for <span class="math inline">\(\hat L^2\)</span> and <span class="math inline">\(\hat L_z\)</span>. Integer <span class="math inline">\(\ell\geq0\)</span> and <span class="math inline">\(m_\ell=-\ell,\ldots,\ell\)</span> enforce single-valued regular angular functions. For <span class="math inline">\(m_\ell\geq0\)</span>, defining <span class="math inline">\(P_\ell^{m_\ell}\)</span> <em>without</em> the Condon–Shortley phase, normalized spherical harmonics are</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+Y_{\ell m_\ell}(\theta,\phi)=(-1)^{m_\ell}
+\sqrt{\frac{2\ell+1}{4\pi}\frac{(\ell-m_\ell)!}{(\ell+m_\ell)!}}
+P_\ell^{m_\ell}(\cos\theta)e^{im_\ell\phi},\qquad
+Y_{\ell,-m_\ell}=(-1)^{m_\ell}Y_{\ell m_\ell}^{*}.
+\end{equation}\]</span>
+</div>
+<p>If a library already includes that phase in its associated Legendre functions, do not insert it twice. Angular normalization means <span class="math inline">\(\int |Y|^2\,d\Omega=1\)</span>.</p>
+<h3 data-number="1.1.2" id="radial-equation-boundary-conditions-and-quantization"><span class="header-section-number">1.1.2</span> Radial equation, boundary conditions and quantization</h3>
+<p>The correctly separated radial equation contains one centrifugal term:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\frac{d^2R}{dr^2}+\frac{2}{r}\frac{dR}{dr}
++\left[\frac{2\mu}{\hbar^2}\left(E+\frac{e^2}{4\pi\epsilon_0r}\right)
+-\frac{\ell(\ell+1)}{r^2}\right]R=0.
+\label{hydrogen-radial}
+\end{equation}\]</span>
+</div>
+<p>Every bracketed term has dimensions of inverse length squared. For <span class="math inline">\(u=rR\)</span>, this becomes a one-dimensional equation with effective potential <span class="math inline">\(V_{eff}=-e^2/(4\pi\epsilon_0r)+\hbar^2\ell(\ell+1)/(2\mu r^2)\)</span>. Regularity at the origin and decay at infinity select square-integrable bound states.</p>
+<p>Let <span class="math inline">\(a_\mu=4\pi\epsilon_0\hbar^2/(\mu e^2)\)</span> and <span class="math inline">\(\rho=2r/(na_\mu)\)</span>. Factoring out <span class="math inline">\(\rho^\ell e^{-\rho/2}\)</span> leaves an associated Laguerre equation. Requiring termination of its series gives <span class="math inline">\(n=1,2,\ldots\)</span> and <span class="math inline">\(0\leq\ell\leq n-1\)</span>. The normalized radial function is</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+R_{n\ell}(r)=\left(\frac{2}{na_\mu}\right)^{3/2}
+\sqrt{\frac{(n-\ell-1)!}{2n(n+\ell)!}}
+e^{-\rho/2}\rho^\ell L_{n-\ell-1}^{2\ell+1}(\rho),\qquad
+\int_0^\infty |R_{n\ell}|^2r^2\,dr=1.
+\label{hydrogen-normalization}
+\end{equation}\]</span>
+</div>
+<p>For this definition of <span class="math inline">\(\rho\)</span>, the decaying exponential is <span class="math inline">\(e^{-\rho/2}\)</span>, not the draft’s <span class="math inline">\(e^{-\rho}\)</span>. The polynomial can equivalently be written using the confluent hypergeometric function <span class="math inline">\({}_1F_1(-n+\ell+1;2\ell+2;\rho)\)</span> with the appropriate proportionality and normalization factors. Energies are</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+E_n=-\frac{\mu e^4}{2(4\pi\epsilon_0)^2\hbar^2 n^2}.
+\label{hydrogen-energy}
+\end{equation}\]</span>
+</div>
+<h3 data-number="1.1.3" id="ground-state-check-and-physical-interpretation"><span class="header-section-number">1.1.3</span> Ground-state check and physical interpretation</h3>
+<p>The full normalized stationary states are <span class="math inline">\(\psi_{n\ell m_\ell}=R_{n\ell}Y_{\ell m_\ell}\)</span>; their time dependence is <span class="math inline">\(e^{-iE_nt/\hbar}\)</span>. For <span class="math inline">\(n=1\)</span>, <span class="math inline">\(\ell=m_\ell=0\)</span>,</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\psi_{100}=\frac{e^{-r/a_\mu}}{\sqrt{\pi a_\mu^3}},\qquad
+P(r)=4\pi r^2|\psi_{100}|^2=\frac{4r^2}{a_\mu^3}e^{-2r/a_\mu}.
+\label{hydrogen-ground-state}
+\end{equation}\]</span>
+</div>
+<p>Integrating <span class="math inline">\(P(r)\)</span> gives unity, and its maximum occurs at <span class="math inline">\(r=a_\mu\)</span>. Probability <em>density per volume</em> is instead largest at the origin: these statements concern different measures. These functions describe quantum states, not a classical electron orbit. Within this ideal spin-free Coulomb model each energy has <span class="math inline">\(n^2\)</span> orbital states; omitted interactions split degeneracies.</p>
+<h2 data-number="1.2" id="checking-the-derivation"><span class="header-section-number">1.2</span> Checking the derivation</h2>
+<p>Substitute the radial solution into equation <span class="math inline">\(\eqref{hydrogen-radial}\)</span>, check both normalization integrals, confirm energy has joule units and evaluate the <span class="math inline">\(n=1\)</span> limit. The radial normalization scales as length to the power <span class="math inline">\(-3/2\)</span>, while <span class="math inline">\(Y\)</span> is dimensionless. For dimensionless <span class="math inline">\(x=r/a_\mu\)</span>, the ground-state radial equation reduces to an immediate analytic check:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+R''(x)+\frac{2}{x}R'(x)+\left(-1+\frac{2}{x}\right)R(x)=0,
+\qquad R(x)\propto e^{-x}.
+\end{equation}\]</span>
+</div>
+<p>For reference and context see <a href="https://openstax.org/books/university-physics-volume-3/pages/8-2-the-hydrogen-atom">OpenStax University Physics, Volume 3: The Hydrogen Atom</a>. The original archive and editorial history are documented in the repository notebook-source guide. These analytical corrections do not imply that every older quantum derivation in the Mental Map has been independently checked.</p>
+<p class="tex-source-download"><a download="" href="../../../assets/documents/quantum-mechanics/Quantum_Mechanics.tex">Download original LaTeX source</a></p></article><noscript><p>JavaScript is required for equation typesetting. The contents, text and images remain available; download the LaTeX source for the original formulas.</p></noscript><a class="back-top" href="#main-content">Back to the top ↑</a></div></div></main>
+<footer class="site-footer"><a href="../../../index.html">Liam McGrath · An open notebook</a><span>Ideas are better connected.</span><a href="../../../About/index.html">About &amp; documents ↗</a></footer>
+<script src="../../../assets/site.js"></script><script defer src="../../../assets/portfolio.js"></script>
+</body></html>

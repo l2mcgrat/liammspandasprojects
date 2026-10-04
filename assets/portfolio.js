@@ -1,22 +1,42 @@
 (() => {
   "use strict";
-  const descriptions = { gaming: "Gaming — competition, measured.", economics: "Economics — systems of exchange.", business: "Business — from process to insight.", physics: "Physics — models of the world.", language: "Language — words, rhythm & meaning.", miscellaneous: "Miscellaneous — room for curiosity.", sports: "Sports — house rules, court stories & data.", "mental-map": "Mental Map — the thread connecting every field." };
   const map = document.querySelector('.hex-map');
+  const hint = document.getElementById('map-hint');
   if (map) {
-    const activate = (topic) => {
-      map.querySelectorAll('.map-spoke').forEach(line => line.classList.toggle('active', topic === 'mental-map' || line.classList.contains(`spoke-${topic}`)));
-      document.getElementById('map-hint').textContent = descriptions[topic] || 'Follow a thread. See where it leads.';
+    const idle = hint ? hint.textContent : '';
+    const activate = (node) => {
+      const topic = node ? node.dataset.topic : '';
+      map.querySelectorAll('.map-spoke').forEach(line => line.classList.toggle('active', topic === 'center' || line.classList.contains(`spoke-${topic}`)));
+      if (hint) hint.textContent = (node && node.dataset.hint) || idle;
     };
-    map.querySelectorAll('[data-topic]').forEach(node => {
-      node.addEventListener('pointerenter', () => activate(node.dataset.topic));
-      node.addEventListener('focus', () => activate(node.dataset.topic));
-      node.addEventListener('pointerleave', () => activate(map.contains(document.activeElement) ? document.activeElement.dataset.topic : ''));
-      node.addEventListener('blur', () => activate(''));
+    const nodes = [...map.querySelectorAll('[data-topic]')];
+    nodes.forEach(node => {
+      node.addEventListener('pointerenter', () => activate(node));
+      node.addEventListener('focus', () => activate(node));
+      node.addEventListener('pointerleave', () => activate(map.contains(document.activeElement) ? document.activeElement : null));
+      node.addEventListener('blur', () => activate(null));
     });
+    // Touch screens have no hover: play each hexagon's animation once as it scrolls into view.
+    const touch = matchMedia('(hover: none)').matches;
+    const calm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (touch && !calm && 'IntersectionObserver' in window) {
+      const seen = new IntersectionObserver(entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        seen.disconnect();
+        nodes.forEach((node, i) => {
+          const icon = node.querySelector('.atlas-icon');
+          if (!icon) return;
+          setTimeout(() => icon.classList.add('is-playing'), i * 260);
+          setTimeout(() => icon.classList.remove('is-playing'), i * 260 + 2600);
+        });
+      }, { threshold: 0.45 });
+      seen.observe(map);
+    }
   }
   const current = location.pathname.replace(/\/$/, '/index.html');
   document.querySelectorAll('.site-header nav a').forEach(link => {
-    if (new URL(link.href).pathname === current) link.setAttribute('aria-current', 'page');
+    const url = new URL(link.href);
+    if (!url.hash && url.pathname === current) link.setAttribute('aria-current', 'page');
   });
   document.querySelector('.print-reader')?.addEventListener('click', () => window.print());
   const contents = document.querySelector('.contents-panel');
