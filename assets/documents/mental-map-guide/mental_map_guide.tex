@@ -1,0 +1,80 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\setlength{\emergencystretch}{3em}
+\usepackage{amsmath,amssymb,enumitem}
+\usepackage[hidelinks]{hyperref}
+\title{Adding Notes to the Mental Map: From the Gemini Chat Log to Science \& Engineering}
+\author{Liam McGrath}
+\date{4 October 2026}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{How the notebook is laid out}
+The Mental Map follows the website exactly. Its six numbered sections are the six fields, each section has six subsections (the topics), and each subsection has six subsubsections (the destinations). Numbers match the site, so 1.2.2 is Science \& Engineering, Physics, Quantum Mechanics, and the hexagon for every page links to its own heading.
+
+Science \& Engineering is section 1:
+
+\begin{center}
+\begin{tabular}{lp{11.5cm}}
+\hline
+1.1 Mathematics & Calculus \& Vectors; Probability \& Statistics; Linear Algebra; Number Theory; Set Theory; Abstract Algebra \\
+1.2 Physics & Classical Mechanics; Quantum Mechanics; General \& Special Relativity; Electromagnetism; Optics; Thermodynamics \\
+1.3 Chemistry & Organic; Inorganic; Electrochemistry; Physical; Analytical; Materials Chemistry \\
+1.4 Biology & Quantum Biology; Biochemistry; Genetics; Cellular Biology; Neuroscience; Evolutionary Biology \\
+1.5 Psychology & Biological; Cognitive; Personality; Developmental; Clinical; Social Psychology \\
+1.6 Computer Science & Artificial Intelligence; Simulations; Data Structures and Algorithms; Computer Architecture; Operating Systems; Programming Languages \\
+\hline
+\end{tabular}
+\end{center}
+
+A destination that has no notes yet contains a single line, \textit{Open for notes}. Replacing that line is how a destination gets filled.
+
+\section{Before you start}
+\begin{itemize}
+\item Work in the \texttt{pandas\_projects} folder. The file to edit is \texttt{mental\_map.tex} at its root.
+\item Every outline heading has a comment line above it and a label after it, for example:
+\begin{center}
+\texttt{\% atlas: Science-and-Engineering/Physics/Optics}\\
+\texttt{\textbackslash subsubsection\{Optics\}\textbackslash label\{sec:optics\}}
+\end{center}
+Search for the comment to jump to a destination. Never edit, move or delete these two lines: the website uses them to link each hexagon to its section, and the build stops if one is missing.
+\item Keep the Gemini export itself out of the repository if it contains anything private. Copy only the parts you rewrite into the notebook.
+\end{itemize}
+
+\section{From the chat log to a destination}
+\begin{enumerate}[label=\arabic*.]
+\item \textbf{Export the conversation.} Copy the useful Gemini responses into a scratch file, keeping your own questions next to them for context.
+\item \textbf{Sort by destination.} Split the scratch file by topic and give each piece the number of the subsubsection where it belongs, using the table above or the dropdowns in the Request a change form on the Mental Map page. When a piece fits two places, put it in one and add a cross-reference in the other.
+\item \textbf{Check before you keep.} A chat answer can be confidently wrong. Verify each claim, equation and number against a textbook, lecture notes or a primary source, and note the source. Mark anything you could not check with \textit{Unverified:} in italics rather than presenting it as fact.
+\item \textbf{Rewrite in your own words.} Short paragraphs, one idea per subheading. Keep equations in LaTeX, numbered displays in an \texttt{equation} or \texttt{align} environment, and inline maths between single dollar signs.
+\item \textbf{Paste under the destination.} Replace the \textit{Open for notes} line with your notes. For subheadings below a destination use \texttt{\textbackslash subsubsubsection\{...\}}, and one level further \texttt{\textbackslash subparagraph\{...\}}. Do not add \texttt{\textbackslash section}, \texttt{\textbackslash subsection} or \texttt{\textbackslash subsubsection} headings: those levels are the website's outline and change only in \texttt{site\_content/atlas.py}.
+\item \textbf{Label what you will refer to.} Give equations labels with a topic prefix, such as \texttt{\textbackslash label\{eq:optics-snell\}}, and refer to them with \texttt{\textbackslash eqref}. Refer to another destination with its label, for example \texttt{Section\textasciitilde\textbackslash ref\{sec:thermodynamics\}}. Every label must be unique in the file.
+\item \textbf{Add figures carefully.} Save PNG or JPEG images in \texttt{tex\_images/mental\_map/}, in a folder named after the topic, and include them with that root-relative path. Remote, absolute and PDF figures are refused; export a PNG instead. Only use images you made or are allowed to reuse, and credit them in the caption.
+\end{enumerate}
+
+\section{Build and check}
+\begin{enumerate}[label=\arabic*.]
+\item Rebuild both copies of the site:\\ \texttt{python -B -m site\_content.build --also-local}
+\item Run the tests, which check that every outline marker, label and image is in place:\\ \texttt{python -B -m unittest discover -s site\_content/tests}
+\item Preview the local site and open the Mental Map. Look for a box titled \textit{LaTeX conversion notes} at the top of the document: it lists unresolved references, duplicate labels and unsupported commands. Fix every note, then check that your equations are numbered and your figures appear.
+\end{enumerate}
+
+\section{Publish}
+\begin{enumerate}[label=\arabic*.]
+\item Commit \texttt{mental\_map.tex} and any new images in \texttt{pandas\_projects}. Stage files by name; never stage private folders such as the r\'esum\'e sources or the original work-term report.
+\item Commit and push the site repository, \texttt{liammspandasprojects}. Only that repository is served at liammspandasprojects.org; pushing \texttt{pandas\_projects} alone does not change the live site.
+\item Add a line to the Change Log under Website Changes saying which destinations were filled.
+\end{enumerate}
+
+\section{Checklist}
+\begin{itemize}
+\item Notes sit under the right destination, below its outline heading.
+\item The \texttt{\% atlas:} comment and its label are unchanged.
+\item Every claim has been checked, or is marked as unverified.
+\item Equations, labels and figures follow the conventions above.
+\item The build shows no conversion notes and all tests pass.
+\item Both repositories are committed, and the site repository is pushed.
+\end{itemize}
+
+\end{document}

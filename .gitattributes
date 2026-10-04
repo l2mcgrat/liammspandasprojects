@@ -8,3 +8,4 @@ assets/documents/**/*.tex -text
 *.html -text
 *.css -text
 *.js -text
+*.csv -text

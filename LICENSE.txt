@@ -1,0 +1,21 @@
+Copyright (c) 2026 Liam McGrath. All rights reserved.
+
+This repository and the website published from it (liammspandasprojects.org),
+including its text, notes, data, analyses, documents, images, icons, designs and
+source code, belong to Liam McGrath unless a different owner is noted below.
+
+No license is granted. You may view this material on the website, and on GitHub as
+GitHub's Terms of Service allow, but you may not copy, clone for reuse, modify,
+republish, distribute, sell or make derivative works from any part of it without
+prior written permission from Liam McGrath.
+
+Third-party material keeps its own terms and is not covered by this notice:
+- MathJax, in assets/vendor/mathjax, is distributed under the Apache License 2.0;
+  its license file is included beside it.
+- Names, links and descriptions of other creators refer to their own work and imply
+  no affiliation. Owen Paget's photo is used with his permission and may not be reused.
+- Super Smash Bros. character names and icons, and any third-party icon sets, belong
+  to their respective owners and appear here for commentary and analysis.
+- Map screenshots credit the mapping service they were made with.
+
+To ask for permission, email l2mcgrat@uwaterloo.ca.

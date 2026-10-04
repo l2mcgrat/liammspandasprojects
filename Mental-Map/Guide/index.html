@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Liam McGrath’s connected notebook of science, language, data analysis and creative projects.">
+<meta name="theme-color" content="#0d101b"><title>Adding notes to the Mental Map | Liam McGrath</title>
+<link rel="icon" href="../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../assets/styles.css"><link rel="stylesheet" href="../../assets/portfolio.css"><link rel="stylesheet" href="../../assets/career.css"><link rel="stylesheet" href="../../assets/atlas-icons.css">
+<script defer src="../../assets/math-config.js"></script><script defer id="MathJax-script" src="../../assets/vendor/mathjax/tex-chtml.js"></script></head><body><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header">
+      <a class="brand" href="../../index.html" aria-label="Liam McGrath home"><span class="brand-mark" aria-hidden="true">LM</span><span>LIAM McGRATH<small>AN OPEN NOTEBOOK</small></span></a>
+    <nav aria-label="Primary navigation"><a href="../../Mental-Map/index.html">Mental Map</a><a href="../../Atlas/index.html">Atlas</a><a href="../../index.html#creator-owen">Creators</a><a href="../../Smash/index.html">Smash</a><a href="../../About/index.html">About me <span aria-hidden="true">↗</span></a></nav>
+    </header><main id="main-content" class="document-page"><div class="reader-top"><div><p class="eyebrow">The connected notebook / LaTeX edition</p><h1>Adding notes to the Mental Map</h1><p>Liam McGrath · A how-to for filling the 216 destinations</p></div><div class="toolbar"><a class="button primary" href="../../assets/documents/mental-map-guide/document.pdf" download>Compiled article · PDF ↓</a><a class="button ghost" href="../../assets/documents/mental-map-guide/source-bundle.zip" download>Source + images · ZIP ↓</a><button class="button ghost print-reader" type="button">Print / Save PDF</button></div></div>
+    <div class="reader-layout"><aside class="reader-sidebar"><details class="contents-panel" open><summary>Contents <span>6 headings</span></summary><label class="toc-search-label" for="toc-search">Find a section<input id="toc-search" type="search" placeholder="Search the contents…"></label><div id="reader-toc"><nav aria-label="Table of contents" class="tex-toc"><ol><li data-level="1"><a href="#how-the-notebook-is-laid-out">1 How the notebook is laid out</a></li><li data-level="1"><a href="#before-you-start">2 Before you start</a></li><li data-level="1"><a href="#from-the-chat-log-to-a-destination">3 From the chat log to a destination</a></li><li data-level="1"><a href="#build-and-check">4 Build and check</a></li><li data-level="1"><a href="#publish">5 Publish</a></li><li data-level="1"><a href="#checklist">6 Checklist</a></li></ol></nav></div><p id="toc-empty" hidden>No matching sections.</p></details></aside>
+    <div class="reader-column"><nav class="topic-links" aria-label="Deeper topic pages"><strong>Follow a thread ↗</strong><a href="../index.html">Mental Map ↗</a><a href="../../Science-and-Engineering/index.html">Science &amp; Engineering ↗</a></nav><p class="reader-note">Steps for moving notes from a Gemini chat log into the right subsubsection, checking them and publishing both repositories.</p><p class="math-status" role="status">Typesetting equations locally…</p><article class="tex-paper"><h1 data-number="1" id="how-the-notebook-is-laid-out"><span class="header-section-number">1</span> How the notebook is laid out</h1>
+<p>The Mental Map follows the website exactly. Its six numbered sections are the six fields, each section has six subsections (the topics), and each subsection has six subsubsections (the destinations). Numbers match the site, so 1.2.2 is Science &amp; Engineering, Physics, Quantum Mechanics, and the hexagon for every page links to its own heading.</p>
+<p>Science &amp; Engineering is section 1:</p>
+<div class="center">
+<table>
+<tbody>
+<tr>
+<td style="text-align: left;">1.1 Mathematics</td>
+<td style="text-align: left;">Calculus &amp; Vectors; Probability &amp; Statistics; Linear Algebra; Number Theory; Set Theory; Abstract Algebra</td>
+</tr>
+<tr>
+<td style="text-align: left;">1.2 Physics</td>
+<td style="text-align: left;">Classical Mechanics; Quantum Mechanics; General &amp; Special Relativity; Electromagnetism; Optics; Thermodynamics</td>
+</tr>
+<tr>
+<td style="text-align: left;">1.3 Chemistry</td>
+<td style="text-align: left;">Organic; Inorganic; Electrochemistry; Physical; Analytical; Materials Chemistry</td>
+</tr>
+<tr>
+<td style="text-align: left;">1.4 Biology</td>
+<td style="text-align: left;">Quantum Biology; Biochemistry; Genetics; Cellular Biology; Neuroscience; Evolutionary Biology</td>
+</tr>
+<tr>
+<td style="text-align: left;">1.5 Psychology</td>
+<td style="text-align: left;">Biological; Cognitive; Personality; Developmental; Clinical; Social Psychology</td>
+</tr>
+<tr>
+<td style="text-align: left;">1.6 Computer Science</td>
+<td style="text-align: left;">Artificial Intelligence; Simulations; Data Structures and Algorithms; Computer Architecture; Operating Systems; Programming Languages</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A destination that has no notes yet contains a single line, <em>Open for notes</em>. Replacing that line is how a destination gets filled.</p>
+<h1 data-number="2" id="before-you-start"><span class="header-section-number">2</span> Before you start</h1>
+<ul>
+<li><p>Work in the <code>pandas_projects</code> folder. The file to edit is <code>mental_map.tex</code> at its root.</p></li>
+<li><p>Every outline heading has a comment line above it and a label after it, for example:</p>
+<div class="center">
+<p><code>% atlas: Science-and-Engineering/Physics/Optics</code><br/>
+<code>\subsubsection{Optics}\label{sec:optics}</code></p>
+</div>
+<p>Search for the comment to jump to a destination. Never edit, move or delete these two lines: the website uses them to link each hexagon to its section, and the build stops if one is missing.</p></li>
+<li><p>Keep the Gemini export itself out of the repository if it contains anything private. Copy only the parts you rewrite into the notebook.</p></li>
+</ul>
+<h1 data-number="3" id="from-the-chat-log-to-a-destination"><span class="header-section-number">3</span> From the chat log to a destination</h1>
+<ol>
+<li><p><strong>Export the conversation.</strong> Copy the useful Gemini responses into a scratch file, keeping your own questions next to them for context.</p></li>
+<li><p><strong>Sort by destination.</strong> Split the scratch file by topic and give each piece the number of the subsubsection where it belongs, using the table above or the dropdowns in the Request a change form on the Mental Map page. When a piece fits two places, put it in one and add a cross-reference in the other.</p></li>
+<li><p><strong>Check before you keep.</strong> A chat answer can be confidently wrong. Verify each claim, equation and number against a textbook, lecture notes or a primary source, and note the source. Mark anything you could not check with <em>Unverified:</em> in italics rather than presenting it as fact.</p></li>
+<li><p><strong>Rewrite in your own words.</strong> Short paragraphs, one idea per subheading. Keep equations in LaTeX, numbered displays in an <code>equation</code> or <code>align</code> environment, and inline maths between single dollar signs.</p></li>
+<li><p><strong>Paste under the destination.</strong> Replace the <em>Open for notes</em> line with your notes. For subheadings below a destination use <code>\subsubsubsection{...}</code>, and one level further <code>\subparagraph{...}</code>. Do not add <code>\section</code>, <code>\subsection</code> or <code>\subsubsection</code> headings: those levels are the website’s outline and change only in <code>site_content/atlas.py</code>.</p></li>
+<li><p><strong>Label what you will refer to.</strong> Give equations labels with a topic prefix, such as <code>\label{eq:optics-snell}</code>, and refer to them with <code>\eqref</code>. Refer to another destination with its label, for example <code>Section~\ref{sec:thermodynamics}</code>. Every label must be unique in the file.</p></li>
+<li><p><strong>Add figures carefully.</strong> Save PNG or JPEG images in <code>tex_images/mental_map/</code>, in a folder named after the topic, and include them with that root-relative path. Remote, absolute and PDF figures are refused; export a PNG instead. Only use images you made or are allowed to reuse, and credit them in the caption.</p></li>
+</ol>
+<h1 data-number="4" id="build-and-check"><span class="header-section-number">4</span> Build and check</h1>
+<ol>
+<li><p>Rebuild both copies of the site:<br/>
+<code>python -B -m site_content.build --also-local</code></p></li>
+<li><p>Run the tests, which check that every outline marker, label and image is in place:<br/>
+<code>python -B -m unittest discover -s site_content/tests</code></p></li>
+<li><p>Preview the local site and open the Mental Map. Look for a box titled <em>LaTeX conversion notes</em> at the top of the document: it lists unresolved references, duplicate labels and unsupported commands. Fix every note, then check that your equations are numbered and your figures appear.</p></li>
+</ol>
+<h1 data-number="5" id="publish"><span class="header-section-number">5</span> Publish</h1>
+<ol>
+<li><p>Commit <code>mental_map.tex</code> and any new images in <code>pandas_projects</code>. Stage files by name; never stage private folders such as the résumé sources or the original work-term report.</p></li>
+<li><p>Commit and push the site repository, <code>liammspandasprojects</code>. Only that repository is served at liammspandasprojects.org; pushing <code>pandas_projects</code> alone does not change the live site.</p></li>
+<li><p>Add a line to the Change Log under Website Changes saying which destinations were filled.</p></li>
+</ol>
+<h1 data-number="6" id="checklist"><span class="header-section-number">6</span> Checklist</h1>
+<ul>
+<li><p>Notes sit under the right destination, below its outline heading.</p></li>
+<li><p>The <code>% atlas:</code> comment and its label are unchanged.</p></li>
+<li><p>Every claim has been checked, or is marked as unverified.</p></li>
+<li><p>Equations, labels and figures follow the conventions above.</p></li>
+<li><p>The build shows no conversion notes and all tests pass.</p></li>
+<li><p>Both repositories are committed, and the site repository is pushed.</p></li>
+</ul>
+<p class="tex-source-download"><a download="" href="../../assets/documents/mental-map-guide/mental_map_guide.tex">Download original LaTeX source</a></p></article><noscript><p>JavaScript is required for equation typesetting. The contents, text and images remain available; download the LaTeX source for the original formulas.</p></noscript><a class="back-top" href="#main-content">Back to the top ↑</a></div></div></main>
+<footer class="site-footer"><a href="../../index.html">Liam McGrath · An open notebook</a><span>Ideas are better connected.</span><a href="../../About/index.html">About &amp; documents ↗</a><p class="site-copyright">© 2026 Liam McGrath. All rights reserved. No part of this site or its source may be copied or republished without permission. <a href="../../LICENSE.txt">License</a></p></footer>
+<script src="../../assets/site.js"></script><script defer src="../../assets/portfolio.js"></script>
+</body></html>

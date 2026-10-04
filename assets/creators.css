@@ -71,6 +71,11 @@ html:has(main.home-snap) .site-footer { scroll-snap-align:end; }
 .creator-highlight:hover .creator-symbol,.creator-symbol:focus-visible { color:#111426; background:var(--creator-accent); border-color:transparent; box-shadow:0 0 28px -4px var(--creator-glow); }
 .creator-highlight:hover .creator-symbol svg,.creator-symbol:focus-visible svg { transform:scale(1.12) rotate(-6deg); }
 .creator-sym-fill { fill:currentColor; }
+/* Projects that are not live yet: no link, dimmed symbol, no hover fill. */
+.creator-image { object-position:center 30%; }
+.creator-soon { display:inline-block; margin-left:8px; padding:2px 8px; border:1px solid var(--creator-line); border-radius:999px; color:var(--creator-accent); font-size:10px; font-weight:600; letter-spacing:.08em; text-transform:uppercase; vertical-align:2px; }
+.creator-highlight.is-pending .creator-symbol,.creator-highlight.is-pending:hover .creator-symbol { color:var(--creator-accent); background:transparent; border-style:dashed; box-shadow:none; opacity:.55; }
+.creator-highlight.is-pending:hover .creator-symbol svg { transform:none; }
 .creator-sym-spin,.creator-sym-pulse,.creator-sym-nudge,.creator-sym-rise,.creator-sym-dots circle,.creator-sym-twinkle { transform-box:fill-box; transform-origin:center; }
 .creator-highlight:is(:hover,:focus-within) .creator-sym-spin { animation:creator-sym-wobble 1.6s ease-in-out infinite; }
 .creator-highlight:is(:hover,:focus-within) .creator-sym-pulse { animation:creator-sym-pulse 1.2s ease-in-out infinite; }

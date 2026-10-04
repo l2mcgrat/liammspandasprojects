@@ -1,0 +1,67 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\title{Upcoming Website Changes}
+\author{Liam McGrath}
+\date{Last updated 4 October 2026}
+\begin{document}
+\maketitle
+
+Planned work, by the date it was requested. Each date lists the requested changes and how they are planned to be implemented. Finished items move to the Change Log.
+
+\section{Planned for 10 October 2026: Series Hub subsections}
+\subsection{Requested changes}
+\begin{itemize}
+\item Updates to each Series Hub destination: Videos, Analytics, History, Records and Creator Petition. Details will come with that prompt.
+\item New basketball data for analysis in the style of a JimmyHighRoller video.
+\end{itemize}
+\subsection{Planned implementation}
+\begin{itemize}
+\item Extend the series data contract before adding new records, so earlier analysis stays reproducible.
+\end{itemize}
+
+\section{4 October 2026: open items}
+\subsection{Requested changes}
+\begin{itemize}
+\item Owen's Creator Hub and Stock Monitoring links, once they are live.
+\item Simulations in the style of Primer this month, as internal branches of the Simulations destination.
+\item UFC and NBA predictions recorded against outcomes.
+\item Swimming set times once a water-safe watch is bought: $5 \times 50$ m, $10 \times 50$ m and $5 \times 100$ m within set windows.
+\item Science \& Engineering notes from the Gemini chat log; the contribution guide on the Mental Map explains the steps.
+\item A database for change requests, once email requests become too many.
+\end{itemize}
+\subsection{Planned implementation}
+\begin{itemize}
+\item Owen's rows already exist and only need a URL each in creators.py.
+\item The two predictions pages already exist; each needs a log of predictions made before events and the outcomes after.
+\item The database plan follows below.
+\end{itemize}
+
+\section{Still open from 27 September 2026}
+\subsection{Requested changes}
+\begin{itemize}
+\item Camille's creator section, once her site URL and written consent are in.
+\item HTTPS on the custom domain: GitHub Pages still presents a certificate for the wrong name.
+\end{itemize}
+\subsection{Planned implementation}
+\begin{itemize}
+\item The HTTPS fix needs the repository owner in GitHub Pages settings: remove and re-add the custom domain, wait for the certificate, then turn on Enforce HTTPS.
+\end{itemize}
+
+\section{Database integration plan for change requests}
+\label{database-plan}
+Today, the Request a change form on the Mental Map drafts an email. When requests outgrow email, the same form can post to a small database instead. GitHub Pages only serves static files, so the database needs a separate service. The steps:
+
+\begin{enumerate}
+\item \textbf{Choose a service.} Either a hosted Postgres database with row-level security (for example Supabase), or a small serverless endpoint (for example a Cloudflare Worker) in front of a database (for example Cloudflare D1). The endpoint option keeps every secret off the website.
+\item \textbf{Create the table.} Columns: id (generated), name (text, required, up to 120 characters), requested\_on (date, required), section, subsection and subsubsection (text, using the site's paths such as Science-and-Engineering/Physics/Optics), content (text, required, up to 20,000 characters), status (new, accepted, merged or declined, default new), reviewer\_note (text) and created\_at (timestamp).
+\item \textbf{Validate on the server.} Accept only paths that exist in the site outline (assets/data/atlas-schema.js), require the subsubsection to sit inside the chosen subsection and section, enforce the lengths and strip control characters. Never trust the browser's checks alone.
+\item \textbf{Lock down access.} The public may insert rows but never read, edit or delete them. With Supabase this is an insert-only policy for the anonymous role; with a Worker, the Worker holds the only key.
+\item \textbf{Stop spam.} Add a bot check (for example Cloudflare Turnstile), a hidden honeypot field and a rate limit per address.
+\item \textbf{Handle personal data.} Names are personal data: add a short privacy note to the form, keep requests only as long as needed and delete one on request.
+\item \textbf{Switch the form.} In request-change.js, send the same fields as JSON to the endpoint, show a confirmation and keep the email draft as the fallback when the service is unavailable.
+\item \textbf{Review requests.} Sort by status, export accepted requests, copy the content into mental\_map.tex under the right destination, then mark them merged and list them in the Change Log.
+\item \textbf{Test.} Use a separate staging table, add tests for the validation rules, and try a malformed and an oversized request before going live.
+\end{enumerate}
+
+\end{document}
