@@ -23,7 +23,7 @@
 .athletics-page .athletics-split-card strong { font:800 46px/1.1 "Arial Narrow","Segoe UI",sans-serif; }
 .athletics-page .athletics-chips { display:flex; flex-wrap:wrap; gap:10px; list-style:none; padding:0; margin:0 0 16px; }
 .athletics-page .athletics-chips li { padding:8px 14px; border:1px solid currentColor; border-radius:999px; font-size:13px; font-weight:650; }
-.athletics-page .athletics-multiples { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(260px,100%),1fr)); gap:16px; margin:24px 0; }
+.athletics-page .athletics-multiples { display:grid; grid-template-columns:repeat(auto-fill,minmax(min(320px,100%),1fr)); gap:16px; margin:24px 0; }
 .athletics-page .athletics-multiple { padding:16px 16px 12px; border:1px solid #ffffff14; border-radius:6px; background:#ffffff05; }
 .athletics-page .athletics-multiple h3 { margin:0 0 6px; font-size:15px; }
 .athletics-page .athletics-multiple small { display:block; color:var(--muted); font-size:11px; }
@@ -31,6 +31,21 @@
 .athletics-page .athletics-spark text { font:10px "Segoe UI",sans-serif; fill:#c4c5b6; }
 .athletics-page .athletics-badge { display:inline-block; margin-bottom:8px; font-size:11px; color:var(--muted); }
 .athletics-page .athletics-badge.up { color:#8fe0a8; }
+.athletics-page .lift-top { color:#bba1ff; }
+.athletics-page .lift-10 { color:#69d4cf; }
+.athletics-page .lift-12 { color:#f7ab65; }
+.athletics-page .lift-reps-key { color:#f0e6ffb3; }
+.athletics-page .athletics-spark .athletics-line { stroke-width:2.5; }
+.athletics-page .athletics-spark .lift-10 .athletics-line { stroke-dasharray:7 4; }
+.athletics-page .athletics-spark .lift-12 .athletics-line { stroke-dasharray:2 4; stroke-linecap:round; }
+.athletics-page .athletics-spark .lift-reps { fill:#f0e6ff; opacity:.16; }
+.athletics-page .athletics-spark .lift-top text { fill:#bba1ff; font-weight:700; }
+.athletics-page .athletics-spark .axis-reps { fill:#f0e6ff99; }
+.athletics-page .athletics-multiple small + small { margin-top:2px; }
+.athletics-page .athletics-update ol { display:grid; gap:10px; padding-left:20px; }
+.athletics-page .athletics-update code, .athletics-page .athletics-entry { font:13px/1.5 Consolas,"Cascadia Mono",monospace; color:#e8e1ff; }
+.athletics-page .athletics-update code { padding:1px 6px; border-radius:4px; background:#ffffff10; overflow-wrap:anywhere; }
+.athletics-page .athletics-entry { margin:0 0 12px; padding:14px 16px; border:1px solid #bba1ff33; border-radius:6px; background:#0d0c16; overflow-x:auto; white-space:pre; }
 @media(max-width:700px) {
   .athletics-page .athletics-split-card strong { font-size:34px; }
 }

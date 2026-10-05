@@ -3,11 +3,28 @@
 \usepackage[hidelinks]{hyperref}
 \title{Website Change Log}
 \author{Liam McGrath}
-\date{Last updated 4 October 2026}
+\date{Last updated 10 October 2026}
 \begin{document}
 \maketitle
 
 Newest first. Each date lists what was requested and what was implemented. Requests come from the prompts recorded in Website\_Change\_Log.txt and the build conversations; planned work lives in the separate Upcoming Changes document.
+
+\section{10 October 2026: LeetCode, rap and training data}
+\subsection{Requested changes}
+\begin{itemize}
+\item Bring the code from the leetcode\_problems repository into the six LeetCode subsubsections.
+\item Bring the music\_work repository into the six Rap subsubsections.
+\item On the weightlifting charts, a secondary axis for reps, and on the weight axis the heaviest weight managed for at least 10 reps and for at least 12 reps.
+\item Pick up the updated swimming and weightlifting logs, and add notes on the site saying where each data file lives, so new sessions can be added without help.
+\end{itemize}
+\subsection{Implemented changes}
+\begin{itemize}
+\item Each LeetCode destination now lists its solutions, split at the problem headings in the source, with the code as written and a link to the exact lines on GitHub. Lists and Arrays and Trees and Tries take problems by file; Graphs, Recursion, Dynamic Programming and Hard Problems cross-list by a stated rule. Recursion is detected from the code itself. Dynamic Programming has no matching solution yet and says so.
+\item Each Rap destination lists its songs with the lyrics as written: Seven Deadly Sins (all four folders), Homewood \& Trafalgar (Trafalgar), Made in Abyss, Vagabond, and NanoFtheAbove (Old Classics and My Hero Academia). Future Projects shows the visualizer and audio-conversion scripts. Drafts not yet committed to GitHub are shown without a link.
+\item Every weightlifting exercise chart now has a weight axis with three lines (heaviest set, heaviest for 10+ reps, heaviest for 12+ reps) and a reps axis with bars for the reps at the heaviest set; a table and a Progress CSV hold the same values.
+\item The 4 October swim (2400 m) is in. The weightlifting log had no entries after 1 October.
+\item Each dashboard has an Add a session section: the .txt file to edit, the line format, the latest entry as written, and the rebuild command. The CSV files are exports, not sources. If the older copy of a log beside the local site preview is edited instead, the build now stops and says which file to copy.
+\end{itemize}
 
 \section{4 October 2026: subsection updates and the creators showcase}
 \subsection{Requested changes}
