@@ -1,0 +1,27 @@
+/* Health dashboards (Sleep, Diet): layered on sports.css + athletics.css. */
+.health-page .sleep-mean { stroke: #69d4cf; stroke-width: 2.5; stroke-dasharray: 8 6; }
+.health-page .diet-out { color: #f7ab65; }
+.health-page .diet-in { color: #69d4cf; }
+.health-page .diet-deficit { fill: #8fe0a8; opacity: .55; }
+.health-page .diet-deficit.is-gain { fill: #f28b82; opacity: .6; }
+.health-page .diet-deficit-key { color: #8fe0a8; }
+.health-page .diet-zero { stroke: #f0e6ff55; stroke-width: 1.5; }
+.health-page .diet-target { stroke: #bba1ff; stroke-width: 2.5; stroke-dasharray: 8 6; }
+.health-page .diet-target-label, .health-page .axis-deficit { fill: #bba1ff; color: #bba1ff; }
+.health-page .sports-chart .axis-deficit { font-weight: 700; }
+.health-page .dream-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(360px, 100%), 1fr)); gap: 16px; margin: 24px 0; }
+.health-page .dream-card { display: grid; gap: 10px; align-content: start; padding: 18px 18px 14px; border: 1px solid #ffffff14; border-radius: 6px; background: #ffffff05; }
+.health-page .dream-card header { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 14px; align-items: baseline; }
+.health-page .dream-card h3 { margin: 0; font-size: 14px; letter-spacing: .06em; text-transform: uppercase; color: #bba1ff; }
+.health-page .dream-hours { font-size: 12px; color: var(--muted); }
+.health-page .dream-text { margin: 0; line-height: 1.65; overflow-wrap: anywhere; }
+.health-page .dream-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 0; }
+.health-page .dream-chip { padding: 4px 10px; border: 1px solid #ffffff22; border-radius: 999px; font-size: 11.5px; color: var(--muted); }
+.health-page .dream-emotion { border-color: #bba1ff66; color: #d4c6ff; }
+.health-page .dream-positive { border-color: #8fe0a866; color: #8fe0a8; }
+.health-page .dream-negative { border-color: #f28b8266; color: #f28b82; }
+.health-page .dream-motifs { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr)); gap: 16px; margin: 20px 0; }
+.health-page .dream-motif { padding: 16px 18px; border: 1px solid #bba1ff2e; border-radius: 6px; background: linear-gradient(160deg, #1b1830, #141222); }
+.health-page .dream-motif h3 { margin: 0 0 4px; font-size: 15px; }
+.health-page .dream-motif-count { margin: 0 0 8px; font: 700 11px/1.4 Consolas, monospace; letter-spacing: .1em; text-transform: uppercase; color: #69d4cf; }
+.health-page .dream-motif p:last-child { margin: 0; color: var(--muted); line-height: 1.6; }

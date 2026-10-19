@@ -3,11 +3,27 @@
 \usepackage[hidelinks]{hyperref}
 \title{Website Change Log}
 \author{Liam McGrath}
-\date{Last updated 10 October 2026}
+\date{Last updated 18 October 2026}
 \begin{document}
 \maketitle
 
 Newest first. Each date lists what was requested and what was implemented. Requests come from the prompts recorded in Website\_Change\_Log.txt and the build conversations; planned work lives in the separate Upcoming Changes document.
+
+\section{18 October 2026: sleep, diet and two weeks of training}
+\subsection{Requested changes}
+\begin{itemize}
+\item A Sleep \& Dream log under Health, with some text analysis of the dreams.
+\item A Diet \& Calorie log under Health, charted with expenditure and consumption on one axis and the target and actual deficit on a second axis, noting the high NEAT and the October BMR of 2050 kcal.
+\item Pick up the updated swimming, weightlifting and running logs, and the new tempo-run log.
+\end{itemize}
+\subsection{Implemented changes}
+\begin{itemize}
+\item The Sleep destination charts hours per night, prints every dream as written, and reads them for motifs with a fixed word list, the site's feelings lexicon and VADER polarity --- labelled clearly as a playful pattern count, not psychoanalysis.
+\item The Diet destination charts energy out, energy in and the daily deficit against a 500 kcal/day reference, checks the written weekly summaries, keeps the owner's expenditure notes, and lists the training behind each day from the swimming, lifting and running logs. Written net values that disagree with the arithmetic are flagged, never corrected.
+\item The running dashboard gained a tempo-run section (10.4 km over two routes); its map stays unpublished because the screenshot shows the start point.
+\item The swimming page now handles the yard-logged sessions (converted at 0.9144 m/yd and shown as written) and flags the Oct 5 set list that does not add up to its written total.
+\item The weightlifting parser accepts the new session formats (bodyweight sets, an inline dropset, a set with no rep count, new splits); excluded sets are shown with their reason.
+\end{itemize}
 
 \section{10 October 2026: LeetCode, rap and training data}
 \subsection{Requested changes}
