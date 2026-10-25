@@ -1,4 +1,253 @@
 songId,path,number,text,tokenCount,emotion,subemotion,ambiguous,neg,neu,pos,compound
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,1,200 Clicks,1,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,3,everything nowadays breeds uncertainty,4,Afraid,Insecure,False,0.444,0.556,0.0,-0.34
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,4,I don't need ethanol making shit worse for me,9,Unclassified,,False,0.489,0.511,0.0,-0.7717
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,5,never ending quest tryna find what works for me,9,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,6,I don't even know right now whats hurting me,9,Sad,Hurt,False,0.252,0.748,0.0,-0.4019
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,7,stimmin with the stilt chill beat thats vibes yea,9,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,8,thinking about me and how I need to side step,10,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,9,"time is factor, i'm an adapter,",6,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,10,but if I don't act then I can see demise yeah,11,Unclassified,,False,0.0,0.781,0.219,0.4215
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,11,I can see demise yea,5,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,12,I can see demise come straight from reprisal,8,Unclassified,,False,0.0,0.787,0.213,0.2263
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,13,spit from a system we built with our eyes closed,10,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,14,get what you get we were built for survival,9,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,15,real question is if I'm fit for survival,8,Unclassified,,False,0.0,0.737,0.263,0.3612
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,16,drugs I could get every click on my ride home,10,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,17,two hundred clicks my commute can't be mindful,8,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,18,distractions exist yea but so does the spiral,8,Unclassified,,False,0.176,0.824,0.0,-0.128
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,19,"who do you idol, whats their mindset,",7,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,20,if can you meet them what time they alive at,10,Unclassified,,False,0.0,0.776,0.224,0.3818
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,21,we need to talk more but always be silent ,9,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,22,we need the listen but never be quiet,8,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,23,we paying people to listen who ramble,7,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,24,we paying parasites all just to gamble,7,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,25,I find it crazy that ChatGPT became,7,Unclassified,,False,0.286,0.714,0.0,-0.34
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,26,everyones bestie our network is scrambled,6,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,27,guessin this shit politicians will handle,6,Unclassified,,False,0.419,0.581,0.0,-0.5574
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,28,but tech is evolving this bitch is a hassle,9,Unclassified,,False,0.439,0.561,0.0,-0.8047
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,29,snake to a bear to a dragon to rassle,9,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,30,break in my mind got the key to the castle,10,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,31,AI is blind to the dangers its breeding,8,Unclassified,,False,0.496,0.504,0.0,-0.7096
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,32,stats on employment are fake whatchu reading,7,Unclassified,,False,0.341,0.659,0.0,-0.4767
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,33,everything changes when ain't no one eating,7,Unclassified,,False,0.0,0.761,0.239,0.2235
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,34,"it all ends the same thats with everyone bleeding, yuh",10,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,36,we don't want that,4,Unclassified,,False,0.289,0.711,0.0,-0.0572
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,37,I can only change myself,5,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,38,this world is crazy though,5,Unclassified,,False,0.375,0.625,0.0,-0.34
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,39,I gotta move,3,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,41,nanotech classmates 3 years ahead of me,6,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,42,they saw a future while I bought Henessy,8,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,43,half moved to europe and find it heavely,8,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,44,"path that I want, a place where i'm meant to be",11,Unclassified,,False,0.0,0.885,0.115,0.0772
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,45,first comes first its the person i'm meant to be,10,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,46,half mapped out and the works good energy,8,Unclassified,,False,0.0,0.545,0.455,0.6124
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,47,only thing to stop me is everywhere essentially,8,Unclassified,,False,0.239,0.761,0.0,-0.296
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,48,momentum slog one drink can be the end of me,10,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,49,"mind slides over, I can be my enemy",8,Unclassified,,False,0.333,0.667,0.0,-0.5423
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,50,"tactical, practical, lacks self empathy",5,Loving,Compassionate,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,51,risks don't matter maxmize entropy,5,Unclassified,,False,0.514,0.486,0.0,-0.2901
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,52,I can put you back onto the wagon if you mess with me,13,Unclassified,,False,0.172,0.828,0.0,-0.3612
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,53,all done chemically lets apply physics so,7,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,54,boundary conditions have well defined limits,6,Unclassified,,False,0.0,0.704,0.296,0.2732
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,55,"and stores are outside em, some I can visit",9,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,56,the liquor ones nixed I stick with the vision,9,Unclassified,,False,0.0,0.8,0.2,0.25
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,57,live with precsion and move on a mission,8,Unclassified,,False,0.0,1.0,0.0,0.0
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,58,I practice my talents and live with conviction,8,Unclassified,,False,0.0,0.7,0.3,0.4588
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,59,life is a balanace I stuggle with wishing,8,Unclassified,,False,0.0,0.787,0.213,0.2263
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,60,that I got more time to persue what I'm missing,10,Unclassified,,False,0.196,0.804,0.0,-0.296
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,61,but I lost a lot to the call of the drink and,12,Unclassified,,False,0.211,0.789,0.0,-0.4497
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,62,I'm feeling a lot of regret for decisions ,8,Sad,Disappointed,False,0.272,0.583,0.146,-0.3182
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,63,I hope to atone for the output I killed and ,10,Trusting,Hopeful,False,0.292,0.519,0.188,-0.3818
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,64,then flow to a state where I know that I'm living,11,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,1,Intro_to_Homewood,3,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,3,Zombie dropped me at my new home for two months,10,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,4,"Taught by my mom friends, society, i'm too fucked",9,Unclassified,,False,0.303,0.483,0.214,-0.3182
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,5,"Kill yourself, you even feel yourself?",6,Unclassified,,False,0.485,0.515,0.0,-0.6908
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,6,"crying what about me, now i'm lifting you up,",9,Sad,Grieving,False,0.279,0.721,0.0,-0.4767
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,7,"hot bought giving me up, and putting faith in the process",11,Trusting,Hopeful,False,0.0,0.634,0.366,0.6369
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,8,all on me with new friends making progress,8,Unclassified,,False,0.0,0.504,0.496,0.7096
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,9,"falls on me, when their looking ofr help",8,Unclassified,,False,0.0,0.722,0.278,0.4019
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,10,"no man in the mirror, I ain't feeling myself",9,Unclassified,,False,0.338,0.662,0.0,-0.3757
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,12,this that new vibe flow feeling Picasso,7,Unclassified,,False,0.0,0.8,0.2,0.128
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,13,sleep is down and up my pills is pilling up,10,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,14,"they say i'm wilding but I Have fine control,",9,Unclassified,,False,0.0,0.784,0.216,0.296
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,15,"everything I say is like mind control,",7,Unclassified,,False,0.0,0.706,0.294,0.3612
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,17,take that CBT and put it in reverse ,8,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,18,make you think bad thoughts so you working worse,9,Unclassified,,False,0.495,0.505,0.0,-0.7823
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,19,so when you leave this place you gon need a nurse,11,Unclassified,,False,0.128,0.872,0.0,-0.1189
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,20,get yo stomache pumped while I plead the 1st,9,Joyful,Excited,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,22,yo my shadows shady you can call me crazy,9,Unclassified,,False,0.231,0.769,0.0,-0.34
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,23,I don't fuck with friends down and out and lazy,10,Unclassified,,False,0.339,0.47,0.191,-0.2969
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,24,deep down i'm kind but don't test me maybe,9,Unclassified,,False,0.0,0.784,0.216,0.296
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,25,you can give me space or ima make you spacey,10,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,26,from a place where hate being brought from nurses,9,Unclassified,,False,0.316,0.684,0.0,-0.5719
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,27,"and instructors, doctors, fuck it whats the purpose,",8,Unclassified,,False,0.333,0.667,0.0,-0.5423
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,28,"leave you feeling worthless bitch i'm here to grow,",9,Depressed,Unworthy,False,0.549,0.347,0.104,-0.7506
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,29,all these toxins block me whats you reap you sow,10,Unclassified,,False,0.244,0.756,0.0,-0.4404
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,31,"so, so, so, so, what am I to do, uh, fuck around and lose, uh,",15,Unclassified,,False,0.323,0.677,0.0,-0.7351
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,32,"pick yo battles, I unleash the shadow, ",7,Unclassified,,False,0.302,0.698,0.0,-0.3818
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,33,small bites no bark you gon bleed a galllon,9,Unclassified,,False,0.216,0.784,0.0,-0.296
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,34,"no trace no trace DNA absent,",6,Unclassified,,False,0.272,0.495,0.233,-0.0803
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,35,"i'm a shot of absinthe, you go fall and splatter,",10,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,36,"mentally explode, all your thoughts are scattered,",7,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,37,only thing that can stop me is a talk with Alex,11,Unclassified,,False,0.18,0.82,0.0,-0.296
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,38,if I get permission turn your thoughts to ashes,9,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,40,"yuh, yuh, yuh, yuh,",4,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,42,"48 thoughts talking laws of power,",5,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,43,"I can read you like a book, I can draw the patterns,",12,Unclassified,,False,0.0,0.815,0.185,0.3612
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,44,"getchya elevated, its a flaw of cowards,",7,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,45,"then I escalate it make it fall from saturn,",9,Unclassified,,False,0.0,1.0,0.0,0.0
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,46,"job loss yo fault plus all thats after,",8,Unclassified,,False,0.455,0.545,0.0,-0.6124
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,47,"you won't find a saviour just enjoy the rapture,",9,Unclassified,,False,0.0,0.593,0.407,0.5859
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,48,"tried to frame my ass with no picture captured,",9,Unclassified,,False,0.449,0.551,0.0,-0.6908
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,49,"tried to frame my ass I respond with laughter, ",9,Joyful,Playful,False,0.255,0.511,0.234,-0.0772
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,50,"tried to frame my ass they gon fix ya actions,",10,Unclassified,,False,0.28,0.72,0.0,-0.5423
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,51,"I'ma tame you ass, I'ma halt you passion",8,Unclassified,,False,0.28,0.48,0.24,-0.128
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,52,I'ma claim my power back from wasted talent,8,Unclassified,,False,0.267,0.5,0.233,-0.1027
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,1,Last Day Freestyle,3,Unclassified,,False,0.0,0.541,0.459,0.1779
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,3,"last day, almost out, I can see tomorrow now,",9,Unclassified,,False,0.0,1.0,0.0,0.0
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,4,"I became a man again from a manic ass problem child,",11,Unclassified,,False,0.408,0.592,0.0,-0.7351
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,5,"asshole stuck in a deep ass hole if I reached up for help they'd grab my soul,",17,Unclassified,,False,0.243,0.575,0.181,-0.34
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,6,"antidepressants and manic depression don't mix well with panic suppression,",10,Afraid,Scared,False,0.557,0.443,0.0,-0.8322
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,7,"I was for testing doc don't know or care how I feel, after ingesting,",14,Unclassified,,False,0.168,0.832,0.0,-0.3875
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,8,"that's my problem, fuck your message, I don't 'like this shit your suggesting,",13,Unclassified,,False,0.583,0.417,0.0,-0.9111
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,9,"here at Homewood, met real doctors, family one was always wrong,",11,Unclassified,,False,0.237,0.763,0.0,-0.4767
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,10,"ADHD and Bipolar I don't have em, sing your song,",10,Unclassified,,False,0.0,1.0,0.0,0.0
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,11,"bet o'll  murphy oh so worried guilt will kill that shit is real,",13,Disgusted,Ashamed,True,0.601,0.399,0.0,-0.9266
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,12,"ain't yo first time listen more and keep ur tail tucked live in fear,",14,Afraid,Scared,False,0.198,0.802,0.0,-0.4939
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,13,"there's a history of malpractice, only use was fill out forms,",11,Unclassified,,False,0.0,1.0,0.0,0.0
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,14,"you ain't helping any addicts or anyone just know ya role,",11,Unclassified,,False,0.159,0.841,0.0,-0.2235
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,15,"fuck your soul and mental health,",6,Unclassified,,False,0.412,0.588,0.0,-0.5423
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,16,"I have goals of getting well, I'm meeting targets,",9,Unclassified,,False,0.0,0.792,0.208,0.2732
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,17,"came from seltzers, ativan, no exercise, and eating garbage,",9,Unclassified,,False,0.216,0.784,0.0,-0.296
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,18,"patience showing no improvements, I forsee me leaving carnage,",9,Unclassified,,False,0.197,0.803,0.0,-0.2411
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,19,"everyone thats insufficient, mean and selfish, being tarnished,",8,Unclassified,,False,0.307,0.693,0.0,-0.4767
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,20,"I'm a savage a bagde of honor, I am living breathing karma,",12,Unclassified,,False,0.185,0.617,0.198,0.0516
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,21,"I don't believe in equal treatment, want my virtues seaping farther,",11,Unclassified,,False,0.0,0.703,0.297,0.4215
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,22,"whatchu reaching out for father, I ain't one you need to bother,",12,Unclassified,,False,0.169,0.704,0.127,-0.1531
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,23,"I got to much people round me who give a shit no need to holler,",15,Unclassified,,False,0.309,0.691,0.0,-0.7003
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,24,"what awaits me, a new journey, sixty days plus being sober,",11,Unclassified,,False,0.0,0.885,0.115,0.0772
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,25,"there just ain't no end to treatment, weakness always creaping over,",11,Unclassified,,False,0.205,0.658,0.138,-0.2292
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,26,urge to alter conciousness consuming drugs is life to most,10,Unclassified,,False,0.0,1.0,0.0,0.0
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,27,"the worst a little dose can do is lead to more and spiral folks,",14,Unclassified,,False,0.24,0.76,0.0,-0.6249
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,28,stressful bullshit passes out the pipe of life so find your peace,12,Unclassified,,False,0.357,0.453,0.189,-0.5165
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,29,just don't think the bottom of a bottle will put your mind at ease,14,Unclassified,,False,0.0,0.839,0.161,0.3612
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,30,i'm squeeze up every bit ogt genius gained through mediation and ,11,Unclassified,,False,0.0,0.794,0.206,0.3818
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,31,privacy to be this aim up climb and see new elevation type A personality,14,Unclassified,,False,0.0,1.0,0.0,0.0
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,32,"and fuck you if your mad at me, need to live compatibly",12,Unclassified,,False,0.401,0.599,0.0,-0.7717
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,33,I don't fuck with apathy and condecention maddens me,9,Unclassified,,False,0.0,0.596,0.404,0.5773
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,34,I'm expecting ego death and vibes or you don't pass the test,12,Unclassified,,False,0.262,0.738,0.0,-0.5994
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,35,Fuck all your accomplishments the wisest men don't yap and flex ,11,Unclassified,,False,0.224,0.577,0.199,-0.1027
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,36,"Out for necks but quietly, there just ain't no firing me,",11,Unclassified,,False,0.177,0.823,0.0,-0.2846
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,37,"Whatchu want some soppey I can't do it bitch there's fire in me, Irony I work this hard for me you just acquired me for now but I got wings and i'm a fly to whats inspiring me",38,Unclassified,,False,0.094,0.745,0.16,0.5908
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,1,Outside Pt.1 ,2,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,3,Catch one outside with a hard forty on me ,9,Unclassified,,False,0.149,0.851,0.0,-0.1027
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,4,I drink while I drive bitches wild if they saw me,11,Unclassified,,False,0.281,0.719,0.0,-0.5994
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,5,Roll break get high 'fore I start this recording,9,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,6,Need to slow down time so my mind I can sort it ,12,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,7,Watch me bread down lines to polise I'm an issue ,10,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,8,Pigs catch me they can try or this crime urofficial ,10,Unclassified,,False,0.314,0.686,0.0,-0.628
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,9,If you sing while inside no bond I ain't with u ,11,Unclassified,,False,0.18,0.82,0.0,-0.296
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,10,"Only tree you gon see, dry your eyes with a tissue ",11,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,11,Bitches vibe with the real lil homey yous a face one ,11,Unclassified,,False,0.281,0.719,0.0,-0.5994
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,12,Anxiety will kill over time why I take some ,9,Afraid,Anxious,False,0.478,0.522,0.0,-0.7506
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,13,Reality's a bitch I'ma ride as I tame her ,9,Unclassified,,False,0.322,0.678,0.0,-0.5859
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,14,stay tied to the ground so i'm wise to the haters,11,Unclassified,,False,0.205,0.578,0.217,0.046
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,15,hoes crazy think they clever having simps send me death threats ,11,Unclassified,,False,0.476,0.366,0.157,-0.7269
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,16,cravings over pussy they ain't never gonna get that,9,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,17,reality's a bitch shes a hoe I don't fuck with,10,Unclassified,,False,0.259,0.546,0.195,-0.2382
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,18,"them cops or them opps try to pop me for nothing,",11,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,20,"Catch me outside with the baddest of babi's, ",8,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,21,"The red hed the tall one the hard one dababy,",10,Unclassified,,False,0.135,0.865,0.0,-0.1027
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,22,"I harbour my thoughts while I'ne balling and faded, ",9,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,23,I'll ride of a cliff yo this lifes what you make it ,12,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,25,"Made it to the top of the hill she give top now,",12,Proud,Successful,False,0.0,0.735,0.265,0.3818
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,26,"Mystique of elites I escaped from the dog pound,",9,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,27,Physique is so peak and her pussy is sauced out ,10,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,28,She drip on my drip lick the tip im her boss now,12,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,29,talk bout all my plans song and dance who to stomp out,12,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,30,we demanding for bands whatchu planning to talk bout,9,Unclassified,,False,0.192,0.808,0.0,-0.2263
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,31,"ain't preped in advance then you just have the wrong house,",11,Unclassified,,False,0.237,0.763,0.0,-0.4767
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,32,"we rasta as fuck need to chill 'fore we pop out,",11,Unclassified,,False,0.259,0.741,0.0,-0.5423
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,33,"its evident we messing with some fools they ain't garded,",10,Unclassified,,False,0.262,0.738,0.0,-0.4939
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,34,"we meddlin with minds and my tool makes them retarded,",10,Unclassified,,False,0.291,0.709,0.0,-0.5719
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,35,"they be mumbling and fumbling the bag they a target,",10,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,36,"warning shots to the roof, put yo ass down for barking",11,Unclassified,,False,0.396,0.604,0.0,-0.7096
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,38,"Catch me outside with the baddest of babi's, ",8,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,39,"The red hed the tall one the hard one dababy,",10,Unclassified,,False,0.135,0.865,0.0,-0.1027
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,40,"I harbour my thoughts while I'ne balling and faded, ",9,Unclassified,,False,0.0,1.0,0.0,0.0
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,41,I'll ride of a cliff yo this lifes what you make it,12,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,1,Satisfaction,1,Unclassified,,False,0.0,0.0,1.0,0.4404
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,3,everything for passion like its wrapped up in a package,10,Unclassified,,False,0.0,0.593,0.407,0.6705
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,4,what you really doing if there isn't really actions,9,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,5,patterns that I failed to keep up caused disatisfaction,9,Unclassified,,False,0.292,0.708,0.0,-0.5106
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,6,I just pause when I see wrath and wonder what we really after,13,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,7,"ain't no drama that i'm wrapped in, wonder whats he really rappin",12,Unclassified,,False,0.0,0.854,0.146,0.2235
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,8,like I don't see patterns and have comments whatchu asking,10,Unclassified,,False,0.0,0.783,0.217,0.3612
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,9,is it just my fucking voice all your pain is my fault,12,Unclassified,,False,0.375,0.625,0.0,-0.7184
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,10,i just won't fucking exist so you can claim your minds calm,12,Unclassified,,False,0.0,0.827,0.173,0.3182
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,11,being honest don't know what to do i'm the bain of yo problems,13,Unclassified,,False,0.159,0.647,0.194,0.1531
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,12,if i could just read yo mind then id claim that i'd solve em,14,Unclassified,,False,0.0,0.878,0.122,0.2023
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,13,but what am I to do when your crazy and i'm not,12,Unclassified,,False,0.22,0.78,0.0,-0.4767
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,14,fuck i'll just kill myself is my aim that far off,11,Unclassified,,False,0.477,0.523,0.0,-0.8481
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,15,why am i wasting my time if your deranged and i'm not,12,Unclassified,,False,0.197,0.803,0.0,-0.4019
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,16,i'm just tryna live in peace and you claim that i'm not,12,Unclassified,,False,0.0,0.759,0.241,0.5423
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,17,whats the aim that I got its obviously tryna be sober,11,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,18,but in your uneducated opinion you just pray my times over,11,Unclassified,,False,0.0,0.772,0.228,0.4497
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,19,"tell me that i'm wrong, explain it three times over ",10,Unclassified,,False,0.256,0.744,0.0,-0.4767
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,20,"if still don't get it, I think im dumb or fight info",12,Unclassified,,False,0.371,0.629,0.0,-0.7096
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,21,"I'f I still don't fucking get it, maybe it ain't that simple",12,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,22,maybe a wrinkle in the fabric of yo ideas ain't minimal,11,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,23,if a judge heard you talk they would label you a criminal,12,Unclassified,,False,0.236,0.764,0.0,-0.5267
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,24,"if a normal person heard you they'd stay away, definitive",10,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,25,I just want to live in peace but to you that ain't orignal,13,Unclassified,,False,0.0,0.764,0.236,0.34
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,26,You love yo drama series to you thats vitamins and minerals,11,Loving,Affectionate,False,0.0,0.704,0.296,0.6369
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,27,"some of this isn't literal, but you need to hear it",11,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,28,if someone you care for cries sorry you need to see it,12,Unclassified,,False,0.247,0.556,0.198,0.0516
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,29,if someone you care for dies you need to make an appearance,12,Unclassified,,False,0.0,0.775,0.225,0.4939
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,30,but thats just too much to ask if it don't gain some alleagance,13,Unclassified,,False,0.234,0.766,0.0,-0.5667
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,31,social alliances act like kitchen appliances,6,Unclassified,,False,0.0,0.667,0.333,0.3612
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,32,useful when needed then you just wanna quiet them,9,Unclassified,,False,0.0,0.734,0.266,0.4404
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,33,misunderstanding bonds cause they some aliiances,6,Unclassified,,False,0.359,0.641,0.0,-0.4215
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,34,"to get what you want, but what you want uninspiring",10,Unclassified,,False,0.0,0.755,0.245,0.1531
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,35,"really its just some info, that you need in the moment",11,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,36,"once they save and then say it, then in essence you own it",13,Unclassified,,False,0.0,0.789,0.211,0.4939
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,37,but being a half decent person was just never a component ,11,Unclassified,,False,0.0,1.0,0.0,0.0
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,38,thats necessary to feeling that you don't need show it,10,Unclassified,,False,0.0,0.857,0.143,0.128
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,39,i've been abhorent myself then collected wealth and felt free,10,Unclassified,,False,0.0,0.552,0.448,0.7579
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,40,if you ever went from oppressed to this then you get me,12,Unclassified,,False,0.22,0.78,0.0,-0.4767
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,41,I don't believe in collecting wins thats envy,8,Unclassified,,False,0.178,0.508,0.314,0.3818
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,42,"Seven Deadly Sins my 1st and and 2nd work, it gets deep",12,Unclassified,,False,0.214,0.786,0.0,-0.4588
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,1,Week 8 Freestyle,2,Unclassified,,False,0.0,0.541,0.459,0.1779
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,3,"Came in a deadbeat, fucking week 8 now,",7,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,4,"not much has changed but, I don't feel the same now,",11,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,5,"muscles growing, hussle showing, code uploaded brains mind,",8,Unclassified,,False,0.0,0.805,0.195,0.1779
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,6,"meds down and weight down, i'm channeling a raged child,",10,Unclassified,,False,0.25,0.75,0.0,-0.4588
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,7,"mad at the world, I need strength to fucking take down,",11,Proud,Worthy,False,0.208,0.584,0.208,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,8,"everyone who stole from me, pain I'll fucking spray round,",10,Unclassified,,False,0.268,0.732,0.0,-0.5106
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,9,"know that I'm awake I'll, tape up my mistakes file,",10,Unclassified,,False,0.217,0.783,0.0,-0.3612
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,10,"everything you spoke to me so openly you hate while,",10,Unclassified,,False,0.306,0.694,0.0,-0.6077
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,11,"insufficient in your own ways, lets do some role play,",10,Unclassified,,False,0.0,0.789,0.211,0.34
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,12,"switch that shit around you'd kill youself was that your goal eh,",12,Unclassified,,False,0.454,0.546,0.0,-0.8519
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,13,"weakness and excusses of abusers shit is gourmet,",8,Unclassified,,False,0.667,0.333,0.0,-0.875
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,14,"feed this meal right back to you and laugh at you no forplay,",13,Joyful,Playful,False,0.131,0.655,0.214,0.34
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,15,fuck with you the guilt you feel will hurt just know its real,13,Disgusted,Ashamed,True,0.474,0.526,0.0,-0.8402
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,16,killing you so softly poetry is how it feels,9,Unclassified,,False,0.355,0.645,0.0,-0.6597
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,17,"message to the dept collectors, know an early death'll get ya",11,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,18,"Brain was just one man, wasn't an exception betcha",9,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,19,"more blood will poor soon, CEOs with war wounds,",9,Unclassified,,False,0.509,0.491,0.0,-0.8055
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,20,theres better methods to get your wealth the stealthy had to more too,13,Unclassified,,False,0.064,0.581,0.355,0.7184
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,21,casings with adjacent statements manifestos old news,7,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,22,"3D Print a blicky blicky finna killa old dude,",9,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,23,"simple as accounting sounds, 100 Mil 100 Rounds,",6,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,24,"most will soon be unemployed, sense a civic war now,",10,Unclassified,,False,0.302,0.698,0.0,-0.5994
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,25,"history repeats to beats, powers can always conceed,",8,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,26,"militaries don't receed they give you up and will proceed,",10,Unclassified,,False,0.0,1.0,0.0,0.0
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,27,"revolution in nepal used discord it just sowed its seed,",10,Unclassified,,False,0.231,0.769,0.0,-0.4019
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,28,evolution end of all this grifting rich go woe is me,11,Unclassified,,False,0.182,0.584,0.234,0.2023
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,29,"kill em put em in a zoo, or better yet a warehouse,",12,Unclassified,,False,0.267,0.568,0.165,-0.4215
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,30,"or keep em couped up in a room, we don't fucking care now",13,Unclassified,,False,0.192,0.808,0.0,-0.43
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,1,Bunny Girl,2,Unclassified,,False,0.0,1.0,0.0,0.0
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,3,"Hippity hop huh get what we want, huh",8,Unclassified,,False,0.0,0.843,0.157,0.0772
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,4,making me pause heavy breaths every breath,7,Unclassified,,False,0.0,1.0,0.0,0.0

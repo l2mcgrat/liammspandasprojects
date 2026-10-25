@@ -1,4 +1,25 @@
 songId,path,number,family,label,score,cue,text,start,end,tokenStart,tokenEnd,negated,weight
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,3,Afraid,Insecure,1,uncertainty,uncertainty,27,38,3,4,False,1
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,6,Sad,Hurt,1,hurting,hurting,34,41,7,8,False,1
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,50,Loving,Compassionate,1,empathy,empathy,32,39,4,5,False,1
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,62,Sad,Disappointed,1,regret,regret,21,27,5,6,False,1
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,63,Trusting,Hopeful,1,hope,hope,2,6,1,2,False,1
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,6,Sad,Grieving,1,crying,crying,0,6,0,1,False,1
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,7,Trusting,Hopeful,1,faith,faith,37,42,7,8,False,1
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,20,Joyful,Excited,1,pumped,pumped,16,22,3,4,False,1
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,28,Depressed,Unworthy,1,worthless,worthless,18,27,3,4,False,1
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,49,Joyful,Playful,1,laughter,laughter,37,45,8,9,False,1
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,6,Afraid,Scared,1,panic,panic,57,62,8,9,False,1
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,11,Disgusted,Ashamed,1,guilt,guilt,31,36,6,7,False,1
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,11,Afraid,Anxious,1,worried,worried,23,30,5,6,False,1
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,12,Afraid,Scared,1,fear,fear,64,68,13,14,False,1
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,12,Afraid,Anxious,1,anxiety,Anxiety,0,7,0,1,False,1
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,25,Proud,Successful,1,made it,Made it,0,7,0,2,False,1
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,26,Loving,Affectionate,1,love,love,4,8,1,2,False,1
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,7,Proud,Worthy,1,strength,strength,25,33,6,7,False,1
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,14,Joyful,Playful,1,laugh,laugh,37,42,8,9,False,1
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,15,Disgusted,Ashamed,1,guilt,guilt,18,23,4,5,False,1
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,15,Sad,Hurt,1,hurt,hurt,38,42,8,9,False,1
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,5,Sad,Lonely,1,alone,alone,137,142,30,31,False,1
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,5,Depressed,Empty,1,depressed,depressed,146,155,32,33,False,1
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,9,Afraid,Anxious,1,nervous,nervous,280,287,57,58,False,1

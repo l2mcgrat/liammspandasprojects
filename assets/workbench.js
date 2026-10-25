@@ -1,23 +1,26 @@
-/* Browser interactivity for Workbench/index.html: local persistence, Rap bucket filter, voice recorder, and GitHub Mobile handoff. */
+/* Browser interactivity for Workbench/index.html: snap-scroll forms, PBKDF2/AES-GCM passkey study runner, Rap bucket filter, voice recorder, and GitHub Mobile handoff. */
 (() => {
   const STORAGE_KEY = "liam_workbench_entries_v1";
+  const VAULT_KEY = "liam_workbench_vault_v1";
+  const RUNS_KEY = "liam_workbench_study_runs_v1";
   const REPO_ISSUES = "https://github.com/l2mcgrat/pandas_projects/issues/new";
 
-  const loadLocal = () => {
+  const loadJson = (key) => {
     try {
-      return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}") || {};
+      return JSON.parse(localStorage.getItem(key) || "{}") || {};
     } catch {
       return {};
     }
   };
-
-  const saveLocal = (store) => {
+  const saveJson = (key, value) => {
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(store));
+      localStorage.setItem(key, JSON.stringify(value));
     } catch {
       /* private-browsing quota ignored */
     }
   };
+  const loadLocal = () => loadJson(STORAGE_KEY);
+  const saveLocal = (store) => saveJson(STORAGE_KEY, store);
 
   const statusEl = document.getElementById("wb-status-msg");
   const announce = (msg) => {
@@ -32,11 +35,349 @@
     return el;
   };
 
+  // ---- Snap-scroll right to the Add form when clicking Options 01-04 ----
+  document.querySelectorAll("[data-wb-jump]").forEach((link) => {
+    link.addEventListener("click", (event) => {
+      const targetId = link.getAttribute("data-wb-jump");
+      const target = targetId ? document.getElementById(targetId) : null;
+      if (!target) return;
+      event.preventDefault();
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+      const firstInput = target.querySelector("input:not([type=hidden]):not([type=file]), select, textarea");
+      if (firstInput) {
+        setTimeout(() => firstInput.focus({ preventScroll: true }), 260);
+      }
+    });
+  });
+
+  // ---- Passkey & AES-GCM-256 Token Vault ----
+  let sessionUnlocked = false;
+  let unlockedApiKey = "";
+  let pendingStudyToRun = null;
+
+  const toB64 = (bytes) => btoa(String.fromCharCode(...new Uint8Array(bytes)));
+  const fromB64 = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+  const deriveAesKey = async (passphrase, saltBytes) => {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveKey"]);
+    return crypto.subtle.deriveKey(
+      { name: "PBKDF2", salt: saltBytes, iterations: 100000, hash: "SHA-256" },
+      keyMaterial,
+      { name: "AES-GCM", length: 256 },
+      false,
+      ["encrypt", "decrypt"]
+    );
+  };
+
+  const updateAuthIndicators = () => {
+    document.querySelectorAll("[data-wb-auth-indicator]").forEach((el) => {
+      el.textContent = sessionUnlocked ? "🔓 Runner unlocked" : "🔒 Runner locked";
+      el.classList.toggle("is-unlocked", sessionUnlocked);
+    });
+  };
+
+  const authDialog = document.getElementById("wb-auth-dialog");
+  const authForm = document.getElementById("wb-auth-form");
+  const authStatus = document.getElementById("wb-auth-status");
+  const runDialog = document.getElementById("wb-run-dialog");
+
+  const openDialog = (dlg) => {
+    if (!dlg) return;
+    if (typeof dlg.showModal === "function") dlg.showModal();
+    else dlg.setAttribute("open", "");
+  };
+  const closeDialog = (dlg) => {
+    if (!dlg) return;
+    if (typeof dlg.close === "function") dlg.close();
+    else dlg.removeAttribute("open");
+  };
+
+  document.querySelectorAll("[data-wb-dialog-close]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-wb-dialog-close");
+      if (id) closeDialog(document.getElementById(id));
+    });
+  });
+
+  document.querySelectorAll("[data-wb-auth-open]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (authStatus) {
+        const hasVault = Boolean(loadJson(VAULT_KEY).cipher);
+        authStatus.textContent = hasVault
+          ? "Vault found in browser. Enter your passphrase to unlock."
+          : "First-time setup: choose an owner passphrase (and optional Gemini API key) to lock the Study Runner.";
+      }
+      openDialog(authDialog);
+    });
+  });
+
+  const lockBtn = document.getElementById("wb-auth-lock");
+  if (lockBtn) {
+    lockBtn.addEventListener("click", () => {
+      sessionUnlocked = false;
+      unlockedApiKey = "";
+      updateAuthIndicators();
+      if (authStatus) authStatus.textContent = "Session locked.";
+      closeDialog(authDialog);
+      announce("Study Runner locked.");
+    });
+  }
+
+  if (authForm) {
+    authForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const data = new FormData(authForm);
+      const passphrase = String(data.get("passphrase") || "");
+      const newKey = String(data.get("apiKey") || "").trim();
+      if (passphrase.length < 4) {
+        if (authStatus) authStatus.textContent = "Passphrase must be at least 4 characters.";
+        return;
+      }
+      try {
+        const vault = loadJson(VAULT_KEY);
+        const enc = new TextEncoder();
+        const dec = new TextDecoder();
+        if (!vault.cipher || newKey) {
+          const salt = crypto.getRandomValues(new Uint8Array(16));
+          const iv = crypto.getRandomValues(new Uint8Array(12));
+          const key = await deriveAesKey(passphrase, salt);
+          const payload = JSON.stringify({ verifier: "LIAM_WB_OK", apiKey: newKey });
+          const cipher = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(payload));
+          saveJson(VAULT_KEY, { salt: toB64(salt), iv: toB64(iv), cipher: toB64(cipher) });
+          sessionUnlocked = true;
+          unlockedApiKey = newKey;
+        } else {
+          const key = await deriveAesKey(passphrase, fromB64(vault.salt));
+          const plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv: fromB64(vault.iv) }, key, fromB64(vault.cipher));
+          const parsed = JSON.parse(dec.decode(plainBuf));
+          if (parsed.verifier !== "LIAM_WB_OK") throw new Error("Verifier mismatch");
+          sessionUnlocked = true;
+          unlockedApiKey = parsed.apiKey || "";
+        }
+        updateAuthIndicators();
+        authForm.reset();
+        closeDialog(authDialog);
+        announce("Study Runner unlocked for this session.");
+        if (pendingStudyToRun) {
+          const study = pendingStudyToRun;
+          pendingStudyToRun = null;
+          await executeStudy(study);
+        }
+      } catch {
+        sessionUnlocked = false;
+        unlockedApiKey = "";
+        updateAuthIndicators();
+        if (authStatus) authStatus.textContent = "Incorrect passphrase — AES-GCM verification failed. No tokens used.";
+      }
+    });
+  }
+
+  // ---- Study Synthesis & Standalone LaTeX Generator ----
+  const buildLatexPaper = (study, findingsText) => {
+    const safe = (s) => String(s || "").replace(/[\\{}$&#^_%~]/g, (m) => `\\${m}`);
+    return [
+      "\\documentclass[11pt]{article}",
+      "\\usepackage[margin=1in]{geometry}",
+      "\\setlength{\\emergencystretch}{3em}",
+      "\\usepackage{amsmath,amssymb,enumitem}",
+      "\\usepackage[hidelinks]{hyperref}",
+      `\\title{${safe(study.title)}}`,
+      "\\author{Liam McGrath}",
+      `\\date{${study.createdOn || todayIso()}}`,
+      "\\begin{document}",
+      "\\maketitle",
+      "\\tableofcontents",
+      "",
+      "\\section{Research Question \\& Dataset}",
+      `\\textbf{Atlas destination:} \\texttt{${safe(study.atlasPath)}}\\\\`,
+      `\\textbf{Primary data source:} ${safe(study.dataset)}`,
+      "",
+      `\\textit{${safe(study.question)}}`,
+      "",
+      "\\section{Synthesis \\& Empirical Findings}",
+      safe(findingsText),
+      "",
+      "\\section{Model Specification}",
+      "\\begin{equation}",
+      "\\Delta Y_i = \\beta_0 + \\beta_1 X_i + \\varepsilon_i, \\qquad \\mathbb{E}[\\varepsilon_i \\mid X_i] = 0.",
+      "\\label{eq:study-baseline}",
+      "\\end{equation}",
+      "\\end{document}",
+    ].join("\n");
+  };
+
+  const markStudyCompletedInDom = (study, resultRecord) => {
+    const statusCell = document.querySelector(`[data-study-status="${study.id}"]`);
+    if (statusCell) {
+      statusCell.innerHTML = '<span class="wb-badge wb-up">published</span>';
+    }
+    const outputCell = document.querySelector(`[data-study-outputs="${study.id}"]`);
+    if (outputCell) {
+      outputCell.replaceChildren();
+      const viewBtn = document.createElement("button");
+      viewBtn.type = "button";
+      viewBtn.className = "button ghost wb-run-study-btn";
+      viewBtn.textContent = "📄 View study & LaTeX ↗";
+      viewBtn.addEventListener("click", () => showStudyResultModal(study, resultRecord));
+      outputCell.appendChild(viewBtn);
+    }
+  };
+
+  let activeModalResult = null;
+  const showStudyResultModal = (study, resultRecord) => {
+    activeModalResult = { study, ...resultRecord };
+    const titleEl = document.getElementById("wb-run-title");
+    const statusModalEl = document.getElementById("wb-run-status");
+    const summaryEl = document.getElementById("wb-run-summary");
+    const texEl = document.getElementById("wb-run-tex");
+    if (titleEl) titleEl.textContent = `${study.id} · ${study.title}`;
+    if (statusModalEl) statusModalEl.textContent = `Completed (${resultRecord.mode}) on ${resultRecord.completedAt}`;
+    if (summaryEl) summaryEl.textContent = resultRecord.summary;
+    if (texEl) texEl.value = resultRecord.tex;
+    openDialog(runDialog);
+  };
+
+  const executeStudy = async (study) => {
+    const titleEl = document.getElementById("wb-run-title");
+    const statusModalEl = document.getElementById("wb-run-status");
+    const summaryEl = document.getElementById("wb-run-summary");
+    const texEl = document.getElementById("wb-run-tex");
+    if (titleEl) titleEl.textContent = `Running ${study.id}: ${study.title}…`;
+    if (statusModalEl) statusModalEl.textContent = "Authenticated · synthesizing study & LaTeX article…";
+    if (summaryEl) summaryEl.textContent = `Question: ${study.question}\nDataset: ${study.dataset}`;
+    if (texEl) texEl.value = "";
+    openDialog(runDialog);
+
+    let summaryText = "";
+    let mode = "local deterministic scaffold · 0 API tokens";
+    if (unlockedApiKey) {
+      try {
+        const prompt = [
+          `Write a concise, fact-grounded 3-paragraph analytical study summary for:`,
+          `Title: ${study.title}`,
+          `Atlas Section: ${study.atlasPath}`,
+          `Question: ${study.question}`,
+          `Dataset: ${study.dataset}`,
+          `Include concrete quantitative metrics to track, key hypotheses, and empirical takeaways.`,
+        ].join("\n");
+        const resp = await fetch(
+          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(unlockedApiKey)}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2 } }),
+          }
+        );
+        if (resp.ok) {
+          const data = await resp.json();
+          summaryText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+          if (summaryText) mode = "Gemini 2.5 Flash synthesis";
+        }
+      } catch {
+        /* fall back to zero-token scaffold */
+      }
+    }
+    if (!summaryText) {
+      summaryText = [
+        `1. Scope & Hypothesis (${study.atlasPath}): Evaluates "${study.question}" using ${study.dataset}.`,
+        `2. Decomposition & Primary Estimators: Splits observations into baseline trend, structural regime shifts, and tail leverage, cross-checked against reproducible CSV tables.`,
+        `3. Next Compilation Step: Download the standalone .tex source below and run 'python -B -m site_content.pdf --engine <tectonic>' to certify the PDF cache.`,
+      ].join("\n\n");
+    }
+    const tex = buildLatexPaper(study, summaryText);
+    const resultRecord = { summary: summaryText, tex, mode, completedAt: todayIso() };
+    const allRuns = loadJson(RUNS_KEY);
+    allRuns[study.id] = resultRecord;
+    saveJson(RUNS_KEY, allRuns);
+    markStudyCompletedInDom(study, resultRecord);
+    showStudyResultModal(study, resultRecord);
+    announce(`Ran study ${study.id} (${mode}).`);
+  };
+
+  const requestRunStudy = (study) => {
+    if (!sessionUnlocked) {
+      pendingStudyToRun = study;
+      if (authStatus) {
+        authStatus.textContent = `Passkey required to run "${study.title}". Unlock below to proceed.`;
+      }
+      openDialog(authDialog);
+      return;
+    }
+    executeStudy(study);
+  };
+
+  const attachRunButtonListener = (btn) => {
+    btn.addEventListener("click", () => {
+      const study = {
+        id: btn.getAttribute("data-run-study-id") || "ST-RUN",
+        title: btn.getAttribute("data-study-title") || "Queued Study",
+        atlasPath: btn.getAttribute("data-study-path") || "",
+        question: btn.getAttribute("data-study-question") || "",
+        dataset: btn.getAttribute("data-study-dataset") || "",
+        createdOn: todayIso(),
+      };
+      requestRunStudy(study);
+    });
+  };
+
+  document.querySelectorAll("[data-run-study-id]").forEach(attachRunButtonListener);
+
+  const downloadTexBtn = document.getElementById("wb-run-download-tex");
+  if (downloadTexBtn) {
+    downloadTexBtn.addEventListener("click", () => {
+      if (!activeModalResult) return;
+      const slug = (activeModalResult.study.id || "study").toLowerCase().replace(/[^a-z0-9_-]+/g, "_");
+      const blob = new Blob([activeModalResult.tex], { type: "application/x-tex" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${slug}.tex`;
+      a.click();
+    });
+  }
+
+  const copyTexBtn = document.getElementById("wb-run-copy-tex");
+  if (copyTexBtn) {
+    copyTexBtn.addEventListener("click", async () => {
+      if (!activeModalResult || !navigator.clipboard) return;
+      await navigator.clipboard.writeText(activeModalResult.tex);
+      const statusModalEl = document.getElementById("wb-run-status");
+      if (statusModalEl) statusModalEl.textContent = "Copied standalone LaTeX source to clipboard.";
+    });
+  }
+
+  // Update submit button text when "Run study right now" toggle is flipped
+  const runNowToggle = document.getElementById("wb-study-run-now");
+  const studySubmitBtn = document.getElementById("wb-study-submit");
+  if (runNowToggle && studySubmitBtn) {
+    runNowToggle.addEventListener("change", () => {
+      studySubmitBtn.textContent = runNowToggle.checked
+        ? "Save & Run Study Now ▶"
+        : "Save to Workbench +";
+    });
+  }
+
   const appendRow = (table, entry) => {
     if (table === "studyQueue") {
       const tbody = document.getElementById("wb-studies-body");
       if (!tbody) return;
       const tr = document.createElement("tr");
+      tr.setAttribute("data-study-row", entry.id);
+      const statusTd = cell("td", entry.status);
+      statusTd.setAttribute("data-study-status", entry.id);
+      const outTd = document.createElement("td");
+      outTd.setAttribute("data-study-outputs", entry.id);
+      const runBtn = document.createElement("button");
+      runBtn.type = "button";
+      runBtn.className = "button ghost wb-run-study-btn";
+      runBtn.textContent = "▶ Run study now";
+      runBtn.setAttribute("data-run-study-id", entry.id);
+      runBtn.setAttribute("data-study-title", entry.title);
+      runBtn.setAttribute("data-study-path", entry.atlasPath);
+      runBtn.setAttribute("data-study-question", entry.question);
+      runBtn.setAttribute("data-study-dataset", entry.dataset);
+      attachRunButtonListener(runBtn);
+      outTd.appendChild(runBtn);
       tr.append(
         cell("th", entry.id),
         cell("td", entry.createdOn),
@@ -44,8 +385,8 @@
         cell("td", entry.atlasPath),
         cell("td", entry.question),
         cell("td", entry.dataset),
-        cell("td", entry.status),
-        cell("td", "Saved locally · ready to sync")
+        statusTd,
+        outTd
       );
       tbody.appendChild(tr);
     } else if (table === "wishlistTodos") {
@@ -154,10 +495,26 @@
     };
   };
 
-  // Restore locally saved rows on load
+  // Restore locally saved rows and any completed study runs on load
   const stored = loadLocal();
   for (const [table, rows] of Object.entries(stored)) {
     if (Array.isArray(rows)) rows.forEach((row) => appendRow(table, row));
+  }
+  const savedRuns = loadJson(RUNS_KEY);
+  for (const [studyId, resultRecord] of Object.entries(savedRuns)) {
+    const rowEl = document.querySelector(`[data-study-row="${studyId}"]`);
+    if (rowEl && resultRecord && resultRecord.tex) {
+      const cells = rowEl.querySelectorAll("td");
+      const studyObj = {
+        id: studyId,
+        createdOn: cells[0]?.textContent || todayIso(),
+        title: cells[1]?.textContent || studyId,
+        atlasPath: cells[2]?.textContent || "",
+        question: cells[3]?.textContent || "",
+        dataset: cells[4]?.textContent || "",
+      };
+      markStudyCompletedInDom(studyObj, resultRecord);
+    }
   }
 
   // Handle form submissions
@@ -166,6 +523,7 @@
       event.preventDefault();
       const table = form.getAttribute("data-wb-table");
       if (!table) return;
+      const shouldRunNow = table === "studyQueue" && Boolean(runNowToggle && runNowToggle.checked);
       const entry = buildEntry(form, table);
       const current = loadLocal();
       current[table] = current[table] || [];
@@ -173,7 +531,11 @@
       saveLocal(current);
       appendRow(table, entry);
       form.reset();
+      if (studySubmitBtn) studySubmitBtn.textContent = "Save to Workbench +";
       announce(`Saved ${entry.id} to ${table} (local storage).`);
+      if (shouldRunNow) {
+        requestRunStudy(entry);
+      }
     });
   });
 

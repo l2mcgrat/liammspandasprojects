@@ -1,4 +1,1376 @@
 songId,path,word,count,songCount,isStopword
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,i,24,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,to,17,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,the,16,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,a,11,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,can,9,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,is,9,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,and,8,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,me,8,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,with,8,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,be,7,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,i'm,7,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,we,7,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,but,6,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,for,6,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,don't,5,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,my,5,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,that,5,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,you,5,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,if,4,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,need,4,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,of,4,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,what,4,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,all,3,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,demise,3,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,find,3,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,get,3,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,it,3,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,on,3,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,see,3,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,this,3,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,time,3,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,yea,3,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,are,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,built,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,clicks,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,crazy,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,drink,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,everything,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,first,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,from,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,got,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,half,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,its,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,know,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,listen,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,live,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,lot,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,meant,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,mind,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,more,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,move,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,never,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,one,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,only,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,our,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,paying,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,shit,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,so,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,survival,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,thats,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,then,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,they,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,want,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,whats,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,where,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,who,2,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,works,2,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,about,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,act,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,adapter,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ahead,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ai,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ain't,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,alive,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,always,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,an,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,apply,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,at,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,atone,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,back,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,balanace,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,bear,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,beat,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,became,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,bestie,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,bitch,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,bleeding,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,blind,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,bought,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,boundary,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,break,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,breeding,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,breeds,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,call,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,can't,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,castle,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,change,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,changes,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,chatgpt,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,chemically,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,chill,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,classmates,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,click,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,closed,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,come,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,comes,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,commute,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,conditions,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,conviction,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,could,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,dangers,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,decisions,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,defined,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,distractions,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,do,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,does,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,done,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,dragon,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,drugs,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,eating,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,em,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,empathy,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,employment,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,end,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ending,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ends,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,enemy,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,energy,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,entropy,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,essentially,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ethanol,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,europe,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,even,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,every,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,everyone,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,everyones,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,everywhere,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,evolving,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,exist,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,eyes,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,factor,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,fake,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,feeling,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,fit,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,flow,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,future,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,gamble,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,good,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,gotta,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,guessin,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,handle,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,hassle,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,have,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,heavely,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,henessy,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,home,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,hope,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,how,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,hundred,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,hurting,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,idol,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,in,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,just,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,key,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,killed,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,lacks,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,lets,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,life,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,limits,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,liquor,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,living,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,lost,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,making,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,mapped,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,matter,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,maxmize,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,meet,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,mess,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,mindful,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,mindset,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,missing,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,mission,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,momentum,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,moved,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,myself,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,nanotech,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,network,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,nixed,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,no,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,now,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,nowadays,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ones,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,onto,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,out,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,output,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,outside,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,over,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,parasites,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,path,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,people,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,person,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,persue,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,physics,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,place,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,politicians,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,practical,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,practice,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,precsion,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,put,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,quest,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,question,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,quiet,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ramble,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,rassle,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,reading,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,real,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,regret,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,reprisal,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,ride,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,right,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,risks,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,same,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,saw,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,scrambled,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,self,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,side,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,silent,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,slides,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,slog,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,snake,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,some,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,spiral,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,spit,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,state,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,stats,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,step,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,stick,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,stilt,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,stimmin,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,stop,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,stores,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,straight,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,stuggle,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,system,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,tactical,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,talents,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,talk,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,tech,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,their,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,them,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,thing,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,thinking,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,though,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,tryna,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,two,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,uncertainty,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,vibes,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,vision,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,visit,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,wagon,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,well,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,were,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,whatchu,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,when,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,while,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,will,1,1,True
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,wishing,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,world,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,worse,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,yeah,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,years,1,1,False
+200-clicks-486f6d65776f6f642f3230305f436c69636b732e747874,Homewood/200_Clicks.txt,yuh,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,you,18,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,i,12,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,me,10,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,a,8,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,and,8,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,my,8,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,the,7,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,to,7,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,i'm,6,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,so,6,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,can,5,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,no,5,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,with,5,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,all,4,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,ass,4,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,from,4,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,is,4,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,it,4,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,thoughts,4,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,up,4,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,yo,4,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,yuh,4,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,down,3,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,feeling,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,frame,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,friends,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,fuck,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,gon,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,i'ma,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,in,3,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,make,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,new,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,of,3,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,that,3,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,tried,3,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,but,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,control,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,don't,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,fall,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,get,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,leave,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,like,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,on,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,place,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,power,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,say,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,they,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,this,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,trace,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,uh,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,what,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,whats,2,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,when,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,your,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,yourself,2,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,about,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,absent,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,absinthe,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,actions,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,after,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,ain't,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,alex,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,am,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,are,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,around,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,ashes,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,at,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,back,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,bad,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,bark,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,battles,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,being,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,bitch,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,bites,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,bleed,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,block,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,book,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,bought,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,brought,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,by,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,call,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,captured,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,cbt,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,claim,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,cowards,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,crazy,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,crying,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,deep,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,dna,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,do,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,doctors,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,draw,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,dropped,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,elevated,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,enjoy,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,escalate,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,even,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,everything,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,explode,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,faith,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,falls,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,fault,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,feel,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,find,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,fine,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,fix,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,flaw,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,flow,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,for,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,fucked,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,galllon,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,getchya,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,give,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,giving,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,go,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,grow,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,halt,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,hate,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,have,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,help,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,here,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,home,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,homewood,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,hot,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,if,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,ima,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,instructors,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,intro,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,its,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,job,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,just,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,kill,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,kind,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,laughter,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,laws,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,lazy,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,lifting,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,looking,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,lose,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,loss,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,making,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,man,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,maybe,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,mentally,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,mind,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,mirror,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,mom,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,months,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,myself,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,need,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,now,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,nurse,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,nurses,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,ofr,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,only,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,or,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,out,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,passion,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,patterns,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,permission,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,picasso,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,pick,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,picture,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,pilling,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,pills,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,plead,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,plus,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,process,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,progress,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,pumped,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,purpose,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,put,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,putting,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,rapture,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,read,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,reap,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,respond,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,reverse,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,saturn,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,saviour,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,scattered,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,shadow,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,shadows,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,shady,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,shot,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,sleep,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,small,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,society,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,sow,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,space,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,spacey,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,splatter,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,st,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,stomache,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,stop,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,take,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,talent,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,talk,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,talking,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,tame,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,taught,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,test,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,thats,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,their,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,then,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,these,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,thing,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,think,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,too,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,toxins,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,turn,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,two,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,unleash,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,vibe,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,wasted,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,where,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,while,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,wilding,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,won't,1,1,True
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,working,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,worse,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,worthless,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,ya,1,1,False
+intro-to-homewood-486f6d65776f6f642f496e74726f5f746f5f486f6d65776f6f642e747874,Homewood/Intro_to_Homewood.txt,zombie,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,i,17,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,and,14,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,a,12,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,me,10,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,to,10,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,don't,9,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,your,8,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,for,6,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ain't,5,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,fuck,5,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,i'm,5,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,just,5,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,no,5,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,of,5,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,out,5,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,the,5,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,you,5,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,in,4,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,at,3,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,is,3,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,my,3,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,need,3,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,or,3,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,shit,3,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,this,3,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,up,3,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,was,3,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,always,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ass,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,being,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,but,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,can,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,day,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,do,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,from,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,got,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,have,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,if,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,know,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,last,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,life,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,live,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,manic,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,more,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,new,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,now,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,one,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,problem,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,real,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,see,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,so,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,soul,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,there,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,there's,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,treatment,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,want,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,well,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,whatchu,2,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,will,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,with,2,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,accomplishments,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,acquired,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,addicts,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,adhd,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,after,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,again,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,aim,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,all,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,almost,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,alter,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,am,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,antidepressants,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,any,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,anyone,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,apathy,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,asshole,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ativan,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,awaits,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bagde,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,be,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,became,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,believe,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bet,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bipolar,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bit,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bitch,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bother,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bottle,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bottom,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,breathing,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,bullshit,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,came,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,can't,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,care,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,carnage,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,child,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,climb,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,compatibly,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,conciousness,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,condecention,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,consuming,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,creaping,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,days,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,death,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,deep,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,depression,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,doc,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,doctors,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,dose,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,drugs,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ease,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,eating,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ego,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,elevation,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,em,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,end,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,equal,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,every,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,everyone,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,exercise,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,expecting,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,family,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,farther,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,father,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,fear,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,feel,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,fill,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,find,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,fire,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,firing,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,first,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,flex,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,fly,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,folks,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,forms,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,forsee,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,freestyle,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,gained,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,garbage,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,genius,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,getting,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,give,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,goals,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,grab,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,guilt,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,hard,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,health,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,help,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,helping,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,here,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,history,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,hole,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,holler,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,homewood,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,honor,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,how,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,improvements,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ingesting,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,inspiring,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,insufficient,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,irony,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,it,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,journey,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,karma,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,keep,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,kill,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,lead,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,leaving,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,like,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,listen,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,little,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,living,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,mad,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,maddens,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,malpractice,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,man,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,mean,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,mediation,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,meeting,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,men,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,mental,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,message,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,met,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,mind,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,mix,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,most,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,much,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,murphy,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,necks,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,o'll,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ogt,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,oh,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,only,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,over,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,panic,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,pass,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,passes,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,patience,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,peace,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,people,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,personality,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,pipe,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,plus,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,privacy,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,put,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,quietly,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,reached,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,reaching,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,role,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,round,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,savage,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,seaping,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,selfish,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,seltzers,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,showing,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,sing,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,sixty,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,sober,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,some,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,song,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,soppey,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,spiral,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,squeeze,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,stressful,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,stuck,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,suggesting,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,suppression,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,tail,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,targets,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,tarnished,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,test,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,testing,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,that,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,that's,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,thats,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,they'd,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,think,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,through,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,time,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,tomorrow,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,tucked,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,type,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ur,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,urge,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,use,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,vibes,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,virtues,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,weakness,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,what,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,whats,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,who,1,1,True
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,wings,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,wisest,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,work,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,worried,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,worst,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,wrong,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,ya,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,yap,1,1,False
+last-day-freestyle-486f6d65776f6f642f4c6173742044617920467265657374796c652e747874,Homewood/Last Day Freestyle.txt,yo,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,the,18,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,i,11,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,to,10,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,a,9,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,with,9,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,me,8,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,they,7,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,and,6,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,my,6,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,of,6,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,one,6,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,we,5,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,you,5,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,ain't,4,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,catch,4,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,it,4,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,outside,4,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,this,4,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,while,4,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,down,3,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,for,3,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,hard,3,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,her,3,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,out,3,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,ride,3,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,so,3,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,them,3,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,yo,3,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,as,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,babi's,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,baddest,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,balling,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,bitch,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,bitches,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,bout,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,can,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,cliff,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,dababy,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,drip,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,faded,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,fore,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,fuck,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,get,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,harbour,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,hed,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,i'll,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,i'm,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,i'ne,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,if,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,is,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,lifes,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,make,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,need,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,now,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,on,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,or,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,over,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,pop,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,pussy,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,reality's,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,red,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,she,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,some,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,talk,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,tall,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,thoughts,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,time,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,top,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,try,2,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,what,2,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,advance,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,all,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,an,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,anxiety,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,ass,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,bag,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,bands,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,barking,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,be,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,bond,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,boss,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,bread,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,break,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,chill,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,clever,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,cops,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,cravings,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,crazy,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,crime,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,dance,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,death,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,demanding,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,dog,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,don't,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,drink,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,drive,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,dry,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,elites,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,escaped,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,evident,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,eyes,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,face,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,fools,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,forty,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,from,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,fumbling,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,garded,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,give,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,gon,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,gonna,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,ground,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,haters,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,have,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,having,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,high,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,hill,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,hoe,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,hoes,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,homey,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,house,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,i'ma,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,im,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,in,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,inside,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,issue,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,its,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,just,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,kill,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,lick,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,lil,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,lines,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,made,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,makes,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,meddlin,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,messing,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,mind,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,minds,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,mumbling,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,mystique,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,never,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,no,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,nothing,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,only,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,opps,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,peak,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,physique,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,pigs,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,planning,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,plans,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,polise,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,pound,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,preped,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,pt,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,put,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,rasta,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,real,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,recording,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,retarded,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,roll,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,roof,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,sauced,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,saw,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,see,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,send,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,shes,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,shots,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,simps,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,sing,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,slow,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,song,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,sort,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,start,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,stay,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,stomp,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,take,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,tame,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,target,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,that,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,then,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,think,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,threats,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,tied,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,tip,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,tissue,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,tool,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,tree,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,u,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,urofficial,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,vibe,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,warning,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,watch,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,whatchu,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,who,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,why,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,wild,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,will,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,wise,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,wrong,1,1,False
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,your,1,1,True
+outside-pt-1-486f6d65776f6f642f4f7574736964652050742e312e747874,Homewood/Outside Pt.1.txt,yous,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,you,23,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,i,13,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,to,13,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,it,12,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,just,12,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,that,11,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,and,10,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,if,10,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,in,9,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,a,7,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,but,7,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,don't,7,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,i'm,7,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,my,6,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,then,6,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,what,6,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,need,5,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,really,5,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,your,5,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,ain't,4,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,get,4,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,some,4,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,thats,4,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,the,4,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,yo,4,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,claim,3,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,for,3,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,fucking,3,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,is,3,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,its,3,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,like,3,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,not,3,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,of,3,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,see,3,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,they,3,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,want,3,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,when,3,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,aim,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,am,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,being,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,care,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,do,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,drama,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,heard,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,info,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,isn't,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,live,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,maybe,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,me,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,myself,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,over,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,patterns,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,peace,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,person,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,someone,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,still,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,this,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,times,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,tryna,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,up,2,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,whats,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wonder,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wrapped,2,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,abhorent,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,act,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,actions,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,after,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,aliiances,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,all,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,alleagance,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,alliances,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,an,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,appearance,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,appliances,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,ask,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,asking,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,away,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,bain,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,be,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,been,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,believe,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,bonds,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,calm,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,can,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,cause,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,caused,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,collected,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,collecting,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,comments,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,component,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,could,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,crazy,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,cries,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,criminal,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,deadly,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,decent,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,deep,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,definitive,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,deranged,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,dies,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,disatisfaction,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,doing,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,dumb,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,em,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,envy,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,essence,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,ever,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,everything,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,exist,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,explain,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,fabric,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,failed,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,far,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,fault,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,feeling,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,felt,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,fight,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,free,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,from,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,fuck,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,gain,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,gets,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,got,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,half,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,have,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,he,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,hear,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,honest,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,i'd,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,i'f,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,i'll,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,i've,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,id,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,ideas,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,im,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,judge,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,keep,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,kill,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,kitchen,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,know,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,label,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,literal,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,love,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,make,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,mind,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,minds,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,minerals,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,minimal,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,misunderstanding,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,moment,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,much,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,nd,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,necessary,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,needed,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,never,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,no,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,normal,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,obviously,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,off,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,once,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,opinion,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,oppressed,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,or,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,orignal,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,own,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,package,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,pain,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,passion,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,pause,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,pray,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,problems,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,quiet,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,rappin,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,read,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,satisfaction,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,save,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,say,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,series,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,seven,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,show,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,simple,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,sins,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,so,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,sober,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,social,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,solve,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,sorry,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,st,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,stay,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,talk,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,tell,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,them,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,there,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,they'd,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,think,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,three,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,time,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,too,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,uneducated,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,uninspiring,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,useful,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,vitamins,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,voice,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wanna,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,was,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wasting,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,we,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wealth,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,went,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,whatchu,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,why,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wins,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,won't,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,work,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,would,1,1,True
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wrath,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wrinkle,1,1,False
+satisfaction-486f6d65776f6f642f536174697366616374696f6e2e747874,Homewood/Satisfaction.txt,wrong,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,you,8,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,a,7,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,to,7,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,in,5,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,the,5,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,and,4,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,fucking,4,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,now,4,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,will,4,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,don't,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,down,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,em,3,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,is,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,just,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,know,3,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,me,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,that,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,up,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,with,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,your,3,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,an,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,at,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,better,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,blicky,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,feel,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,get,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,i,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,i'll,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,i'm,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,it,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,its,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,kill,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,more,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,of,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,old,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,or,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,shit,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,so,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,soon,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,this,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,war,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,was,2,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,week,2,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,abusers,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,accounting,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,adjacent,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,all,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,always,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,around,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,as,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,awake,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,back,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,be,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,beats,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,betcha,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,blood,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,brain,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,brains,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,but,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,came,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,can,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,care,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,casings,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,ceos,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,changed,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,channeling,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,child,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,civic,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,code,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,collectors,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,conceed,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,couped,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,d,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,deadbeat,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,death'll,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,dept,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,discord,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,do,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,dude,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,early,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,eh,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,end,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,everyone,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,everything,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,evolution,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,exception,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,excusses,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,feed,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,feels,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,file,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,finna,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,forplay,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,freestyle,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,from,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,fuck,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,give,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,go,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,goal,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,gourmet,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,grifting,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,growing,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,guilt,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,had,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,has,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,hate,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,history,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,how,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,hurt,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,hussle,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,insufficient,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,keep,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,killa,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,killing,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,laugh,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,lets,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,mad,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,man,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,manifestos,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,meal,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,meds,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,message,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,methods,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,mil,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,militaries,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,mind,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,mistakes,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,most,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,much,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,muscles,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,my,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,need,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,nepal,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,news,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,no,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,not,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,one,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,openly,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,own,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,pain,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,play,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,poetry,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,poor,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,powers,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,print,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,proceed,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,put,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,raged,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,real,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,receed,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,repeats,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,revolution,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,rich,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,right,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,role,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,room,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,round,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,rounds,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,same,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,seed,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,sense,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,showing,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,simple,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,softly,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,some,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,sounds,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,sowed,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,spoke,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,spray,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,statements,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,stealthy,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,stole,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,strength,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,switch,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,take,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,tape,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,theres,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,they,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,too,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,unemployed,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,uploaded,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,used,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,warehouse,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,wasn't,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,ways,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,we,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,weakness,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,wealth,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,weight,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,while,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,who,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,woe,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,world,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,wounds,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,ya,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,yet,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,you'd,1,1,True
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,youself,1,1,False
+week-8-freestyle-486f6d65776f6f642f5765656b203820467265657374796c652e747874,Homewood/Week 8 Freestyle.txt,zoo,1,1,False
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,you,43,1,True
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,i,26,1,True
 bunny-girl-4d6164655f696e5f41627973732f42756e6e79204769726c2e747874,Made_in_Abyss/Bunny Girl.txt,me,25,1,True
