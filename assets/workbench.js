@@ -110,11 +110,33 @@
     if (typeof dlg.showModal === "function") dlg.showModal();
     else dlg.setAttribute("open", "");
   };
+  const resetPeekButtons = () => {
+    document.querySelectorAll("[data-wb-peek]").forEach((btn) => {
+      const targetId = btn.getAttribute("data-wb-peek");
+      const input = targetId ? document.getElementById(targetId) : null;
+      if (input) input.type = "password";
+      btn.setAttribute("aria-pressed", "false");
+      btn.classList.remove("is-peeking");
+    });
+  };
   const closeDialog = (dlg) => {
     if (!dlg) return;
+    resetPeekButtons();
     if (typeof dlg.close === "function") dlg.close();
     else dlg.removeAttribute("open");
   };
+
+  document.querySelectorAll("[data-wb-peek]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-wb-peek");
+      const input = targetId ? document.getElementById(targetId) : null;
+      if (!input) return;
+      const showing = input.type === "password";
+      input.type = showing ? "text" : "password";
+      btn.setAttribute("aria-pressed", showing ? "true" : "false");
+      btn.classList.toggle("is-peeking", showing);
+    });
+  });
 
   document.querySelectorAll("[data-wb-dialog-close]").forEach((btn) => {
     btn.addEventListener("click", () => {
