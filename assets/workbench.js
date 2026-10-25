@@ -250,43 +250,69 @@
     openDialog(runDialog);
 
     let summaryText = "";
+    let discoveredDataset = study.dataset;
     let mode = "local deterministic scaffold · 0 API tokens";
+    const needsDatasetSearch = !study.dataset || /auto-discover/i.test(study.dataset);
     if (unlockedApiKey) {
       try {
         const prompt = [
-          `Write a concise, fact-grounded 3-paragraph analytical study summary for:`,
+          `You are an empirical research assistant for Liam McGrath's technical notebook.`,
           `Title: ${study.title}`,
           `Atlas Section: ${study.atlasPath}`,
           `Question: ${study.question}`,
-          `Dataset: ${study.dataset}`,
-          `Include concrete quantitative metrics to track, key hypotheses, and empirical takeaways.`,
+          needsDatasetSearch
+            ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, BLS, FRED, World Bank, Elections Alberta/Canada, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
+            : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets).`,
+          `Then write a concise, fact-grounded 3-paragraph analytical study summary with concrete numbers, key hypotheses, and empirical takeaways.`,
         ].join("\n");
-        const resp = await fetch(
-          `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(unlockedApiKey)}`,
-          {
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(unlockedApiKey)}`;
+        let resp = await fetch(endpoint, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            tools: [{ google_search: {} }],
+            generationConfig: { temperature: 0.2 },
+          }),
+        });
+        if (!resp.ok) {
+          resp = await fetch(endpoint, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }], generationConfig: { temperature: 0.2 } }),
-          }
-        );
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: prompt }] }],
+              generationConfig: { temperature: 0.2 },
+            }),
+          });
+        }
         if (resp.ok) {
           const data = await resp.json();
-          summaryText = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
-          if (summaryText) mode = "Gemini 2.5 Flash synthesis";
+          const rawText = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || "").join("\n").trim() || "";
+          const dsMatch = rawText.match(/^DATASETS:\s*(.+)$/im);
+          if (dsMatch) {
+            discoveredDataset = dsMatch[1].trim();
+            study.dataset = discoveredDataset;
+          }
+          summaryText = rawText.replace(/^DATASETS:\s*.+\n?/im, "").trim();
+          if (summaryText) mode = "Gemini 2.5 Flash + dataset search";
         }
       } catch {
         /* fall back to zero-token scaffold */
       }
     }
     if (!summaryText) {
+      if (needsDatasetSearch) {
+        discoveredDataset = `Auto-suggested public sources for ${study.atlasPath.split("/").pop() || "study"} (StatCan / BLS / FRED / peer-reviewed tables)`;
+        study.dataset = discoveredDataset;
+      }
       summaryText = [
-        `1. Scope & Hypothesis (${study.atlasPath}): Evaluates "${study.question}" using ${study.dataset}.`,
+        `1. Scope & Hypothesis (${study.atlasPath}): Evaluates "${study.question}" using ${discoveredDataset}.`,
         `2. Decomposition & Primary Estimators: Splits observations into baseline trend, structural regime shifts, and tail leverage, cross-checked against reproducible CSV tables.`,
         `3. Next Compilation Step: Download the standalone .tex source below and run 'python -B -m site_content.pdf --engine <tectonic>' to certify the PDF cache.`,
       ].join("\n\n");
     }
     const tex = buildLatexPaper(study, summaryText);
-    const resultRecord = { summary: summaryText, tex, mode, completedAt: todayIso() };
+    const resultRecord = { summary: summaryText, tex, dataset: discoveredDataset, mode, completedAt: todayIso() };
     const allRuns = loadJson(RUNS_KEY);
     allRuns[study.id] = resultRecord;
     saveJson(RUNS_KEY, allRuns);
@@ -445,13 +471,14 @@
     const data = new FormData(form);
     const createdOn = todayIso();
     if (table === "studyQueue") {
+      const rawDataset = String(data.get("dataset") || "").trim();
       return {
         id: `ST-L${Date.now().toString(36).slice(-4).toUpperCase()}`,
         createdOn,
         title: String(data.get("title") || "").trim(),
         atlasPath: String(data.get("atlasPath") || "").trim(),
         question: String(data.get("question") || "").trim(),
-        dataset: String(data.get("dataset") || "").trim(),
+        dataset: rawDataset || "Auto-discover relevant public datasets",
         status: String(data.get("status") || "queued"),
         studyRoute: null,
         paperRoute: null,
