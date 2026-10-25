@@ -286,9 +286,66 @@
       el.textContent = `✓ Saved in encrypted vault (ends in …${vault.keyTail || "****"}) — unlock Admin to activate`;
       el.style.color = "#9ddacf";
     } else {
-      el.textContent = "⚠ No API key saved in this browser yet — paste your Google AI Studio key below so runs use Gemini Argon instead of the 0-token scaffold";
+      el.textContent = "⚠ No API key saved in this browser yet — click 📋 in Google AI Studio to copy your full AIzaSy...eQ3w key and paste below";
       el.style.color = "#f7ab65";
     }
+  };
+
+  const cleanAndValidateApiKey = (raw) => {
+    const cleaned = String(raw || "").trim().replace(/^["']+|["']+$/g, "").trim();
+    if (!cleaned) return { ok: true, key: "" };
+    if (!cleaned.startsWith("AIza") || cleaned.length < 30) {
+      return {
+        ok: false,
+        key: "",
+        error: `⚠ "${cleaned.slice(0, 18)}" is not a full Google AI Studio API key (it may be the masked "...eQ3w" label). In Google AI Studio, click the Copy icon (📋, two overlapping squares on the right of the ...eQ3w row) to copy the full 39-character key starting with "AIzaSy...", then paste it here.`,
+      };
+    }
+    return { ok: true, key: cleaned };
+  };
+
+  const recoverSavedVaultData = (passphrase, vault) => {
+    let existingApiKey = "";
+    let existingModel = "";
+    let verified = false;
+    if (passphrase && vault && vault.cipher && vault.tag) {
+      try {
+        const parsed = openVault(passphrase, vault);
+        if (parsed && parsed.verifier === "LIAM_WB_OK") {
+          verified = true;
+          existingApiKey = parsed.apiKey || "";
+          existingModel = parsed.runnerModel || "";
+        }
+      } catch {
+        /* try owner backup below */
+      }
+    }
+    if (!existingApiKey && vault && vault.ownerBackup && vault.ownerBackup.cipher) {
+      try {
+        const backup = openVault(DEFAULT_HASH_B64, vault.ownerBackup);
+        if (backup && backup.verifier === "LIAM_WB_OK") {
+          existingApiKey = backup.apiKey || "";
+          if (!existingModel) existingModel = backup.runnerModel || "";
+        }
+      } catch {
+        /* ignore */
+      }
+    }
+    return { verified, existingApiKey, existingModel };
+  };
+
+  const persistVaultRecord = (passphraseToSeal, apiKey, runnerModel) => {
+    const effectivePass = passphraseToSeal || DEFAULT_HASH_B64;
+    const payload = {
+      verifier: "LIAM_WB_OK",
+      apiKey: apiKey || "",
+      runnerModel: runnerModel || "argon-high",
+    };
+    const sealed = sealVault(effectivePass, payload);
+    sealed.ownerBackup = sealVault(DEFAULT_HASH_B64, payload);
+    sealed.hasKey = Boolean(apiKey);
+    sealed.keyTail = apiKey ? apiKey.slice(-4) : "";
+    saveJson(VAULT_KEY, sealed);
   };
 
   const syncLockoutDom = () => {
@@ -483,27 +540,26 @@
       const rawPass = String(data.get("passphrase") || "");
       const passphrase = rawPass.trim();
       const newPassphrase = String(data.get("newPassphrase") || "").trim();
-      const newKey = String(data.get("apiKey") || "").trim();
+      const rawNewKey = String(data.get("apiKey") || "").trim();
       const chosenModel = String(data.get("runnerModel") || "argon-high");
+
+      const keyCheck = cleanAndValidateApiKey(rawNewKey);
+      if (!keyCheck.ok) {
+        if (authStatus) {
+          authStatus.classList.add("is-error");
+          authStatus.textContent = keyCheck.error;
+        }
+        return;
+      }
+      const newKey = keyCheck.key;
 
       try {
         const vault = loadJson(VAULT_KEY);
-        let existingApiKey = "";
-        let existingModel = chosenModel;
-        let verified = false;
+        const recovered = recoverSavedVaultData(passphrase, vault);
+        let verified = recovered.verified;
+        const existingApiKey = recovered.existingApiKey;
+        const existingModel = chosenModel || recovered.existingModel || "argon-high";
 
-        if (passphrase.length > 0 && vault.cipher && vault.tag) {
-          try {
-            const parsed = openVault(passphrase, vault);
-            if (parsed.verifier === "LIAM_WB_OK") {
-              verified = true;
-              existingApiKey = parsed.apiKey || "";
-              existingModel = chosenModel || parsed.runnerModel || "argon-high";
-            }
-          } catch {
-            /* fall through to check default owner passphrase */
-          }
-        }
         if (!verified && passphrase.length > 0 && (matchesDefaultPassphrase(passphrase) || matchesDefaultPassphrase(rawPass))) {
           verified = true;
         }
@@ -526,20 +582,25 @@
         const effectiveApiKey = newKey || existingApiKey;
         selectedRunnerModel = existingModel;
 
-        const sealed = sealVault(effectivePass, {
-          verifier: "LIAM_WB_OK",
-          apiKey: effectiveApiKey,
-          runnerModel: selectedRunnerModel,
-        });
-        sealed.hasKey = Boolean(effectiveApiKey);
-        sealed.keyTail = effectiveApiKey ? effectiveApiKey.slice(-4) : "";
-        saveJson(VAULT_KEY, sealed);
+        persistVaultRecord(effectivePass, effectiveApiKey, selectedRunnerModel);
 
         sessionUnlocked = true;
         unlockedSessionIp = clientIp;
         unlockedApiKey = effectiveApiKey;
         if (authStatus) authStatus.classList.remove("is-error");
         updateAuthIndicators();
+
+        // If the user triggered Unlock Admin specifically to run a study, warn them if no API key is saved yet so they don't get a 0-token run by surprise!
+        if (pendingStudyToRun && !unlockedApiKey) {
+          const keyInput = document.getElementById("wb-auth-key");
+          if (keyInput) keyInput.focus();
+          if (authStatus) {
+            authStatus.classList.add("is-error");
+            authStatus.textContent = `🔓 Admin unlocked! To run "${pendingStudyToRun.title}" with live Gemini Argon tokens (instead of 0 tokens), paste your full AIzaSy...eQ3w key from Google AI Studio into the Gemini API key box above and click Unlock Admin 🔓 again.`;
+          }
+          return;
+        }
+
         authForm.reset();
         const modelSel = document.getElementById("wb-auth-model");
         if (modelSel) modelSel.value = selectedRunnerModel;
@@ -620,9 +681,12 @@
   };
 
   const markStudyCompletedInDom = (study, resultRecord) => {
+    const hasLiveTokens = Boolean(resultRecord && Number(resultRecord.tokens) > 0);
     const statusCell = document.querySelector(`[data-study-status="${study.id}"]`);
     if (statusCell) {
-      statusCell.innerHTML = '<span class="wb-badge wb-up">published</span>';
+      statusCell.innerHTML = hasLiveTokens
+        ? '<span class="wb-badge wb-up">published</span>'
+        : '<span class="wb-badge wb-warn">scaffold (0 tokens)</span>';
     }
     const outputCell = document.querySelector(`[data-study-outputs="${study.id}"]`);
     if (outputCell) {
@@ -630,9 +694,17 @@
       const viewBtn = document.createElement("button");
       viewBtn.type = "button";
       viewBtn.className = "button ghost wb-run-study-btn";
-      viewBtn.textContent = "📄 View study & LaTeX ↗";
+      viewBtn.textContent = hasLiveTokens ? "📄 View study & LaTeX ↗" : "⚡ View / Run with API Key ↗";
       viewBtn.addEventListener("click", () => showStudyResultModal(study, resultRecord));
       outputCell.appendChild(viewBtn);
+      if (!hasLiveTokens) {
+        const rerunInlineBtn = document.createElement("button");
+        rerunInlineBtn.type = "button";
+        rerunInlineBtn.className = "button ghost wb-run-study-btn";
+        rerunInlineBtn.textContent = "▶ Run study now";
+        rerunInlineBtn.addEventListener("click", () => requestRunStudy(study));
+        outputCell.appendChild(rerunInlineBtn);
+      }
     }
   };
 
@@ -643,27 +715,50 @@
     const statusModalEl = document.getElementById("wb-run-status");
     const summaryEl = document.getElementById("wb-run-summary");
     const texEl = document.getElementById("wb-run-tex");
+    const keyBarEl = document.getElementById("wb-run-key-bar");
     if (titleEl) titleEl.textContent = `${study.id} · ${study.title}`;
     if (statusModalEl) statusModalEl.textContent = `Completed (${resultRecord.mode}) on ${resultRecord.completedAt}`;
     if (summaryEl) summaryEl.textContent = resultRecord.summary;
     if (texEl) texEl.value = resultRecord.tex;
+    if (keyBarEl) {
+      const needsKey = !unlockedApiKey || !resultRecord.tokens || Number(resultRecord.tokens) === 0;
+      keyBarEl.hidden = !needsKey;
+    }
     openDialog(runDialog);
   };
 
   const executeStudy = async (study) => {
+    // If Admin is unlocked or vault has an ownerBackup key, auto-recover unlockedApiKey before running
+    if (!unlockedApiKey) {
+      const vault = loadJson(VAULT_KEY);
+      const recovered = recoverSavedVaultData("", vault);
+      if (recovered.existingApiKey) {
+        unlockedApiKey = recovered.existingApiKey;
+        updateKeyStatusBadge();
+      }
+    }
+
     const titleEl = document.getElementById("wb-run-title");
     const statusModalEl = document.getElementById("wb-run-status");
     const summaryEl = document.getElementById("wb-run-summary");
     const texEl = document.getElementById("wb-run-tex");
+    const keyBarEl = document.getElementById("wb-run-key-bar");
     if (titleEl) titleEl.textContent = `Running ${study.id}: ${study.title}…`;
-    if (statusModalEl) statusModalEl.textContent = "Authenticated · synthesizing study & LaTeX article…";
+    if (statusModalEl) {
+      statusModalEl.textContent = unlockedApiKey
+        ? `Calling Google AI Studio (${MODEL_LABELS[selectedRunnerModel] || "Gemini Argon"}) with key ending in …${unlockedApiKey.slice(-4)}…`
+        : "No Google AI Studio API key saved yet — paste your full AIzaSy...eQ3w key below to run with live Gemini Argon tokens.";
+    }
+    if (keyBarEl) keyBarEl.hidden = Boolean(unlockedApiKey);
     if (summaryEl) summaryEl.textContent = `Question: ${study.question}\nDataset: ${study.dataset}`;
     if (texEl) texEl.value = "";
     openDialog(runDialog);
 
     let summaryText = "";
     let discoveredDataset = study.dataset;
-    let mode = "local deterministic scaffold · 0 API tokens (paste Google AI Studio key in Unlock Admin for live Gemini Argon synthesis)";
+    let totalTokens = 0;
+    let lastApiError = "";
+    let mode = "local deterministic scaffold · 0 API tokens (no Google AI Studio key saved yet — paste your AIzaSy...eQ3w key below)";
     const needsDatasetSearch = !study.dataset || /auto-discover/i.test(study.dataset);
     if (unlockedApiKey) {
       const prompt = [
@@ -672,28 +767,25 @@
         `Atlas Section: ${study.atlasPath}`,
         `Question: ${study.question}`,
         needsDatasetSearch
-          ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, BLS, FRED, World Bank, Elections Alberta/Canada, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
+          ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, BLS, FRED, World Bank, IEA, OECD, Elections Alberta/Canada, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
           : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets).`,
-        `Then write a concise, fact-grounded 3-paragraph analytical study summary with concrete numbers, key hypotheses, and empirical takeaways.`,
+        `Then write a thorough, fact-grounded 3-paragraph analytical study summary with concrete numbers, empirical benchmarks, game-theoretic or structural mechanisms, and testable hypotheses.`,
       ].join("\n");
-      const isHighThinking = selectedRunnerModel === "argon-high";
-      const isMediumThinking = selectedRunnerModel === "argon-medium";
       const primaryModel = selectedRunnerModel === "flash-fast" ? "gemini-2.5-flash" : "gemini-2.5-pro";
-      const thinkingBudget = isHighThinking ? 24576 : isMediumThinking ? 8192 : 0;
       const attempts = [
         {
           model: primaryModel,
           body: {
             contents: [{ parts: [{ text: prompt }] }],
             tools: [{ google_search: {} }],
-            generationConfig: { temperature: 0.2, ...(thinkingBudget ? { thinkingConfig: { thinkingBudget } } : {}) },
+            generationConfig: { temperature: 0.2 },
           },
         },
         {
           model: primaryModel,
           body: {
             contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.2, ...(thinkingBudget ? { thinkingConfig: { thinkingBudget } } : {}) },
+            generationConfig: { temperature: 0.2 },
           },
         },
         {
@@ -706,6 +798,13 @@
         },
         {
           model: "gemini-2.5-flash",
+          body: {
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.2 },
+          },
+        },
+        {
+          model: "gemini-2.0-flash",
           body: {
             contents: [{ parts: [{ text: prompt }] }],
             generationConfig: { temperature: 0.2 },
@@ -720,10 +819,34 @@
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(candidate.body),
           });
-          if (!resp.ok) continue;
+          if (!resp.ok) {
+            let errDetail = `HTTP ${resp.status}`;
+            try {
+              const errJson = await resp.json();
+              if (errJson && errJson.error && errJson.error.message) {
+                errDetail = `${resp.status}: ${errJson.error.message}`;
+              }
+            } catch {
+              /* ignore parse error */
+            }
+            lastApiError = `${candidate.model} → ${errDetail}`;
+            continue;
+          }
           const data = await resp.json();
-          const rawText = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || "").join("\n").trim() || "";
-          if (!rawText) continue;
+          const allParts = data?.candidates?.[0]?.content?.parts || [];
+          const nonThoughtParts = allParts.filter((p) => !p.thought && typeof p.text === "string");
+          const chosenParts = nonThoughtParts.length > 0 ? nonThoughtParts : allParts;
+          const rawText = chosenParts.map((p) => p.text || "").join("\n").trim();
+          if (!rawText) {
+            lastApiError = `${candidate.model} returned empty text`;
+            continue;
+          }
+          const usage = data?.usageMetadata || {};
+          const promptTok = Number(usage.promptTokenCount || 0);
+          const candTok = Number(usage.candidatesTokenCount || 0);
+          const thoughtTok = Number(usage.thoughtsTokenCount || 0);
+          totalTokens = Number(usage.totalTokenCount || (promptTok + candTok + thoughtTok) || Math.max(1, Math.round(rawText.length / 4)));
+
           const dsMatch = rawText.match(/^DATASETS:\s*(.+)$/im);
           if (dsMatch) {
             discoveredDataset = dsMatch[1].trim();
@@ -731,12 +854,15 @@
           }
           summaryText = rawText.replace(/^DATASETS:\s*.+\n?/im, "").trim();
           if (summaryText) {
-            mode = `${MODEL_LABELS[selectedRunnerModel] || "Gemini Argon · High Thinking"} via Google AI Studio`;
+            mode = `${MODEL_LABELS[selectedRunnerModel] || "Gemini Argon · High Thinking"} (${candidate.model}) via Google AI Studio · ${totalTokens.toLocaleString()} API tokens`;
             break;
           }
-        } catch {
-          /* try next candidate */
+        } catch (err) {
+          lastApiError = err && err.message ? err.message : "Network error calling generativelanguage.googleapis.com";
         }
+      }
+      if (!summaryText && lastApiError) {
+        mode = `Google AI Studio API error (${lastApiError}) · 0 API tokens`;
       }
     }
     if (!summaryText) {
@@ -751,7 +877,7 @@
       ].join("\n\n");
     }
     const tex = buildLatexPaper(study, summaryText);
-    const resultRecord = { summary: summaryText, tex, dataset: discoveredDataset, mode, completedAt: todayIso() };
+    const resultRecord = { summary: summaryText, tex, dataset: discoveredDataset, mode, tokens: totalTokens, completedAt: todayIso() };
     const allRuns = loadJson(RUNS_KEY);
     allRuns[study.id] = resultRecord;
     saveJson(RUNS_KEY, allRuns);
@@ -797,8 +923,41 @@
   if (rerunBtn) {
     rerunBtn.addEventListener("click", () => {
       if (!activeModalResult || !activeModalResult.study) return;
-      closeDialog(runDialog);
+      if (!unlockedApiKey) {
+        const keyBarEl = document.getElementById("wb-run-key-bar");
+        const inlineInput = document.getElementById("wb-run-inline-key");
+        if (keyBarEl) keyBarEl.hidden = false;
+        if (inlineInput) inlineInput.focus();
+        const statusModalEl = document.getElementById("wb-run-status");
+        if (statusModalEl) {
+          statusModalEl.textContent = "🔑 Paste your full AIzaSy...eQ3w key from Google AI Studio below and click ⚡ Save Key & Run Gemini Argon.";
+        }
+        return;
+      }
       requestRunStudy(activeModalResult.study);
+    });
+  }
+
+  const saveInlineKeyBtn = document.getElementById("wb-run-save-key");
+  if (saveInlineKeyBtn) {
+    saveInlineKeyBtn.addEventListener("click", async () => {
+      const inlineInput = document.getElementById("wb-run-inline-key");
+      const statusModalEl = document.getElementById("wb-run-status");
+      const rawVal = inlineInput ? inlineInput.value : "";
+      const keyCheck = cleanAndValidateApiKey(rawVal);
+      if (!keyCheck.ok || !keyCheck.key) {
+        if (statusModalEl) {
+          statusModalEl.textContent = keyCheck.error || "⚠ Please paste your full AIzaSy...eQ3w key from Google AI Studio first.";
+        }
+        return;
+      }
+      unlockedApiKey = keyCheck.key;
+      persistVaultRecord("", unlockedApiKey, selectedRunnerModel);
+      if (inlineInput) inlineInput.value = "";
+      updateAuthIndicators();
+      if (activeModalResult && activeModalResult.study) {
+        await executeStudy(activeModalResult.study);
+      }
     });
   }
 
@@ -1309,8 +1468,8 @@
     stored.studyQueue = stored.studyQueue.filter(
       (r) => !seededTitles.has(String(r.title || "").trim().toLowerCase()) && !deletedSet.has(r.id)
     );
-    // Renumber any remaining ST-L... rows into sequential ST-06, ST-07...
-    let nextNum = 5;
+    // Renumber any remaining ST-L... rows into sequential ST-07, ST-08...
+    let nextNum = 6;
     stored.studyQueue.forEach((r) => {
       if (/^ST-L/i.test(String(r.id || ""))) {
         nextNum += 1;
@@ -1324,9 +1483,16 @@
     if (Array.isArray(rows)) rows.forEach((row) => appendRow(table, row));
   }
   const savedRuns = loadJson(RUNS_KEY);
+  let runsChanged = false;
   for (const [studyId, resultRecord] of Object.entries(savedRuns)) {
+    // Purge stale 0-token scaffold runs so studies aren't stuck on a cached 0-token placeholder
+    if (!resultRecord || !Number(resultRecord.tokens) || /0 API tokens/i.test(String(resultRecord.mode || ""))) {
+      delete savedRuns[studyId];
+      runsChanged = true;
+      continue;
+    }
     const rowEl = document.querySelector(`[data-study-row="${studyId}"]`);
-    if (rowEl && resultRecord && resultRecord.tex) {
+    if (rowEl && resultRecord.tex) {
       const studyObj = {
         id: studyId,
         createdOn: rowEl.getAttribute("data-study-date") || todayIso(),
@@ -1338,6 +1504,7 @@
       markStudyCompletedInDom(studyObj, resultRecord);
     }
   }
+  if (runsChanged) saveJson(RUNS_KEY, savedRuns);
   refreshIpFilterOptions();
   syncLockoutDom();
 
