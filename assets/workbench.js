@@ -51,8 +51,8 @@
   });
 
   // ---- Passkey & Portable SHA-256 HMAC / CTR-MAC Token Vault ----
-  // Pure-JS SHA-256 + HMAC-SHA256 so passkey verification and vault encryption work on both
-  // http://liammspandasprojects.org (where window.crypto.subtle is unavailable) and https://.
+  // Pure-JS SHA-256 + HMAC-SHA256 so passkey verification and vault encryption work over both
+  // plain HTTP (http://liammspandasprojects.org) and HTTPS.
   const DEFAULT_SALT_STR = "liam-wb-salt-v2";
   const DEFAULT_HASH_B64 = "67wxyE7LLICnHCNkjjGbBSKiCXdsQXw5YSjn1+lNzHo=";
   const LEGACY_PBKDF2_HASH_B64 = "c/tgnYToM7Vc9RWMAayysEY5G4NZTmPz10CHDSCkAXo=";
