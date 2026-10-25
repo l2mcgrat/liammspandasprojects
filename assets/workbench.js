@@ -51,12 +51,28 @@
   });
 
   // ---- Passkey & AES-GCM-256 Token Vault ----
+  // One-way 100,000-iteration PBKDF2-SHA256 verifier of the initial owner passphrase (no plaintext in repo).
+  const DEFAULT_SALT_B64 = "bGlhbS13Yi1zYWx0LXYwMQ==";
+  const DEFAULT_HASH_B64 = "c/tgnYToM7Vc9RWMAayysEY5G4NZTmPz10CHDSCkAXo=";
+
   let sessionUnlocked = false;
   let unlockedApiKey = "";
+  let selectedRunnerModel = "argon-high";
   let pendingStudyToRun = null;
 
   const toB64 = (bytes) => btoa(String.fromCharCode(...new Uint8Array(bytes)));
   const fromB64 = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+
+  const derivePbkdf2Bits = async (passphrase, saltBytes) => {
+    const enc = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveBits"]);
+    const bits = await crypto.subtle.deriveBits(
+      { name: "PBKDF2", salt: saltBytes, iterations: 100000, hash: "SHA-256" },
+      keyMaterial,
+      256
+    );
+    return toB64(bits);
+  };
 
   const deriveAesKey = async (passphrase, saltBytes) => {
     const enc = new TextEncoder();
@@ -70,9 +86,16 @@
     );
   };
 
+  const MODEL_LABELS = {
+    "argon-high": "Gemini Argon · High Thinking",
+    "argon-medium": "Gemini Argon · Medium Thinking",
+    "flash-fast": "Gemini 2.5 Flash · Fast Search",
+  };
+
   const updateAuthIndicators = () => {
+    const label = MODEL_LABELS[selectedRunnerModel] || MODEL_LABELS["argon-high"];
     document.querySelectorAll("[data-wb-auth-indicator]").forEach((el) => {
-      el.textContent = sessionUnlocked ? "🔓 Runner unlocked" : "🔒 Runner locked";
+      el.textContent = sessionUnlocked ? `🔓 Unlocked · ${label}` : "🔒 Runner locked";
       el.classList.toggle("is-unlocked", sessionUnlocked);
     });
   };
@@ -105,8 +128,8 @@
       if (authStatus) {
         const hasVault = Boolean(loadJson(VAULT_KEY).cipher);
         authStatus.textContent = hasVault
-          ? "Vault found in browser. Enter your passphrase to unlock."
-          : "First-time setup: choose an owner passphrase (and optional Gemini API key) to lock the Study Runner.";
+          ? "Custom browser vault active. Enter your current passphrase to unlock, change passphrase, or update settings."
+          : "Default owner passphrase active. Enter your passphrase to unlock (or fill New passphrase to change it).";
       }
       openDialog(authDialog);
     });
@@ -129,36 +152,66 @@
       event.preventDefault();
       const data = new FormData(authForm);
       const passphrase = String(data.get("passphrase") || "");
+      const newPassphrase = String(data.get("newPassphrase") || "");
       const newKey = String(data.get("apiKey") || "").trim();
+      const chosenModel = String(data.get("runnerModel") || "argon-high");
       if (passphrase.length < 4) {
         if (authStatus) authStatus.textContent = "Passphrase must be at least 4 characters.";
+        return;
+      }
+      if (newPassphrase && newPassphrase.length < 4) {
+        if (authStatus) authStatus.textContent = "New passphrase must be at least 4 characters.";
         return;
       }
       try {
         const vault = loadJson(VAULT_KEY);
         const enc = new TextEncoder();
         const dec = new TextDecoder();
-        if (!vault.cipher || newKey) {
-          const salt = crypto.getRandomValues(new Uint8Array(16));
-          const iv = crypto.getRandomValues(new Uint8Array(12));
-          const key = await deriveAesKey(passphrase, salt);
-          const payload = JSON.stringify({ verifier: "LIAM_WB_OK", apiKey: newKey });
-          const cipher = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, enc.encode(payload));
-          saveJson(VAULT_KEY, { salt: toB64(salt), iv: toB64(iv), cipher: toB64(cipher) });
-          sessionUnlocked = true;
-          unlockedApiKey = newKey;
-        } else {
+        let existingApiKey = "";
+        let existingModel = chosenModel;
+
+        if (vault.cipher) {
+          // Verify against custom browser vault
           const key = await deriveAesKey(passphrase, fromB64(vault.salt));
           const plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv: fromB64(vault.iv) }, key, fromB64(vault.cipher));
           const parsed = JSON.parse(dec.decode(plainBuf));
           if (parsed.verifier !== "LIAM_WB_OK") throw new Error("Verifier mismatch");
-          sessionUnlocked = true;
-          unlockedApiKey = parsed.apiKey || "";
+          existingApiKey = parsed.apiKey || "";
+          existingModel = chosenModel || parsed.runnerModel || "argon-high";
+        } else {
+          // Verify against the pre-configured 100k-iteration PBKDF2-SHA256 default hash
+          const derivedB64 = await derivePbkdf2Bits(passphrase, fromB64(DEFAULT_SALT_B64));
+          if (derivedB64 !== DEFAULT_HASH_B64) throw new Error("Default passphrase mismatch");
         }
+
+        const effectivePass = newPassphrase || passphrase;
+        const effectiveApiKey = newKey || existingApiKey;
+        selectedRunnerModel = existingModel;
+
+        // Persist encrypted vault whenever settings/passphrase/key are saved or initialized
+        const salt = crypto.getRandomValues(new Uint8Array(16));
+        const iv = crypto.getRandomValues(new Uint8Array(12));
+        const saveKey = await deriveAesKey(effectivePass, salt);
+        const payload = JSON.stringify({
+          verifier: "LIAM_WB_OK",
+          apiKey: effectiveApiKey,
+          runnerModel: selectedRunnerModel,
+        });
+        const cipher = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, saveKey, enc.encode(payload));
+        saveJson(VAULT_KEY, { salt: toB64(salt), iv: toB64(iv), cipher: toB64(cipher) });
+
+        sessionUnlocked = true;
+        unlockedApiKey = effectiveApiKey;
         updateAuthIndicators();
         authForm.reset();
+        const modelSel = document.getElementById("wb-auth-model");
+        if (modelSel) modelSel.value = selectedRunnerModel;
         closeDialog(authDialog);
-        announce("Study Runner unlocked for this session.");
+        announce(
+          newPassphrase
+            ? `Passphrase changed & Study Runner unlocked (${MODEL_LABELS[selectedRunnerModel]}).`
+            : `Study Runner unlocked (${MODEL_LABELS[selectedRunnerModel]}).`
+        );
         if (pendingStudyToRun) {
           const study = pendingStudyToRun;
           pendingStudyToRun = null;
@@ -168,7 +221,7 @@
         sessionUnlocked = false;
         unlockedApiKey = "";
         updateAuthIndicators();
-        if (authStatus) authStatus.textContent = "Incorrect passphrase — AES-GCM verification failed. No tokens used.";
+        if (authStatus) authStatus.textContent = "Incorrect current passphrase — PBKDF2 / AES-GCM verification failed. No tokens used.";
       }
     });
   }
@@ -265,25 +318,36 @@
             : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets).`,
           `Then write a concise, fact-grounded 3-paragraph analytical study summary with concrete numbers, key hypotheses, and empirical takeaways.`,
         ].join("\n");
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(unlockedApiKey)}`;
+        const isHighThinking = selectedRunnerModel === "argon-high";
+        const isMediumThinking = selectedRunnerModel === "argon-medium";
+        const modelId = selectedRunnerModel === "flash-fast" ? "gemini-2.5-flash" : "gemini-2.5-pro";
+        const thinkingBudget = isHighThinking ? 24576 : isMediumThinking ? 8192 : 0;
+        const genConfig = {
+          temperature: 0.2,
+          ...(thinkingBudget ? { thinkingConfig: { thinkingBudget } } : {}),
+        };
+        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${encodeURIComponent(unlockedApiKey)}`;
         let resp = await fetch(endpoint, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             contents: [{ parts: [{ text: prompt }] }],
             tools: [{ google_search: {} }],
-            generationConfig: { temperature: 0.2 },
+            generationConfig: genConfig,
           }),
         });
         if (!resp.ok) {
-          resp = await fetch(endpoint, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              contents: [{ parts: [{ text: prompt }] }],
-              generationConfig: { temperature: 0.2 },
-            }),
-          });
+          resp = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(unlockedApiKey)}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: prompt }] }],
+                generationConfig: { temperature: 0.2 },
+              }),
+            }
+          );
         }
         if (resp.ok) {
           const data = await resp.json();
@@ -294,7 +358,7 @@
             study.dataset = discoveredDataset;
           }
           summaryText = rawText.replace(/^DATASETS:\s*.+\n?/im, "").trim();
-          if (summaryText) mode = "Gemini 2.5 Flash + dataset search";
+          if (summaryText) mode = `${MODEL_LABELS[selectedRunnerModel] || "Gemini Argon · High Thinking"} + dataset search`;
         }
       } catch {
         /* fall back to zero-token scaffold */

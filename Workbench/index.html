@@ -177,18 +177,26 @@ CREATE TABLE IF NOT EXISTS voice_notes (
       </section>
       <dialog class="request-dialog wb-dialog" id="wb-auth-dialog" aria-labelledby="wb-auth-title">
       <form class="request-form" method="dialog" id="wb-auth-form">
-        <p class="eyebrow">Owner Passkey &amp; Token Vault · PBKDF2 + AES-GCM-256</p>
-        <h2 id="wb-auth-title">Unlock the Study Runner</h2>
-        <p class="request-intro">Only authenticated sessions can run studies and spend API tokens. Your API key is encrypted locally in your browser with AES-GCM-256 derived from your passphrase (100,000 PBKDF2-SHA256 iterations)—nothing is ever stored in the public site source.</p>
+        <p class="eyebrow">Owner Passkey &amp; Study Runner Vault · PBKDF2 + AES-GCM-256</p>
+        <h2 id="wb-auth-title">Unlock or Change Passkey &amp; Runner Settings</h2>
+        <p class="request-intro">Your default owner passphrase is active (verified via a 100,000-iteration PBKDF2-SHA256 hash—never stored in plaintext). Enter your current passphrase below to unlock the Study Runner, change your passphrase, or save your Gemini API key.</p>
         <div class="request-grid">
-          <label class="request-wide" for="wb-auth-pass">Owner passphrase<input id="wb-auth-pass" name="passphrase" type="password" required autocomplete="current-password" placeholder="Enter your passphrase to unlock or set up vault"></label>
-          <label class="request-wide" for="wb-auth-key">Gemini API key <small>(only needed on first setup or when rotating keys; leave blank to unlock existing vault)</small><input id="wb-auth-key" name="apiKey" type="password" autocomplete="off" placeholder="AIza... (optional if vault already saved, or leave blank for zero-token local scaffold)"></label>
+          <label for="wb-auth-pass">Current passphrase<input id="wb-auth-pass" name="passphrase" type="password" required autocomplete="current-password" placeholder="Enter current passphrase to unlock"></label>
+          <label for="wb-auth-new-pass">New passphrase <small>(optional — fill to change)</small><input id="wb-auth-new-pass" name="newPassphrase" type="password" autocomplete="new-password" placeholder="Leave blank to keep current passphrase"></label>
+          <label class="request-wide" for="wb-auth-model">Default Study Runner model &amp; thinking depth
+            <select id="wb-auth-model" name="runnerModel">
+              <option value="argon-high" selected>Gemini Argon · High Thinking (Default · deep reasoning + Google Search)</option>
+              <option value="argon-medium">Gemini Argon · Medium Thinking (balanced speed &amp; depth)</option>
+              <option value="flash-fast">Gemini 2.5 Flash · Fast Grounded Search (lowest token cost)</option>
+            </select>
+          </label>
+          <label class="request-wide" for="wb-auth-key">Gemini API key <small>(encrypted with AES-GCM-256 in your browser; lets the static site call Google's Gemini API + live web search directly)</small><input id="wb-auth-key" name="apiKey" type="password" autocomplete="off" placeholder="AIza... (paste once to save/update; leave blank to keep existing key)"></label>
         </div>
         <p class="request-status" id="wb-auth-status" role="status" aria-live="polite"></p>
         <div class="request-actions">
           <button class="button ghost" type="button" id="wb-auth-lock">Lock session</button>
           <button class="button ghost" type="button" data-wb-dialog-close="wb-auth-dialog">Cancel</button>
-          <button class="button primary" type="submit">Unlock runner 🔓</button>
+          <button class="button primary" type="submit">Unlock / Save settings 🔓</button>
         </div>
       </form>
     </dialog>
