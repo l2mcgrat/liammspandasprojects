@@ -4,6 +4,7 @@
   const VAULT_KEY = "liam_workbench_vault_v2";
   const RUNS_KEY = "liam_workbench_study_runs_v1";
   const LOCKOUT_KEY = "liam_workbench_ip_lockout_v1";
+  const DELETED_KEY = "liam_workbench_deleted_v1";
   const REPO_ISSUES = "https://github.com/l2mcgrat/pandas_projects/issues/new";
 
   const FAILED_ATTEMPT_MESSAGES = [
@@ -231,8 +232,23 @@
   const runNowToggle = document.getElementById("wb-study-run-now");
   const studySubmitBtn = document.getElementById("wb-study-submit");
 
-  // ---- Client IP Resolution & Permanent IP Lockout State ----
+  // ---- Client IP Resolution, IP Index & Permanent IP Lockout State ----
   let clientIp = loadJson(LOCKOUT_KEY).lastIp || "local-ip";
+  let unlockedSessionIp = null;
+
+  const computeIpIndex = (ipStr) => {
+    const raw = String(ipStr || "local-ip").trim();
+    if (!raw || raw === "IP#OWNER") return "IP#OWNER";
+    const digest = sha256(utf8Bytes(`liam-ip-idx:${raw}`));
+    const hex = Array.from(digest.slice(0, 2)).map((b) => b.toString(16).padStart(2, "0")).join("").toUpperCase();
+    const parts = raw.split(".");
+    const masked = parts.length === 4 ? `${parts[0]}.${parts[1]}.*.*` : raw.slice(0, 10);
+    return raw === "local-ip" ? `IP#${hex}` : `IP#${hex} (${masked})`;
+  };
+
+  let currentIpIndex = computeIpIndex(clientIp);
+
+  const isAdminUnlocked = () => Boolean(sessionUnlocked && unlockedSessionIp === clientIp && !isIpLocked());
 
   const getLockoutStore = () => {
     const store = loadJson(LOCKOUT_KEY);
@@ -259,18 +275,46 @@
     saveJson(LOCKOUT_KEY, store);
   };
 
+  const updateKeyStatusBadge = () => {
+    const el = document.getElementById("wb-key-status");
+    if (!el) return;
+    const vault = loadJson(VAULT_KEY);
+    if (unlockedApiKey) {
+      el.textContent = `✓ Active in session (ends in …${unlockedApiKey.slice(-4)})`;
+      el.style.color = "#8fe0a8";
+    } else if (vault && vault.hasKey) {
+      el.textContent = `✓ Saved in encrypted vault (ends in …${vault.keyTail || "****"}) — unlock Admin to activate`;
+      el.style.color = "#9ddacf";
+    } else {
+      el.textContent = "⚠ No API key saved in this browser yet — paste your Google AI Studio key below so runs use Gemini Argon instead of the 0-token scaffold";
+      el.style.color = "#f7ab65";
+    }
+  };
+
   const syncLockoutDom = () => {
     const locked = isIpLocked();
+    const adminActive = isAdminUnlocked();
     const label = MODEL_LABELS[selectedRunnerModel] || MODEL_LABELS["argon-high"];
     document.querySelectorAll("[data-wb-auth-indicator]").forEach((el) => {
       if (locked) {
         el.textContent = `🚫 IP ${clientIp} Locked Out`;
       } else {
-        el.textContent = sessionUnlocked ? `🔓 Unlocked · ${label}` : "🔒 Runner locked";
+        el.textContent = adminActive ? `🔓 Admin · ${label} (${currentIpIndex.split(" ")[0]})` : "🔒 Admin locked";
       }
-      el.classList.toggle("is-unlocked", !locked && sessionUnlocked);
+      el.classList.toggle("is-unlocked", adminActive);
       el.classList.toggle("is-locked-out", locked);
     });
+    document.querySelectorAll("[data-wb-auth-open]").forEach((btn) => {
+      btn.textContent = locked ? "🚫 IP Locked Out" : (adminActive ? "🔓 Admin Unlocked" : "🔐 Unlock Admin");
+    });
+    document.querySelectorAll("[data-wb-admin-col], [data-wb-admin-only]").forEach((el) => {
+      el.hidden = !adminActive;
+    });
+    const restoreBtn = document.getElementById("wb-restore-deleted");
+    if (restoreBtn) {
+      const deleted = loadJson(DELETED_KEY).ids || [];
+      restoreBtn.hidden = !adminActive || deleted.length === 0;
+    }
     document.querySelectorAll("[data-run-study-id]").forEach((btn) => {
       btn.disabled = locked;
       btn.textContent = locked ? "🚫 IP Locked Out" : "▶ Run study now";
@@ -289,7 +333,19 @@
         if (wrap) wrap.hidden = locked;
       });
     }
+    updateKeyStatusBadge();
   };
+
+  const lockAdminSession = () => {
+    sessionUnlocked = false;
+    unlockedSessionIp = null;
+    unlockedApiKey = "";
+    syncLockoutDom();
+  };
+
+  // Automatically lock Admin when leaving or unloading the page so it is strictly single-page-session + IP-scoped
+  window.addEventListener("pagehide", lockAdminSession);
+  window.addEventListener("beforeunload", lockAdminSession);
 
   const lockCurrentIp = () => {
     const store = getLockoutStore();
@@ -297,9 +353,7 @@
     store.lockedAll = true;
     store.lockedIps[clientIp] = { ip: clientIp, lockedAt: new Date().toISOString() };
     saveJson(LOCKOUT_KEY, store);
-    sessionUnlocked = false;
-    unlockedApiKey = "";
-    syncLockoutDom();
+    lockAdminSession();
   };
 
   const unlockCurrentIp = () => {
@@ -324,6 +378,13 @@
           const store = getLockoutStore();
           const prevIp = clientIp;
           clientIp = String(d.ip);
+          currentIpIndex = computeIpIndex(clientIp);
+          // If unlocked under local-ip placeholder during page load, bind to the resolved IP; if IP actually changed mid-session, lock!
+          if (sessionUnlocked && unlockedSessionIp && unlockedSessionIp !== prevIp && unlockedSessionIp !== clientIp) {
+            lockAdminSession();
+          } else if (sessionUnlocked && unlockedSessionIp === prevIp) {
+            unlockedSessionIp = clientIp;
+          }
           store.lastIp = clientIp;
           if (store.lockedAll || store.lockedIps[prevIp]) {
             store.lockedIps[clientIp] = { ip: clientIp, lockedAt: new Date().toISOString() };
@@ -333,6 +394,7 @@
           }
           saveJson(LOCKOUT_KEY, store);
           syncLockoutDom();
+          if (typeof refreshIpFilterOptions === "function") refreshIpFilterOptions();
         }
       })
       .catch(() => {
@@ -404,15 +466,13 @@
   const lockBtn = document.getElementById("wb-auth-lock");
   if (lockBtn) {
     lockBtn.addEventListener("click", () => {
-      sessionUnlocked = false;
-      unlockedApiKey = "";
-      updateAuthIndicators();
+      lockAdminSession();
       if (authStatus) {
         authStatus.classList.remove("is-error");
-        authStatus.textContent = "Session locked.";
+        authStatus.textContent = "Admin session locked.";
       }
       closeDialog(authDialog);
-      announce("Study Runner locked.");
+      announce("Admin session locked.");
     });
   }
 
@@ -471,9 +531,12 @@
           apiKey: effectiveApiKey,
           runnerModel: selectedRunnerModel,
         });
+        sealed.hasKey = Boolean(effectiveApiKey);
+        sealed.keyTail = effectiveApiKey ? effectiveApiKey.slice(-4) : "";
         saveJson(VAULT_KEY, sealed);
 
         sessionUnlocked = true;
+        unlockedSessionIp = clientIp;
         unlockedApiKey = effectiveApiKey;
         if (authStatus) authStatus.classList.remove("is-error");
         updateAuthIndicators();
@@ -483,8 +546,8 @@
         closeDialog(authDialog);
         announce(
           newPassphrase
-            ? `Passphrase changed & Study Runner unlocked (${MODEL_LABELS[selectedRunnerModel]}).`
-            : `Study Runner unlocked (${MODEL_LABELS[selectedRunnerModel]}).`
+            ? `Passphrase changed & Admin unlocked for ${currentIpIndex} (${MODEL_LABELS[selectedRunnerModel]}).`
+            : `Admin unlocked for ${currentIpIndex} (${MODEL_LABELS[selectedRunnerModel]}).`
         );
         if (pendingStudyToRun) {
           const study = pendingStudyToRun;
@@ -492,8 +555,7 @@
           await executeStudy(study);
         }
       } catch {
-        sessionUnlocked = false;
-        unlockedApiKey = "";
+        lockAdminSession();
         // If already locked out on this IP, close the window immediately on any wrong attempt.
         if (isIpLocked()) {
           closeDialog(authDialog);
@@ -601,64 +663,80 @@
 
     let summaryText = "";
     let discoveredDataset = study.dataset;
-    let mode = "local deterministic scaffold · 0 API tokens";
+    let mode = "local deterministic scaffold · 0 API tokens (paste Google AI Studio key in Unlock Admin for live Gemini Argon synthesis)";
     const needsDatasetSearch = !study.dataset || /auto-discover/i.test(study.dataset);
     if (unlockedApiKey) {
-      try {
-        const prompt = [
-          `You are an empirical research assistant for Liam McGrath's technical notebook.`,
-          `Title: ${study.title}`,
-          `Atlas Section: ${study.atlasPath}`,
-          `Question: ${study.question}`,
-          needsDatasetSearch
-            ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, BLS, FRED, World Bank, Elections Alberta/Canada, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
-            : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets).`,
-          `Then write a concise, fact-grounded 3-paragraph analytical study summary with concrete numbers, key hypotheses, and empirical takeaways.`,
-        ].join("\n");
-        const isHighThinking = selectedRunnerModel === "argon-high";
-        const isMediumThinking = selectedRunnerModel === "argon-medium";
-        const modelId = selectedRunnerModel === "flash-fast" ? "gemini-2.5-flash" : "gemini-2.5-pro";
-        const thinkingBudget = isHighThinking ? 24576 : isMediumThinking ? 8192 : 0;
-        const genConfig = {
-          temperature: 0.2,
-          ...(thinkingBudget ? { thinkingConfig: { thinkingBudget } } : {}),
-        };
-        const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${encodeURIComponent(unlockedApiKey)}`;
-        let resp = await fetch(endpoint, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+      const prompt = [
+        `You are an empirical research assistant for Liam McGrath's technical notebook.`,
+        `Title: ${study.title}`,
+        `Atlas Section: ${study.atlasPath}`,
+        `Question: ${study.question}`,
+        needsDatasetSearch
+          ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, BLS, FRED, World Bank, Elections Alberta/Canada, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
+          : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets).`,
+        `Then write a concise, fact-grounded 3-paragraph analytical study summary with concrete numbers, key hypotheses, and empirical takeaways.`,
+      ].join("\n");
+      const isHighThinking = selectedRunnerModel === "argon-high";
+      const isMediumThinking = selectedRunnerModel === "argon-medium";
+      const primaryModel = selectedRunnerModel === "flash-fast" ? "gemini-2.5-flash" : "gemini-2.5-pro";
+      const thinkingBudget = isHighThinking ? 24576 : isMediumThinking ? 8192 : 0;
+      const attempts = [
+        {
+          model: primaryModel,
+          body: {
             contents: [{ parts: [{ text: prompt }] }],
             tools: [{ google_search: {} }],
-            generationConfig: genConfig,
-          }),
-        });
-        if (!resp.ok) {
-          resp = await fetch(
-            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(unlockedApiKey)}`,
-            {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({
-                contents: [{ parts: [{ text: prompt }] }],
-                generationConfig: { temperature: 0.2 },
-              }),
-            }
-          );
-        }
-        if (resp.ok) {
+            generationConfig: { temperature: 0.2, ...(thinkingBudget ? { thinkingConfig: { thinkingBudget } } : {}) },
+          },
+        },
+        {
+          model: primaryModel,
+          body: {
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.2, ...(thinkingBudget ? { thinkingConfig: { thinkingBudget } } : {}) },
+          },
+        },
+        {
+          model: "gemini-2.5-flash",
+          body: {
+            contents: [{ parts: [{ text: prompt }] }],
+            tools: [{ google_search: {} }],
+            generationConfig: { temperature: 0.2 },
+          },
+        },
+        {
+          model: "gemini-2.5-flash",
+          body: {
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.2 },
+          },
+        },
+      ];
+      for (const candidate of attempts) {
+        try {
+          const url = `https://generativelanguage.googleapis.com/v1beta/models/${candidate.model}:generateContent?key=${encodeURIComponent(unlockedApiKey)}`;
+          const resp = await fetch(url, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(candidate.body),
+          });
+          if (!resp.ok) continue;
           const data = await resp.json();
           const rawText = data?.candidates?.[0]?.content?.parts?.map((p) => p.text || "").join("\n").trim() || "";
+          if (!rawText) continue;
           const dsMatch = rawText.match(/^DATASETS:\s*(.+)$/im);
           if (dsMatch) {
             discoveredDataset = dsMatch[1].trim();
             study.dataset = discoveredDataset;
           }
           summaryText = rawText.replace(/^DATASETS:\s*.+\n?/im, "").trim();
-          if (summaryText) mode = `${MODEL_LABELS[selectedRunnerModel] || "Gemini Argon · High Thinking"} + dataset search`;
+          if (summaryText) {
+            mode = `${MODEL_LABELS[selectedRunnerModel] || "Gemini Argon · High Thinking"} via Google AI Studio`;
+            break;
+          }
+        } catch {
+          /* try next candidate */
         }
-      } catch {
-        /* fall back to zero-token scaffold */
       }
     }
     if (!summaryText) {
@@ -687,11 +765,11 @@
       announce(`🚫 Access permanently locked for IP ${clientIp} until unlocked by the owner.`);
       return;
     }
-    if (!sessionUnlocked) {
+    if (!isAdminUnlocked()) {
       pendingStudyToRun = study;
       if (authStatus) {
         authStatus.classList.remove("is-error");
-        authStatus.textContent = `Passkey required to run "${study.title}". Unlock below to proceed.`;
+        authStatus.textContent = `Unlock Admin required to run "${study.title}". Enter your passphrase below.`;
       }
       openDialog(authDialog);
       return;
@@ -714,6 +792,15 @@
   };
 
   document.querySelectorAll("[data-run-study-id]").forEach(attachRunButtonListener);
+
+  const rerunBtn = document.getElementById("wb-run-rerun");
+  if (rerunBtn) {
+    rerunBtn.addEventListener("click", () => {
+      if (!activeModalResult || !activeModalResult.study) return;
+      closeDialog(runDialog);
+      requestRunStudy(activeModalResult.study);
+    });
+  }
 
   const downloadTexBtn = document.getElementById("wb-run-download-tex");
   if (downloadTexBtn) {
@@ -744,6 +831,58 @@
       studySubmitBtn.textContent = runNowToggle.checked
         ? "Save & Run Study Now ▶"
         : "Save to Workbench +";
+    });
+  }
+
+  // ---- Admin Study Deletion & IP Index Filter Bar ----
+  const getDeletedIds = () => {
+    const d = loadJson(DELETED_KEY);
+    return Array.isArray(d.ids) ? d.ids : [];
+  };
+  const addDeletedId = (id) => {
+    const ids = new Set(getDeletedIds());
+    ids.add(id);
+    saveJson(DELETED_KEY, { ids: Array.from(ids) });
+  };
+
+  const deleteStudyById = (studyId) => {
+    if (!isAdminUnlocked()) {
+      announce("🔒 Unlock Admin first to delete studies.");
+      openDialog(authDialog);
+      return;
+    }
+    document.querySelectorAll(`[data-study-row="${studyId}"]`).forEach((tr) => tr.remove());
+    const current = loadLocal();
+    if (Array.isArray(current.studyQueue)) {
+      current.studyQueue = current.studyQueue.filter((item) => item.id !== studyId);
+      saveLocal(current);
+    }
+    const runs = loadJson(RUNS_KEY);
+    if (runs[studyId]) {
+      delete runs[studyId];
+      saveJson(RUNS_KEY, runs);
+    }
+    addDeletedId(studyId);
+    refreshIpFilterOptions();
+    syncLockoutDom();
+    announce(`Deleted study ${studyId}.`);
+  };
+
+  const attachDeleteStudyListener = (btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const id = btn.getAttribute("data-delete-study-id");
+      if (id) deleteStudyById(id);
+    });
+  };
+
+  document.querySelectorAll("[data-delete-study-id]").forEach(attachDeleteStudyListener);
+
+  const restoreDeletedBtn = document.getElementById("wb-restore-deleted");
+  if (restoreDeletedBtn) {
+    restoreDeletedBtn.addEventListener("click", () => {
+      saveJson(DELETED_KEY, { ids: [] });
+      window.location.reload();
     });
   }
 
@@ -865,7 +1004,25 @@
     outAct.appendChild(runBtn);
     outRow.append(outLbl, outAct);
 
-    tip.append(head, destRow, qRow, outRow);
+    const adminRow = document.createElement("div");
+    adminRow.className = "wb-pbi-row";
+    adminRow.setAttribute("data-wb-admin-only", "");
+    adminRow.hidden = !isAdminUnlocked();
+    const adminLbl = cell("span", "Admin · IP Index & Moderation");
+    adminLbl.className = "wb-pbi-label";
+    const adminAct = document.createElement("div");
+    adminAct.className = "wb-pbi-actions";
+    const ipBadge = cell("code", entry.ipIndex || currentIpIndex);
+    ipBadge.className = "wb-ip-badge";
+    const delBtn = cell("button", "🗑 Delete study");
+    delBtn.type = "button";
+    delBtn.className = "button ghost wb-delete-study-btn";
+    delBtn.setAttribute("data-delete-study-id", entry.id);
+    attachDeleteStudyListener(delBtn);
+    adminAct.append(ipBadge, delBtn);
+    adminRow.append(adminLbl, adminAct);
+
+    tip.append(head, destRow, qRow, outRow, adminRow);
     wrap.append(trig, tip);
     wireStudyCellTooltip(wrap);
     td.appendChild(wrap);
@@ -876,21 +1033,49 @@
     if (table === "studyQueue") {
       const tbody = document.getElementById("wb-studies-body");
       if (!tbody) return;
+      const ipIdx = entry.ipIndex || currentIpIndex;
       const tr = document.createElement("tr");
       tr.setAttribute("data-study-row", entry.id);
       tr.setAttribute("data-study-date", entry.createdOn);
       tr.setAttribute("data-study-title", entry.title);
       tr.setAttribute("data-study-path", entry.atlasPath);
+      tr.setAttribute("data-study-field", (entry.atlasPath || "").split("/")[0] || "");
       tr.setAttribute("data-study-question", entry.question);
       tr.setAttribute("data-study-dataset", entry.dataset);
-      const statusTd = cell("td", entry.status);
+      tr.setAttribute("data-study-status-val", entry.status);
+      tr.setAttribute("data-study-ip", ipIdx);
+      const statusTd = document.createElement("td");
       statusTd.setAttribute("data-study-status", entry.id);
+      const badge = cell("span", entry.status);
+      badge.className = `wb-badge wb-${entry.status === "published" ? "up" : entry.status === "in-progress" ? "warn" : "flat"}`;
+      statusTd.appendChild(badge);
+
+      const ipTd = document.createElement("td");
+      ipTd.setAttribute("data-wb-admin-col", "");
+      ipTd.hidden = !isAdminUnlocked();
+      const ipCode = cell("code", ipIdx);
+      ipCode.className = "wb-ip-badge";
+      ipTd.appendChild(ipCode);
+
+      const delTd = document.createElement("td");
+      delTd.setAttribute("data-wb-admin-col", "");
+      delTd.hidden = !isAdminUnlocked();
+      const delBtn = cell("button", "🗑 Delete");
+      delBtn.type = "button";
+      delBtn.className = "button ghost wb-delete-study-btn";
+      delBtn.setAttribute("data-delete-study-id", entry.id);
+      delBtn.setAttribute("aria-label", `Delete ${entry.id}`);
+      attachDeleteStudyListener(delBtn);
+      delTd.appendChild(delBtn);
+
       tr.append(
         cell("th", entry.id),
         cell("td", entry.createdOn),
-        buildStudyCellDom(entry),
+        buildStudyCellDom({ ...entry, ipIndex: ipIdx }),
         cell("td", entry.dataset),
-        statusTd
+        statusTd,
+        ipTd,
+        delTd
       );
       tbody.appendChild(tr);
     } else if (table === "wishlistTodos") {
@@ -945,13 +1130,29 @@
     }
   };
 
+  // Sequential ID generator (ST-06, TD-08, RL-04, VN-03) instead of random base-36 postal-code strings
+  const nextSequentialId = (prefix, tbodyId, tableKey) => {
+    let maxNum = 0;
+    const re = new RegExp(`^${prefix}-(\\d+)$`, "i");
+    document.querySelectorAll(`#${tbodyId} tr th`).forEach((th) => {
+      const m = th.textContent.trim().match(re);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
+    });
+    const localRows = loadLocal()[tableKey] || [];
+    localRows.forEach((r) => {
+      const m = String(r.id || "").match(re);
+      if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
+    });
+    return `${prefix}-${String(maxNum + 1).padStart(2, "0")}`;
+  };
+
   const buildEntry = (form, table) => {
     const data = new FormData(form);
     const createdOn = todayIso();
     if (table === "studyQueue") {
       const rawDataset = String(data.get("dataset") || "").trim();
       return {
-        id: `ST-L${Date.now().toString(36).slice(-4).toUpperCase()}`,
+        id: nextSequentialId("ST", "wb-studies-body", "studyQueue"),
         createdOn,
         title: String(data.get("title") || "").trim(),
         atlasPath: String(data.get("atlasPath") || "").trim(),
@@ -960,12 +1161,13 @@
         status: String(data.get("status") || "queued"),
         studyRoute: null,
         paperRoute: null,
+        ipIndex: isAdminUnlocked() ? "IP#OWNER" : currentIpIndex,
         notes: "Added from browser Workbench",
       };
     }
     if (table === "wishlistTodos") {
       return {
-        id: `TD-L${Date.now().toString(36).slice(-4).toUpperCase()}`,
+        id: nextSequentialId("TD", "wb-todos-body", "wishlistTodos"),
         createdOn,
         title: String(data.get("title") || "").trim(),
         category: String(data.get("category") || "Website"),
@@ -977,7 +1179,7 @@
     }
     if (table === "rapLyrics") {
       return {
-        id: `RL-L${Date.now().toString(36).slice(-4).toUpperCase()}`,
+        id: nextSequentialId("RL", "wb-lyrics-body", "rapLyrics"),
         createdOn,
         bucket: String(data.get("bucket") || "Future-Projects"),
         title: String(data.get("title") || "").trim(),
@@ -987,7 +1189,7 @@
       };
     }
     return {
-      id: `VN-L${Date.now().toString(36).slice(-4).toUpperCase()}`,
+      id: nextSequentialId("VN", "wb-voice-body", "voiceNotes"),
       createdOn,
       channel: String(data.get("channel") || "Journal"),
       title: String(data.get("title") || "").trim(),
@@ -1000,8 +1202,124 @@
     };
   };
 
-  // Restore locally saved rows and any completed study runs on load
+  // ---- Always-On Study Queue Filter Bar ----
+  const filterSearchEl = document.getElementById("wb-filter-search");
+  const filterStatusEl = document.getElementById("wb-filter-status");
+  const filterFieldEl = document.getElementById("wb-filter-field");
+  const filterIpEl = document.getElementById("wb-filter-ip");
+  const filterResetBtn = document.getElementById("wb-filter-reset");
+  const deleteFilteredIpBtn = document.getElementById("wb-delete-filtered-ip");
+
+  function refreshIpFilterOptions() {
+    if (!filterIpEl) return;
+    const prevVal = filterIpEl.value || "all";
+    const ips = new Set();
+    document.querySelectorAll("#wb-studies-body tr").forEach((tr) => {
+      const ip = tr.getAttribute("data-study-ip");
+      if (ip && ip !== "IP#OWNER") ips.add(ip);
+    });
+    // Keep the first 4 built-in options, then add any distinct submitter IP indexes
+    while (filterIpEl.options.length > 4) filterIpEl.remove(4);
+    ips.forEach((ip) => {
+      const opt = document.createElement("option");
+      opt.value = ip;
+      opt.textContent = ip;
+      filterIpEl.appendChild(opt);
+    });
+    if ([...filterIpEl.options].some((o) => o.value === prevVal)) {
+      filterIpEl.value = prevVal;
+    }
+  }
+
+  const applyStudyFilters = () => {
+    const q = (filterSearchEl ? filterSearchEl.value : "").trim().toLowerCase();
+    const st = filterStatusEl ? filterStatusEl.value : "all";
+    const fld = filterFieldEl ? filterFieldEl.value : "all";
+    const ipFilter = filterIpEl ? filterIpEl.value : "all";
+
+    document.querySelectorAll("#wb-studies-body tr").forEach((tr) => {
+      const title = (tr.getAttribute("data-study-title") || "").toLowerCase();
+      const question = (tr.getAttribute("data-study-question") || "").toLowerCase();
+      const dataset = (tr.getAttribute("data-study-dataset") || "").toLowerCase();
+      const rowId = (tr.getAttribute("data-study-row") || "").toLowerCase();
+      const rowStatus = tr.getAttribute("data-study-status-val") || "";
+      const rowField = tr.getAttribute("data-study-field") || "";
+      const rowIp = tr.getAttribute("data-study-ip") || "IP#OWNER";
+
+      const matchesQ = !q || title.includes(q) || question.includes(q) || dataset.includes(q) || rowId.includes(q);
+      const matchesSt = st === "all" || rowStatus === st;
+      const matchesFld = fld === "all" || rowField === fld;
+      let matchesIp = true;
+      if (ipFilter === "mine") {
+        matchesIp = rowIp === currentIpIndex || rowIp === "IP#OWNER";
+      } else if (ipFilter === "not-mine") {
+        matchesIp = rowIp !== currentIpIndex && rowIp !== "IP#OWNER";
+      } else if (ipFilter !== "all") {
+        matchesIp = rowIp === ipFilter;
+      }
+      tr.hidden = !(matchesQ && matchesSt && matchesFld && matchesIp);
+    });
+  };
+
+  [filterSearchEl, filterStatusEl, filterFieldEl, filterIpEl].forEach((el) => {
+    if (!el) return;
+    el.addEventListener("input", applyStudyFilters);
+    el.addEventListener("change", applyStudyFilters);
+  });
+
+  if (filterResetBtn) {
+    filterResetBtn.addEventListener("click", () => {
+      if (filterSearchEl) filterSearchEl.value = "";
+      if (filterStatusEl) filterStatusEl.value = "all";
+      if (filterFieldEl) filterFieldEl.value = "all";
+      if (filterIpEl) filterIpEl.value = "all";
+      applyStudyFilters();
+    });
+  }
+
+  if (deleteFilteredIpBtn) {
+    deleteFilteredIpBtn.addEventListener("click", () => {
+      if (!isAdminUnlocked()) return;
+      const visibleIds = [];
+      document.querySelectorAll("#wb-studies-body tr").forEach((tr) => {
+        if (!tr.hidden) {
+          const id = tr.getAttribute("data-study-row");
+          if (id) visibleIds.push(id);
+        }
+      });
+      visibleIds.forEach(deleteStudyById);
+      announce(`Deleted ${visibleIds.length} filtered study row(s).`);
+    });
+  }
+
+  // Remove any Admin-deleted seed rows, migrate old ST-L... postal-code IDs, and restore local rows
+  const deletedSet = new Set(getDeletedIds());
+  deletedSet.forEach((id) => {
+    document.querySelectorAll(`[data-study-row="${id}"]`).forEach((tr) => tr.remove());
+  });
+
   const stored = loadLocal();
+  if (Array.isArray(stored.studyQueue)) {
+    const seededTitles = new Set(
+      Array.from(document.querySelectorAll("#wb-studies-body tr")).map((tr) =>
+        (tr.getAttribute("data-study-title") || "").trim().toLowerCase()
+      )
+    );
+    // Drop local rows that have already been promoted into the official repo seed (e.g. Sodium Battery Technology -> ST-05)
+    stored.studyQueue = stored.studyQueue.filter(
+      (r) => !seededTitles.has(String(r.title || "").trim().toLowerCase()) && !deletedSet.has(r.id)
+    );
+    // Renumber any remaining ST-L... rows into sequential ST-06, ST-07...
+    let nextNum = 5;
+    stored.studyQueue.forEach((r) => {
+      if (/^ST-L/i.test(String(r.id || ""))) {
+        nextNum += 1;
+        r.id = `ST-${String(nextNum).padStart(2, "0")}`;
+      }
+      if (!r.ipIndex) r.ipIndex = currentIpIndex;
+    });
+    saveLocal(stored);
+  }
   for (const [table, rows] of Object.entries(stored)) {
     if (Array.isArray(rows)) rows.forEach((row) => appendRow(table, row));
   }
@@ -1020,6 +1338,7 @@
       markStudyCompletedInDom(studyObj, resultRecord);
     }
   }
+  refreshIpFilterOptions();
   syncLockoutDom();
 
   // Handle form submissions
@@ -1035,6 +1354,10 @@
       current[table].push(entry);
       saveLocal(current);
       appendRow(table, entry);
+      if (table === "studyQueue") {
+        refreshIpFilterOptions();
+        applyStudyFilters();
+      }
       form.reset();
       if (studySubmitBtn) studySubmitBtn.textContent = "Save to Workbench +";
       announce(`Saved ${entry.id} to ${table} (local storage).`);
