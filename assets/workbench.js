@@ -220,9 +220,9 @@
   };
 
   const MODEL_LABELS = {
-    "argon-high": "Gemini Argon · High Thinking",
-    "argon-medium": "Gemini Argon · Medium Thinking",
-    "flash-fast": "Gemini 2.5 Flash · Fast Search",
+    "argon-high": "Gemini 4 Argon · High Thinking",
+    "argon-medium": "Gemini 4 Argon · Medium Thinking",
+    "flash-fast": "Gemini 3.8 Flash · Fast Search",
   };
 
   const authDialog = document.getElementById("wb-auth-dialog");
@@ -286,7 +286,7 @@
       el.textContent = `✓ Saved in encrypted vault (ends in …${vault.keyTail || "****"}) — unlock Admin to activate`;
       el.style.color = "#9ddacf";
     } else {
-      el.textContent = "⚠ No API key saved in this browser yet — click 📋 in Google AI Studio to copy your full AIzaSy...eQ3w key and paste below";
+      el.textContent = "⚠ No API key saved in this browser yet — paste your Google AI Studio key (AQ....eQ3w) below";
       el.style.color = "#f7ab65";
     }
   };
@@ -294,11 +294,12 @@
   const cleanAndValidateApiKey = (raw) => {
     const cleaned = String(raw || "").trim().replace(/^["']+|["']+$/g, "").trim();
     if (!cleaned) return { ok: true, key: "" };
-    if (!cleaned.startsWith("AIza") || cleaned.length < 30) {
+    // Accept Google AI Studio Auth keys (AQ....), Standard keys (AIza...), or any full key >= 16 chars that isn't a masked "...xxxx" snippet
+    if (cleaned.startsWith("...") || cleaned.length < 16) {
       return {
         ok: false,
         key: "",
-        error: `⚠ "${cleaned.slice(0, 18)}" is not a full Google AI Studio API key (it may be the masked "...eQ3w" label). In Google AI Studio, click the Copy icon (📋, two overlapping squares on the right of the ...eQ3w row) to copy the full 39-character key starting with "AIzaSy...", then paste it here.`,
+        error: `⚠ "${cleaned}" looks like the shortened "...eQ3w" preview rather than the full key. Click "Copy key" in Google AI Studio to copy the full key (e.g. AQ....eQ3w) and paste it here.`,
       };
     }
     return { ok: true, key: cleaned };
@@ -596,7 +597,7 @@
           if (keyInput) keyInput.focus();
           if (authStatus) {
             authStatus.classList.add("is-error");
-            authStatus.textContent = `🔓 Admin unlocked! To run "${pendingStudyToRun.title}" with live Gemini Argon tokens (instead of 0 tokens), paste your full AIzaSy...eQ3w key from Google AI Studio into the Gemini API key box above and click Unlock Admin 🔓 again.`;
+            authStatus.textContent = `🔓 Admin unlocked! To run "${pendingStudyToRun.title}" with live Gemini 4 Argon tokens (instead of 0 tokens), paste your Google AI Studio key (AQ....eQ3w) into the Gemini API key box above and click Unlock Admin 🔓 again.`;
           }
           return;
         }
@@ -746,8 +747,8 @@
     if (titleEl) titleEl.textContent = `Running ${study.id}: ${study.title}…`;
     if (statusModalEl) {
       statusModalEl.textContent = unlockedApiKey
-        ? `Calling Google AI Studio (${MODEL_LABELS[selectedRunnerModel] || "Gemini Argon"}) with key ending in …${unlockedApiKey.slice(-4)}…`
-        : "No Google AI Studio API key saved yet — paste your full AIzaSy...eQ3w key below to run with live Gemini Argon tokens.";
+        ? `Calling Google AI Studio (${MODEL_LABELS[selectedRunnerModel] || "Gemini 4 Argon"}) with key ending in …${unlockedApiKey.slice(-4)}…`
+        : "No Google AI Studio API key saved yet — paste your AQ....eQ3w key below to run with live Gemini 4 Argon tokens.";
     }
     if (keyBarEl) keyBarEl.hidden = Boolean(unlockedApiKey);
     if (summaryEl) summaryEl.textContent = `Question: ${study.question}\nDataset: ${study.dataset}`;
@@ -758,7 +759,7 @@
     let discoveredDataset = study.dataset;
     let totalTokens = 0;
     let lastApiError = "";
-    let mode = "local deterministic scaffold · 0 API tokens (no Google AI Studio key saved yet — paste your AIzaSy...eQ3w key below)";
+    let mode = "local deterministic scaffold · 0 API tokens (no Google AI Studio key saved yet — paste your AQ....eQ3w key below)";
     const needsDatasetSearch = !study.dataset || /auto-discover/i.test(study.dataset);
     if (unlockedApiKey) {
       const prompt = [
@@ -771,52 +772,130 @@
           : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets).`,
         `Then write a thorough, fact-grounded 3-paragraph analytical study summary with concrete numbers, empirical benchmarks, game-theoretic or structural mechanisms, and testable hypotheses.`,
       ].join("\n");
-      const primaryModel = selectedRunnerModel === "flash-fast" ? "gemini-2.5-flash" : "gemini-2.5-pro";
+      const thinkingLevel = selectedRunnerModel === "argon-high" ? "high" : selectedRunnerModel === "argon-medium" ? "medium" : "low";
+      const primaryModel = selectedRunnerModel === "flash-fast" ? "gemini-3.8-flash" : "gemini-4-argon";
+      const extractInteractionsText = (data) => {
+        if (typeof data?.output_text === "string" && data.output_text.trim()) {
+          return data.output_text.trim();
+        }
+        if (Array.isArray(data?.steps)) {
+          const chunks = [];
+          data.steps.forEach((step) => {
+            if ((!step.type || step.type === "model_output") && Array.isArray(step.content)) {
+              step.content.forEach((block) => {
+                if ((!block.type || block.type === "text") && typeof block.text === "string") {
+                  chunks.push(block.text);
+                }
+              });
+            }
+          });
+          if (chunks.length > 0) return chunks.join("\n").trim();
+        }
+        const allParts = data?.candidates?.[0]?.content?.parts || [];
+        const nonThoughtParts = allParts.filter((p) => !p.thought && typeof p.text === "string");
+        const chosenParts = nonThoughtParts.length > 0 ? nonThoughtParts : allParts;
+        return chosenParts.map((p) => p.text || "").join("\n").trim();
+      };
+      const extractTokenCount = (data, rawText) => {
+        const u = data?.usage || data?.usageMetadata || {};
+        const total = Number(
+          u.total_tokens ||
+          u.totalTokenCount ||
+          (Number(u.total_input_tokens || u.promptTokenCount || 0) +
+            Number(u.total_output_tokens || u.candidatesTokenCount || 0) +
+            Number(u.total_thought_tokens || u.thoughtsTokenCount || 0) +
+            Number(u.total_tool_use_tokens || 0))
+        );
+        return total > 0 ? total : Math.max(1, Math.round(rawText.length / 4));
+      };
+
       const attempts = [
+        // 1. Official 2026 Google AI Studio Interactions API (supports AQ.* Auth Keys & gemini-4-argon / gemini-3.8-flash)
         {
+          endpoint: "https://generativelanguage.googleapis.com/v1beta/interactions",
           model: primaryModel,
           body: {
-            contents: [{ parts: [{ text: prompt }] }],
-            tools: [{ google_search: {} }],
-            generationConfig: { temperature: 0.2 },
+            model: primaryModel,
+            input: prompt,
+            tools: [{ type: "google_search" }],
+            generation_config: { thinking_level: thinkingLevel },
           },
         },
         {
+          endpoint: "https://generativelanguage.googleapis.com/v1beta/interactions",
           model: primaryModel,
           body: {
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.2 },
+            model: primaryModel,
+            input: prompt,
+            generation_config: { thinking_level: thinkingLevel },
           },
         },
         {
-          model: "gemini-2.5-flash",
+          endpoint: "https://generativelanguage.googleapis.com/v1beta/interactions",
+          model: "gemini-3.8-flash",
           body: {
-            contents: [{ parts: [{ text: prompt }] }],
+            model: "gemini-3.8-flash",
+            input: prompt,
+            tools: [{ type: "google_search" }],
+            generation_config: { thinking_level: "low" },
+          },
+        },
+        {
+          endpoint: "https://generativelanguage.googleapis.com/v1beta/interactions",
+          model: "gemini-3.8-flash",
+          body: {
+            model: "gemini-3.8-flash",
+            input: prompt,
+          },
+        },
+        // 2. Fallback to v1beta generateContent with x-goog-api-key header (no deprecated temperature param)
+        {
+          endpoint: `https://generativelanguage.googleapis.com/v1beta/models/${primaryModel}:generateContent`,
+          model: primaryModel,
+          body: {
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
             tools: [{ google_search: {} }],
-            generationConfig: { temperature: 0.2 },
+            generationConfig: { thinkingConfig: { thinkingLevel } },
           },
         },
         {
-          model: "gemini-2.5-flash",
+          endpoint: `https://generativelanguage.googleapis.com/v1beta/models/${primaryModel}:generateContent`,
+          model: primaryModel,
           body: {
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.2 },
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
           },
         },
         {
-          model: "gemini-2.0-flash",
+          endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+          model: "gemini-3.8-flash",
           body: {
-            contents: [{ parts: [{ text: prompt }] }],
-            generationConfig: { temperature: 0.2 },
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+            tools: [{ google_search: {} }],
+          },
+        },
+        {
+          endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+          model: "gemini-3.8-flash",
+          body: {
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
+          },
+        },
+        {
+          endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
+          model: "gemini-3.5-flash-lite",
+          body: {
+            contents: [{ role: "user", parts: [{ text: prompt }] }],
           },
         },
       ];
       for (const candidate of attempts) {
         try {
-          const url = `https://generativelanguage.googleapis.com/v1beta/models/${candidate.model}:generateContent?key=${encodeURIComponent(unlockedApiKey)}`;
-          const resp = await fetch(url, {
+          const resp = await fetch(candidate.endpoint, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              "x-goog-api-key": unlockedApiKey,
+            },
             body: JSON.stringify(candidate.body),
           });
           if (!resp.ok) {
@@ -833,19 +912,12 @@
             continue;
           }
           const data = await resp.json();
-          const allParts = data?.candidates?.[0]?.content?.parts || [];
-          const nonThoughtParts = allParts.filter((p) => !p.thought && typeof p.text === "string");
-          const chosenParts = nonThoughtParts.length > 0 ? nonThoughtParts : allParts;
-          const rawText = chosenParts.map((p) => p.text || "").join("\n").trim();
+          const rawText = extractInteractionsText(data);
           if (!rawText) {
             lastApiError = `${candidate.model} returned empty text`;
             continue;
           }
-          const usage = data?.usageMetadata || {};
-          const promptTok = Number(usage.promptTokenCount || 0);
-          const candTok = Number(usage.candidatesTokenCount || 0);
-          const thoughtTok = Number(usage.thoughtsTokenCount || 0);
-          totalTokens = Number(usage.totalTokenCount || (promptTok + candTok + thoughtTok) || Math.max(1, Math.round(rawText.length / 4)));
+          totalTokens = extractTokenCount(data, rawText);
 
           const dsMatch = rawText.match(/^DATASETS:\s*(.+)$/im);
           if (dsMatch) {
@@ -854,7 +926,7 @@
           }
           summaryText = rawText.replace(/^DATASETS:\s*.+\n?/im, "").trim();
           if (summaryText) {
-            mode = `${MODEL_LABELS[selectedRunnerModel] || "Gemini Argon · High Thinking"} (${candidate.model}) via Google AI Studio · ${totalTokens.toLocaleString()} API tokens`;
+            mode = `${MODEL_LABELS[selectedRunnerModel] || "Gemini 4 Argon · High Thinking"} (${candidate.model}) via Google AI Studio · ${totalTokens.toLocaleString()} API tokens`;
             break;
           }
         } catch (err) {
@@ -930,7 +1002,7 @@
         if (inlineInput) inlineInput.focus();
         const statusModalEl = document.getElementById("wb-run-status");
         if (statusModalEl) {
-          statusModalEl.textContent = "🔑 Paste your full AIzaSy...eQ3w key from Google AI Studio below and click ⚡ Save Key & Run Gemini Argon.";
+          statusModalEl.textContent = "🔑 Paste your AQ....eQ3w key from Google AI Studio below and click ⚡ Save Key & Run Gemini Argon.";
         }
         return;
       }
@@ -947,7 +1019,7 @@
       const keyCheck = cleanAndValidateApiKey(rawVal);
       if (!keyCheck.ok || !keyCheck.key) {
         if (statusModalEl) {
-          statusModalEl.textContent = keyCheck.error || "⚠ Please paste your full AIzaSy...eQ3w key from Google AI Studio first.";
+          statusModalEl.textContent = keyCheck.error || "⚠ Please paste your AQ....eQ3w key from Google AI Studio first.";
         }
         return;
       }
