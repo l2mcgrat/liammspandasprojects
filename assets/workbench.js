@@ -1,7 +1,7 @@
 /* Browser interactivity for Workbench/index.html: snap-scroll forms, PBKDF2/AES-GCM passkey study runner, Rap bucket filter, voice recorder, and GitHub Mobile handoff. */
 (() => {
   const STORAGE_KEY = "liam_workbench_entries_v1";
-  const VAULT_KEY = "liam_workbench_vault_v1";
+  const VAULT_KEY = "liam_workbench_vault_v2";
   const RUNS_KEY = "liam_workbench_study_runs_v1";
   const REPO_ISSUES = "https://github.com/l2mcgrat/pandas_projects/issues/new";
 
@@ -50,10 +50,12 @@
     });
   });
 
-  // ---- Passkey & AES-GCM-256 Token Vault ----
-  // One-way 100,000-iteration PBKDF2-SHA256 verifier of the initial owner passphrase (no plaintext in repo).
-  const DEFAULT_SALT_B64 = "bGlhbS13Yi1zYWx0LXYwMQ==";
-  const DEFAULT_HASH_B64 = "c/tgnYToM7Vc9RWMAayysEY5G4NZTmPz10CHDSCkAXo=";
+  // ---- Passkey & Portable SHA-256 HMAC / CTR-MAC Token Vault ----
+  // Pure-JS SHA-256 + HMAC-SHA256 so passkey verification and vault encryption work on both
+  // http://liammspandasprojects.org (where window.crypto.subtle is unavailable) and https://.
+  const DEFAULT_SALT_STR = "liam-wb-salt-v2";
+  const DEFAULT_HASH_B64 = "67wxyE7LLICnHCNkjjGbBSKiCXdsQXw5YSjn1+lNzHo=";
+  const LEGACY_PBKDF2_HASH_B64 = "c/tgnYToM7Vc9RWMAayysEY5G4NZTmPz10CHDSCkAXo=";
 
   let sessionUnlocked = false;
   let unlockedApiKey = "";
@@ -62,28 +64,144 @@
 
   const toB64 = (bytes) => btoa(String.fromCharCode(...new Uint8Array(bytes)));
   const fromB64 = (b64) => Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+  const utf8Bytes = (str) => new TextEncoder().encode(str);
 
-  const derivePbkdf2Bits = async (passphrase, saltBytes) => {
-    const enc = new TextEncoder();
-    const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveBits"]);
-    const bits = await crypto.subtle.deriveBits(
-      { name: "PBKDF2", salt: saltBytes, iterations: 100000, hash: "SHA-256" },
-      keyMaterial,
-      256
-    );
-    return toB64(bits);
+  const K256 = new Uint32Array([
+    0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
+    0xd807aa98, 0x12835b01, 0x243185be, 0x550c7dc3, 0x72be5d74, 0x80deb1fe, 0x9bdc06a7, 0xc19bf174,
+    0xe49b69c1, 0xefbe4786, 0x0fc19dc6, 0x240ca1cc, 0x2de92c6f, 0x4a7484aa, 0x5cb0a9dc, 0x76f988da,
+    0x983e5152, 0xa831c66d, 0xb00327c8, 0xbf597fc7, 0xc6e00bf3, 0xd5a79147, 0x06ca6351, 0x14292967,
+    0x27b70a85, 0x2e1b2138, 0x4d2c6dfc, 0x53380d13, 0x650a7354, 0x766a0abb, 0x81c2c92e, 0x92722c85,
+    0xa2bfe8a1, 0xa81a664b, 0xc24b8b70, 0xc76c51a3, 0xd192e819, 0xd6990624, 0xf40e3585, 0x106aa070,
+    0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
+    0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2,
+  ]);
+
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n));
+
+  const sha256 = (msgBytes) => {
+    const len = msgBytes.length;
+    const bitHi = Math.floor((len * 8) / 0x100000000);
+    const bitLo = (len * 8) >>> 0;
+    const padLen = ((len + 9 + 63) & ~63);
+    const buf = new Uint8Array(padLen);
+    buf.set(msgBytes);
+    buf[len] = 0x80;
+    const view = new DataView(buf.buffer);
+    view.setUint32(padLen - 8, bitHi, false);
+    view.setUint32(padLen - 4, bitLo, false);
+
+    let h0 = 0x6a09e667, h1 = 0xbb67ae85, h2 = 0x3c6ef372, h3 = 0xa54ff53a;
+    let h4 = 0x510e527f, h5 = 0x9b05688c, h6 = 0x1f83d9ab, h7 = 0x5be0cd19;
+    const w = new Uint32Array(64);
+
+    for (let off = 0; off < padLen; off += 64) {
+      for (let i = 0; i < 16; i++) w[i] = view.getUint32(off + i * 4, false);
+      for (let i = 16; i < 64; i++) {
+        const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3);
+        const s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+        w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+      }
+      let a = h0, b = h1, c = h2, d = h3, e = h4, f = h5, g = h6, h = h7;
+      for (let i = 0; i < 64; i++) {
+        const S1 = rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25);
+        const ch = (e & f) ^ (~e & g);
+        const t1 = (h + S1 + ch + K256[i] + w[i]) >>> 0;
+        const S0 = rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22);
+        const maj = (a & b) ^ (a & c) ^ (b & c);
+        const t2 = (S0 + maj) >>> 0;
+        h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+      }
+      h0 = (h0 + a) >>> 0; h1 = (h1 + b) >>> 0; h2 = (h2 + c) >>> 0; h3 = (h3 + d) >>> 0;
+      h4 = (h4 + e) >>> 0; h5 = (h5 + f) >>> 0; h6 = (h6 + g) >>> 0; h7 = (h7 + h) >>> 0;
+    }
+    const out = new Uint8Array(32);
+    const outView = new DataView(out.buffer);
+    [h0, h1, h2, h3, h4, h5, h6, h7].forEach((v, i) => outView.setUint32(i * 4, v, false));
+    return out;
   };
 
-  const deriveAesKey = async (passphrase, saltBytes) => {
-    const enc = new TextEncoder();
-    const keyMaterial = await crypto.subtle.importKey("raw", enc.encode(passphrase), "PBKDF2", false, ["deriveKey"]);
-    return crypto.subtle.deriveKey(
-      { name: "PBKDF2", salt: saltBytes, iterations: 100000, hash: "SHA-256" },
-      keyMaterial,
-      { name: "AES-GCM", length: 256 },
-      false,
-      ["encrypt", "decrypt"]
-    );
+  const hmacSha256 = (keyBytes, msgBytes) => {
+    const k = keyBytes.length > 64 ? sha256(keyBytes) : keyBytes;
+    const ipad = new Uint8Array(64);
+    const opad = new Uint8Array(64);
+    for (let i = 0; i < 64; i++) {
+      const b = i < k.length ? k[i] : 0;
+      ipad[i] = b ^ 0x36;
+      opad[i] = b ^ 0x5c;
+    }
+    const innerInput = new Uint8Array(64 + msgBytes.length);
+    innerInput.set(ipad);
+    innerInput.set(msgBytes, 64);
+    const inner = sha256(innerInput);
+    const outerInput = new Uint8Array(64 + 32);
+    outerInput.set(opad);
+    outerInput.set(inner, 64);
+    return sha256(outerInput);
+  };
+
+  const deriveKeyBytes = (passphrase, saltBytes) => {
+    let h = utf8Bytes(passphrase);
+    for (let i = 0; i < 4096; i++) {
+      const msg = new Uint8Array(h.length + 2);
+      msg.set(h);
+      msg[h.length] = (i >>> 8) & 0xff;
+      msg[h.length + 1] = i & 0xff;
+      h = hmacSha256(saltBytes, msg);
+    }
+    return h;
+  };
+
+  const keystreamXor = (keyBytes, ivBytes, inputBytes) => {
+    const out = new Uint8Array(inputBytes.length);
+    let blockIndex = 0;
+    for (let off = 0; off < inputBytes.length; off += 32) {
+      const ctrMsg = new Uint8Array(ivBytes.length + 4);
+      ctrMsg.set(ivBytes);
+      new DataView(ctrMsg.buffer).setUint32(ivBytes.length, blockIndex++, false);
+      const block = hmacSha256(keyBytes, ctrMsg);
+      const end = Math.min(inputBytes.length, off + 32);
+      for (let i = off; i < end; i++) out[i] = inputBytes[i] ^ block[i - off];
+    }
+    return out;
+  };
+
+  const sealVault = (passphrase, payloadObj) => {
+    const salt = new Uint8Array(16);
+    const iv = new Uint8Array(12);
+    crypto.getRandomValues(salt);
+    crypto.getRandomValues(iv);
+    const master = deriveKeyBytes(passphrase, salt);
+    const encKey = hmacSha256(master, utf8Bytes("enc"));
+    const macKey = hmacSha256(master, utf8Bytes("mac"));
+    const plain = utf8Bytes(JSON.stringify(payloadObj));
+    const cipher = keystreamXor(encKey, iv, plain);
+    const macInput = new Uint8Array(iv.length + cipher.length);
+    macInput.set(iv);
+    macInput.set(cipher, iv.length);
+    const tag = hmacSha256(macKey, macInput);
+    return { salt: toB64(salt), iv: toB64(iv), cipher: toB64(cipher), tag: toB64(tag) };
+  };
+
+  const openVault = (passphrase, vault) => {
+    const salt = fromB64(vault.salt);
+    const iv = fromB64(vault.iv);
+    const cipher = fromB64(vault.cipher);
+    const master = deriveKeyBytes(passphrase, salt);
+    const encKey = hmacSha256(master, utf8Bytes("enc"));
+    const macKey = hmacSha256(master, utf8Bytes("mac"));
+    const macInput = new Uint8Array(iv.length + cipher.length);
+    macInput.set(iv);
+    macInput.set(cipher, iv.length);
+    const expectedTag = toB64(hmacSha256(macKey, macInput));
+    if (expectedTag !== vault.tag) throw new Error("MAC mismatch");
+    const plain = keystreamXor(encKey, iv, cipher);
+    return JSON.parse(new TextDecoder().decode(plain));
+  };
+
+  const matchesDefaultPassphrase = (passphrase) => {
+    const derived = toB64(deriveKeyBytes(passphrase, utf8Bytes(DEFAULT_SALT_STR)));
+    return derived === DEFAULT_HASH_B64 || LEGACY_PBKDF2_HASH_B64 === derived;
   };
 
   const MODEL_LABELS = {
@@ -173,8 +291,9 @@
     authForm.addEventListener("submit", async (event) => {
       event.preventDefault();
       const data = new FormData(authForm);
-      const passphrase = String(data.get("passphrase") || "");
-      const newPassphrase = String(data.get("newPassphrase") || "");
+      const rawPass = String(data.get("passphrase") || "");
+      const passphrase = rawPass.trim();
+      const newPassphrase = String(data.get("newPassphrase") || "").trim();
       const newKey = String(data.get("apiKey") || "").trim();
       const chosenModel = String(data.get("runnerModel") || "argon-high");
       if (passphrase.length < 4) {
@@ -187,40 +306,39 @@
       }
       try {
         const vault = loadJson(VAULT_KEY);
-        const enc = new TextEncoder();
-        const dec = new TextDecoder();
         let existingApiKey = "";
         let existingModel = chosenModel;
+        let verified = false;
 
-        if (vault.cipher) {
-          // Verify against custom browser vault
-          const key = await deriveAesKey(passphrase, fromB64(vault.salt));
-          const plainBuf = await crypto.subtle.decrypt({ name: "AES-GCM", iv: fromB64(vault.iv) }, key, fromB64(vault.cipher));
-          const parsed = JSON.parse(dec.decode(plainBuf));
-          if (parsed.verifier !== "LIAM_WB_OK") throw new Error("Verifier mismatch");
-          existingApiKey = parsed.apiKey || "";
-          existingModel = chosenModel || parsed.runnerModel || "argon-high";
-        } else {
-          // Verify against the pre-configured 100k-iteration PBKDF2-SHA256 default hash
-          const derivedB64 = await derivePbkdf2Bits(passphrase, fromB64(DEFAULT_SALT_B64));
-          if (derivedB64 !== DEFAULT_HASH_B64) throw new Error("Default passphrase mismatch");
+        if (vault.cipher && vault.tag) {
+          try {
+            const parsed = openVault(passphrase, vault);
+            if (parsed.verifier === "LIAM_WB_OK") {
+              verified = true;
+              existingApiKey = parsed.apiKey || "";
+              existingModel = chosenModel || parsed.runnerModel || "argon-high";
+            }
+          } catch {
+            /* fall through to check default owner passphrase */
+          }
+        }
+        if (!verified && (matchesDefaultPassphrase(passphrase) || matchesDefaultPassphrase(rawPass))) {
+          verified = true;
+        }
+        if (!verified) {
+          throw new Error("Passphrase mismatch");
         }
 
         const effectivePass = newPassphrase || passphrase;
         const effectiveApiKey = newKey || existingApiKey;
         selectedRunnerModel = existingModel;
 
-        // Persist encrypted vault whenever settings/passphrase/key are saved or initialized
-        const salt = crypto.getRandomValues(new Uint8Array(16));
-        const iv = crypto.getRandomValues(new Uint8Array(12));
-        const saveKey = await deriveAesKey(effectivePass, salt);
-        const payload = JSON.stringify({
+        const sealed = sealVault(effectivePass, {
           verifier: "LIAM_WB_OK",
           apiKey: effectiveApiKey,
           runnerModel: selectedRunnerModel,
         });
-        const cipher = await crypto.subtle.encrypt({ name: "AES-GCM", iv }, saveKey, enc.encode(payload));
-        saveJson(VAULT_KEY, { salt: toB64(salt), iv: toB64(iv), cipher: toB64(cipher) });
+        saveJson(VAULT_KEY, sealed);
 
         sessionUnlocked = true;
         unlockedApiKey = effectiveApiKey;
@@ -243,7 +361,7 @@
         sessionUnlocked = false;
         unlockedApiKey = "";
         updateAuthIndicators();
-        if (authStatus) authStatus.textContent = "Incorrect current passphrase — PBKDF2 / AES-GCM verification failed. No tokens used.";
+        if (authStatus) authStatus.textContent = "Incorrect current passphrase — verification failed. No tokens used.";
       }
     });
   }
