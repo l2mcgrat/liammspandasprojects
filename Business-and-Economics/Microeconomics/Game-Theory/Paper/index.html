@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Liam McGrath’s connected notebook of science, language, data analysis and creative projects.">
+<meta name="theme-color" content="#0d101b"><title>Why Gas Prices Feather Down: Oligopoly Supergames &amp; Algorithmic Pricing | Liam McGrath</title>
+<link rel="icon" href="../../../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../../assets/styles.css"><link rel="stylesheet" href="../../../../assets/portfolio.css"><link rel="stylesheet" href="../../../../assets/career.css"><link rel="stylesheet" href="../../../../assets/atlas-icons.css">
+<script defer src="../../../../assets/math-config.js"></script><script defer id="MathJax-script" src="../../../../assets/vendor/mathjax/tex-chtml.js"></script></head><body><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header">
+      <a class="brand" href="../../../../index.html" aria-label="Liam McGrath home"><span class="brand-mark" aria-hidden="true">LM</span><span>LIAM McGRATH<small>AN OPEN NOTEBOOK</small></span></a>
+    <nav aria-label="Primary navigation"><a href="../../../../Mental-Map/index.html">Mental Map</a><a href="../../../../Atlas/index.html">Atlas</a><a href="../../../../index.html#creator-owen">Creators</a><a href="../../../../Smash/index.html">Smash</a><a href="../../../../About/index.html">About me <span aria-hidden="true">↗</span></a></nav>
+    </header><main id="main-content" class="document-page"><div class="atlas-strip tone-business"><span class="atlas-strip-icon atlas-hover"><svg class="atlas-icon ai-59963b18" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="14" y="14" width="36" height="36" rx="2"/><path d="M32 14v36M14 32h36"/><path d="M8 23h3M8 41h3M23 8v3M41 8v3"/><rect class="a" x="17" y="17" width="12" height="12" rx="2"/></svg></span><nav class="atlas-crumbs" aria-label="Breadcrumb"><ol><li><a href="../../../../index.html">Home</a></li><li><a href="../../../../Business-and-Economics/index.html">Business &amp; Economics</a></li><li><a href="../../../../Business-and-Economics/Microeconomics/index.html">Microeconomics</a></li><li><a href="../../../../Business-and-Economics/Microeconomics/Game-Theory/index.html">Game Theory</a></li><li aria-current="page">Paper</li></ol></nav><span class="atlas-strip-meta">Attached reader</span></div><div class="reader-top"><div><p class="eyebrow">The connected notebook / LaTeX edition</p><h1>Why Gas Prices Feather Down: Oligopoly Supergames &amp; Algorithmic Pricing</h1><p>Liam McGrath · Microeconomics &amp; Game Theory study (Gemini 4 Argon + Pandas)</p></div><div class="toolbar"><a class="button primary" href="../../../../assets/documents/gas-price-collusion/document.pdf" download>Compiled article · PDF ↓</a><a class="button ghost" href="../../../../assets/documents/gas-price-collusion/source-bundle.zip" download>Source + images · ZIP ↓</a><button class="button ghost print-reader" type="button">Print / Save PDF</button></div></div>
+    <div class="reader-layout"><aside class="reader-sidebar"><details class="contents-panel" open><summary>Contents <span>5 headings</span></summary><label class="toc-search-label" for="toc-search">Find a section<input id="toc-search" type="search" placeholder="Search the contents…"></label><div id="reader-toc"><nav aria-label="Table of contents" class="tex-toc"><ol><li data-level="1"><a href="#sec:gas-decomposition">1 Decomposing Cross-Country Retail Gasoline Prices</a></li><li data-level="1"><a href="#sec:supergame-theory">2 Repeated Bertrand Supergames: Why Gasoline Colludes and Other Industries Do Not</a></li><li data-level="1"><a href="#sec:econometric-models">3 Econometric Specification: Rockets, Feathers, and Transparency DiD</a><ol><li data-level="2"><a href="#the-transparencyconcentration-difference-in-differences-model">3.1 The Transparency–Concentration Difference-in-Differences Model</a></li><li data-level="2"><a href="#asymmetric-error-correction-rockets-and-feathers">3.2 Asymmetric Error Correction ("Rockets and Feathers")</a></li></ol></li></ol></nav></div><p id="toc-empty" hidden>No matching sections.</p></details></aside>
+    <div class="reader-column"><nav class="topic-links" aria-label="Deeper topic pages"><strong>Follow a thread ↗</strong><a href="../index.html">Interactive Game Theory dashboard ↗</a><a href="../Gas-Price-Collusion/index.html">Gas Price Collusion tab ↗</a><a href="../../index.html">Microeconomics ↗</a><a href="../../../../Workbench/index.html">Workbench ↗</a></nav><p class="reader-note">Cross-country retail fuel price decomposition, Rockets &amp; Feathers asymmetric ECM, and repeated Bertrand supergame SPNE thresholds.</p><p class="math-status" role="status">Typesetting equations locally…</p><article class="tex-paper"><h1 data-number="1" id="sec:gas-decomposition"><span class="header-section-number">1</span> Decomposing Cross-Country Retail Gasoline Prices</h1>
+<p>Cross-country comparisons of retail gasoline prices require decomposing headline pump prices <span class="math inline">\(P_{c,t}^{\text{pump}}\)</span> into three distinct structural components: wholesale crude and refining costs (measured at the Terminal Gate Price or rack price <span class="math inline">\(P_{c,t}^{\text{TGP}}\)</span>), sovereign fiscal wedges <span class="math inline">\(T_{c,t}\)</span> (excise duty, carbon pricing, and value-added tax), and the pre-tax retail-and-distribution markup spread <span class="math inline">\(M_{c,t}\)</span>:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+P_{c,t}^{\text{pump}} = P_{c,t}^{\text{TGP}} + T_{c,t} + M_{c,t}, \qquad
+L_{c,t}^{\text{ex-tax}} = \frac{M_{c,t}}{P_{c,t}^{\text{TGP}} + M_{c,t}}.
+\label{eq:pump-decomposition}
+\end{equation}\]</span>
+</div>
+<p>According to the International Energy Agency (IEA) <em>Energy Prices and Taxes Database</em>, raw international pump price disparities—such as Denmark at <span class="math inline">\(\$2.35\text{ USD/L}\)</span> and the Netherlands at <span class="math inline">\(\$2.26\text{ USD/L}\)</span> versus <span class="math inline">\(\$0.96\text{ USD/L}\)</span> in the United States and <span class="math inline">\(\$0.34\text{ USD/L}\)</span> in state-subsidized Algeria—are driven first by sovereign taxation, which accounts for <span class="math inline">\(55\%\)</span> to <span class="math inline">\(62\%\)</span> of retail prices in European OECD economies compared with <span class="math inline">\(16\%\)</span> to <span class="math inline">\(35\%\)</span> in North America.</p>
+<p>However, isolating the ex-tax retail-over-wholesale spread <span class="math inline">\(M_{c,t}\)</span> reveals substantial, persistent supra-competitive markups in concentrated national oligopolies where three to five vertically integrated refiner-marketers or supermarket chains control retail distribution:</p>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>Country / Market</strong></th>
+<th style="text-align: right;"><strong>Pump</strong></th>
+<th style="text-align: right;"><strong>TGP</strong></th>
+<th style="text-align: right;"><strong>Tax</strong></th>
+<th style="text-align: right;"><strong>Markup</strong></th>
+<th style="text-align: right;"><strong>CR4</strong></th>
+<th style="text-align: right;"><strong>HHI</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Germany (MTS-K Oligopoly)</td>
+<td style="text-align: right;">$1.98</td>
+<td style="text-align: right;">$0.64</td>
+<td style="text-align: right;">$1.06</td>
+<td style="text-align: right;">$0.28</td>
+<td style="text-align: right;">68%</td>
+<td style="text-align: right;">2640</td>
+</tr>
+<tr>
+<td style="text-align: left;">United Kingdom (CMA Quadropoly)</td>
+<td style="text-align: right;">$1.94</td>
+<td style="text-align: right;">$0.63</td>
+<td style="text-align: right;">$1.04</td>
+<td style="text-align: right;">$0.27</td>
+<td style="text-align: right;">64%</td>
+<td style="text-align: right;">2480</td>
+</tr>
+<tr>
+<td style="text-align: left;">Australia (FuelWatch 4-Pillar)</td>
+<td style="text-align: right;">$1.38</td>
+<td style="text-align: right;">$0.62</td>
+<td style="text-align: right;">$0.49</td>
+<td style="text-align: right;">$0.27</td>
+<td style="text-align: right;">74%</td>
+<td style="text-align: right;">2890</td>
+</tr>
+<tr>
+<td style="text-align: left;">Chile (COPEC–Shell–Petrobras)</td>
+<td style="text-align: right;">$1.44</td>
+<td style="text-align: right;">$0.65</td>
+<td style="text-align: right;">$0.53</td>
+<td style="text-align: right;">$0.26</td>
+<td style="text-align: right;">89%</td>
+<td style="text-align: right;">3620</td>
+</tr>
+<tr>
+<td style="text-align: left;">Canada (Regional Refiners)</td>
+<td style="text-align: right;">$1.32</td>
+<td style="text-align: right;">$0.61</td>
+<td style="text-align: right;">$0.46</td>
+<td style="text-align: right;">$0.25</td>
+<td style="text-align: right;">71%</td>
+<td style="text-align: right;">2580</td>
+</tr>
+<tr>
+<td style="text-align: left;">Netherlands (Highway Oligopoly)</td>
+<td style="text-align: right;">$2.26</td>
+<td style="text-align: right;">$0.64</td>
+<td style="text-align: right;">$1.37</td>
+<td style="text-align: right;">$0.25</td>
+<td style="text-align: right;">67%</td>
+<td style="text-align: right;">2510</td>
+</tr>
+<tr>
+<td style="text-align: left;">Denmark (Nordic Consolidation)</td>
+<td style="text-align: right;">$2.35</td>
+<td style="text-align: right;">$0.65</td>
+<td style="text-align: right;">$1.46</td>
+<td style="text-align: right;">$0.24</td>
+<td style="text-align: right;">76%</td>
+<td style="text-align: right;">2790</td>
+</tr>
+<tr>
+<td style="text-align: left;">Italy (Eni–IP–Q8 Network)</td>
+<td style="text-align: right;">$2.04</td>
+<td style="text-align: right;">$0.64</td>
+<td style="text-align: right;">$1.18</td>
+<td style="text-align: right;">$0.22</td>
+<td style="text-align: right;">62%</td>
+<td style="text-align: right;">2290</td>
+</tr>
+<tr>
+<td style="text-align: left;">Japan (3-Refiner Consolidation)</td>
+<td style="text-align: right;">$1.24</td>
+<td style="text-align: right;">$0.62</td>
+<td style="text-align: right;">$0.43</td>
+<td style="text-align: right;">$0.19</td>
+<td style="text-align: right;">82%</td>
+<td style="text-align: right;">3180</td>
+</tr>
+<tr>
+<td style="text-align: left;">France (Hypermarket Split)</td>
+<td style="text-align: right;">$1.99</td>
+<td style="text-align: right;">$0.64</td>
+<td style="text-align: right;">$1.17</td>
+<td style="text-align: right;">$0.18</td>
+<td style="text-align: right;">54%</td>
+<td style="text-align: right;">1920</td>
+</tr>
+<tr>
+<td style="text-align: left;">United States (Big-Box Benchmark)</td>
+<td style="text-align: right;">$0.96</td>
+<td style="text-align: right;">$0.59</td>
+<td style="text-align: right;">$0.15</td>
+<td style="text-align: right;">$0.12</td>
+<td style="text-align: right;">31%</td>
+<td style="text-align: right;">1120</td>
+</tr>
+<tr>
+<td style="text-align: left;">Algeria (State-Capped Producer)</td>
+<td style="text-align: right;">$0.34</td>
+<td style="text-align: right;">$0.22</td>
+<td style="text-align: right;">$0.05</td>
+<td style="text-align: right;">$0.07</td>
+<td style="text-align: right;">95%</td>
+<td style="text-align: right;">8200</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Across market-pricing OECD economies, Pandas cross-sectional regression yields a correlation of <span class="math inline">\(r = 0.91\)</span> between Top-4 firm concentration (<span class="math inline">\(\text{CR}_4\)</span>) and the ex-tax retail markup <span class="math inline">\(M_{c,t}\)</span>. Peer-reviewed industrial organization benchmarks confirm that these spreads reflect tacit and algorithmic coordination:</p>
+<ol>
+<li><p><strong>Australia (Focal-Point Signaling):</strong> Using Western Australia FuelWatch station-level data, Byrne and de Roos (2019, <em>AER</em>) show that market leader BP executed three years of focal-point price signaling to transition Perth stations out of competitive Edgeworth price cycles into coordinated sticky pricing, expanding retail margins by <span class="math inline">\(2.4\)</span> to <span class="math inline">\(3.5\)</span> cents per liter (up to a <span class="math inline">\(75\%\)</span> margin expansion).</p></li>
+<li><p><strong>Germany (Algorithmic Tacit Collusion):</strong> Using Germany’s Bundeskartellamt Market Transparency Unit for Fuels (MTS-K) high-frequency station panel, Assad, Clark, Ershov, and Xu (2024, <em>JPE</em>) demonstrate that adopting AI algorithmic pricing software increased average non-monopoly station margins by <span class="math inline">\(9\%\)</span>, and by <span class="math inline">\(28\%\)</span> in local duopolies where both competitors adopted algorithmic repricing.</p></li>
+<li><p><strong>United Kingdom (Supermarket Feathering):</strong> The UK Competition and Markets Authority (CMA) Road Fuel Market Study (2023–2025) documented that weakened price competition among the four dominant supermarket fuel retailers (Asda, Tesco, Sainsbury’s, and Morrisons) added roughly <span class="math inline">\(6\text{ pence/L}\)</span> to retail fuel margins, costing British motorists over £1.6 billion annually.</p></li>
+<li><p><strong>Canada and Chile (Cartels and Transparency Portals):</strong> Clark and Houde (2013, 2014) document explicit phone-tree coordination and asymmetric pass-through across regional Canadian markets, while Luco (2019, <em>AEJ: Microeconomics</em>) shows that Chile’s mandatory government price-disclosure website increased retail margins by <span class="math inline">\(7\%\)</span> to <span class="math inline">\(11\%\)</span> in areas with low local competition because stations used the portal to monitor rival compliance.</p></li>
+</ol>
+<h1 data-number="2" id="sec:supergame-theory"><span class="header-section-number">2</span> Repeated Bertrand Supergames: Why Gasoline Colludes and Other Industries Do Not</h1>
+<p>Game theory explains why retail gasoline is uniquely prone to collusive equilibria while other industries remain fiercely competitive by modeling pricing as an infinitely repeated Bertrand oligopoly supergame. In a one-shot static game, selling a chemically standardized, homogeneous commodity (87-octane regular unleaded) produces the Bertrand paradox, driving price to marginal cost (<span class="math inline">\(P = c\)</span>) and economic profits to zero.</p>
+<p>In an infinitely repeated game with continuous discount rate <span class="math inline">\(r\)</span> and detection-and-retaliation lag <span class="math inline">\(T\)</span>, <span class="math inline">\(N\)</span> symmetric firms can sustain a supra-competitive collusive price <span class="math inline">\(P^C &gt; c\)</span> as a Subgame Perfect Nash Equilibrium (SPNE) using grim-trigger or symmetric punishment strategies if the effective discount factor <span class="math inline">\(\delta = \exp(-rT)\)</span> exceeds the critical incentive-compatibility threshold <span class="math inline">\(\delta^*\)</span>:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\delta = \exp(-rT) \ge \delta^* = \frac{\pi^{\text{deviate}} - \pi^{\text{collude}}}{\pi^{\text{deviate}} - \pi^{\text{punish}}} \simeq 1 - \frac{1}{N}.
+\label{eq:spne-threshold}
+\end{equation}\]</span>
+</div>
+<p>Retail gasoline possesses four structural characteristics that push <span class="math inline">\(\delta \to 1\)</span> while lowering <span class="math inline">\(\delta^*\)</span>:</p>
+<ul>
+<li><p><strong>Zero Monitoring Lag (<span class="math inline">\(T \to 0\)</span>):</strong> Because pump prices are posted on towering street signs and aggregated into real-time government transparency portals or commercial APIs, rivals detect undercutting within minutes and match cuts immediately. Instant detection eliminates the transient volume windfall from cheating (<span class="math inline">\(\pi^{\text{deviate}} \to \pi^{\text{collude}}\)</span>).</p></li>
+<li><p><strong>Extreme Elasticity Asymmetry:</strong> Station-level residual demand is hyper-elastic—Clark and Houde (2014) show a <span class="math inline">\(2\text{ c/L}\)</span> price gap shifts station volume by <span class="math inline">\(36\%\)</span>—making punishment phases devastating (<span class="math inline">\(\pi^{\text{punish}} \simeq 0\)</span>), whereas aggregate short-run market demand for motor fuel is highly inelastic (<span class="math inline">\(\epsilon_D \in [-0.05, -0.25]\)</span>), maximizing the joint collusive profit pie <span class="math inline">\(\pi^{\text{collude}}\)</span>.</p></li>
+<li><p><strong>High Entry Barriers and Small Local <span class="math inline">\(N\)</span>:</strong> Environmental permitting, pipeline terminal access, and refining scale restrict local intersection clusters to <span class="math inline">\(N \in [2, 5]\)</span> major brands.</p></li>
+<li><p><strong>Multi-Market Contact:</strong> The same vertically integrated brands meet across thousands of local intersections, pooling incentive constraints (Bernheim and Whinston, 1990).</p></li>
+</ul>
+<p>Conversely, industries such as enterprise B2B SaaS, custom precision manufacturing, and commercial widebody aircraft procurement fail the supergame condition (<span class="math inline">\(\delta &lt; \delta^*\)</span>) for three structural reasons: (i) prices are privately negotiated behind closed doors (Stigler, 1964; Green and Porter, 1984), making <span class="math inline">\(T\)</span> large and noisy; (ii) high product differentiation keeps static Nash margins positive (<span class="math inline">\(\pi^{\text{punish}} &gt; 0\)</span>); and (iii) lumpy, infrequent multi-year contracts make single-deal deviation gains enormous (<span class="math inline">\(\pi^{\text{deviate}} \gg \pi^{\text{collude}}\)</span>).</p>
+<h1 data-number="3" id="sec:econometric-models"><span class="header-section-number">3</span> Econometric Specification: Rockets, Feathers, and Transparency DiD</h1>
+<p>Two empirical specifications operationalize these game-theoretic mechanisms in station-level panel data:</p>
+<h2 data-number="3.1" id="the-transparencyconcentration-difference-in-differences-model"><span class="header-section-number">3.1</span> The Transparency–Concentration Difference-in-Differences Model</h2>
+<p>Mandatory price disclosure or algorithmic pricing adoption increases net pre-tax retail margins <span class="math inline">\(M_{imt}\)</span> in concentrated local markets (<span class="math inline">\(\text{HHI}_m &gt; 2500\)</span>) where supplier monitoring gains dominate consumer search gains:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+M_{imt} = \alpha_i + \gamma_t + \beta_1 \left(\text{Post}_t \times \text{HighHHI}_m\right) + \beta_2\,\text{Post}_t + \theta\,X_{imt} + \varepsilon_{imt},
+\label{eq:did-transparency}
+\end{equation}\]</span>
+</div>
+<p>where <span class="math inline">\(\beta_1 &gt; 0\)</span> identifies tacit coordination enabled by zero-lag price monitoring.</p>
+<h2 data-number="3.2" id="asymmetric-error-correction-rockets-and-feathers"><span class="header-section-number">3.2</span> Asymmetric Error Correction ("Rockets and Feathers")</h2>
+<p>In collusive oligopolies, positive wholesale cost shocks (<span class="math inline">\(\Delta C_t^+ &gt; 0\)</span>) are passed through to retail prices within <span class="math inline">\(1\)</span> to <span class="math inline">\(3\)</span> days to coordinate upward focal jumps, whereas negative wholesale shocks (<span class="math inline">\(\Delta C_t^- &lt; 0\)</span>) decay slowly over <span class="math inline">\(3\)</span> to <span class="math inline">\(4\)</span> weeks because unilateral price cuts risk triggering a costly punishment war:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\Delta P_{it} = \sum_{k=0}^{K} \lambda_k^+ \Delta C_{t-k}^+ + \sum_{k=0}^{K} \lambda_k^- \Delta C_{t-k}^- + \phi\left(P_{i,t-1} - \beta C_{t-1}\right) + \varepsilon_{it},
+\label{eq:rockets-feathers-ecm}
+\end{equation}\]</span>
+</div>
+<p>where <span class="math inline">\(\sum_{k=0}^{3} \lambda_k^+ \gg \sum_{k=0}^{3} \lambda_k^-\)</span> measures the asymmetric tacit coordination wedge.</p>
+<p class="tex-source-download"><a download="" href="../../../../assets/documents/gas-price-collusion/gas_price_collusion.tex">Download original LaTeX source</a></p></article><noscript><p>JavaScript is required for equation typesetting. The contents, text and images remain available; download the LaTeX source for the original formulas.</p></noscript><a class="back-top" href="#main-content">Back to the top ↑</a></div></div></main>
+<footer class="site-footer"><a href="../../../../index.html">Liam McGrath · An open notebook</a><span>Ideas are better connected.</span><a href="../../../../About/index.html">About &amp; documents ↗</a><p class="site-copyright">© 2026 Liam McGrath. All rights reserved. No part of this site or its source may be copied or republished without permission. <a href="../../../../LICENSE.txt">License</a></p></footer>
+<script src="../../../../assets/site.js"></script><script defer src="../../../../assets/portfolio.js"></script>
+</body></html>

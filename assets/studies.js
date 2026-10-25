@@ -78,4 +78,39 @@
       });
     });
   }
+
+  // Gas Price Collusion (Game Theory) Supergame Industry Inspector
+  const gasLayout = document.querySelector(".study-map-layout[data-gas-industries]");
+  if (gasLayout) {
+    let industries = [];
+    try {
+      industries = JSON.parse(gasLayout.getAttribute("data-gas-industries") || "[]");
+    } catch {
+      industries = [];
+    }
+    const byId = new Map(industries.map((ind) => [ind.id, ind]));
+    const selectIndustry = (id) => {
+      const ind = byId.get(id);
+      if (!ind) return;
+      document.querySelectorAll("[data-gas-ind-btn]").forEach((btn) => {
+        btn.classList.toggle("is-active", btn.getAttribute("data-gas-ind-btn") === id);
+      });
+      const setTxt = (elId, val) => {
+        const el = document.getElementById(elId);
+        if (el) el.textContent = val;
+      };
+      setTxt("gas-ind-eq", `${ind.equilibrium} · Repeated Bertrand Inspector`);
+      setTxt("gas-ind-name", ind.industry);
+      setTxt("gas-ind-deff", Number(ind.deltaEff).toFixed(2));
+      setTxt("gas-ind-dstar", Number(ind.deltaStar).toFixed(2));
+      setTxt("gas-ind-n", String(ind.firmsN));
+      setTxt("gas-ind-lag", `${ind.detectionLagHours} hr`);
+      setTxt("gas-ind-homog", ind.homogeneity);
+      setTxt("gas-ind-vis", ind.priceVisibility);
+      setTxt("gas-ind-why", ind.whyMechanism);
+    };
+    document.querySelectorAll("[data-gas-ind-btn]").forEach((btn) => {
+      btn.addEventListener("click", () => selectIndustry(btn.getAttribute("data-gas-ind-btn")));
+    });
+  }
 })();

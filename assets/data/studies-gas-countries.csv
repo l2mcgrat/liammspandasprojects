@@ -1,0 +1,13 @@
+code,country,pumpUsdL,wholesaleUsdL,taxUsdL,markupUsdL,cr4Pct,hhi,dominantFirms,regime,lernerExTaxPct
+DE,Germany (MTS-K / Algorithmic Oligopoly),1.98,0.64,1.06,0.28,68,2640,"Aral (BP), Shell, Jet, Esso, TotalEnergies","Algorithmic tacit collusion (+28% duopoly margin, Assad et al. 2024 JPE)",30.4
+UK,United Kingdom (CMA Supermarket Quadropoly),1.94,0.63,1.04,0.27,64,2480,"Asda, Tesco, Sainsbury's, Morrisons + BP/Shell",Rocket-and-feather margin expansion (+6 p/L CMA 2023–2025 finding),30.0
+AU,Australia (Perth FuelWatch / 4-Pillar Refiners),1.38,0.62,0.49,0.27,74,2890,"BP, Ampol/Caltex, Viva (Shell), Coles/7-Eleven","BP focal-point signaling ended Edgeworth wars (+75% margin, Byrne & de Roos 2019 AER)",30.3
+CL,Chile (COPEC–Shell–Petrobras Triopoly),1.44,0.65,0.53,0.26,89,3620,"COPEC (~55%), Shell (Enex), Esmax (Petrobras)","Mandatory price-disclosure portal increased local margins (+7%–11%, Luco 2019 AEJ)",28.6
+CA,Canada (Regional Refiner-Marketers & Cartel Clusters),1.32,0.61,0.46,0.25,71,2580,"Petro-Canada (Suncor), Esso (Imperial), Shell, Couche-Tard",Phone-tree & asymmetric pass-through coordination (Clark & Houde 2013/2014),29.1
+NL,Netherlands (Highway Concession Oligopoly),2.26,0.64,1.37,0.25,67,2510,"Shell, BP, Esso, TotalEnergies",High tax wedge + concentrated highway auction leases,28.1
+DK,Denmark (Nordic Retail Consolidation),2.35,0.65,1.46,0.24,76,2790,"Circle K, OK, Q8, Shell",Highest OECD pump price (62% sovereign tax + 24 c/L synchronized list price),27.0
+IT,Italy (Integrated Eni–IP–Q8 Network),2.04,0.64,1.18,0.22,62,2290,"Eni, IP (Gruppo API), Q8, Tamoil",Parallel recommended price lists with regional sticky spreads,25.6
+FR,France (Hypermarket vs. Highway Split),1.99,0.64,1.17,0.18,54,1920,"TotalEnergies, E.Leclerc, Carrefour, Intermarche",Loss-leader hypermarkets compress urban margins; highway corridors stay oligopolistic,22.0
+JP,Japan (ENEOS–Idemitsu–Cosmo Triopoly),1.24,0.62,0.43,0.19,82,3180,"ENEOS (~50%), Idemitsu Showa Shell, Cosmo Oil",3-refiner wholesale consolidation + government subsidy smoothing,23.5
+US,United States (Unconcentrated Independent & Big-Box Benchmark),0.96,0.59,0.15,0.12,31,1120,"Costco, QuikTrip, Wawa, Sheetz, Buc-ee's, 60%+ independents",Competitive high-volume discounters break focal-point coordination (12 c/L spread),16.9
+DZ,Algeria (State-Subsidized Producer Benchmark),0.34,0.22,0.05,0.07,95,8200,Naftal (Sonatrach state monopoly),Administratively capped domestic fuel price below export parity,24.1

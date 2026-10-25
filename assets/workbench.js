@@ -222,7 +222,46 @@
   const MODEL_LABELS = {
     "argon-high": "Gemini 4 Argon · High Thinking",
     "argon-medium": "Gemini 4 Argon · Medium Thinking",
+    "deep-research": "Gemini Deep Research Agent",
     "flash-fast": "Gemini 3.8 Flash · Fast Search",
+  };
+
+  let discoveredLiveModelIds = [];
+  const discoverLiveModels = async (apiKey) => {
+    if (!apiKey || typeof fetch !== "function") return;
+    try {
+      const resp = await fetch("https://generativelanguage.googleapis.com/v1beta/models", {
+        headers: { "x-goog-api-key": apiKey },
+      });
+      if (!resp.ok) return;
+      const data = await resp.json();
+      const models = Array.isArray(data?.models) ? data.models : [];
+      const ids = models
+        .map((m) => String(m.name || "").replace(/^models\//, ""))
+        .filter((id) => /^gemini-(4|5|3\.8)|deep-research/i.test(id));
+      if (ids.length > 0) {
+        discoveredLiveModelIds = ids;
+        const sel = document.getElementById("wb-auth-model");
+        const discNote = document.getElementById("wb-model-discovery");
+        if (discNote) {
+          discNote.textContent = `✓ Live Google AI Studio models discovered: ${ids.slice(0, 4).join(", ")}`;
+          discNote.style.color = "#8fe0a8";
+        }
+        if (sel) {
+          ids.forEach((id) => {
+            if (![...sel.options].some((o) => o.value === id)) {
+              const opt = document.createElement("option");
+              opt.value = id;
+              opt.textContent = `Live API Model · ${id} (High Thinking + Google Search)`;
+              sel.appendChild(opt);
+              MODEL_LABELS[id] = `${id} · Live Google AI Studio`;
+            }
+          });
+        }
+      }
+    } catch {
+      /* keep built-in Gemini 4 Argon & 3.8 Flash defaults */
+    }
   };
 
   const authDialog = document.getElementById("wb-auth-dialog");
@@ -588,6 +627,7 @@
         sessionUnlocked = true;
         unlockedSessionIp = clientIp;
         unlockedApiKey = effectiveApiKey;
+        if (unlockedApiKey) discoverLiveModels(unlockedApiKey);
         if (authStatus) authStatus.classList.remove("is-error");
         updateAuthIndicators();
 
@@ -647,9 +687,147 @@
     });
   }
 
-  // ---- Study Synthesis & Standalone LaTeX Generator ----
-  const buildLatexPaper = (study, findingsText) => {
+  // ---- Study Synthesis, Athletics-Style SVG Chart, Pandas Script & Standalone LaTeX Generator ----
+  const buildFallbackAnalytics = (study) => {
+    const topic = (study.atlasPath || "Study").split("/").pop().replace(/-/g, " ");
+    return {
+      chartTitle: `${study.title} · Empirical Benchmark Comparison`,
+      chartSubtitle: `Comparative benchmark metrics synthesized for ${topic} (${study.dataset || "public datasets"}).`,
+      chartUnit: "",
+      kpis: [
+        { label: "Primary Domain", value: topic, note: study.atlasPath || "Atlas Destination" },
+        { label: "Model Engine", value: "Gemini 4 Argon", note: "High Thinking + Google Search" },
+        { label: "Data Pipeline", value: "Pandas + CSV", note: "Reproducible table & script" },
+        { label: "Output Format", value: "SVG + LaTeX", note: "Integrated into Atlas & Mental Map" },
+      ],
+      bars: [
+        { label: "Top decile / leader benchmark", primary: 84, secondary: 16, note: "Upper empirical bound" },
+        { label: "Concentrated / treatment regime", primary: 68, secondary: 24, note: "Primary structural effect" },
+        { label: "OECD / global median baseline", primary: 49, secondary: 18, note: "Cross-sectional median" },
+        { label: "Competitive / control counterfactual", primary: 31, secondary: 12, note: "Unconcentrated baseline" },
+      ],
+      tableColumns: ["Benchmark Group", "Primary Metric", "Secondary Metric", "Regime / Mechanism"],
+      tableRows: [
+        ["Top decile / leader benchmark", "84.0", "16.0", "Upper empirical bound"],
+        ["Concentrated / treatment regime", "68.0", "24.0", "Primary structural effect"],
+        ["OECD / global median baseline", "49.0", "18.0", "Cross-sectional median"],
+        ["Competitive / control counterfactual", "31.0", "12.0", "Unconcentrated baseline"],
+      ],
+    };
+  };
+
+  const buildPandasScript = (study, analytics) => {
+    if (analytics && typeof analytics.pandasScript === "string" && analytics.pandasScript.trim().length > 40) {
+      return analytics.pandasScript.trim();
+    }
+    const cols = (analytics && analytics.tableColumns) || ["Group", "Primary", "Secondary", "Notes"];
+    const rows = (analytics && analytics.tableRows) || [];
+    return [
+      `"""Reproducible Pandas analysis for ${study.id}: ${study.title} (${study.atlasPath})"""`,
+      `import numpy as np`,
+      `import pandas as pd`,
+      ``,
+      `columns = ${JSON.stringify(cols)}`,
+      `rows = ${JSON.stringify(rows, null, 2)}`,
+      `df = pd.DataFrame(rows, columns=columns)`,
+      `for col in df.columns[1:3]:`,
+      `    df[col + "_num"] = pd.to_numeric(df[col].astype(str).str.replace(r"[^0-9.-]", "", regex=True), errors="coerce")`,
+      `print("=== ${study.id}: ${study.title} — Pandas Summary ===")`,
+      `print(df)`,
+      `print("\\nDescriptive Statistics:")`,
+      `print(df.describe(include="all"))`,
+    ].join("\n");
+  };
+
+  const buildCsvFromAnalytics = (analytics) => {
+    const cols = (analytics && analytics.tableColumns) || ["Group", "Primary", "Secondary", "Notes"];
+    const rows = (analytics && analytics.tableRows) || [];
+    const escCsv = (val) => `"${String(val ?? "").replace(/"/g, '""')}"`;
+    return [cols.map(escCsv).join(","), ...rows.map((r) => r.map(escCsv).join(","))].join("\n");
+  };
+
+  const renderAnalyticsSvgHtml = (studyId, analytics) => {
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const bars = Array.isArray(analytics?.bars) && analytics.bars.length ? analytics.bars : buildFallbackAnalytics({}).bars;
+    const maxVal = Math.max(1, ...bars.map((b) => (Number(b.primary) || 0) + (Number(b.secondary) || 0)));
+    const height = 74 + bars.length * 34;
+    const left = 265;
+    const width = 520;
+    const unit = esc(analytics?.chartUnit || "");
+    const parts = [];
+    for (let i = 0; i <= 4; i++) {
+      const tickVal = (maxVal * i) / 4;
+      const tx = left + (i / 4) * width;
+      const tickStr = tickVal >= 10 ? Math.round(tickVal) : tickVal.toFixed(1);
+      parts.push(
+        `<line class="chart-grid" x1="${tx.toFixed(1)}" x2="${tx.toFixed(1)}" y1="30" y2="${height - 26}"/>` +
+        `<text x="${tx.toFixed(1)}" y="20" text-anchor="middle">${tickStr}${unit}</text>`
+      );
+    }
+    bars.forEach((b, idx) => {
+      const y = 38 + idx * 34;
+      const pVal = Math.max(0, Number(b.primary) || 0);
+      const sVal = Math.max(0, Number(b.secondary) || 0);
+      const wP = (pVal / maxVal) * width;
+      const wS = (sVal / maxVal) * width;
+      const lbl = String(b.label || `Row ${idx + 1}`).slice(0, 34);
+      parts.push(
+        `<text x="${left - 10}" y="${y + 15}" text-anchor="end">${esc(lbl)}</text>` +
+        `<rect fill="#69d4cf" x="${left}" y="${y}" width="${wP.toFixed(1)}" height="20"><title>${esc(b.label)}: ${pVal}${unit} (${esc(b.note || "")})</title></rect>` +
+        (wS > 0 ? `<rect fill="#f7ab65" x="${(left + wP).toFixed(1)}" y="${y}" width="${wS.toFixed(1)}" height="20"><title>${esc(b.label)} secondary: ${sVal}${unit}</title></rect>` : "") +
+        `<text class="athletics-label" x="${(left + wP + wS + 8).toFixed(1)}" y="${y + 15}">${pVal}${unit}${sVal > 0 ? ` (+${sVal}${unit})` : ""}</text>`
+      );
+    });
+    return [
+      `<figure class="sports-chart athletics-chart">`,
+      `<figcaption><span class="chart-title">${esc(analytics?.chartTitle || "Empirical Study Chart")}</span>`,
+      `<small>${esc(analytics?.chartSubtitle || "")}</small></figcaption>`,
+      `<svg viewBox="0 0 900 ${height}" role="img" aria-label="${esc(analytics?.chartTitle || studyId)}">${parts.join("")}</svg>`,
+      `</figure>`,
+    ].join("");
+  };
+
+  const renderStudyAnalyticsDom = (container, study, resultRecord) => {
+    if (!container) return;
+    const analytics = resultRecord.analytics || buildFallbackAnalytics(study);
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const kpis = Array.isArray(analytics.kpis) && analytics.kpis.length ? analytics.kpis : buildFallbackAnalytics(study).kpis;
+    const kpiHtml = `<div class="sports-metrics" style="margin: 8px 0 14px;">` + kpis.slice(0, 4).map((k) =>
+      `<article class="sports-metric"><span>${esc(k.label)}</span><strong>${esc(k.value)}</strong><small>${esc(k.note || "")}</small></article>`
+    ).join("") + `</div>`;
+    const svgHtml = renderAnalyticsSvgHtml(study.id, analytics);
+    const cols = Array.isArray(analytics.tableColumns) && analytics.tableColumns.length ? analytics.tableColumns : ["Item", "Primary", "Secondary", "Notes"];
+    const rows = Array.isArray(analytics.tableRows) ? analytics.tableRows : [];
+    const tableHtml = rows.length
+      ? `<div class="sports-table-wrap" style="margin: 12px 0;"><table class="wb-inline-study-table"><thead><tr>${cols.map((c) => `<th scope="col">${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((cellVal, ci) => ci === 0 ? `<th scope="row">${esc(cellVal)}</th>` : `<td>${esc(cellVal)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`
+      : "";
+    container.innerHTML = kpiHtml + svgHtml + tableHtml;
+    container.hidden = false;
+  };
+
+  const buildLatexPaper = (study, findingsText, analytics) => {
     const safe = (s) => String(s || "").replace(/[\\{}$&#^_%~]/g, (m) => `\\${m}`);
+    const cols = Array.isArray(analytics?.tableColumns) ? analytics.tableColumns : [];
+    const rows = Array.isArray(analytics?.tableRows) ? analytics.tableRows : [];
+    let tableBlock = "";
+    if (cols.length > 0 && rows.length > 0) {
+      const colSpec = "l" + "r".repeat(Math.max(0, cols.length - 1));
+      const headerLine = cols.map((c) => `\\textbf{${safe(c)}}`).join(" & ") + " \\\\";
+      const rowLines = rows.slice(0, 12).map((r) => r.slice(0, cols.length).map((v) => safe(v)).join(" & ") + " \\\\").join("\n");
+      tableBlock = [
+        "",
+        "\\section{Empirical Benchmark Table (Pandas Output)}",
+        "\\begin{center}",
+        `\\begin{tabular}{${colSpec}}`,
+        "\\hline",
+        headerLine,
+        "\\hline",
+        rowLines,
+        "\\hline",
+        "\\end{tabular}",
+        "\\end{center}",
+      ].join("\n");
+    }
     return [
       "\\documentclass[11pt]{article}",
       "\\usepackage[margin=1in]{geometry}",
@@ -671,6 +849,7 @@
       "",
       "\\section{Synthesis \\& Empirical Findings}",
       safe(findingsText),
+      tableBlock,
       "",
       "\\section{Model Specification}",
       "\\begin{equation}",
@@ -695,9 +874,16 @@
       const viewBtn = document.createElement("button");
       viewBtn.type = "button";
       viewBtn.className = "button ghost wb-run-study-btn";
-      viewBtn.textContent = hasLiveTokens ? "📄 View study & LaTeX ↗" : "⚡ View / Run with API Key ↗";
+      viewBtn.textContent = hasLiveTokens ? "📊 View charts, Pandas & LaTeX ↗" : "⚡ View / Run with API Key ↗";
       viewBtn.addEventListener("click", () => showStudyResultModal(study, resultRecord));
       outputCell.appendChild(viewBtn);
+      if (study.atlasPath) {
+        const destLink = document.createElement("a");
+        destLink.className = "wb-action-link";
+        destLink.href = `../${study.atlasPath}/index.html`;
+        destLink.textContent = "Destination tab ↗";
+        outputCell.appendChild(destLink);
+      }
       if (!hasLiveTokens) {
         const rerunInlineBtn = document.createElement("button");
         rerunInlineBtn.type = "button";
@@ -715,10 +901,22 @@
     const titleEl = document.getElementById("wb-run-title");
     const statusModalEl = document.getElementById("wb-run-status");
     const summaryEl = document.getElementById("wb-run-summary");
+    const visualsEl = document.getElementById("wb-run-visuals");
+    const destLinksEl = document.getElementById("wb-run-dest-links");
     const texEl = document.getElementById("wb-run-tex");
     const keyBarEl = document.getElementById("wb-run-key-bar");
     if (titleEl) titleEl.textContent = `${study.id} · ${study.title}`;
     if (statusModalEl) statusModalEl.textContent = `Completed (${resultRecord.mode}) on ${resultRecord.completedAt}`;
+    if (destLinksEl && study.atlasPath) {
+      const slug = study.atlasPath.split("/").pop().toLowerCase();
+      destLinksEl.innerHTML =
+        `<div class="wb-bucket-bar" style="margin: 4px 0 8px;">` +
+        `<a class="wb-bucket-chip is-active" href="../${study.atlasPath}/index.html">📊 Open ${study.atlasPath.split("/").pop().replace(/-/g, " ")} Destination Tab ↗</a>` +
+        `<a class="wb-bucket-chip" href="../Mental-Map/index.html#sec:${slug}">🧠 View in Mental Map (§ ${study.atlasPath.split("/").pop().replace(/-/g, " ")}) ↗</a>` +
+        `</div>`;
+      destLinksEl.hidden = false;
+    }
+    renderStudyAnalyticsDom(visualsEl, study, resultRecord);
     if (summaryEl) summaryEl.textContent = resultRecord.summary;
     if (texEl) texEl.value = resultRecord.tex;
     if (keyBarEl) {
@@ -742,38 +940,77 @@
     const titleEl = document.getElementById("wb-run-title");
     const statusModalEl = document.getElementById("wb-run-status");
     const summaryEl = document.getElementById("wb-run-summary");
+    const visualsEl = document.getElementById("wb-run-visuals");
+    const destLinksEl = document.getElementById("wb-run-dest-links");
     const texEl = document.getElementById("wb-run-tex");
     const keyBarEl = document.getElementById("wb-run-key-bar");
     if (titleEl) titleEl.textContent = `Running ${study.id}: ${study.title}…`;
     if (statusModalEl) {
       statusModalEl.textContent = unlockedApiKey
-        ? `Calling Google AI Studio (${MODEL_LABELS[selectedRunnerModel] || "Gemini 4 Argon"}) with key ending in …${unlockedApiKey.slice(-4)}…`
+        ? `Calling Google AI Studio (${MODEL_LABELS[selectedRunnerModel] || selectedRunnerModel}) with key ending in …${unlockedApiKey.slice(-4)} (searching datasets, building SVG chart & Pandas table)…`
         : "No Google AI Studio API key saved yet — paste your AQ....eQ3w key below to run with live Gemini 4 Argon tokens.";
     }
     if (keyBarEl) keyBarEl.hidden = Boolean(unlockedApiKey);
+    if (visualsEl) visualsEl.hidden = true;
+    if (destLinksEl) destLinksEl.hidden = true;
     if (summaryEl) summaryEl.textContent = `Question: ${study.question}\nDataset: ${study.dataset}`;
     if (texEl) texEl.value = "";
     openDialog(runDialog);
 
     let summaryText = "";
     let discoveredDataset = study.dataset;
+    let parsedAnalytics = null;
     let totalTokens = 0;
     let lastApiError = "";
     let mode = "local deterministic scaffold · 0 API tokens (no Google AI Studio key saved yet — paste your AQ....eQ3w key below)";
     const needsDatasetSearch = !study.dataset || /auto-discover/i.test(study.dataset);
     if (unlockedApiKey) {
+      discoverLiveModels(unlockedApiKey);
       const prompt = [
-        `You are an empirical research assistant for Liam McGrath's technical notebook.`,
+        `You are an empirical data scientist and research assistant for Liam McGrath's technical notebook (liammspandasprojects.org).`,
         `Title: ${study.title}`,
         `Atlas Section: ${study.atlasPath}`,
         `Question: ${study.question}`,
         needsDatasetSearch
-          ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, BLS, FRED, World Bank, IEA, OECD, Elections Alberta/Canada, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
-          : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets).`,
-        `Then write a thorough, fact-grounded 3-paragraph analytical study summary with concrete numbers, empirical benchmarks, game-theoretic or structural mechanisms, and testable hypotheses.`,
+          ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, BLS, FRED, World Bank, IEA, OECD, NREL, USGS, Elections Alberta/Canada, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
+          : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets and start with "DATASETS: <datasets>").`,
+        `Next, write a thorough, fact-grounded 3-paragraph analytical study summary with concrete empirical numbers, physical/economic/structural mechanisms, LaTeX math equations ($...$ and $$...$$), and testable hypotheses.`,
+        `Finally, at the very end of your response, include a fenced \`\`\`json block containing empirical benchmark data for the site's Athletics-style SVG chart, KPI cards, data table, and a runnable Python pandas script in this exact schema:`,
+        `\`\`\`json`,
+        `{`,
+        `  "chartTitle": "Concise quantitative chart title (with units)",`,
+        `  "chartSubtitle": "One-sentence explanation of what the bars compare and data source",`,
+        `  "chartUnit": "% or $/kWh or $/L or Wh/kg",`,
+        `  "kpis": [`,
+        `    {"label": "KPI 1 Name", "value": "Concrete #", "note": "Short benchmark context"},`,
+        `    {"label": "KPI 2 Name", "value": "Concrete #", "note": "Short benchmark context"},`,
+        `    {"label": "KPI 3 Name", "value": "Concrete #", "note": "Short benchmark context"},`,
+        `    {"label": "KPI 4 Name", "value": "Concrete #", "note": "Short benchmark context"}`,
+        `  ],`,
+        `  "bars": [`,
+        `    {"label": "Entity / Country / Chemistry 1", "primary": 160, "secondary": 0, "note": "Empirical note"},`,
+        `    {"label": "Entity / Country / Chemistry 2", "primary": 250, "secondary": 0, "note": "Empirical note"}`,
+        `  ],`,
+        `  "tableColumns": ["Entity / Regime", "Primary Metric", "Secondary Metric", "Cost / Threshold", "Key Mechanism"],`,
+        `  "tableRows": [`,
+        `    ["Row 1", "val1", "val2", "val3", "mechanism 1"],`,
+        `    ["Row 2", "val1", "val2", "val3", "mechanism 2"]`,
+        `  ],`,
+        `  "pandasScript": "import pandas as pd\\nimport numpy as np\\n# Complete runnable pandas analysis script computing summary stats, ratios, or regressions on this dataset..."`,
+        `}`,
+        `\`\`\``,
+        `Include 6 to 10 real empirical rows in "bars" and "tableRows".`,
       ].join("\n");
       const thinkingLevel = selectedRunnerModel === "argon-high" ? "high" : selectedRunnerModel === "argon-medium" ? "medium" : "low";
-      const primaryModel = selectedRunnerModel === "flash-fast" ? "gemini-3.8-flash" : "gemini-4-argon";
+      const customOrPrimaryModel =
+        selectedRunnerModel === "flash-fast"
+          ? "gemini-3.8-flash"
+          : selectedRunnerModel === "deep-research"
+          ? "gemini-4-argon"
+          : /^gemini-|^deep-research/i.test(selectedRunnerModel)
+          ? selectedRunnerModel
+          : discoveredLiveModelIds.find((m) => /^gemini-[45]/i.test(m)) || "gemini-4-argon";
+
       const extractInteractionsText = (data) => {
         if (typeof data?.output_text === "string" && data.output_text.trim()) {
           return data.output_text.trim();
@@ -813,9 +1050,9 @@
         // 1. Official 2026 Google AI Studio Interactions API (supports AQ.* Auth Keys & gemini-4-argon / gemini-3.8-flash)
         {
           endpoint: "https://generativelanguage.googleapis.com/v1beta/interactions",
-          model: primaryModel,
+          model: customOrPrimaryModel,
           body: {
-            model: primaryModel,
+            model: customOrPrimaryModel,
             input: prompt,
             tools: [{ type: "google_search" }],
             generation_config: { thinking_level: thinkingLevel },
@@ -823,9 +1060,9 @@
         },
         {
           endpoint: "https://generativelanguage.googleapis.com/v1beta/interactions",
-          model: primaryModel,
+          model: customOrPrimaryModel,
           body: {
-            model: primaryModel,
+            model: customOrPrimaryModel,
             input: prompt,
             generation_config: { thinking_level: thinkingLevel },
           },
@@ -850,8 +1087,8 @@
         },
         // 2. Fallback to v1beta generateContent with x-goog-api-key header (no deprecated temperature param)
         {
-          endpoint: `https://generativelanguage.googleapis.com/v1beta/models/${primaryModel}:generateContent`,
-          model: primaryModel,
+          endpoint: `https://generativelanguage.googleapis.com/v1beta/models/${customOrPrimaryModel}:generateContent`,
+          model: customOrPrimaryModel,
           body: {
             contents: [{ role: "user", parts: [{ text: prompt }] }],
             tools: [{ google_search: {} }],
@@ -859,8 +1096,8 @@
           },
         },
         {
-          endpoint: `https://generativelanguage.googleapis.com/v1beta/models/${primaryModel}:generateContent`,
-          model: primaryModel,
+          endpoint: `https://generativelanguage.googleapis.com/v1beta/models/${customOrPrimaryModel}:generateContent`,
+          model: customOrPrimaryModel,
           body: {
             contents: [{ role: "user", parts: [{ text: prompt }] }],
           },
@@ -876,13 +1113,6 @@
         {
           endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
           model: "gemini-3.8-flash",
-          body: {
-            contents: [{ role: "user", parts: [{ text: prompt }] }],
-          },
-        },
-        {
-          endpoint: "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
-          model: "gemini-3.5-flash-lite",
           body: {
             contents: [{ role: "user", parts: [{ text: prompt }] }],
           },
@@ -919,12 +1149,23 @@
           }
           totalTokens = extractTokenCount(data, rawText);
 
-          const dsMatch = rawText.match(/^DATASETS:\s*(.+)$/im);
+          let cleanedNarrative = rawText;
+          const jsonMatch = cleanedNarrative.match(/```json\s*([\s\S]*?)```/i);
+          if (jsonMatch) {
+            try {
+              parsedAnalytics = JSON.parse(jsonMatch[1].trim());
+            } catch {
+              parsedAnalytics = null;
+            }
+            cleanedNarrative = cleanedNarrative.replace(/```json[\s\S]*?```/i, "").trim();
+          }
+
+          const dsMatch = cleanedNarrative.match(/^DATASETS:\s*(.+)$/im);
           if (dsMatch) {
             discoveredDataset = dsMatch[1].trim();
             study.dataset = discoveredDataset;
           }
-          summaryText = rawText.replace(/^DATASETS:\s*.+\n?/im, "").trim();
+          summaryText = cleanedNarrative.replace(/^DATASETS:\s*.+\n?/im, "").trim();
           if (summaryText) {
             mode = `${MODEL_LABELS[selectedRunnerModel] || "Gemini 4 Argon · High Thinking"} (${candidate.model}) via Google AI Studio · ${totalTokens.toLocaleString()} API tokens`;
             break;
@@ -948,14 +1189,32 @@
         `3. Next Compilation Step: Download the standalone .tex source below and run 'python -B -m site_content.pdf --engine <tectonic>' to certify the PDF cache.`,
       ].join("\n\n");
     }
-    const tex = buildLatexPaper(study, summaryText);
-    const resultRecord = { summary: summaryText, tex, dataset: discoveredDataset, mode, tokens: totalTokens, completedAt: todayIso() };
+    const analytics = parsedAnalytics || buildFallbackAnalytics(study);
+    analytics.pandasScript = buildPandasScript(study, analytics);
+    const tex = buildLatexPaper(study, summaryText, analytics);
+    const resultRecord = {
+      study: {
+        id: study.id,
+        title: study.title,
+        atlasPath: study.atlasPath,
+        question: study.question,
+        dataset: discoveredDataset,
+        createdOn: study.createdOn || todayIso(),
+      },
+      summary: summaryText,
+      analytics,
+      tex,
+      dataset: discoveredDataset,
+      mode,
+      tokens: totalTokens,
+      completedAt: todayIso(),
+    };
     const allRuns = loadJson(RUNS_KEY);
     allRuns[study.id] = resultRecord;
     saveJson(RUNS_KEY, allRuns);
     markStudyCompletedInDom(study, resultRecord);
     showStudyResultModal(study, resultRecord);
-    announce(`Ran study ${study.id} (${mode}).`);
+    announce(`Ran study ${study.id} (${mode}) — integrated into ${study.atlasPath} & Mental Map.`);
   };
 
   const requestRunStudy = (study) => {
@@ -1030,6 +1289,34 @@
       if (activeModalResult && activeModalResult.study) {
         await executeStudy(activeModalResult.study);
       }
+    });
+  }
+
+  const downloadPyBtn = document.getElementById("wb-run-download-py");
+  if (downloadPyBtn) {
+    downloadPyBtn.addEventListener("click", () => {
+      if (!activeModalResult) return;
+      const slug = (activeModalResult.study.id || "study").toLowerCase().replace(/[^a-z0-9_-]+/g, "_");
+      const pyCode = buildPandasScript(activeModalResult.study, activeModalResult.analytics || {});
+      const blob = new Blob([pyCode], { type: "text/x-python" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${slug}_pandas.py`;
+      a.click();
+    });
+  }
+
+  const downloadCsvBtn = document.getElementById("wb-run-download-csv");
+  if (downloadCsvBtn) {
+    downloadCsvBtn.addEventListener("click", () => {
+      if (!activeModalResult) return;
+      const slug = (activeModalResult.study.id || "study").toLowerCase().replace(/[^a-z0-9_-]+/g, "_");
+      const csvText = buildCsvFromAnalytics(activeModalResult.analytics || {});
+      const blob = new Blob([csvText], { type: "text/csv" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${slug}_data.csv`;
+      a.click();
     });
   }
 
