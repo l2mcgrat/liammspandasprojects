@@ -27,6 +27,7 @@
 .workbench-page .wb-form h3 { margin: 0; font-size: 16px; color: #9ddacf; }
 .workbench-page .wb-auth-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: 999px; border: 1px solid var(--line); font: 700 11.5px/1.2 Consolas, monospace; color: var(--muted); background: #ffffff08; }
 .workbench-page .wb-auth-pill.is-unlocked { border-color: #8fe0a888; color: #8fe0a8; background: #8fe0a814; }
+.workbench-page .wb-auth-pill.is-locked-out { border-color: #f28b8288; color: #f28b82; background: #f28b8218; }
 .workbench-page .wb-toggle { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border: 1px solid #9ddacf38; border-radius: 8px; background: #090d16; cursor: pointer; user-select: none; }
 .workbench-page .wb-toggle input { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
 .workbench-page .wb-toggle-track { position: relative; flex: 0 0 42px; width: 42px; height: 24px; border-radius: 999px; background: #262d42; border: 1px solid var(--line); transition: background .18s ease, border-color .18s ease; }

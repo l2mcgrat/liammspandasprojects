@@ -3,7 +3,21 @@
   const STORAGE_KEY = "liam_workbench_entries_v1";
   const VAULT_KEY = "liam_workbench_vault_v2";
   const RUNS_KEY = "liam_workbench_study_runs_v1";
+  const LOCKOUT_KEY = "liam_workbench_ip_lockout_v1";
   const REPO_ISSUES = "https://github.com/l2mcgrat/pandas_projects/issues/new";
+
+  const FAILED_ATTEMPT_MESSAGES = [
+    "Incorrect current passphrase — verification failed. No tokens used.",
+    "Passphrase Is Incorrect You Potential Clanker",
+    "Persistant Are We 👀👀👀👀👀👀",
+    "Maybe its time to give up and Touch Some Grassss",
+    "Why are you still trying bro 😆🤣🥹🤤😬",
+    "Dilly Dallying away our whole life away huh 🙂‍↔️",
+    "🥶🥶🥶🥶🥶🥶🥶🥶🥶🥶🥶",
+    "Why 😐",
+    "Whyyyyy 😑😑😑😑",
+    "Last Try 👉🤢👈👉😶👈👉😼👈👉😈👈",
+  ];
 
   const loadJson = (key) => {
     try {
@@ -210,18 +224,123 @@
     "flash-fast": "Gemini 2.5 Flash · Fast Search",
   };
 
-  const updateAuthIndicators = () => {
-    const label = MODEL_LABELS[selectedRunnerModel] || MODEL_LABELS["argon-high"];
-    document.querySelectorAll("[data-wb-auth-indicator]").forEach((el) => {
-      el.textContent = sessionUnlocked ? `🔓 Unlocked · ${label}` : "🔒 Runner locked";
-      el.classList.toggle("is-unlocked", sessionUnlocked);
-    });
-  };
-
   const authDialog = document.getElementById("wb-auth-dialog");
   const authForm = document.getElementById("wb-auth-form");
   const authStatus = document.getElementById("wb-auth-status");
   const runDialog = document.getElementById("wb-run-dialog");
+  const runNowToggle = document.getElementById("wb-study-run-now");
+  const studySubmitBtn = document.getElementById("wb-study-submit");
+
+  // ---- Client IP Resolution & Permanent IP Lockout State ----
+  let clientIp = loadJson(LOCKOUT_KEY).lastIp || "local-ip";
+
+  const getLockoutStore = () => {
+    const store = loadJson(LOCKOUT_KEY);
+    store.attemptsByIp = store.attemptsByIp || {};
+    store.lockedIps = store.lockedIps || {};
+    return store;
+  };
+
+  const isIpLocked = () => {
+    const store = getLockoutStore();
+    return Boolean(store.lockedAll || store.lockedIps[clientIp]);
+  };
+
+  const getFailedAttempts = () => {
+    const store = getLockoutStore();
+    return Number(store.attemptsByIp[clientIp] || store.attemptsByIp._local || 0);
+  };
+
+  const setFailedAttempts = (count) => {
+    const store = getLockoutStore();
+    store.lastIp = clientIp;
+    store.attemptsByIp[clientIp] = count;
+    store.attemptsByIp._local = count;
+    saveJson(LOCKOUT_KEY, store);
+  };
+
+  const syncLockoutDom = () => {
+    const locked = isIpLocked();
+    const label = MODEL_LABELS[selectedRunnerModel] || MODEL_LABELS["argon-high"];
+    document.querySelectorAll("[data-wb-auth-indicator]").forEach((el) => {
+      if (locked) {
+        el.textContent = `🚫 IP ${clientIp} Locked Out`;
+      } else {
+        el.textContent = sessionUnlocked ? `🔓 Unlocked · ${label}` : "🔒 Runner locked";
+      }
+      el.classList.toggle("is-unlocked", !locked && sessionUnlocked);
+      el.classList.toggle("is-locked-out", locked);
+    });
+    document.querySelectorAll("[data-run-study-id]").forEach((btn) => {
+      btn.disabled = locked;
+      btn.textContent = locked ? "🚫 IP Locked Out" : "▶ Run study now";
+    });
+    if (runNowToggle) {
+      if (locked) {
+        runNowToggle.checked = false;
+        if (studySubmitBtn) studySubmitBtn.textContent = "Save to Workbench +";
+      }
+      runNowToggle.disabled = locked;
+    }
+    if (authForm) {
+      ["wb-auth-new-pass", "wb-auth-model", "wb-auth-key"].forEach((id) => {
+        const el = document.getElementById(id);
+        const wrap = el ? el.closest("label") : null;
+        if (wrap) wrap.hidden = locked;
+      });
+    }
+  };
+
+  const lockCurrentIp = () => {
+    const store = getLockoutStore();
+    store.lastIp = clientIp;
+    store.lockedAll = true;
+    store.lockedIps[clientIp] = { ip: clientIp, lockedAt: new Date().toISOString() };
+    saveJson(LOCKOUT_KEY, store);
+    sessionUnlocked = false;
+    unlockedApiKey = "";
+    syncLockoutDom();
+  };
+
+  const unlockCurrentIp = () => {
+    const store = getLockoutStore();
+    store.lockedAll = false;
+    delete store.lockedIps[clientIp];
+    delete store.lockedIps["local-ip"];
+    store.attemptsByIp[clientIp] = 0;
+    store.attemptsByIp._local = 0;
+    saveJson(LOCKOUT_KEY, store);
+    const passInput = document.getElementById("wb-auth-pass");
+    if (passInput) passInput.placeholder = "Enter current passphrase to unlock";
+    syncLockoutDom();
+  };
+
+  // Resolve public IP in background via ipify (graceful fallback if offline/ad-blocked)
+  if (typeof fetch === "function") {
+    fetch("https://api.ipify.org?format=json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => {
+        if (d && d.ip) {
+          const store = getLockoutStore();
+          const prevIp = clientIp;
+          clientIp = String(d.ip);
+          store.lastIp = clientIp;
+          if (store.lockedAll || store.lockedIps[prevIp]) {
+            store.lockedIps[clientIp] = { ip: clientIp, lockedAt: new Date().toISOString() };
+          }
+          if (store.attemptsByIp._local && !store.attemptsByIp[clientIp]) {
+            store.attemptsByIp[clientIp] = store.attemptsByIp._local;
+          }
+          saveJson(LOCKOUT_KEY, store);
+          syncLockoutDom();
+        }
+      })
+      .catch(() => {
+        /* keep local-ip fallback */
+      });
+  }
+
+  const updateAuthIndicators = () => syncLockoutDom();
 
   const openDialog = (dlg) => {
     if (!dlg) return;
@@ -265,11 +384,18 @@
 
   document.querySelectorAll("[data-wb-auth-open]").forEach((btn) => {
     btn.addEventListener("click", () => {
+      syncLockoutDom();
       if (authStatus) {
-        const hasVault = Boolean(loadJson(VAULT_KEY).cipher);
-        authStatus.textContent = hasVault
-          ? "Custom browser vault active. Enter your current passphrase to unlock, change passphrase, or update settings."
-          : "Default owner passphrase active. Enter your passphrase to unlock (or fill New passphrase to change it).";
+        if (isIpLocked()) {
+          authStatus.classList.add("is-error");
+          authStatus.textContent = `🚫 IP ${clientIp} is permanently locked out after 10 failed attempts. Inaccessible until unlocked by a valid passphrase.`;
+        } else {
+          authStatus.classList.remove("is-error");
+          const hasVault = Boolean(loadJson(VAULT_KEY).cipher);
+          authStatus.textContent = hasVault
+            ? "Custom browser vault active. Enter your current passphrase to unlock, change passphrase, or update settings."
+            : "Default owner passphrase active. Enter your passphrase to unlock (or fill New passphrase to change it).";
+        }
       }
       openDialog(authDialog);
     });
@@ -281,7 +407,10 @@
       sessionUnlocked = false;
       unlockedApiKey = "";
       updateAuthIndicators();
-      if (authStatus) authStatus.textContent = "Session locked.";
+      if (authStatus) {
+        authStatus.classList.remove("is-error");
+        authStatus.textContent = "Session locked.";
+      }
       closeDialog(authDialog);
       announce("Study Runner locked.");
     });
@@ -296,21 +425,14 @@
       const newPassphrase = String(data.get("newPassphrase") || "").trim();
       const newKey = String(data.get("apiKey") || "").trim();
       const chosenModel = String(data.get("runnerModel") || "argon-high");
-      if (passphrase.length < 4) {
-        if (authStatus) authStatus.textContent = "Passphrase must be at least 4 characters.";
-        return;
-      }
-      if (newPassphrase && newPassphrase.length < 4) {
-        if (authStatus) authStatus.textContent = "New passphrase must be at least 4 characters.";
-        return;
-      }
+
       try {
         const vault = loadJson(VAULT_KEY);
         let existingApiKey = "";
         let existingModel = chosenModel;
         let verified = false;
 
-        if (vault.cipher && vault.tag) {
+        if (passphrase.length > 0 && vault.cipher && vault.tag) {
           try {
             const parsed = openVault(passphrase, vault);
             if (parsed.verifier === "LIAM_WB_OK") {
@@ -322,12 +444,23 @@
             /* fall through to check default owner passphrase */
           }
         }
-        if (!verified && (matchesDefaultPassphrase(passphrase) || matchesDefaultPassphrase(rawPass))) {
+        if (!verified && passphrase.length > 0 && (matchesDefaultPassphrase(passphrase) || matchesDefaultPassphrase(rawPass))) {
           verified = true;
         }
         if (!verified) {
           throw new Error("Passphrase mismatch");
         }
+
+        if (newPassphrase && newPassphrase.length < 4) {
+          if (authStatus) {
+            authStatus.classList.add("is-error");
+            authStatus.textContent = "New passphrase must be at least 4 characters.";
+          }
+          return;
+        }
+
+        // Valid passphrase entered: lift any IP lockout and reset the 1-10 failed-attempt loop!
+        unlockCurrentIp();
 
         const effectivePass = newPassphrase || passphrase;
         const effectiveApiKey = newKey || existingApiKey;
@@ -342,6 +475,7 @@
 
         sessionUnlocked = true;
         unlockedApiKey = effectiveApiKey;
+        if (authStatus) authStatus.classList.remove("is-error");
         updateAuthIndicators();
         authForm.reset();
         const modelSel = document.getElementById("wb-auth-model");
@@ -360,8 +494,31 @@
       } catch {
         sessionUnlocked = false;
         unlockedApiKey = "";
+        // If already locked out on this IP, close the window immediately on any wrong attempt.
+        if (isIpLocked()) {
+          closeDialog(authDialog);
+          announce(`🚫 Access denied for IP ${clientIp} — permanently locked until unlocked.`);
+          return;
+        }
+        const attempt = getFailedAttempts() + 1;
+        setFailedAttempts(attempt);
+        if (attempt > FAILED_ATTEMPT_MESSAGES.length) {
+          // Failed after seeing #10 ("Last Try ...") -> close window & permanently lock out IP
+          lockCurrentIp();
+          closeDialog(authDialog);
+          announce(`🚫 IP ${clientIp} permanently locked out after 10 failed attempts until unlocked.`);
+          return;
+        }
+        const msg = FAILED_ATTEMPT_MESSAGES[attempt - 1];
+        if (authStatus) {
+          authStatus.classList.add("is-error");
+          authStatus.textContent = msg;
+        }
+        if (attempt === FAILED_ATTEMPT_MESSAGES.length) {
+          const passInput = document.getElementById("wb-auth-pass");
+          if (passInput) passInput.placeholder = "Last Try 👉🤢👈👉😶👈👉😼👈👉😈👈";
+        }
         updateAuthIndicators();
-        if (authStatus) authStatus.textContent = "Incorrect current passphrase — verification failed. No tokens used.";
       }
     });
   }
@@ -526,9 +683,14 @@
   };
 
   const requestRunStudy = (study) => {
+    if (isIpLocked()) {
+      announce(`🚫 Access permanently locked for IP ${clientIp} until unlocked by the owner.`);
+      return;
+    }
     if (!sessionUnlocked) {
       pendingStudyToRun = study;
       if (authStatus) {
+        authStatus.classList.remove("is-error");
         authStatus.textContent = `Passkey required to run "${study.title}". Unlock below to proceed.`;
       }
       openDialog(authDialog);
@@ -577,8 +739,6 @@
   }
 
   // Update submit button text when "Run study right now" toggle is flipped
-  const runNowToggle = document.getElementById("wb-study-run-now");
-  const studySubmitBtn = document.getElementById("wb-study-submit");
   if (runNowToggle && studySubmitBtn) {
     runNowToggle.addEventListener("change", () => {
       studySubmitBtn.textContent = runNowToggle.checked
@@ -747,6 +907,7 @@
       markStudyCompletedInDom(studyObj, resultRecord);
     }
   }
+  syncLockoutDom();
 
   // Handle form submissions
   document.querySelectorAll("form[data-wb-table]").forEach((form) => {

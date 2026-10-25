@@ -319,6 +319,7 @@ caption { text-align:left; font-size:11px; color:#969db5; padding:14px; }
 .wb-peek-btn:hover .wb-peek-pupil,.wb-peek-btn:hover .wb-peek-glint { transform:translateX(1.2px); }
 .wb-peek-btn.is-peeking .wb-peek-pupil,.wb-peek-btn.is-peeking .wb-peek-glint,.wb-peek-btn[aria-pressed="true"] .wb-peek-pupil,.wb-peek-btn[aria-pressed="true"] .wb-peek-glint { transform:translateX(2.4px); }
 .request-status { min-height:1.4em; margin:0; color:#b7c7ff; font-size:12px; }
+.request-status.is-error { color:#f28b82; font-size:13.5px; font-weight:600; }
 .request-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:12px; }
 .request-side { display:flex; align-items:center; min-height:44px; margin:0 0 14px; padding:8px 12px; border:1px dashed #b5a6f466; border-radius:8px; color:#cfc4ff; font-size:12px; }
 .request-side:hover { border-style:solid; background:#9b83d716; }
