@@ -747,36 +747,150 @@
     });
   }
 
+  // ---- PowerBI-Style Study Link Tooltip (Desktop hover + Mobile/Desktop click-to-pin) ----
+  const closeAllStudyTooltips = (exceptCell = null) => {
+    document.querySelectorAll(".wb-study-cell.is-open").forEach((cellEl) => {
+      if (cellEl !== exceptCell) {
+        cellEl.classList.remove("is-open");
+        const trig = cellEl.querySelector("[data-wb-study-trigger]");
+        if (trig) trig.setAttribute("aria-expanded", "false");
+      }
+    });
+  };
+
+  const wireStudyCellTooltip = (cellEl) => {
+    const trig = cellEl.querySelector("[data-wb-study-trigger]");
+    const closeBtn = cellEl.querySelector("[data-wb-tip-close]");
+    if (trig) {
+      trig.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        const opening = !cellEl.classList.contains("is-open");
+        closeAllStudyTooltips(cellEl);
+        cellEl.classList.toggle("is-open", opening);
+        trig.setAttribute("aria-expanded", opening ? "true" : "false");
+      });
+    }
+    if (closeBtn) {
+      closeBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        cellEl.classList.remove("is-open");
+        if (trig) trig.setAttribute("aria-expanded", "false");
+      });
+    }
+  };
+
+  document.querySelectorAll(".wb-study-cell").forEach(wireStudyCellTooltip);
+  document.addEventListener("click", (ev) => {
+    if (!ev.target.closest(".wb-study-cell")) closeAllStudyTooltips();
+  });
+  document.addEventListener("keydown", (ev) => {
+    if (ev.key === "Escape") closeAllStudyTooltips();
+  });
+
+  const buildStudyCellDom = (entry) => {
+    const td = document.createElement("td");
+    td.className = "wb-study-td";
+    const wrap = document.createElement("div");
+    wrap.className = "wb-study-cell";
+
+    const trig = document.createElement("button");
+    trig.type = "button";
+    trig.className = "wb-study-link";
+    trig.setAttribute("data-wb-study-trigger", "");
+    trig.setAttribute("aria-expanded", "false");
+    trig.setAttribute("aria-controls", `wb-tip-${entry.id}`);
+    const titleSpan = cell("span", entry.title);
+    titleSpan.className = "wb-study-link-title";
+    const pillSpan = cell("span", "↗ Details & Run");
+    pillSpan.className = "wb-study-link-pill";
+    pillSpan.setAttribute("aria-hidden", "true");
+    trig.append(titleSpan, pillSpan);
+
+    const tip = document.createElement("div");
+    tip.className = "wb-pbi-tooltip";
+    tip.id = `wb-tip-${entry.id}`;
+    tip.setAttribute("role", "region");
+    tip.setAttribute("aria-label", `${entry.title} details`);
+
+    const head = document.createElement("div");
+    head.className = "wb-pbi-head";
+    const kicker = document.createElement("span");
+    kicker.className = "wb-pbi-kicker";
+    const codeEl = cell("code", entry.id);
+    kicker.append(codeEl, document.createTextNode(" · Study Tooltip"));
+    const closeBtn = cell("button", "✕");
+    closeBtn.type = "button";
+    closeBtn.className = "wb-pbi-close";
+    closeBtn.setAttribute("data-wb-tip-close", "");
+    closeBtn.setAttribute("aria-label", "Close study tooltip");
+    head.append(kicker, closeBtn);
+
+    const destRow = document.createElement("div");
+    destRow.className = "wb-pbi-row";
+    const destLbl = cell("span", "Destination");
+    destLbl.className = "wb-pbi-label";
+    const destVal = document.createElement("div");
+    destVal.className = "wb-pbi-val";
+    const destLink = cell("a", `${entry.atlasPath.split("/").pop().replace(/-/g, " ")} ↗`);
+    destLink.href = `../${entry.atlasPath}/index.html`;
+    destVal.appendChild(destLink);
+    destRow.append(destLbl, destVal);
+
+    const qRow = document.createElement("div");
+    qRow.className = "wb-pbi-row";
+    const qLbl = cell("span", "Question");
+    qLbl.className = "wb-pbi-label";
+    const qP = cell("p", entry.question);
+    qP.className = "wb-pbi-question";
+    qRow.append(qLbl, qP);
+
+    const outRow = document.createElement("div");
+    outRow.className = "wb-pbi-row";
+    const outLbl = cell("span", "Outputs / Run");
+    outLbl.className = "wb-pbi-label";
+    const outAct = document.createElement("div");
+    outAct.className = "wb-pbi-actions";
+    outAct.setAttribute("data-study-outputs", entry.id);
+    const runBtn = document.createElement("button");
+    runBtn.type = "button";
+    runBtn.className = "button ghost wb-run-study-btn";
+    runBtn.textContent = isIpLocked() ? "🚫 IP Locked Out" : "▶ Run study now";
+    runBtn.disabled = isIpLocked();
+    runBtn.setAttribute("data-run-study-id", entry.id);
+    runBtn.setAttribute("data-study-title", entry.title);
+    runBtn.setAttribute("data-study-path", entry.atlasPath);
+    runBtn.setAttribute("data-study-question", entry.question);
+    runBtn.setAttribute("data-study-dataset", entry.dataset);
+    attachRunButtonListener(runBtn);
+    outAct.appendChild(runBtn);
+    outRow.append(outLbl, outAct);
+
+    tip.append(head, destRow, qRow, outRow);
+    wrap.append(trig, tip);
+    wireStudyCellTooltip(wrap);
+    td.appendChild(wrap);
+    return td;
+  };
+
   const appendRow = (table, entry) => {
     if (table === "studyQueue") {
       const tbody = document.getElementById("wb-studies-body");
       if (!tbody) return;
       const tr = document.createElement("tr");
       tr.setAttribute("data-study-row", entry.id);
+      tr.setAttribute("data-study-date", entry.createdOn);
+      tr.setAttribute("data-study-title", entry.title);
+      tr.setAttribute("data-study-path", entry.atlasPath);
+      tr.setAttribute("data-study-question", entry.question);
+      tr.setAttribute("data-study-dataset", entry.dataset);
       const statusTd = cell("td", entry.status);
       statusTd.setAttribute("data-study-status", entry.id);
-      const outTd = document.createElement("td");
-      outTd.setAttribute("data-study-outputs", entry.id);
-      const runBtn = document.createElement("button");
-      runBtn.type = "button";
-      runBtn.className = "button ghost wb-run-study-btn";
-      runBtn.textContent = "▶ Run study now";
-      runBtn.setAttribute("data-run-study-id", entry.id);
-      runBtn.setAttribute("data-study-title", entry.title);
-      runBtn.setAttribute("data-study-path", entry.atlasPath);
-      runBtn.setAttribute("data-study-question", entry.question);
-      runBtn.setAttribute("data-study-dataset", entry.dataset);
-      attachRunButtonListener(runBtn);
-      outTd.appendChild(runBtn);
       tr.append(
         cell("th", entry.id),
         cell("td", entry.createdOn),
-        cell("td", entry.title),
-        cell("td", entry.atlasPath),
-        cell("td", entry.question),
+        buildStudyCellDom(entry),
         cell("td", entry.dataset),
-        statusTd,
-        outTd
+        statusTd
       );
       tbody.appendChild(tr);
     } else if (table === "wishlistTodos") {
@@ -895,14 +1009,13 @@
   for (const [studyId, resultRecord] of Object.entries(savedRuns)) {
     const rowEl = document.querySelector(`[data-study-row="${studyId}"]`);
     if (rowEl && resultRecord && resultRecord.tex) {
-      const cells = rowEl.querySelectorAll("td");
       const studyObj = {
         id: studyId,
-        createdOn: cells[0]?.textContent || todayIso(),
-        title: cells[1]?.textContent || studyId,
-        atlasPath: cells[2]?.textContent || "",
-        question: cells[3]?.textContent || "",
-        dataset: cells[4]?.textContent || "",
+        createdOn: rowEl.getAttribute("data-study-date") || todayIso(),
+        title: rowEl.getAttribute("data-study-title") || studyId,
+        atlasPath: rowEl.getAttribute("data-study-path") || "",
+        question: rowEl.getAttribute("data-study-question") || "",
+        dataset: rowEl.getAttribute("data-study-dataset") || "",
       };
       markStudyCompletedInDom(studyObj, resultRecord);
     }

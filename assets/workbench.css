@@ -54,3 +54,31 @@
 .workbench-page .wb-pipe-card h3 { margin: 0 0 8px; font-size: 15px; }
 .workbench-page .wb-schema-details { margin: 14px 0; }
 .workbench-page .wb-schema-details summary { cursor: pointer; font-weight: 650; color: #9ddacf; margin-bottom: 8px; }
+/* PowerBI-style interactive Study link & hover/tap tooltip card */
+.workbench-page .wb-studies-wrap { overflow: visible; }
+.workbench-page .wb-study-td { position: relative; min-width: 220px; }
+.workbench-page .wb-study-cell { position: relative; display: inline-block; max-width: 100%; }
+.workbench-page .wb-study-link { appearance: none; display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 4px 0; border: 0; background: transparent; color: #9ddacf; font: inherit; font-weight: 700; text-align: left; cursor: pointer; }
+.workbench-page .wb-study-link-title { text-decoration: underline; text-decoration-color: #9ddacf99; text-decoration-thickness: 1.5px; text-underline-offset: 4px; transition: color .15s ease, text-decoration-color .15s ease; }
+.workbench-page .wb-study-link-pill { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 999px; border: 1px solid #9ddacf55; background: #9ddacf14; color: #d6f7f0; font: 700 10.5px/1.3 Consolas, monospace; letter-spacing: .04em; text-decoration: none; white-space: nowrap; transition: background .15s ease, border-color .15s ease, box-shadow .15s ease; }
+.workbench-page .wb-study-link:is(:hover, :focus-visible) .wb-study-link-title, .workbench-page .wb-study-cell.is-open .wb-study-link-title { color: #ffffff; text-decoration-color: #9ddacf; }
+.workbench-page .wb-study-link:is(:hover, :focus-visible) .wb-study-link-pill, .workbench-page .wb-study-cell.is-open .wb-study-link-pill { background: #9ddacf2e; border-color: #9ddacf; box-shadow: 0 0 12px #9ddacf33; }
+.workbench-page .wb-pbi-tooltip { display: none; position: absolute; left: 0; top: calc(100% + 8px); width: min(460px, 84vw); padding: 16px 18px; border: 1px solid #9ddacf66; border-top: 3px solid #9ddacf; border-radius: 10px; background: linear-gradient(165deg, #161d31fc, #0c101dfc); box-shadow: 0 24px 60px #000e; z-index: 60; gap: 11px; color: var(--text); text-align: left; }
+.workbench-page .wb-pbi-tooltip::before { content: ""; position: absolute; left: 0; right: 0; top: -12px; height: 12px; }
+@media (hover: hover) {
+  .workbench-page .wb-study-cell:is(:hover, :focus-within) .wb-pbi-tooltip { display: grid; }
+}
+.workbench-page .wb-study-cell.is-open .wb-pbi-tooltip { display: grid; }
+.workbench-page .wb-pbi-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding-bottom: 8px; border-bottom: 1px solid #ffffff18; }
+.workbench-page .wb-pbi-kicker { font: 700 11px/1.2 Consolas, monospace; text-transform: uppercase; letter-spacing: .08em; color: #9ddacf; }
+.workbench-page .wb-pbi-close { width: 26px; height: 26px; padding: 0; display: grid; place-items: center; border: 1px solid #ffffff24; border-radius: 6px; background: #ffffff08; color: var(--muted); font-size: 12px; cursor: pointer; }
+.workbench-page .wb-pbi-close:hover { color: #fff; border-color: #9ddacf; background: #9ddacf22; }
+.workbench-page .wb-pbi-row { display: grid; gap: 3px; }
+.workbench-page .wb-pbi-label { font: 700 10.5px/1.2 Consolas, monospace; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.workbench-page .wb-pbi-val { font-size: 13.5px; font-weight: 600; }
+.workbench-page .wb-pbi-question { margin: 0; font-size: 13px; line-height: 1.55; color: #e8eaf6; white-space: normal; }
+.workbench-page .wb-pbi-actions { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding-top: 2px; }
+@media (max-width: 760px) {
+  .workbench-page .wb-studies-wrap { overflow-x: auto; }
+  .workbench-page .wb-pbi-tooltip { position: fixed; left: 14px; right: 14px; top: auto; bottom: 18px; width: auto; max-height: 75dvh; overflow-y: auto; z-index: 90; }
+}
