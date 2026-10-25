@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Liam McGrath’s connected notebook of science, language, data analysis and creative projects.">
+<meta name="theme-color" content="#0d101b"><title>Above and Beneath the Surface: The AI Iceberg Index | Liam McGrath</title>
+<link rel="icon" href="../../../../assets/mark.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../../../../assets/styles.css"><link rel="stylesheet" href="../../../../assets/portfolio.css"><link rel="stylesheet" href="../../../../assets/career.css"><link rel="stylesheet" href="../../../../assets/atlas-icons.css">
+<script defer src="../../../../assets/math-config.js"></script><script defer id="MathJax-script" src="../../../../assets/vendor/mathjax/tex-chtml.js"></script></head><body><a class="skip-link" href="#main-content">Skip to content</a><header class="site-header">
+      <a class="brand" href="../../../../index.html" aria-label="Liam McGrath home"><span class="brand-mark" aria-hidden="true">LM</span><span>LIAM McGRATH<small>AN OPEN NOTEBOOK</small></span></a>
+    <nav aria-label="Primary navigation"><a href="../../../../Mental-Map/index.html">Mental Map</a><a href="../../../../Atlas/index.html">Atlas</a><a href="../../../../index.html#creator-owen">Creators</a><a href="../../../../Smash/index.html">Smash</a><a href="../../../../About/index.html">About me <span aria-hidden="true">↗</span></a></nav>
+    </header><main id="main-content" class="document-page"><div class="atlas-strip tone-business"><span class="atlas-strip-icon atlas-hover"><svg class="atlas-icon ai-b2c8e497" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M8 54h48"/><g class="b"><circle cx="50" cy="16" r="5"/><path d="M50 8V6M56.5 9.5 58 8M57 16h2"/></g><g class="a"><path d="M12 54V40h9v14M24 54V30h9v24M36 54V22h9v32"/><path d="M27 35h3M27 41h3M39 27h3M39 33h3M39 39h3"/></g></svg></span><nav class="atlas-crumbs" aria-label="Breadcrumb"><ol><li><a href="../../../../index.html">Home</a></li><li><a href="../../../../Business-and-Economics/index.html">Business &amp; Economics</a></li><li><a href="../../../../Business-and-Economics/Macroeconomics/index.html">Macroeconomics</a></li><li><a href="../../../../Business-and-Economics/Macroeconomics/Economic-Growth/index.html">Economic Growth</a></li><li aria-current="page">Paper</li></ol></nav><span class="atlas-strip-meta">Attached reader</span></div><div class="reader-top"><div><p class="eyebrow">The connected notebook / LaTeX edition</p><h1>Above and Beneath the Surface: The AI Iceberg Index</h1><p>Liam McGrath · Macroeconomics &amp; labor-exposure study</p></div><div class="toolbar"><a class="button primary" href="../../../../assets/documents/macro-ai-iceberg/document.pdf" download>Compiled article · PDF ↓</a><a class="button ghost" href="../../../../assets/documents/macro-ai-iceberg/source-bundle.zip" download>Source + images · ZIP ↓</a><button class="button ghost print-reader" type="button">Print / Save PDF</button></div></div>
+    <div class="reader-layout"><aside class="reader-sidebar"><details class="contents-panel" open><summary>Contents <span>4 headings</span></summary><label class="toc-search-label" for="toc-search">Find a section<input id="toc-search" type="search" placeholder="Search the contents…"></label><div id="reader-toc"><nav aria-label="Table of contents" class="tex-toc"><ol><li data-level="1"><a href="#sec:iceberg-model">1 The Iceberg Decomposition of Labor Exposure</a></li><li data-level="1"><a href="#sec:role-matrix">2 Role Decomposition Inside Major NAICS Industries</a></li><li data-level="1"><a href="#sec:regional-map">3 Regional Economies: Why the Rust Belt and Financial Hubs Diverge</a></li><li data-level="1"><a href="#sec:moats">4 What Gets Wiped Out vs. What Gains Leverage</a></li></ol></nav></div><p id="toc-empty" hidden>No matching sections.</p></details></aside>
+    <div class="reader-column"><nav class="topic-links" aria-label="Deeper topic pages"><strong>Follow a thread ↗</strong><a href="../index.html">Interactive Iceberg study ↗</a><a href="../../index.html">Macroeconomics ↗</a><a href="../../../../Workbench/index.html">Workbench ↗</a></nav><p class="reader-note">Formal decomposition of visible vs. submerged AI skill exposure across 12 NAICS sectors and 12 regional economies.</p><p class="math-status" role="status">Typesetting equations locally…</p><article class="tex-paper"><h1 data-number="1" id="sec:iceberg-model"><span class="header-section-number">1</span> The Iceberg Decomposition of Labor Exposure</h1>
+<p>Public debate around artificial intelligence and employment concentrates almost exclusively on visible technology roles: software engineering, data infrastructure, and digital media. The Massachusetts Institute of Technology (MIT) and Oak Ridge National Laboratory (ORNL) <em>Project Iceberg</em> study models <span class="math inline">\(N = 151\times 10^6\)</span> workers across <span class="math inline">\(J = 923\)</span> occupations and <span class="math inline">\(K &gt; 32{,}000\)</span> occupational skills. Its central finding is a structural decomposition of the total national wage bill <span class="math inline">\(W\)</span> into three disjoint components:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+W = W_{\text{surface}} + W_{\text{submerged}} + W_{\text{moat}},
+\label{eq:wage-split}
+\end{equation}\]</span>
+</div>
+<p>where <span class="math inline">\(W_{\text{surface}}\)</span> denotes visible technology-sector adoption, <span class="math inline">\(W_{\text{submerged}}\)</span> denotes skills-centered technical exposure embedded inside traditional non-technology industries, and <span class="math inline">\(W_{\text{moat}}\)</span> denotes tasks anchored in physical dexterity, on-site presence, clinical care, or statutory human liability.</p>
+<p>Empirically, the Project Iceberg baseline yields the shares:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+s_{\text{surface}} = \frac{W_{\text{surface}}}{W} \simeq 0.022 \quad (\$211\text{B}), \qquad
+s_{\text{submerged}} = \frac{W_{\text{submerged}}}{W} \simeq 0.117 \quad (\$1.20\text{T}),
+\label{eq:iceberg-shares}
+\end{equation}\]</span>
+</div>
+<p>giving a combined technical skill exposure of <span class="math inline">\(s_{\text{total}} = s_{\text{surface}} + s_{\text{submerged}} = 0.139\)</span> (<span class="math inline">\(13.9\%\)</span> of wage value) and a submerged-to-surface multiplier of</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\Lambda = \frac{s_{\text{submerged}}}{s_{\text{surface}}} = \frac{11.7}{2.2} \simeq 5.32.
+\label{eq:iceberg-ratio}
+\end{equation}\]</span>
+</div>
+<p>For every dollar of wage value visibly disrupted inside the computing and software sector, more than five dollars of technically automatable cognitive, clerical, financial, and analytical work sits beneath the surface in manufacturing, finance, healthcare, retail, logistics, and public administration.</p>
+<h1 data-number="2" id="sec:role-matrix"><span class="header-section-number">2</span> Role Decomposition Inside Major NAICS Industries</h1>
+<p>Why do non-technology sectors carry such large submerged exposure? An industry <span class="math inline">\(i \in \{1,\dots,12\}\)</span> is not a homogeneous occupation; it is a convex combination of occupational role families <span class="math inline">\(r \in \{1,\dots,6\}\)</span> with employment shares <span class="math inline">\(\theta_{i,r}\)</span> satisfying <span class="math inline">\(\sum_{r=1}^6 \theta_{i,r} = 1\)</span>. Let <span class="math inline">\(\alpha_r^{\text{surf}}\)</span> and <span class="math inline">\(\alpha_r^{\text{sub}}\)</span> denote the mean surface and submerged task-exposure coefficients of role family <span class="math inline">\(r\)</span>. Then industry <span class="math inline">\(i\)</span>’s expected wage-weighted exposure is:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+E_i = \sum_{r=1}^{6} \theta_{i,r}\left(\alpha_r^{\text{surf}} + \alpha_r^{\text{sub}}\right).
+\label{eq:sector-exposure}
+\end{equation}\]</span>
+</div>
+<p>The six occupational role families exhibit sharply different technical overlap with current frontier language and multimodal models:</p>
+<ol>
+<li><p><strong>Analytical, Engineering &amp; Technical</strong> (<span class="math inline">\(\alpha^{\text{surf}} \simeq 14.0\%\)</span>, <span class="math inline">\(\alpha^{\text{sub}} \simeq 34.0\%\)</span>): software, quantitative finance, CAD drafting, legal/tax research, and operations modeling.</p></li>
+<li><p><strong>Administrative, Clerical &amp; Operations Support</strong> (<span class="math inline">\(\alpha^{\text{surf}} \simeq 2.5\%\)</span>, <span class="math inline">\(\alpha^{\text{sub}} \simeq 46.0\%\)</span>): scheduling, medical coding, claims triage, invoicing, compliance packets, and procurement logs.</p></li>
+<li><p><strong>Management, Finance &amp; Strategy</strong> (<span class="math inline">\(\alpha^{\text{surf}} \simeq 2.0\%\)</span>, <span class="math inline">\(\alpha^{\text{sub}} \simeq 24.0\%\)</span>): budgeting, reporting, project tracking, and performance synthesis.</p></li>
+<li><p><strong>Sales, Intake &amp; Client Service</strong> (<span class="math inline">\(\alpha^{\text{surf}} \simeq 2.2\%\)</span>, <span class="math inline">\(\alpha^{\text{sub}} \simeq 22.0\%\)</span>): tier-1 customer support, inside sales, order routing, and catalog management.</p></li>
+<li><p><strong>Skilled Trades, Plant &amp; Transport</strong> (<span class="math inline">\(\alpha^{\text{surf}} \simeq 0.4\%\)</span>, <span class="math inline">\(\alpha^{\text{sub}} \simeq 4.5\%\)</span>): machining, electrical/plumbing/millwright work, heavy trucking, and line maintenance.</p></li>
+<li><p><strong>Hands-On Clinical, Site &amp; Hospitality</strong> (<span class="math inline">\(\alpha^{\text{surf}} \simeq 0.3\%\)</span>, <span class="math inline">\(\alpha^{\text{sub}} \simeq 3.5\%\)</span>): bedside nursing, emergency medicine, job-site construction, and culinary service.</p></li>
+</ol>
+<div class="center">
+<table>
+<thead>
+<tr>
+<th style="text-align: left;"><strong>NAICS Sector</strong></th>
+<th style="text-align: right;"><strong>Jobs</strong></th>
+<th style="text-align: right;"><strong>GDP</strong></th>
+<th style="text-align: right;"><strong>Tip</strong></th>
+<th style="text-align: right;"><strong>Sub.</strong></th>
+<th style="text-align: right;"><strong>Total</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">51 Information, Software &amp; Media</td>
+<td style="text-align: right;">2.1%</td>
+<td style="text-align: right;">5.5%</td>
+<td style="text-align: right;">16.8%</td>
+<td style="text-align: right;">26.4%</td>
+<td style="text-align: right;">43.2%</td>
+</tr>
+<tr>
+<td style="text-align: left;">54 Professional, Scientific &amp; Tech</td>
+<td style="text-align: right;">7.4%</td>
+<td style="text-align: right;">8.1%</td>
+<td style="text-align: right;">6.9%</td>
+<td style="text-align: right;">27.1%</td>
+<td style="text-align: right;">34.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">52 Finance, Insurance &amp; Real Estate</td>
+<td style="text-align: right;">6.0%</td>
+<td style="text-align: right;">20.7%</td>
+<td style="text-align: right;">4.2%</td>
+<td style="text-align: right;">28.6%</td>
+<td style="text-align: right;">32.8%</td>
+</tr>
+<tr>
+<td style="text-align: left;">92 Public Administration</td>
+<td style="text-align: right;">4.8%</td>
+<td style="text-align: right;">11.4%</td>
+<td style="text-align: right;">1.1%</td>
+<td style="text-align: right;">15.9%</td>
+<td style="text-align: right;">17.0%</td>
+</tr>
+<tr>
+<td style="text-align: left;">61 Educational Services</td>
+<td style="text-align: right;">8.9%</td>
+<td style="text-align: right;">5.2%</td>
+<td style="text-align: right;">1.3%</td>
+<td style="text-align: right;">12.6%</td>
+<td style="text-align: right;">13.9%</td>
+</tr>
+<tr>
+<td style="text-align: left;">31–33 Manufacturing</td>
+<td style="text-align: right;">8.3%</td>
+<td style="text-align: right;">10.3%</td>
+<td style="text-align: right;">1.4%</td>
+<td style="text-align: right;">11.8%</td>
+<td style="text-align: right;">13.2%</td>
+</tr>
+<tr>
+<td style="text-align: left;">42–45 Retail &amp; Wholesale Trade</td>
+<td style="text-align: right;">12.8%</td>
+<td style="text-align: right;">11.9%</td>
+<td style="text-align: right;">1.2%</td>
+<td style="text-align: right;">10.9%</td>
+<td style="text-align: right;">12.1%</td>
+</tr>
+<tr>
+<td style="text-align: left;">62 Healthcare &amp; Social Assistance</td>
+<td style="text-align: right;">14.1%</td>
+<td style="text-align: right;">8.6%</td>
+<td style="text-align: right;">0.9%</td>
+<td style="text-align: right;">10.4%</td>
+<td style="text-align: right;">11.3%</td>
+</tr>
+<tr>
+<td style="text-align: left;">21 Energy, Mining &amp; Extraction</td>
+<td style="text-align: right;">1.6%</td>
+<td style="text-align: right;">3.4%</td>
+<td style="text-align: right;">1.5%</td>
+<td style="text-align: right;">9.8%</td>
+<td style="text-align: right;">11.3%</td>
+</tr>
+<tr>
+<td style="text-align: left;">48–49 Transportation &amp; Warehousing</td>
+<td style="text-align: right;">5.1%</td>
+<td style="text-align: right;">4.9%</td>
+<td style="text-align: right;">0.8%</td>
+<td style="text-align: right;">8.7%</td>
+<td style="text-align: right;">9.5%</td>
+</tr>
+<tr>
+<td style="text-align: left;">23 Construction</td>
+<td style="text-align: right;">6.1%</td>
+<td style="text-align: right;">4.4%</td>
+<td style="text-align: right;">0.5%</td>
+<td style="text-align: right;">5.4%</td>
+<td style="text-align: right;">5.9%</td>
+</tr>
+<tr>
+<td style="text-align: left;">72 Accommodation &amp; Food Services</td>
+<td style="text-align: right;">9.4%</td>
+<td style="text-align: right;">3.6%</td>
+<td style="text-align: right;">0.4%</td>
+<td style="text-align: right;">4.8%</td>
+<td style="text-align: right;">5.2%</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 data-number="3" id="sec:regional-map"><span class="header-section-number">3</span> Regional Economies: Why the Rust Belt and Financial Hubs Diverge</h1>
+<p>For a regional economy <span class="math inline">\(g\)</span> with industry GDP shares <span class="math inline">\(\omega_{g,i}\)</span>, the local Iceberg ratio <span class="math inline">\(\Lambda_g = S_g^{\text{sub}} / S_g^{\text{surf}}\)</span> measures how badly tech-sector headcount understates total labor exposure:</p>
+<div class="tex-display-math">
+<span class="math display">\[\begin{equation}
+\Lambda_g = \frac{\sum_i \omega_{g,i}\, s_{i,\text{submerged}}}{\sum_i \omega_{g,i}\, s_{i,\text{surface}}}.
+\label{eq:regional-ratio}
+\end{equation}\]</span>
+</div>
+<p>In coastal software hubs such as California (<span class="math inline">\(4.8\%\)</span> visible, <span class="math inline">\(13.6\%\)</span> submerged, <span class="math inline">\(\Lambda_{\text{CA}} \simeq 2.83\)</span>) and the Pacific Northwest (<span class="math inline">\(4.4\%\)</span> visible, <span class="math inline">\(12.5\%\)</span> submerged, <span class="math inline">\(\Lambda_{\text{PNW}} \simeq 2.84\)</span>), a large share of AI exposure is already visible in technology payrolls. By contrast, in the Great Lakes Manufacturing Belt (<span class="math inline">\(1.6\%\)</span> visible, <span class="math inline">\(11.9\%\)</span> submerged, <span class="math inline">\(\Lambda_{\text{GL}} \simeq 7.44\)</span>), Ontario (<span class="math inline">\(2.6\%\)</span> visible, <span class="math inline">\(13.1\%\)</span> submerged, <span class="math inline">\(\Lambda_{\text{ON}} \simeq 5.04\)</span>), and Alberta (<span class="math inline">\(1.6\%\)</span> visible, <span class="math inline">\(9.9\%\)</span> submerged, <span class="math inline">\(\Lambda_{\text{AB}} \simeq 6.19\)</span>), the technology sector looks small on paper while corporate headquarters, plant scheduling, engineering documentation, banking, and logistics carry five to seven times as much submerged task exposure.</p>
+<h1 data-number="4" id="sec:moats"><span class="header-section-number">4</span> What Gets Wiped Out vs. What Gains Leverage</h1>
+<p>Task exposure is not identical to immediate job elimination; it measures the fraction of an occupation’s skill bundle where automated systems can substitute for human hours. Occupations fail when three conditions hold simultaneously:</p>
+<ul>
+<li><p>High submerged skill overlap (<span class="math inline">\(\alpha_r^{\text{sub}} &gt; 0.35\)</span>) in routine information routing, transcription, or boilerplate generation;</p></li>
+<li><p>Low physical or environmental variability (purely screen-mediated inputs and outputs);</p></li>
+<li><p>Low personal statutory or fiduciary liability (outputs are reviewed downstream by a licensed engineer, physician, or counsel).</p></li>
+</ul>
+<p>Conversely, workers who combine domain judgment with physical execution or statutory sign-off experience AI as a complement that compresses administrative overhead rather than a substitute for their core role.</p>
+<p class="tex-source-download"><a download="" href="../../../../assets/documents/macro-ai-iceberg/macro_ai_iceberg.tex">Download original LaTeX source</a></p></article><noscript><p>JavaScript is required for equation typesetting. The contents, text and images remain available; download the LaTeX source for the original formulas.</p></noscript><a class="back-top" href="#main-content">Back to the top ↑</a></div></div></main>
+<footer class="site-footer"><a href="../../../../index.html">Liam McGrath · An open notebook</a><span>Ideas are better connected.</span><a href="../../../../About/index.html">About &amp; documents ↗</a><p class="site-copyright">© 2026 Liam McGrath. All rights reserved. No part of this site or its source may be copied or republished without permission. <a href="../../../../LICENSE.txt">License</a></p></footer>
+<script src="../../../../assets/site.js"></script><script defer src="../../../../assets/portfolio.js"></script>
+</body></html>

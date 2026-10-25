@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\setlength{\emergencystretch}{3em}
+\usepackage{amsmath,amssymb,enumitem}
+\usepackage[hidelinks]{hyperref}
+\title{Three Ballots in One: Ballot Structure, Coalition Anatomy, and Demographic Splits in the 2026 Alberta Referendum}
+\author{Liam McGrath}
+\date{25 October 2026}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Overview of the 19 October 2026 Ballot}
+\label{sec:ballot-overview}
+On 19 October 2026, Alberta voters cast more than $2.07\times 10^6$ ballots across ten provincial referendum questions---the largest ballot count in the province's history. Although presented on a single ballot, the ten questions partitioned into three distinct constitutional and policy regimes:
+\begin{enumerate}[label=\arabic*.]
+\item \textbf{Questions 1--5 (Non-constitutional provincial policy):} Five proposals on provincial immigration limits, eligibility for provincially funded health and social programs, a 12-month residency waiting period, fees for non-permanent residents, and proof of citizenship to vote.
+\item \textbf{Questions 6--9 (Constitutional amendments):} Four proposals requiring bilateral or multilateral amendment of the Constitution of Canada: provincial selection of King's Bench and Appeal judges, abolition of the federal Senate, opting out of federal social programs with full funding, and provincial paramountcy over conflicting federal laws.
+\item \textbf{Question 10 (Sovereignty process):} A binary choice between remaining a province of Canada (Option 1: \textit{Remain}) or commencing the legal process toward a binding referendum on separating from Canada (Option 2: \textit{Referendum}).
+\end{enumerate}
+
+Let $p_q \in [0,1]$ denote the two-way affirmative share on question $q \in \{1,\dots,10\}$:
+\begin{equation}
+p_q = \frac{V_q^{\text{For}}}{V_q^{\text{For}} + V_q^{\text{Against}}}.
+\label{eq:two-way-share}
+\end{equation}
+The official Elections Alberta count reveals a clean regime boundary at the $p_q = 0.50$ threshold:
+\begin{equation}
+\min_{q \in \{1,\dots,5\}} p_q = 0.5229 > 0.50 > \max_{q \in \{6,\dots,9\}} p_q = 0.4978, \qquad p_{10}^{\text{Remain}} = 0.7495.
+\label{eq:regime-separation}
+\end{equation}
+
+\begin{center}
+\begin{tabular}{lp{6.4cm}rrr}
+\hline
+\textbf{Q\#} & \textbf{Subject} & \textbf{For / Stay} & \textbf{Against} & \textbf{For \%} \\
+\hline
+Q1 & Provincial immigration control \& job priority & 1,093,541 & 907,731 & 54.64 \\
+Q2 & Citizen/PR eligibility for social programs & 1,032,950 & 941,379 & 52.32 \\
+Q3 & 12-month residency wait for benefits & 1,053,247 & 932,163 & 53.05 \\
+Q4 & Healthcare/school fee for non-perm.\ status & 1,007,376 & 919,120 & 52.29 \\
+Q5 & Proof of citizenship required to vote & 1,083,647 & 730,033 & 59.75 \\
+\hline
+Q6 & Provincial selection of superior-court judges & 832,386 & 918,241 & 47.55 \\
+Q7 & Abolish the unelected federal Senate & 898,093 & 926,950 & 49.21 \\
+Q8 & Opt out of federal programs w/ full funding & 752,760 & 855,376 & 46.81 \\
+Q9 & Provincial law priority over federal law & 785,995 & 792,812 & 49.78 \\
+\hline
+Q10 & Remain in Canada vs.\ separation referendum & 1,551,868 & 518,766 & 74.95 \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Ballot Roll-Off and Issue Salience}
+\label{sec:roll-off}
+Comparing total valid votes $N_q = V_q^{\text{For}} + V_q^{\text{Against}}$ across the ten questions measures voter roll-off relative to Question 10 ($N_{10} = 2{,}070{,}634$):
+\begin{equation}
+\rho_q = 1 - \frac{N_q}{N_{10}}.
+\label{eq:rolloff}
+\end{equation}
+Roll-off was minimal on Question 1 ($\rho_1 \simeq 3.35\%$) and Question 3 ($\rho_3 \simeq 4.12\%$), rose to $\rho_5 \simeq 12.4\%$ on voter citizenship ID, and peaked on the technical constitutional paramountcy and fiscal opt-out questions ($\rho_8 \simeq 22.3\%$, $\rho_9 \simeq 23.8\%$). Roughly one in five voters who cast a decisive ballot on remaining in Canada declined to endorse constitutional brinkmanship on Questions 6--9.
+
+\section{Demographic Decomposition of Question 10}
+\label{sec:demographics}
+Combining the Elections Alberta tally with pre-referendum and exit-poll cross-tabs from Abacus Data ($n = 1{,}021$, Oct 7--13, 2026) and Research Co.\ ($n = 811$ likely voters, Oct 16--18; $n = 601$ exit poll, Oct 19--20) shows how the aggregate $74.95\%$ Remain share arises as a turnout-weighted sum across demographic strata $g$:
+\begin{equation}
+P(\text{Remain}) = \sum_{g} w_g\, P(\text{Remain} \mid g), \qquad \sum_g w_g = 1.
+\label{eq:law-total-prob}
+\end{equation}
+
+\subsection{Regional Gradient}
+Remain won every geographic region of Alberta, but with a 20-point urban--rural gradient:
+\begin{itemize}
+\item \textbf{Edmonton Metro:} $77\%$ Remain, $17\%$ Option 2, $6\%$ undecided.
+\item \textbf{Calgary Metro:} $75\%$ Remain, $19\%$ Option 2, $6\%$ undecided.
+\item \textbf{Small Cities \& Suburbs:} $62\%$ Remain, $29\%$ Option 2, $9\%$ undecided.
+\item \textbf{Rural Alberta:} $57\%$ Remain, $35\%$ Option 2, $8\%$ undecided.
+\end{itemize}
+
+\subsection{Partisan Asymmetry}
+The referendum's sharpest cleavage ran inside the governing United Conservative Party (UCP) coalition rather than between the two major parties as wholes:
+\begin{itemize}
+\item \textbf{Provincial NDP supporters:} $93\%$ Remain, $4\%$ Option 2.
+\item \textbf{Provincial UCP supporters:} $44\%$ Remain, $52\%$ Option 2 ($4\%$ undecided), with $77\%$ of all Option 2 voters coming from the UCP base. Among UCP supporters voting Remain, $52\%$ cited economic caution or restraint rather than satisfaction with Ottawa.
+\item \textbf{2025 Federal Vote:} Federal Liberal ($95\%$ Remain / $5\%$ Option 2) and Federal NDP ($82\%$ Remain / $18\%$ Option 2) voters broke overwhelmingly for Remain, while 2025 Federal Conservative voters split $65\%$ Remain to $35\%$ Option 2.
+\end{itemize}
+
+\subsection{Age, Turnout, and Identity Attachment}
+Turnout strongly favored older cohorts: $85\%$ of voters aged $60+$ definitely voted (including mail-in ballots, which broke $93\%$ Remain), compared with $38\%$ of voters under $30$. Older Albertans ($60+$) reported identical $71\%$ strong attachment to both Canada and Alberta. By contrast, interest in Alberta becoming a US state skewed toward younger voters ($21\%$ among ages 18--34 vs.\ $15\%$ among 35--54 and $6\%$ among $55+$).
+
+\section{Decomposing the Option 2 Coalition: Leverage vs.\ Secession}
+\label{sec:coalition-math}
+A critical analytical mistake is equating the $25.05\%$ Option 2 vote with hard support for independence. Let $M \in \{\text{Independence}, \text{Better Deal}, \text{Direct Say}, \text{Message to Ottawa}, \text{Other}\}$ denote an Option 2 voter's primary motive, with empirical shares $(0.32, 0.23, 0.22, 0.19, 0.04)$, and let $P(\text{Separate} \mid \text{Option 2}) = 0.63$ be the share of Option 2 voters who say they would vote to separate in a binding follow-up referendum. Accounting for non-separatist protest voters yields an implied direct-independence share across the entire electorate of
+\begin{equation}
+P(\text{Independent Alberta}) \simeq 0.18 \quad (18\%),
+\label{eq:direct-independence}
+\end{equation}
+demonstrating that roughly one-third of the Option 2 vote functioned as constitutional bargaining leverage rather than a mandate to leave Confederation.
+
+\end{document}

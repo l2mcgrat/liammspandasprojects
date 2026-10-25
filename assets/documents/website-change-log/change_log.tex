@@ -3,11 +3,27 @@
 \usepackage[hidelinks]{hyperref}
 \title{Website Change Log}
 \author{Liam McGrath}
-\date{Last updated 18 October 2026}
+\date{Last updated 25 October 2026}
 \begin{document}
 \maketitle
 
 Newest first. Each date lists what was requested and what was implemented. Requests come from the prompts recorded in Website\_Change\_Log.txt and the build conversations; planned work lives in the separate Upcoming Changes document.
+
+\section{25 October 2026: database Workbench, hybrid log sync, and two flagship studies}
+\subsection{Requested changes}
+\begin{itemize}
+\item A hybrid Python script for pulling Gaming \& Performance logs from Google Drive (\texttt{Logs/}) or local files that parses structured entries for zero tokens and repairs formatting slips before rebuilding.
+\item A direct subpage like Atlas (\texttt{Workbench/index.html}) backed by four database tables: (1) a To Study with Data table, (2) a To-Do \& wishlist table, (3) a spontaneous rap lyric table with a topic-bucket dropdown, and (4) a voice-recording studio that feeds a journal and podcast queue.
+\item First end-to-end study for Macroeconomics: what AI will wipe out according to the MIT / Oak Ridge Iceberg Index, how the major NAICS industries break down into occupational roles, an interactive regional economy map, and a dedicated LaTeX paper.
+\item Second end-to-end study: the 19 October 2026 Alberta Referendum votes across all ten questions and how each demographic voted, with its own dedicated LaTeX paper.
+\end{itemize}
+\subsection{Implemented changes}
+\begin{itemize}
+\item \texttt{python -B -m site\_content.log\_sync} pulls all six athletics and health logs from a mounted Google Drive \texttt{Logs/} folder (or local edits), validates them with the strict parsers (0 tokens), applies deterministic regex repairs for common paste slips (0 tokens), and supports an optional \texttt{--llm-repair} single-line Gemini fallback ($<80$ tokens) when a line still fails.
+\item \texttt{Workbench/index.html} is live as a direct top-level subpage backed by a relational SQLite store (\texttt{records/workbench/workbench.db}) and JSON/CSV exports across all four tables, complete with browser capture forms, a Rap bucket filter, a Web Audio voice-note recorder with live dictation, and one-tap GitHub Mobile handoff.
+\item The Macroeconomics study (\texttt{Business-and-Economics/Macroeconomics/Economic-Growth/index.html}) charts the $2.2\%$ visible vs.\ $11.7\%$ submerged Iceberg split across 12 NAICS sectors, breaks every industry into six occupational role families, provides an interactive 12-region North American economy map, and links to its compiled Tectonic PDF paper (\texttt{Paper/index.html}).
+\item The Public Policy study (\texttt{Business-and-Economics/Law-and-Policy/Public-Policy/index.html}) charts all ten 19 October 2026 Alberta Referendum questions, compares 14 demographic slices by region, party coalition, age, turnout, and voting channel, analyzes voter motives inside both coalitions, and links to its compiled Tectonic PDF paper (\texttt{Paper/index.html}).
+\end{itemize}
 
 \section{18 October 2026: sleep, diet and two weeks of training}
 \subsection{Requested changes}

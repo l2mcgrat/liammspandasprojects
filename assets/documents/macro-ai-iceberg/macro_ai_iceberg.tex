@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\setlength{\emergencystretch}{3em}
+\usepackage{amsmath,amssymb,enumitem}
+\usepackage[hidelinks]{hyperref}
+\title{Above and Beneath the Surface: Sector Structure, Occupational Roles, and the AI Iceberg Index}
+\author{Liam McGrath}
+\date{25 October 2026}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{The Iceberg Decomposition of Labor Exposure}
+\label{sec:iceberg-model}
+Public debate around artificial intelligence and employment concentrates almost exclusively on visible technology roles: software engineering, data infrastructure, and digital media. The Massachusetts Institute of Technology (MIT) and Oak Ridge National Laboratory (ORNL) \textit{Project Iceberg} study models $N = 151\times 10^6$ workers across $J = 923$ occupations and $K > 32{,}000$ occupational skills. Its central finding is a structural decomposition of the total national wage bill $W$ into three disjoint components:
+\begin{equation}
+W = W_{\text{surface}} + W_{\text{submerged}} + W_{\text{moat}},
+\label{eq:wage-split}
+\end{equation}
+where $W_{\text{surface}}$ denotes visible technology-sector adoption, $W_{\text{submerged}}$ denotes skills-centered technical exposure embedded inside traditional non-technology industries, and $W_{\text{moat}}$ denotes tasks anchored in physical dexterity, on-site presence, clinical care, or statutory human liability.
+
+Empirically, the Project Iceberg baseline yields the shares:
+\begin{equation}
+s_{\text{surface}} = \frac{W_{\text{surface}}}{W} \simeq 0.022 \quad (\$211\text{B}), \qquad
+s_{\text{submerged}} = \frac{W_{\text{submerged}}}{W} \simeq 0.117 \quad (\$1.20\text{T}),
+\label{eq:iceberg-shares}
+\end{equation}
+giving a combined technical skill exposure of $s_{\text{total}} = s_{\text{surface}} + s_{\text{submerged}} = 0.139$ ($13.9\%$ of wage value) and a submerged-to-surface multiplier of
+\begin{equation}
+\Lambda = \frac{s_{\text{submerged}}}{s_{\text{surface}}} = \frac{11.7}{2.2} \simeq 5.32.
+\label{eq:iceberg-ratio}
+\end{equation}
+For every dollar of wage value visibly disrupted inside the computing and software sector, more than five dollars of technically automatable cognitive, clerical, financial, and analytical work sits beneath the surface in manufacturing, finance, healthcare, retail, logistics, and public administration.
+
+\section{Role Decomposition Inside Major NAICS Industries}
+\label{sec:role-matrix}
+Why do non-technology sectors carry such large submerged exposure? An industry $i \in \{1,\dots,12\}$ is not a homogeneous occupation; it is a convex combination of occupational role families $r \in \{1,\dots,6\}$ with employment shares $\theta_{i,r}$ satisfying $\sum_{r=1}^6 \theta_{i,r} = 1$. Let $\alpha_r^{\text{surf}}$ and $\alpha_r^{\text{sub}}$ denote the mean surface and submerged task-exposure coefficients of role family $r$. Then industry $i$'s expected wage-weighted exposure is:
+\begin{equation}
+E_i = \sum_{r=1}^{6} \theta_{i,r}\left(\alpha_r^{\text{surf}} + \alpha_r^{\text{sub}}\right).
+\label{eq:sector-exposure}
+\end{equation}
+
+The six occupational role families exhibit sharply different technical overlap with current frontier language and multimodal models:
+\begin{enumerate}[label=\arabic*.]
+\item \textbf{Analytical, Engineering \& Technical} ($\alpha^{\text{surf}} \simeq 14.0\%$, $\alpha^{\text{sub}} \simeq 34.0\%$): software, quantitative finance, CAD drafting, legal/tax research, and operations modeling.
+\item \textbf{Administrative, Clerical \& Operations Support} ($\alpha^{\text{surf}} \simeq 2.5\%$, $\alpha^{\text{sub}} \simeq 46.0\%$): scheduling, medical coding, claims triage, invoicing, compliance packets, and procurement logs.
+\item \textbf{Management, Finance \& Strategy} ($\alpha^{\text{surf}} \simeq 2.0\%$, $\alpha^{\text{sub}} \simeq 24.0\%$): budgeting, reporting, project tracking, and performance synthesis.
+\item \textbf{Sales, Intake \& Client Service} ($\alpha^{\text{surf}} \simeq 2.2\%$, $\alpha^{\text{sub}} \simeq 22.0\%$): tier-1 customer support, inside sales, order routing, and catalog management.
+\item \textbf{Skilled Trades, Plant \& Transport} ($\alpha^{\text{surf}} \simeq 0.4\%$, $\alpha^{\text{sub}} \simeq 4.5\%$): machining, electrical/plumbing/millwright work, heavy trucking, and line maintenance.
+\item \textbf{Hands-On Clinical, Site \& Hospitality} ($\alpha^{\text{surf}} \simeq 0.3\%$, $\alpha^{\text{sub}} \simeq 3.5\%$): bedside nursing, emergency medicine, job-site construction, and culinary service.
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{p{5.8cm}rrrrr}
+\hline
+\textbf{NAICS Sector} & \textbf{Jobs} & \textbf{GDP} & \textbf{Tip} & \textbf{Sub.} & \textbf{Total} \\
+\hline
+51 Information, Software \& Media & 2.1\% & 5.5\% & 16.8\% & 26.4\% & 43.2\% \\
+54 Professional, Scientific \& Tech & 7.4\% & 8.1\% & 6.9\% & 27.1\% & 34.0\% \\
+52 Finance, Insurance \& Real Estate & 6.0\% & 20.7\% & 4.2\% & 28.6\% & 32.8\% \\
+92 Public Administration & 4.8\% & 11.4\% & 1.1\% & 15.9\% & 17.0\% \\
+61 Educational Services & 8.9\% & 5.2\% & 1.3\% & 12.6\% & 13.9\% \\
+31--33 Manufacturing & 8.3\% & 10.3\% & 1.4\% & 11.8\% & 13.2\% \\
+42--45 Retail \& Wholesale Trade & 12.8\% & 11.9\% & 1.2\% & 10.9\% & 12.1\% \\
+62 Healthcare \& Social Assistance & 14.1\% & 8.6\% & 0.9\% & 10.4\% & 11.3\% \\
+21 Energy, Mining \& Extraction & 1.6\% & 3.4\% & 1.5\% & 9.8\% & 11.3\% \\
+48--49 Transportation \& Warehousing & 5.1\% & 4.9\% & 0.8\% & 8.7\% & 9.5\% \\
+23 Construction & 6.1\% & 4.4\% & 0.5\% & 5.4\% & 5.9\% \\
+72 Accommodation \& Food Services & 9.4\% & 3.6\% & 0.4\% & 4.8\% & 5.2\% \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Regional Economies: Why the Rust Belt and Financial Hubs Diverge}
+\label{sec:regional-map}
+For a regional economy $g$ with industry GDP shares $\omega_{g,i}$, the local Iceberg ratio $\Lambda_g = S_g^{\text{sub}} / S_g^{\text{surf}}$ measures how badly tech-sector headcount understates total labor exposure:
+\begin{equation}
+\Lambda_g = \frac{\sum_i \omega_{g,i}\, s_{i,\text{submerged}}}{\sum_i \omega_{g,i}\, s_{i,\text{surface}}}.
+\label{eq:regional-ratio}
+\end{equation}
+In coastal software hubs such as California ($4.8\%$ visible, $13.6\%$ submerged, $\Lambda_{\text{CA}} \simeq 2.83$) and the Pacific Northwest ($4.4\%$ visible, $12.5\%$ submerged, $\Lambda_{\text{PNW}} \simeq 2.84$), a large share of AI exposure is already visible in technology payrolls. By contrast, in the Great Lakes Manufacturing Belt ($1.6\%$ visible, $11.9\%$ submerged, $\Lambda_{\text{GL}} \simeq 7.44$), Ontario ($2.6\%$ visible, $13.1\%$ submerged, $\Lambda_{\text{ON}} \simeq 5.04$), and Alberta ($1.6\%$ visible, $9.9\%$ submerged, $\Lambda_{\text{AB}} \simeq 6.19$), the technology sector looks small on paper while corporate headquarters, plant scheduling, engineering documentation, banking, and logistics carry five to seven times as much submerged task exposure.
+
+\section{What Gets Wiped Out vs.\ What Gains Leverage}
+\label{sec:moats}
+Task exposure is not identical to immediate job elimination; it measures the fraction of an occupation's skill bundle where automated systems can substitute for human hours. Occupations fail when three conditions hold simultaneously:
+\begin{itemize}
+\item High submerged skill overlap ($\alpha_r^{\text{sub}} > 0.35$) in routine information routing, transcription, or boilerplate generation;
+\item Low physical or environmental variability (purely screen-mediated inputs and outputs);
+\item Low personal statutory or fiduciary liability (outputs are reviewed downstream by a licensed engineer, physician, or counsel).
+\end{itemize}
+Conversely, workers who combine domain judgment with physical execution or statutory sign-off experience AI as a complement that compresses administrative overhead rather than a substitute for their core role.
+
+\end{document}

@@ -3,11 +3,22 @@
 \usepackage[hidelinks]{hyperref}
 \title{Upcoming Website Changes}
 \author{Liam McGrath}
-\date{Last updated 18 October 2026}
+\date{Last updated 25 October 2026}
 \begin{document}
 \maketitle
 
 Planned work, by the date it was requested. Each date lists the requested changes and how they are planned to be implemented. Finished items move to the Change Log.
+
+\section{25 October 2026: open items}
+\subsection{Requested changes}
+\begin{itemize}
+\item Connect a live serverless insert endpoint (Cloudflare Worker + D1 or Supabase) to \texttt{Workbench/index.html} so phone submissions write directly without a GitHub Mobile commit step.
+\item Run the next queued Workbench studies: First to Four basketball leverage analysis and Primer-style replicator simulations.
+\end{itemize}
+\subsection{Planned implementation}
+\begin{itemize}
+\item Point the Workbench forms at the Worker URL once deployed; the browser payload already matches the four SQLite tables in \texttt{records/workbench/workbench.db}.
+\end{itemize}
 
 \section{18 October 2026: open items}
 \subsection{Requested changes}

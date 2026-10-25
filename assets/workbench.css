@@ -1,0 +1,38 @@
+/* Workbench direct subpage: four relational tables, quick-add forms, rap bucket filter, and voice recorder. */
+.workbench-page { --liam: #9ddacf; --link: #9ddacf; }
+.workbench-page .wb-status-card { padding: 20px 22px; border: 1px solid #9ddacf40; border-radius: 8px; background: linear-gradient(160deg, #13242b, #111622); display: grid; gap: 10px; align-content: start; }
+.workbench-page .wb-status-card h2 { margin: 0; font-size: 20px; }
+.workbench-page .wb-status-card p { margin: 0; color: var(--muted); font-size: 13.5px; line-height: 1.55; }
+.workbench-page .wb-export-bar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 4px; }
+.workbench-page .wb-status-msg { font-size: 12.5px; color: #8fe0a8; }
+.workbench-page .wb-badge { display: inline-block; padding: 3px 9px; border-radius: 999px; font: 700 11px/1.3 Consolas, monospace; text-transform: uppercase; letter-spacing: .06em; border: 1px solid currentColor; }
+.workbench-page .wb-up { color: #8fe0a8; background: #8fe0a814; }
+.workbench-page .wb-warn { color: #f7ab65; background: #f7ab6514; }
+.workbench-page .wb-flat { color: #a4acc3; background: #ffffff08; }
+.workbench-page .wb-prio { font: 700 11px/1.2 Consolas, monospace; text-transform: uppercase; }
+.workbench-page .wb-prio-high { color: #f28b82; }
+.workbench-page .wb-prio-medium { color: #f7ab65; }
+.workbench-page .wb-prio-low { color: #8fe0a8; }
+.workbench-page .wb-action-link { white-space: nowrap; font-weight: 600; }
+.workbench-page .wb-bars { margin: 0; font: 13px/1.55 "Segoe UI", system-ui, sans-serif; white-space: pre-wrap; color: #f0e6ff; }
+.workbench-page .wb-channel { display: inline-block; padding: 3px 8px; border-radius: 4px; background: #bba1ff1f; color: #d4c6ff; font-size: 12px; font-weight: 600; }
+.workbench-page .wb-sub, .workbench-page .wb-summary { display: block; margin-top: 4px; color: var(--muted); font-size: 12px; }
+.workbench-page .wb-transcript { margin: 0; line-height: 1.55; }
+.workbench-page .wb-bucket-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 14px; }
+.workbench-page .wb-bucket-chip { padding: 7px 13px; border: 1px solid var(--line); border-radius: 999px; background: #ffffff06; color: var(--muted); font-size: 13px; font-weight: 600; cursor: pointer; }
+.workbench-page .wb-bucket-chip.is-active, .workbench-page .wb-bucket-chip:hover { border-color: #9ddacf; color: var(--text); background: #9ddacf1c; }
+.workbench-page .wb-form { margin-top: 18px; padding: 20px 22px; border: 1px solid var(--line); border-radius: 8px; background: #0e1320cc; display: grid; gap: 14px; }
+.workbench-page .wb-form h3 { margin: 0; font-size: 16px; color: #9ddacf; }
+.workbench-page .wb-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px 16px; }
+.workbench-page .wb-form-grid label { display: grid; gap: 5px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
+.workbench-page .wb-form-grid .wb-wide { grid-column: 1 / -1; }
+.workbench-page .wb-form input, .workbench-page .wb-form select, .workbench-page .wb-form textarea { width: 100%; box-sizing: border-box; padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; background: #090c15; color: var(--text); font: 14px/1.45 "Segoe UI", system-ui, sans-serif; }
+.workbench-page .wb-form-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.workbench-page .wb-recorder { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px 14px; border: 1px dashed #9ddacf55; border-radius: 6px; background: #090d16; }
+.workbench-page .wb-rec-timer { font: 700 13px/1.4 Consolas, monospace; color: #f7ab65; }
+.workbench-page .wb-upload-btn { cursor: pointer; margin: 0; }
+.workbench-page .wb-pipeline-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 16px; margin-bottom: 16px; }
+.workbench-page .wb-pipe-card { padding: 16px 18px; border: 1px solid #ffffff14; border-radius: 6px; background: #ffffff05; }
+.workbench-page .wb-pipe-card h3 { margin: 0 0 8px; font-size: 15px; }
+.workbench-page .wb-schema-details { margin: 14px 0; }
+.workbench-page .wb-schema-details summary { cursor: pointer; font-weight: 650; color: #9ddacf; margin-bottom: 8px; }

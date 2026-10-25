@@ -1,0 +1,13 @@
+id,name,country,gdpBillionsUsd,workersMillions,surfaceAiPct,submergedAiPct,combinedAiPct,signature
+ON,Ontario (Toronto–Waterloo–Auto Corridor),Canada,830,8.0,2.6,13.1,15.7,High submerged exposure in Bay Street back-office finance alongside protected auto/process manufacturing in southwestern Ontario.
+AB,Alberta (Calgary–Edmonton–Oil Sands),Canada,345,2.5,1.6,9.9,11.5,"Field extraction and skilled trades anchor a high physical moat, while Calgary corporate/engineering headquarters carry the submerged AI exposure."
+BC,British Columbia (Pacific Gateway),Canada,310,2.9,2.5,11.4,13.9,"Port logistics, natural resources, and construction balance urban software/VFX exposure in Vancouver."
+QC,Quebec (Montreal–Aerospace & Hydro),Canada,440,4.5,2.4,12.0,14.4,Strong AI research hub (Mila) paired with heavy aerospace/industrial manufacturing and public-sector services.
+CA,California (Bay Area–SoCal–Central Valley),USA,4100,18.6,4.8,13.6,18.4,"Highest visible 'tip of the iceberg' (4.8%) due to Silicon Valley, plus large submerged exposure in entertainment, legal, and financial ops."
+TX,Texas (Houston–DFW–Austin Triangle),USA,2650,14.2,2.3,11.2,13.5,"DFW/Austin corporate & tech hubs create mid-tier cognitive exposure, buffered by Gulf Coast energy, refining, and construction."
+NY,New York & Tri-State Corridor,USA,2250,9.8,3.4,15.8,19.2,"Highest submerged Iceberg exposure (15.8%): dense concentration of financial analysis, compliance, legal, and administrative roles."
+GL,Great Lakes Manufacturing Belt (MI/OH/IL/IN),USA,3150,19.4,1.6,11.9,13.5,"The classic Iceberg case highlighted by ORNL: low visible tech-sector share (1.6%), but 7.4x larger submerged exposure in plant administration, supply chain, and insurance."
+NE,New England (Boston Biotech & Hartford Finance),USA,1420,7.5,3.5,14.4,17.9,"High white-collar density in insurance, asset management, and university administration alongside protected wet-lab R&D."
+PNW,Pacific Northwest (Seattle–Portland),USA,1180,6.1,4.4,12.5,16.9,"Second-highest visible tech exposure (4.4%) from hyperscale cloud & software HQs, contrasted with aerospace machining and maritime trade."
+SE,US Southeast (Atlanta–Charlotte–Florida),USA,3800,24.5,1.9,11.6,13.5,Charlotte banking and Atlanta corporate back-offices drive submerged clerical exposure; hospitality and construction remain physical.
+MW,Mountain & Plains (CO/UT/NM/KS),USA,1650,9.2,2.4,11.1,13.5,"National laboratories, aerospace engineering, and resource extraction balance mid-level administrative exposure."

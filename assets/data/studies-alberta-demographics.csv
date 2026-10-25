@@ -1,0 +1,15 @@
+dimension,group,remainPct,option2Pct,otherPct,turnoutOrShare,source
+Official Count,All Alberta Ballots (Oct 19),75.0,25.0,0.0,"2,070,634 ballots (99.98% rpt)",Elections Alberta
+Region,Edmonton Metro,77.0,17.0,6.0,41% say best days ahead,Abacus Data (Oct 2026)
+Region,Calgary Metro,75.0,19.0,6.0,48% say best days ahead,Abacus Data (Oct 2026)
+Region,Small Cities & Suburbs,62.0,29.0,9.0,Red Deer / Lethbridge / Airdrie,Abacus Data (Oct 2026)
+Region,Rural Alberta,57.0,35.0,8.0,52% say best days ahead,Abacus Data (Oct 2026)
+Provincial Party,Alberta NDP Voters,93.0,4.0,3.0,84% strong attachment to Canada,Abacus Data (Oct 2026)
+Provincial Party,United Conservative (UCP) Voters,44.0,52.0,4.0,77% of Option 2 pool is UCP,Abacus Data (Oct 2026)
+2025 Federal Vote,Federal Liberal Voters,95.0,5.0,0.0,Likely voters,"Research Co. (Oct 18, 2026)"
+2025 Federal Vote,Federal NDP Voters,82.0,18.0,0.0,Likely voters,"Research Co. (Oct 18, 2026)"
+2025 Federal Vote,Federal Conservative Voters,65.0,35.0,0.0,Likely voters,"Research Co. (Oct 18, 2026)"
+Age & Turnout,Ages 18–34 (Under 30 turnout 38%),64.0,24.0,12.0,21% open to US statehood,Abacus / Research Co.
+Age & Turnout,Ages 35–54,67.0,25.0,8.0,15% open to US statehood,Abacus / Research Co.
+Age & Turnout,Ages 55+ (60+ definite turnout 85%),73.0,23.0,4.0,6% open to US statehood; 71% dual attachment,Abacus / Research Co.
+Voting Channel,Early Mail-In Ballots (11% of electorate),93.0,7.0,0.0,84% of Remain voters 100% certain,Abacus Data (Oct 2026)

@@ -1,0 +1,54 @@
+/* Macroeconomics AI Iceberg & 2026 Alberta Referendum study dashboards. */
+.study-page .study-bar-surface, .study-page .ab-q-remain { fill: #69d4cf; }
+.study-page .study-bar-submerged { fill: #f7ab65; }
+.study-page .ab-q-pass { fill: #8fe0a8; }
+.study-page .ab-q-fail { fill: #f7ab65; }
+.study-page .ab-q-against { fill: #3b3754; }
+.study-page .ab-q-undecided { fill: #626980; }
+.study-page .study-key-surface { color: #69d4cf; }
+.study-page .study-key-submerged { color: #f7ab65; }
+.study-page .ab-key-pass { color: #8fe0a8; }
+.study-page .ab-key-against { color: #a4acc3; }
+.study-page .role-0 { fill: #69d4cf; }
+.study-page .role-1 { fill: #f7ab65; }
+.study-page .role-2 { fill: #bba1ff; }
+.study-page .role-3 { fill: #f28b82; }
+.study-page .role-4 { fill: #8fe0a8; }
+.study-page .role-5 { fill: #5e7ce2; }
+.study-page .role-key-0 { color: #69d4cf; }
+.study-page .role-key-1 { color: #f7ab65; }
+.study-page .role-key-2 { color: #bba1ff; }
+.study-page .role-key-3 { color: #f28b82; }
+.study-page .role-key-4 { color: #8fe0a8; }
+.study-page .role-key-5 { color: #8aa4ff; }
+.study-page .role-seg-label { fill: #0d101b; font: 700 11px/1 "Segoe UI", sans-serif; pointer-events: none; }
+.study-page .study-map-layout { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(280px, 1fr); gap: 20px; align-items: start; margin: 18px 0 24px; }
+.study-page .study-map-bg { fill: #0d111d; stroke: #ffffff18; }
+.study-page .study-map-land { fill: #161d31; stroke: #69d4cf44; stroke-width: 1.5; }
+.study-page .study-map-border { stroke: #f7ab6566; stroke-width: 1.5; stroke-dasharray: 6 5; }
+.study-page .study-map-caption { fill: #a4acc3; font: 700 11px/1 Consolas, monospace; letter-spacing: .08em; }
+.study-page .study-map-node { cursor: pointer; }
+.study-page .study-map-halo { fill: #69d4cf18; stroke: transparent; transition: all .18s ease; }
+.study-page .study-map-pin { fill: #1d2742; stroke: #69d4cf; stroke-width: 2.2; transition: all .18s ease; }
+.study-page .study-map-node.is-selected .study-map-halo, .study-page .study-map-node:hover .study-map-halo { fill: #f7ab6533; stroke: #f7ab65; stroke-width: 1.5; }
+.study-page .study-map-node.is-selected .study-map-pin, .study-page .study-map-node:hover .study-map-pin { fill: #f7ab65; stroke: #fff; }
+.study-page .study-map-code { fill: #fff; font: 700 11px/1 Consolas, monospace; pointer-events: none; }
+.study-page .study-map-node.is-selected .study-map-code, .study-page .study-map-node:hover .study-map-code { fill: #0d101b; }
+.study-page .study-map-pct { fill: #d4c6ff; font: 700 11px/1 "Segoe UI", sans-serif; pointer-events: none; }
+.study-page .study-inspector { padding: 20px 22px; border: 1px solid #69d4cf44; border-radius: 8px; background: linear-gradient(160deg, #161d30, #111422); display: grid; gap: 12px; }
+.study-page .study-inspector h3 { margin: 0; font-size: 19px; }
+.study-page .study-inspector h4 { margin: 4px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+.study-page .study-reg-kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.study-page .study-reg-kpis div { padding: 10px 12px; border: 1px solid #ffffff14; border-radius: 6px; background: #0b0e18; }
+.study-page .study-reg-kpis span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.study-page .study-reg-kpis strong { font: 700 18px/1.2 "Segoe UI", sans-serif; color: #f0e6ff; }
+.study-page .study-sector-bars { display: grid; gap: 8px; }
+.study-page .study-sector-row { display: grid; grid-template-columns: minmax(110px, 1.2fr) minmax(80px, 1.6fr) 38px; gap: 8px; align-items: center; font-size: 12.5px; }
+.study-page .study-sector-track { height: 9px; border-radius: 999px; background: #ffffff12; overflow: hidden; }
+.study-page .study-sector-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #69d4cf, #bba1ff); }
+.study-page .wb-bucket-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
+.study-page .wb-bucket-chip { padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; background: #ffffff06; color: var(--muted); font-size: 12.5px; font-weight: 600; cursor: pointer; }
+.study-page .wb-bucket-chip.is-active, .study-page .wb-bucket-chip:hover { border-color: #69d4cf; color: var(--text); background: #69d4cf1f; }
+@media (max-width: 860px) {
+  .study-page .study-map-layout { grid-template-columns: 1fr; }
+}

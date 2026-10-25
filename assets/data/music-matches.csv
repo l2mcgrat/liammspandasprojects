@@ -505,10 +505,10 @@ preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.tx
 preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.txt,34,Proud,Worthy,1,capable,capable,18,25,4,5,False,1
 preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.txt,37,Loving,Affectionate,1,loving,loving,31,37,7,8,False,1
 preference-56616761626f6e642f507265666572656e63652e747874,Vagabond/Preference.txt,40,Loving,Affectionate,1,love,love,14,18,4,5,False,1
+sparkly-56616761626f6e642f537061726b6c792e747874,Vagabond/Sparkly.txt,4,Joyful,Happy,1,happy,happy,38,43,7,8,False,1
+sparkly-56616761626f6e642f537061726b6c792e747874,Vagabond/Sparkly.txt,5,Grateful,Thankful,1,thankful,thankful,27,35,6,7,False,1
 target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,15,Intrigued,Curious,1,wondering,wondering,30,39,7,8,False,1
 target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,65,Sad,Lonely,0,lonely,lonely,20,26,4,5,True,0
-target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,95,Intrigued,Curious,1,wondering,wondering,30,39,7,8,False,1
-target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,145,Sad,Lonely,0,lonely,lonely,20,26,4,5,True,0
 type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,9,Depressed,Unworthy,1,powerless,Powerless,0,9,0,1,False,1
 type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,23,Joyful,Happy,1,happy,happy,45,50,10,11,False,1
 type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,31,Grateful,Blessed,1,blessings,blessings,30,39,6,7,False,1
@@ -525,3 +525,6 @@ void-56616761626f6e642f566f69642e747874,Vagabond/Void.txt,18,Grateful,Blessed,1,
 void-56616761626f6e642f566f69642e747874,Vagabond/Void.txt,20,Depressed,Empty,1,empty,empty,15,20,4,5,False,1
 void-56616761626f6e642f566f69642e747874,Vagabond/Void.txt,21,Joyful,Happy,1,glad,glad,3,7,1,2,False,1
 void-56616761626f6e642f566f69642e747874,Vagabond/Void.txt,27,Sad,Lonely,1,lonely,lonely,35,41,7,8,False,1
+void-56616761626f6e642f566f69642e747874,Vagabond/Void.txt,40,Joyful,Happy,1,glad,glad,47,51,11,12,False,1
+void-56616761626f6e642f566f69642e747874,Vagabond/Void.txt,40,Grateful,Thankful,1,thank you,thank you,28,37,7,9,False,1
+website-56616761626f6e642f576562736974652e747874,Vagabond/Website.txt,34,Surprised,Amazed,1,in awe,in awe,41,47,7,9,False,1
