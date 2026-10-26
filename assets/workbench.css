@@ -44,14 +44,26 @@
 .workbench-page .wb-form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); gap: 12px 16px; }
 .workbench-page .wb-form-grid label { display: grid; gap: 5px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .workbench-page .wb-form-grid .wb-wide { grid-column: 1 / -1; }
-.workbench-page .wb-form input, .workbench-page .wb-form select, .workbench-page .wb-form textarea { width: 100%; box-sizing: border-box; padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; background: #090c15; color: var(--text); font: 14px/1.45 "Segoe UI", system-ui, sans-serif; }
+.workbench-page .wb-form input:not([type="checkbox"]), .workbench-page .wb-form select, .workbench-page .wb-form textarea { width: 100%; box-sizing: border-box; padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; background: #090c15; color: var(--text); font: 14px/1.45 "Segoe UI", system-ui, sans-serif; }
 .workbench-page .wb-form textarea.wb-auto-grow { min-height: 42px; overflow-y: hidden; resize: vertical; field-sizing: content; transition: border-color .15s ease; }
 .workbench-page .wb-site-data-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border: 1px dashed #9ddacf44; border-radius: 8px; background: #090d16; }
 .workbench-page .wb-site-data-label { font-size: 12px; font-weight: 650; color: #9ddacf; margin-right: 4px; }
-.workbench-page .wb-restudy-fieldset { margin: 0; padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; background: #090c15; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
-.workbench-page .wb-restudy-fieldset legend { padding: 0 6px; font-size: 11.5px; font-weight: 650; color: var(--muted); position: static; width: auto; height: auto; clip-path: none; }
-.workbench-page .wb-restudy-fieldset label, .workbench-page .wb-restudy-checks label, .wb-restudy-bar label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text); cursor: pointer; }
-.workbench-page .wb-restudy-checks { display: flex; flex-wrap: wrap; gap: 8px 14px; padding-top: 2px; }
+/* Multi-Select Scope Pill Toggles & 3-Stage Cascading Atlas Selector */
+.workbench-page .wb-restudy-fieldset, .workbench-page .wb-cascade-fieldset { margin: 0; padding: 11px 14px 13px; border: 1px solid #9ddacf38; border-radius: 8px; background: #090d16; display: grid; gap: 10px; }
+.workbench-page .wb-restudy-fieldset legend, .workbench-page .wb-cascade-fieldset legend { padding: 0 6px; font-size: 11.5px; font-weight: 650; color: #9ddacf; letter-spacing: .04em; text-transform: uppercase; position: static; width: auto; height: auto; clip-path: none; }
+.workbench-page .wb-scope-pills, .wb-restudy-checks { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(180px, 100%), 1fr)); gap: 8px; }
+.workbench-page .wb-scope-pill, .wb-restudy-checks .wb-scope-pill { position: relative; display: inline-flex; align-items: center; gap: 9px; padding: 8px 12px; border: 1px solid #ffffff1a; border-radius: 8px; background: #101524; color: #b6bdd4; font-size: 12.5px; font-weight: 600; cursor: pointer; user-select: none; transition: border-color .16s ease, background .16s ease, color .16s ease, box-shadow .16s ease; }
+.workbench-page .wb-scope-pill input[type="checkbox"], .wb-restudy-checks .wb-scope-pill input[type="checkbox"] { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.workbench-page .wb-scope-check, .wb-restudy-checks .wb-scope-check { width: 16px; height: 16px; flex: 0 0 16px; border-radius: 4px; border: 1.5px solid #6b7494; background: #090c15; display: inline-grid; place-items: center; transition: background .16s ease, border-color .16s ease; }
+.workbench-page .wb-scope-check::after, .wb-restudy-checks .wb-scope-check::after { content: ""; width: 8px; height: 4px; border-left: 2px solid #091318; border-bottom: 2px solid #091318; transform: rotate(-45deg) scale(0); transition: transform .14s ease; }
+.workbench-page .wb-scope-pill:has(input:checked), .wb-restudy-checks .wb-scope-pill:has(input:checked) { border-color: #9ddacf88; background: linear-gradient(145deg, #153133, #0e1c24); color: #eefaf7; box-shadow: 0 6px 18px -10px #9ddacf66; }
+.workbench-page .wb-scope-pill:has(input:checked) .wb-scope-check, .wb-restudy-checks .wb-scope-pill:has(input:checked) .wb-scope-check { background: #9ddacf; border-color: #9ddacf; }
+.workbench-page .wb-scope-pill:has(input:checked) .wb-scope-check::after, .wb-restudy-checks .wb-scope-pill:has(input:checked) .wb-scope-check::after { transform: rotate(-45deg) scale(1); }
+.workbench-page .wb-scope-pill:hover, .wb-restudy-checks .wb-scope-pill:hover { border-color: #9ddacf66; color: #ffffff; }
+.workbench-page .wb-cascade-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px 14px; }
+@media (max-width: 760px) {
+  .workbench-page .wb-cascade-grid { grid-template-columns: 1fr; }
+}
 .wb-restudy-bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 10px 12px; border: 1px solid #9ddacf44; border-radius: 8px; background: #0b0f1b; font-size: 12.5px; }
 .workbench-page .wb-col-id, .workbench-page .wb-col-date, .workbench-page .wb-col-status { white-space: nowrap; width: 1%; }
 .workbench-page .wb-col-data { min-width: 190px; }

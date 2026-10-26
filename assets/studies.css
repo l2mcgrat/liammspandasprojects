@@ -39,11 +39,15 @@
 .study-page .study-inspector h3 { margin: 0; font-size: 19px; }
 .study-page .study-inspector h4 { margin: 4px 0 0; font-size: 12px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
 .study-page .study-reg-kpis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-.study-page .study-reg-kpis div { padding: 10px 12px; border: 1px solid #ffffff14; border-radius: 6px; background: #0b0e18; }
-.study-page .study-reg-kpis span { display: block; font-size: 11px; color: var(--muted); text-transform: uppercase; }
-.study-page .study-reg-kpis strong { font: 700 18px/1.2 "Segoe UI", sans-serif; color: #f0e6ff; }
+.study-page .study-reg-kpis > div { position: relative; padding: 10px 12px; border: 1px solid #ffffff14; border-radius: 6px; background: #0b0e18; cursor: pointer; transition: border-color .18s ease, background .18s ease; }
+.study-page .study-reg-kpis > div:hover, .study-page .study-reg-kpis > div.is-open { border-color: #69d4cf88; background: #141c30; }
+.study-page .study-reg-kpis .kpi-head { display: flex; justify-content: space-between; align-items: center; gap: 6px; }
+.study-page .study-reg-kpis .kpi-head span { display: inline; font-size: 11px; color: var(--muted); text-transform: uppercase; }
+.study-page .study-reg-kpis > div > strong { display: block; margin-top: 3px; font: 700 18px/1.2 "Segoe UI", sans-serif; color: #f0e6ff; }
 .study-page .study-sector-bars { display: grid; gap: 8px; }
-.study-page .study-sector-row { display: grid; grid-template-columns: minmax(110px, 1.2fr) minmax(80px, 1.6fr) 38px; gap: 8px; align-items: center; font-size: 12.5px; }
+.study-page .study-sector-row { position: relative; display: grid; grid-template-columns: minmax(110px, 1.2fr) minmax(80px, 1.6fr) 38px; gap: 8px; align-items: center; font-size: 12.5px; }
+.study-page .study-attr-row { padding: 6px 8px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; transition: border-color .16s ease, background .16s ease; }
+.study-page .study-attr-row:hover, .study-page .study-attr-row.is-open { border-color: #69d4cf66; background: #ffffff08; }
 .study-page .study-sector-track { height: 9px; border-radius: 999px; background: #ffffff12; overflow: hidden; }
 .study-page .study-sector-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #69d4cf, #bba1ff); }
 .study-page .wb-bucket-bar { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 12px; }
