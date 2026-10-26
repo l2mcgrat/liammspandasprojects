@@ -45,6 +45,17 @@
 .workbench-page .wb-form-grid label { display: grid; gap: 5px; font-size: 12.5px; font-weight: 600; color: var(--muted); }
 .workbench-page .wb-form-grid .wb-wide { grid-column: 1 / -1; }
 .workbench-page .wb-form input, .workbench-page .wb-form select, .workbench-page .wb-form textarea { width: 100%; box-sizing: border-box; padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; background: #090c15; color: var(--text); font: 14px/1.45 "Segoe UI", system-ui, sans-serif; }
+.workbench-page .wb-form textarea.wb-auto-grow { min-height: 42px; overflow-y: hidden; resize: vertical; field-sizing: content; transition: border-color .15s ease; }
+.workbench-page .wb-site-data-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border: 1px dashed #9ddacf44; border-radius: 8px; background: #090d16; }
+.workbench-page .wb-site-data-label { font-size: 12px; font-weight: 650; color: #9ddacf; margin-right: 4px; }
+.workbench-page .wb-restudy-fieldset { margin: 0; padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; background: #090c15; display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.workbench-page .wb-restudy-fieldset legend { padding: 0 6px; font-size: 11.5px; font-weight: 650; color: var(--muted); position: static; width: auto; height: auto; clip-path: none; }
+.workbench-page .wb-restudy-fieldset label, .workbench-page .wb-restudy-checks label, .wb-restudy-bar label { display: inline-flex; align-items: center; gap: 6px; font-size: 12.5px; color: var(--text); cursor: pointer; }
+.workbench-page .wb-restudy-checks { display: flex; flex-wrap: wrap; gap: 8px 14px; padding-top: 2px; }
+.wb-restudy-bar { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; padding: 10px 12px; border: 1px solid #9ddacf44; border-radius: 8px; background: #0b0f1b; font-size: 12.5px; }
+.workbench-page .wb-col-id, .workbench-page .wb-col-date, .workbench-page .wb-col-status { white-space: nowrap; width: 1%; }
+.workbench-page .wb-col-data { min-width: 190px; }
+.workbench-page .wb-click-pill { display: inline-flex; align-items: center; gap: 3px; padding: 2px 7px; border-radius: 999px; border: 1px solid #bba1ff44; background: #bba1ff14; color: #d4c6ff; font: 700 10.5px/1.3 Consolas, monospace; white-space: nowrap; }
 .workbench-page .wb-form-actions { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
 .workbench-page .wb-recorder { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; padding: 12px 14px; border: 1px dashed #9ddacf55; border-radius: 6px; background: #090d16; }
 .workbench-page .wb-rec-timer { font: 700 13px/1.4 Consolas, monospace; color: #f7ab65; }
@@ -91,6 +102,9 @@
 .wb-run-key-row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .wb-run-key-row input { flex: 1 1 240px; min-width: 0; padding: 9px 11px; border: 1px solid var(--line); border-radius: 6px; background: #080b14; color: var(--text); font: 13.5px/1.4 Consolas, monospace; }
 @media (max-width: 760px) {
-  .workbench-page .wb-studies-wrap { overflow-x: auto; }
-  .workbench-page .wb-pbi-tooltip { position: fixed; left: 14px; right: 14px; top: auto; bottom: 18px; width: auto; max-height: 75dvh; overflow-y: auto; z-index: 90; }
+  .workbench-page .wb-studies-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding-bottom: 6px; }
+  .workbench-page #workbench-studies-table,
+  .workbench-page #workbench-theory-table,
+  .workbench-page #workbench-apps-table { min-width: 680px; }
+  .workbench-page .wb-pbi-tooltip { position: fixed; left: 12px; right: 12px; top: auto; bottom: 16px; width: auto; max-height: 76dvh; overflow-y: auto; z-index: 95; }
 }

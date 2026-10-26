@@ -1,0 +1,58 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\setlength{\emergencystretch}{3em}
+\usepackage{amsmath,amssymb,enumitem}
+\usepackage[hidelinks]{hyperref}
+\title{Period 3 Power: Periodic Table Electrochemistry, Hard Carbon Intercalation, and Grid-Scale Sodium-Ion Batteries}
+\author{Liam McGrath}
+\date{25 October 2026}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Elemental \& Electrochemical Foundations: Period 2 vs.\ Period 3}
+\label{sec:periodic-electrochemistry}
+At the atomic level, the divergence between sodium-ion ($\text{Na}$-ion, SIB) and lithium-ion ($\text{Li}$-ion, LIB) electrochemistry stems directly from moving down Group 1 of the periodic table from Period 2 ($\text{Li}$, $Z = 3$, electron configuration $[\text{He}]2s^1$, molar mass $M_{\text{Li}} = 6.94\text{ g/mol}$) to Period 3 ($\text{Na}$, $Z = 11$, $[\text{Ne}]3s^1$, $M_{\text{Na}} = 22.99\text{ g/mol}$). Adding a closed $n=2$ neon core shell ($1s^2 2s^2 2p^6$) increases the six-coordinate Shannon octahedral ionic radius from $r_{\text{Li}^+} = 0.76\text{ \AA}$ to $r_{\text{Na}^+} = 1.02\text{ \AA}$---expanding the ionic volume by $(1.02 / 0.76)^3 \simeq 2.42\times$---and shifts the standard reduction potential from $E^\circ_{\text{Li}^+/\text{Li}} = -3.04\text{ V}$ to $E^\circ_{\text{Na}^+/\text{Na}} = -2.71\text{ V}$ versus the Standard Hydrogen Electrode (SHE).
+
+By Faraday's law of electrolysis, the theoretical specific capacity $Q_{\text{th}}$ of an alkali metal electrode transferring $n=1$ electron per mole is inversely proportional to its molar mass $M$:
+\begin{equation}
+Q_{\text{th}} = \frac{nF}{3.6\,M} \quad [\text{mAh/g}], \qquad
+Q_{\text{th}}^{\text{Li}} \simeq 3861\text{ mAh/g}, \qquad
+Q_{\text{th}}^{\text{Na}} \simeq 1166\text{ mAh/g}.
+\label{eq:faraday-capacity}
+\end{equation}
+The thermodynamic cell voltage $E_{\text{cell}}$ is governed by the difference in alkali chemical potential $\mu_A$ ($A \in \{\text{Li}, \text{Na}\}$) between the cathode host and anode host:
+\begin{equation}
+E_{\text{cell}}(x) = -\frac{\Delta G(x)}{nF} = -\frac{\mu_A^{\text{cathode}}(x) - \mu_A^{\text{anode}}(x)}{e}.
+\label{eq:chemical-potential}
+\end{equation}
+
+\section{Intercalation Thermodynamics, Current Collectors, and Desolvation Kinetics}
+\label{sec:intercalation-kinetics}
+Three structural consequences follow directly from the Period 3 core shell and surface charge density:
+\begin{enumerate}[label=\arabic*.]
+\item \textbf{Graphite Staging Instability vs.\ Hard Carbon Nanopores:} Whereas $\text{Li}^+$ intercalates into crystalline graphite ($d_{002} = 3.35\text{ \AA}$) to form $\text{LiC}_6$ ($372\text{ mAh/g}$), binary $\text{NaC}_6$ and $\text{NaC}_8$ staging compounds are thermodynamically unstable ($\Delta G_{\text{f}} > 0$) because the larger $\text{Na}^+$ ion induces severe interlayer strain and weaker $\pi$--cation binding, limiting graphite capacity to $< 35\text{ mAh/g}$. Commercial SIBs therefore replace graphite with disordered \textit{hard carbon} ($d_{002} \simeq 3.7$--$4.0\text{ \AA}$), which stores $300$--$350\text{ mAh/g}$ via sloping defect-adsorption followed by a low-voltage plateau ($0.05$--$0.12\text{ V}$ vs.\ $\text{Na/Na}^+$) where quasi-metallic sodium clusters fill closed nanopores.
+\item \textbf{Dual Aluminum Collectors and $0.0\text{ V}$ Transport:} Because lithium forms brittle intermetallic alloys with aluminum ($\text{LiAl}$) below $0.3\text{ V}$ vs.\ $\text{Li/Li}^+$, LIBs must use heavy, expensive copper foil on the anode---and discharging an LIB below $1.5\text{ V}$ dissolves $\text{Cu}^{2+}$ ions that plate into internal short-circuit dendrites upon recharge. Sodium exhibits zero thermodynamic solubility in solid aluminum at room temperature, allowing SIBs to use inexpensive aluminum foil on \textit{both} electrodes and to be shipped or stored short-circuited at $0.0\text{ V}$.
+\item \textbf{Lower Stokes Desolvation Energy for Sub-Zero Operation:} Although $\text{Na}^+$ has a larger bare crystallographic radius than $\text{Li}^+$, its surface electrostatic charge density $\sigma \propto q / (4\pi r^2)$ is $44\%$ lower. Consequently, $\text{Na}^+$ binds polar carbonate and ether solvent molecules more weakly, lowering the interfacial desolvation activation barrier $E_a^{\text{desolv}}$ by $25\%$--$30\%$ and sustaining $88\%$--$92\%$ capacity retention at $-20\,^\circ\text{C}$ versus $64\%$ for $\text{LiFePO}_4$ (LFP).
+\end{enumerate}
+
+\begin{center}
+\begin{tabular}{p{5.1cm}rrrrrr}
+\hline
+\textbf{Cell Architecture} & \textbf{Wh/kg} & \textbf{Wh/L} & \textbf{\$/kWh} & \textbf{Cycles} & \textbf{$-20^\circ$C} & \textbf{0 V Safe} \\
+\hline
+Na-Ion Prussian White (PBW) & 165 & 340 & \$44 & 8000 & 92\% & Yes (Al/Al) \\
+Na-Ion Layered Oxide (NFM) & 155 & 330 & \$49 & 4500 & 88\% & Yes (Al/Al) \\
+Na-Ion Polyanionic (NFPP Grid) & 135 & 295 & \$41 & 10000 & 90\% & Yes (Al/Al) \\
+Li-Ion LFP (Prismatic BESS) & 190 & 410 & \$68 & 6500 & 64\% & No (Cu foil) \\
+Li-Ion LMFP (Mn-Doped Olivine) & 225 & 490 & \$74 & 4500 & 68\% & No (Cu foil) \\
+Li-Ion NMC-811 (High-Ni EV) & 275 & 670 & \$98 & 2200 & 72\% & No (Cu foil) \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Grid-Scale Deployment and Blackout Prevention}
+\label{sec:grid-blackout}
+Sodium's upper-crustal abundance ($23{,}600\text{ ppm}$ vs.\ $20\text{ ppm}$ for lithium, a $1{,}180\times$ geological ratio) and abundant iron/manganese cathodes (Prussian White $\text{Na}_2\text{Fe}[\text{Fe}(\text{CN})_6]$ and polyanionic $\text{Na}_4\text{Fe}_3(\text{PO}_4)_2\text{P}_2\text{O}_7$) decouple stationary Battery Energy Storage Systems (BESS) from lithium carbonate price spikes. In grid-scale deployments, where footprint mass is unconstrained, levelized cost of storage (LCOS), sub-zero reliability during winter polar-vortex demand peaks, and non-propagation of thermal runaway dominate gravimetric energy density.
+
+\end{document}

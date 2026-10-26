@@ -1,0 +1,7 @@
+id,chemistry,ion,cathode,anode,gravWhKg,volWhL,cellCostUsdKwh,cycleLife,tempRetMinus20Pct,crustalPpm,zeroVoltSafe
+SIB-PBW,Na-Ion Prussian White (CATL Gen-2 / Natron),Na+ (r = 1.02 Å),Na2Fe[Fe(CN)6] (Prussian White),Hard Carbon (Al foil),165,340,44,8000,92,23600,Yes (Al collector both sides)
+SIB-NFM,Na-Ion Layered Oxide (HiNa NaNi1/3Fe1/3Mn1/3O2),Na+ (r = 1.02 Å),O3/P2 Layered Transition Metal Oxide,Hard Carbon (Al foil),155,330,49,4500,88,23600,Yes (0 V short-circuit transport)
+SIB-POLY,Na-Ion Polyanionic NFPP (Na4Fe3(PO4)2P2O7 Grid),Na+ (r = 1.02 Å),Polyanionic Iron Pyrophosphate,Hard Carbon (Al foil),135,295,41,10000,90,23600,Yes (ultra-stable 3D framework)
+LIB-LFP,Li-Ion LFP (LiFePO4 Prismatic BESS Benchmark),Li+ (r = 0.76 Å),Olivine LiFePO4,Graphite (Cu foil required),190,410,68,6500,64,20,No (Cu dissolution < 1.5 V)
+LIB-LMFP,Li-Ion LMFP (Manganese-Doped LiMn0.6Fe0.4PO4),Li+ (r = 0.76 Å),Olivine LMFP (4.0 V plateau),Graphite / SiOx (Cu foil),225,490,74,4500,68,20,No (Cu collector corrosion)
+LIB-NMC811,Li-Ion NMC-811 (High-Nickel Long-Range EV),Li+ (r = 0.76 Å),LiNi0.8Mn0.1Co0.1O2,Graphite + Si (Cu foil),275,670,98,2200,72,20,No (thermal runaway O2 release)

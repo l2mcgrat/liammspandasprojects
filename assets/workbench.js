@@ -402,7 +402,13 @@
       el.classList.toggle("is-locked-out", locked);
     });
     document.querySelectorAll("[data-wb-auth-open]").forEach((btn) => {
-      btn.textContent = locked ? "🚫 IP Locked Out" : (adminActive ? "🔓 Admin Unlocked" : "🔐 Unlock Admin");
+      const cap = btn.querySelector(".symbol-caption");
+      if (cap) {
+        cap.textContent = locked ? "IP Locked Out" : (adminActive ? "Admin Unlocked" : "Unlock Admin");
+        btn.classList.toggle("is-unlocked", adminActive);
+      } else {
+        btn.textContent = locked ? "🚫 IP Locked Out" : (adminActive ? "🔓 Admin Unlocked" : "🔐 Unlock Admin");
+      }
     });
     document.querySelectorAll("[data-wb-admin-col], [data-wb-admin-only]").forEach((el) => {
       el.hidden = !adminActive;
@@ -414,7 +420,10 @@
     }
     document.querySelectorAll("[data-run-study-id]").forEach((btn) => {
       btn.disabled = locked;
-      btn.textContent = locked ? "🚫 IP Locked Out" : "▶ Run study now";
+      if (!btn.hasAttribute("data-orig-label")) {
+        btn.setAttribute("data-orig-label", btn.textContent || "▶ Run study now");
+      }
+      btn.textContent = locked ? "🚫 IP Locked Out" : (btn.getAttribute("data-orig-label") || "▶ Run study now");
     });
     if (runNowToggle) {
       if (locked) {
@@ -1236,19 +1245,28 @@
 
   const attachRunButtonListener = (btn) => {
     btn.addEventListener("click", () => {
+      const id = btn.getAttribute("data-run-study-id") || btn.getAttribute("data-restudy-id") || "ST-RUN";
+      const useNewEl = document.querySelector(`[data-restudy-new="${id}"]`);
+      const useUpdEl = document.querySelector(`[data-restudy-updated="${id}"]`);
+      const useNew = useNewEl ? useNewEl.checked : true;
+      const useUpdated = useUpdEl ? useUpdEl.checked : false;
+      const scopeNotes = [];
+      if (useNew) scopeNotes.push("search for & incorporate the newest external benchmark datasets");
+      if (useUpdated) scopeNotes.push("re-evaluate updated / internal site datasets (records/athletics, records/health, Smash, basketball)");
+      const baseDataset = btn.getAttribute("data-study-dataset") || "";
       const study = {
-        id: btn.getAttribute("data-run-study-id") || "ST-RUN",
+        id,
         title: btn.getAttribute("data-study-title") || "Queued Study",
         atlasPath: btn.getAttribute("data-study-path") || "",
         question: btn.getAttribute("data-study-question") || "",
-        dataset: btn.getAttribute("data-study-dataset") || "",
+        dataset: scopeNotes.length ? `${baseDataset} [Re-Study Scope: ${scopeNotes.join(" + ")}]` : baseDataset,
         createdOn: todayIso(),
       };
       requestRunStudy(study);
     });
   };
 
-  document.querySelectorAll("[data-run-study-id]").forEach(attachRunButtonListener);
+  document.querySelectorAll("[data-run-study-id], [data-restudy-id]").forEach(attachRunButtonListener);
 
   const rerunBtn = document.getElementById("wb-run-rerun");
   if (rerunBtn) {
@@ -1265,7 +1283,16 @@
         }
         return;
       }
-      requestRunStudy(activeModalResult.study);
+      const modNew = document.getElementById("wb-modal-scope-new");
+      const modUpd = document.getElementById("wb-modal-scope-updated");
+      const scopes = [];
+      if (!modNew || modNew.checked) scopes.push("New External Datasets");
+      if (modUpd && modUpd.checked) scopes.push("Updated / Internal Site Datasets");
+      const baseStudy = { ...activeModalResult.study };
+      if (scopes.length) {
+        baseStudy.dataset = `${String(baseStudy.dataset || "").replace(/\s*\[Re-Study Scope:.*\]$/, "")} [Re-Study Scope: ${scopes.join(" + ")}]`;
+      }
+      requestRunStudy(baseStudy);
     });
   }
 
@@ -1596,6 +1623,61 @@
         delTd
       );
       tbody.appendChild(tr);
+    } else if (table === "theoryQueue") {
+      const tbody = document.getElementById("wb-theory-body");
+      if (!tbody) return;
+      const tr = document.createElement("tr");
+      tr.setAttribute("data-theory-row", entry.id);
+      const runTd = document.createElement("td");
+      const runBtn = cell("button", "▶ Derive Theory Now");
+      runBtn.type = "button";
+      runBtn.className = "button ghost wb-run-study-btn";
+      runBtn.setAttribute("data-run-study-id", entry.id);
+      runBtn.setAttribute("data-study-title", `Theory: ${entry.title}`);
+      runBtn.setAttribute("data-study-path", entry.atlasPath);
+      runBtn.setAttribute("data-study-question", entry.scopePrompt);
+      runBtn.setAttribute("data-study-dataset", `First-principles textbook & peer-reviewed derivation (${entry.category})`);
+      attachRunButtonListener(runBtn);
+      runTd.appendChild(runBtn);
+      tr.append(
+        cell("th", entry.id),
+        cell("td", entry.createdOn),
+        cell("td", entry.category),
+        cell("td", entry.title),
+        cell("td", entry.atlasPath),
+        cell("td", entry.scopePrompt),
+        cell("td", entry.status),
+        runTd
+      );
+      tbody.appendChild(tr);
+    } else if (table === "applicationsQueue") {
+      const tbody = document.getElementById("wb-apps-body");
+      if (!tbody) return;
+      const tr = document.createElement("tr");
+      tr.setAttribute("data-app-row", entry.id);
+      const runTd = document.createElement("td");
+      const runBtn = cell("button", "▶ Build Application Now");
+      runBtn.type = "button";
+      runBtn.className = "button ghost wb-run-study-btn";
+      runBtn.setAttribute("data-run-study-id", entry.id);
+      runBtn.setAttribute("data-study-title", `Application: ${entry.title}`);
+      runBtn.setAttribute("data-study-path", entry.atlasPath);
+      runBtn.setAttribute("data-study-question", `Engineering Design: ${entry.systemDesign} | Societal Benefit: ${entry.societalBenefit}`);
+      runBtn.setAttribute("data-study-dataset", `Engineering system benchmarks & deployment data (${entry.domain})`);
+      attachRunButtonListener(runBtn);
+      runTd.appendChild(runBtn);
+      tr.append(
+        cell("th", entry.id),
+        cell("td", entry.createdOn),
+        cell("td", entry.domain),
+        cell("td", entry.title),
+        cell("td", entry.atlasPath),
+        cell("td", entry.systemDesign),
+        cell("td", entry.societalBenefit),
+        cell("td", entry.status),
+        runTd
+      );
+      tbody.appendChild(tr);
     } else if (table === "wishlistTodos") {
       const tbody = document.getElementById("wb-todos-body");
       if (!tbody) return;
@@ -1669,17 +1751,47 @@
     const createdOn = todayIso();
     if (table === "studyQueue") {
       const rawDataset = String(data.get("dataset") || "").trim();
+      const scopes = [];
+      if (data.get("scopeNewDatasets")) scopes.push("New External Datasets");
+      if (data.get("scopeUpdatedDatasets")) scopes.push("Updated / Internal Site Datasets");
+      const dsFinal = rawDataset || (scopes.length ? `Auto-discover (${scopes.join(" + ")})` : "Auto-discover relevant public datasets");
       return {
         id: nextSequentialId("ST", "wb-studies-body", "studyQueue"),
         createdOn,
         title: String(data.get("title") || "").trim(),
         atlasPath: String(data.get("atlasPath") || "").trim(),
         question: String(data.get("question") || "").trim(),
-        dataset: rawDataset || "Auto-discover relevant public datasets",
+        dataset: dsFinal,
         status: String(data.get("status") || "queued"),
         studyRoute: null,
         paperRoute: null,
+        clicks: 1,
         ipIndex: isAdminUnlocked() ? "IP#OWNER" : currentIpIndex,
+        notes: "Added from browser Workbench",
+      };
+    }
+    if (table === "theoryQueue") {
+      return {
+        id: nextSequentialId("TH", "wb-theory-body", "theoryQueue"),
+        createdOn,
+        category: String(data.get("category") || "General / Subsubsection Introduction"),
+        title: String(data.get("title") || "").trim(),
+        atlasPath: String(data.get("atlasPath") || "").trim(),
+        scopePrompt: String(data.get("scopePrompt") || "").trim(),
+        status: "queued",
+        notes: "Added from browser Workbench",
+      };
+    }
+    if (table === "applicationsQueue") {
+      return {
+        id: nextSequentialId("AP", "wb-apps-body", "applicationsQueue"),
+        createdOn,
+        domain: String(data.get("domain") || "General Engineering Application"),
+        title: String(data.get("title") || "").trim(),
+        atlasPath: String(data.get("atlasPath") || "").trim(),
+        systemDesign: String(data.get("systemDesign") || "").trim(),
+        societalBenefit: String(data.get("societalBenefit") || "").trim(),
+        status: "queued",
         notes: "Added from browser Workbench",
       };
     }
@@ -1720,10 +1832,77 @@
     };
   };
 
-  // ---- Always-On Study Queue Filter Bar ----
+  // ---- Dynamic Auto-Growing Entry Boxes & Site Data Quick-Picker ----
+  const wireAutoGrow = (el) => {
+    const resize = () => {
+      el.style.height = "auto";
+      el.style.height = `${Math.max(42, el.scrollHeight)}px`;
+    };
+    el.addEventListener("input", resize);
+    el.addEventListener("focus", resize);
+  };
+  document.querySelectorAll("textarea.wb-auto-grow").forEach(wireAutoGrow);
+
+  document.querySelectorAll("[data-site-dataset]").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const dsInput = document.getElementById("wb-study-dataset");
+      const updCheck = document.getElementById("wb-scope-updated");
+      const snippet = chip.getAttribute("data-site-dataset") || "";
+      if (!dsInput || !snippet) return;
+      const active = chip.classList.toggle("is-active");
+      if (active) {
+        dsInput.value = dsInput.value.trim() ? `${dsInput.value.trim()} | ${snippet}` : snippet;
+        if (updCheck) updCheck.checked = true;
+      } else {
+        dsInput.value = dsInput.value.replace(snippet, "").replace(/^\s*\|\s*|\s*\|\s*$/g, "").replace(/\s*\|\s*\|\s*/g, " | ").trim();
+      }
+      dsInput.dispatchEvent(new Event("input"));
+    });
+  });
+
+  // ---- Study Click Counter & Visit Rank / Date Sorting ----
+  const CLICKS_STORAGE_KEY = "liam_study_clicks_v1";
+  const getSavedClicks = () => loadJson(CLICKS_STORAGE_KEY);
+  const recordStudyClick = (studyId) => {
+    if (!studyId) return;
+    const clicks = getSavedClicks();
+    clicks[studyId] = (Number(clicks[studyId]) || 0) + 1;
+    saveJson(CLICKS_STORAGE_KEY, clicks);
+    const tr = document.querySelector(`#wb-studies-body tr[data-study-row="${studyId}"]`);
+    if (tr) {
+      const base = Number(tr.getAttribute("data-base-clicks") || tr.getAttribute("data-study-clicks") || 0);
+      if (!tr.hasAttribute("data-base-clicks")) tr.setAttribute("data-base-clicks", String(base));
+      const total = base + Number(clicks[studyId]);
+      tr.setAttribute("data-study-clicks", String(total));
+      document.querySelectorAll(`[data-click-badge="${studyId}"]`).forEach((b) => {
+        b.textContent = b.classList.contains("wb-click-pill") ? `👁 ${total}` : `${total} visits`;
+      });
+    }
+  };
+  // Initialize click counts from localStorage on load
+  const initialClicks = getSavedClicks();
+  document.querySelectorAll("#wb-studies-body tr[data-study-row]").forEach((tr) => {
+    const id = tr.getAttribute("data-study-row");
+    const base = Number(tr.getAttribute("data-study-clicks") || 0);
+    tr.setAttribute("data-base-clicks", String(base));
+    const extra = Number(initialClicks[id] || 0);
+    if (extra > 0) {
+      const total = base + extra;
+      tr.setAttribute("data-study-clicks", String(total));
+      document.querySelectorAll(`[data-click-badge="${id}"]`).forEach((b) => {
+        b.textContent = b.classList.contains("wb-click-pill") ? `👁 ${total}` : `${total} visits`;
+      });
+    }
+  });
+  document.querySelectorAll("[data-study-click]").forEach((el) => {
+    el.addEventListener("click", () => recordStudyClick(el.getAttribute("data-study-click")));
+  });
+
+  // ---- Always-On Study Queue Filter & Sort Bar ----
   const filterSearchEl = document.getElementById("wb-filter-search");
   const filterStatusEl = document.getElementById("wb-filter-status");
   const filterFieldEl = document.getElementById("wb-filter-field");
+  const filterSortEl = document.getElementById("wb-filter-sort");
   const filterIpEl = document.getElementById("wb-filter-ip");
   const filterResetBtn = document.getElementById("wb-filter-reset");
   const deleteFilteredIpBtn = document.getElementById("wb-delete-filtered-ip");
@@ -1753,9 +1932,12 @@
     const q = (filterSearchEl ? filterSearchEl.value : "").trim().toLowerCase();
     const st = filterStatusEl ? filterStatusEl.value : "all";
     const fld = filterFieldEl ? filterFieldEl.value : "all";
+    const sortBy = filterSortEl ? filterSortEl.value : "id-asc";
     const ipFilter = filterIpEl ? filterIpEl.value : "all";
+    const tbody = document.getElementById("wb-studies-body");
+    const rows = Array.from(document.querySelectorAll("#wb-studies-body tr"));
 
-    document.querySelectorAll("#wb-studies-body tr").forEach((tr) => {
+    rows.forEach((tr) => {
       const title = (tr.getAttribute("data-study-title") || "").toLowerCase();
       const question = (tr.getAttribute("data-study-question") || "").toLowerCase();
       const dataset = (tr.getAttribute("data-study-dataset") || "").toLowerCase();
@@ -1777,9 +1959,29 @@
       }
       tr.hidden = !(matchesQ && matchesSt && matchesFld && matchesIp);
     });
+
+    if (tbody && rows.length > 1) {
+      const parseNum = (idStr) => {
+        const m = String(idStr || "").match(/(\d+)/);
+        return m ? parseInt(m[1], 10) : 999;
+      };
+      rows.sort((a, b) => {
+        const idA = a.getAttribute("data-study-row") || "";
+        const idB = b.getAttribute("data-study-row") || "";
+        const dateA = a.getAttribute("data-study-date") || "";
+        const dateB = b.getAttribute("data-study-date") || "";
+        const clicksA = Number(a.getAttribute("data-study-clicks") || 0);
+        const clicksB = Number(b.getAttribute("data-study-clicks") || 0);
+        if (sortBy === "visits-desc") return clicksB - clicksA || parseNum(idA) - parseNum(idB);
+        if (sortBy === "date-desc") return dateB.localeCompare(dateA) || parseNum(idB) - parseNum(idA);
+        if (sortBy === "date-asc") return dateA.localeCompare(dateB) || parseNum(idA) - parseNum(idB);
+        return parseNum(idA) - parseNum(idB);
+      });
+      rows.forEach((tr) => tbody.appendChild(tr));
+    }
   };
 
-  [filterSearchEl, filterStatusEl, filterFieldEl, filterIpEl].forEach((el) => {
+  [filterSearchEl, filterStatusEl, filterFieldEl, filterSortEl, filterIpEl].forEach((el) => {
     if (!el) return;
     el.addEventListener("input", applyStudyFilters);
     el.addEventListener("change", applyStudyFilters);
@@ -1790,6 +1992,7 @@
       if (filterSearchEl) filterSearchEl.value = "";
       if (filterStatusEl) filterStatusEl.value = "all";
       if (filterFieldEl) filterFieldEl.value = "all";
+      if (filterSortEl) filterSortEl.value = "id-asc";
       if (filterIpEl) filterIpEl.value = "all";
       applyStudyFilters();
     });
