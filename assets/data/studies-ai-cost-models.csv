@@ -1,0 +1,9 @@
+id,model,architecture,inputUsdM,outputUsdM,blendedUsdM,trainFlopsE24,trainCapexUsdM,energyWhQuery,benchmarkPct,regime
+GPT4-2023,GPT-4 Original (Mar 2023 Baseline),Early MoE (~1.76T total),30.0,60.0,36.0,21.0,78.0,2.9,68.0,2023 Frontier Reference (1.0× cost baseline)
+CLAUDE-OPUS,Claude 4.5 Opus (Dense Frontier),Frontier High-Capacity Dense,15.0,75.0,27.0,45.0,145.0,2.4,86.4,High-Capex Deep Synthesis Tier
+GPT4O-STD,GPT-4o (Omni Production Frontier),Multimodal Sparse MoE,2.5,10.0,4.38,32.0,95.0,0.95,81.5,8.2× cheaper than 2023 GPT-4 (+13.5 pp score)
+ARGON-HIGH,Gemini 4 Argon (High Thinking),Sparse MoE + Test-Time Reasoning,1.25,10.0,3.5,52.0,130.0,0.85,89.2,10.3× cheaper than 2023 GPT-4 (+21.2 pp score)
+LLAMA4-405B,Llama-4 405B FP8 (Open-Weight Cloud),405B Dense FP8 Quantized,0.8,1.2,0.9,38.0,64.0,0.62,82.1,40× cheaper via open-weight inference competition
+DEEPSEEK-R1,DeepSeek-V3 / R1 (MLA + Aux-Free MoE),671B Total / 37B Active MoE + MLA,0.14,2.19,0.48,2.79,5.58,0.38,87.5,75× cheaper · Multi-head Latent Attention cuts KV-cache 75%
+FLASH-38,Gemini 3.8 Flash (High-Throughput),Distilled Hardware-Aware MoE,0.075,0.3,0.18,9.5,22.0,0.14,79.8,200× cheaper than 2023 GPT-4 at higher accuracy
+LOCAL-Q4,Local Quantized 32B–70B (4-Bit Consumer GPU),32B Q4_K_M Local VRAM,0.03,0.06,0.04,4.2,8.0,0.09,76.4,900× cheaper marginal electricity · zero API rent

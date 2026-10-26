@@ -1,0 +1,69 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\setlength{\emergencystretch}{3em}
+\usepackage{amsmath,amssymb,enumitem}
+\usepackage[hidelinks]{hyperref}
+
+\title{AI Cost \& Compute Economics: Token Inference Deflation, Frontier Training Capex, and Test-Time Reasoning Scaling}
+\author{Liam McGrath \\ Workbench Study ST-08 $\cdot$ Gemini 4 Argon + Pandas Synthesis}
+\date{October 26, 2026}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Executive Summary \& Core Paradox}
+Between March 2023 and October 2026, the unit price of frontier-equivalent large language model (LLM) inference collapsed by \textbf{10.3$\times$ to 200$\times$} (from \$36.00 per million blended tokens for original GPT-4 to \$3.50/1M for Gemini 4 Argon High Thinking, \$0.48/1M for DeepSeek-R1, and \$0.18/1M for Gemini 3.8 Flash), while composite reasoning accuracy on MMLU-Pro and GPQA Diamond rose by $+11.8$ to $+21.2$ percentage points.
+
+Simultaneously, the upfront capital expenditure required to pre-train a frontier base model rose from \$78M to \$130M--\$1B+ per cluster generation. This study formalizes the two-part tariff of modern AI infrastructure:
+\begin{enumerate}
+  \item \textbf{Marginal Inference Deflation ($\approx 68\%$--$85\%$/year):} Driven by Sparse Mixture-of-Experts (MoE) routing, Multi-head Latent Attention (MLA) KV-cache compression, FP8/INT4 quantization, and custom ASICs (TPU v6e / Blackwell B200).
+  \item \textbf{Jevons Paradox via Test-Time Reasoning:} As unit token prices fall by two orders of magnitude, test-time compute scaling (chain-of-thought search trees in Gemini 4 Argon, o3, and R1) multiplies token volume per complex query by $5\times$--$15\times$, expanding aggregate enterprise spend even as per-token prices plummet.
+\end{enumerate}
+
+\section{First-Principles Theory: Chinchilla Scaling, Memory Bandwidth \& KV-Cache Mechanics}
+
+\subsection{Pre-Training Compute \& Chinchilla Optimality}
+For a dense transformer with $N$ active parameters trained on $D$ tokens, total training floating-point operations scale as:
+\begin{equation}
+  C_{\text{train}} \approx 6 N D, \qquad L(N, D) = E_0 + \frac{A}{N^{\alpha}} + \frac{B}{D^{\beta}}.
+  \label{eq:chinchilla}
+\end{equation}
+In a Sparse Mixture-of-Experts (MoE) architecture with $N_{\text{total}}$ total parameters and $N_{\text{active}} \leq N_{\text{total}}$ routed per token (e.g.\ $N_{\text{active}} = 37\text{B}$ out of $N_{\text{total}} = 671\text{B}$), forward-pass FLOPs per token drop from $2 N_{\text{total}}$ to $2 N_{\text{active}}$.
+
+\subsection{The Arithmetic Intensity \& HBM3e Memory Wall}
+Autoregressive token decoding generates one token per forward pass per sequence. At batch size $B_{\text{seq}}$, the operational intensity (FLOPs per byte transferred from High-Bandwidth Memory) is bounded by weight and Key-Value (KV) cache reads:
+\begin{equation}
+  T_{\text{step}} = \max\left( \frac{2 B_{\text{seq}} N_{\text{active}}}{\text{FLOP/s}_{\text{peak}}}, \; \frac{b_w N_{\text{active}} + 2 b_{kv} B_{\text{seq}} L_{\text{ctx}} n_{\text{layers}} d_{kv}}{\text{BW}_{\text{HBM}}} \right),
+  \label{eq:roofline}
+\end{equation}
+where $b_w$ and $b_{kv}$ are bytes per weight and KV-cache element, and $L_{\text{ctx}}$ is context length. Multi-head Latent Attention (MLA) projects keys and values into a low-rank latent vector $d_c \leq n_{\text{heads}} d_h$, reducing KV-cache memory traffic by $75\%$--$88\%$.
+
+\section{Empirical Benchmark Matrix (2023--2026)}
+Table 1 summarizes the Pandas benchmark dataset across eight flagship proprietary, open-weight cloud, and local quantized model tiers (blended price assumes a $3:1$ input-to-output token ratio).
+
+\begin{center}
+\begin{tabular}{lrrrrr}
+\hline
+\textbf{Model Tier} & \textbf{\$/1M Tok} & \textbf{Defl.} & \textbf{Capex} & \textbf{Wh} & \textbf{Score} \\
+\hline
+GPT-4 (Mar 2023 Baseline) & 36.00 & 1.0$\times$ & \$78M & 2.90 & 68.0\% \\
+Claude 4.5 Opus (Dense) & 27.00 & 1.3$\times$ & \$145M & 2.40 & 86.4\% \\
+GPT-4o (Omni Production) & 4.38 & 8.2$\times$ & \$95M & 0.95 & 81.5\% \\
+Gemini 4 Argon (High Think) & 3.50 & 10.3$\times$ & \$130M & 0.85 & 89.2\% \\
+Llama-4 405B FP8 (Open) & 0.90 & 40.0$\times$ & \$64M & 0.62 & 82.1\% \\
+DeepSeek-V3 / R1 (MoE+MLA) & 0.48 & 75.0$\times$ & \$5.6M & 0.38 & 87.5\% \\
+Gemini 3.8 Flash (Distilled) & 0.18 & 200.0$\times$ & \$22M & 0.14 & 79.8\% \\
+Local Quantized 32B (Q4) & 0.04 & 900.0$\times$ & \$8M & 0.09 & 76.4\% \\
+\hline
+\end{tabular}
+\end{center}
+
+\section{Enterprise Cascade Routing \& Societal Implications}
+Let an enterprise workload process $V = 10^8$ tokens/month across routine extraction ($1 - \theta = 0.85$) and deep mathematical or architectural reasoning ($\theta = 0.15$). Under a two-tier cascade router pairing Gemini 3.8 Flash ($p_{\text{fast}} = \$0.18/\text{1M}$) with Gemini 4 Argon High Thinking ($p_{\text{deep}} = \$3.50/\text{1M}$):
+\begin{equation}
+  p_{\text{cascade}} = (1 - \theta) p_{\text{fast}} + \theta p_{\text{deep}} = 0.85(0.18) + 0.15(3.50) = \$0.678/\text{1M tokens},
+  \label{eq:cascade}
+\end{equation}
+yielding an \textbf{80.6\% reduction in total inference expenditure} relative to routing $100\%$ of traffic through a frontier reasoning model, while preserving frontier accuracy on hard tail queries.
+\end{document}

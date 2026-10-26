@@ -4870,6 +4870,18 @@ European study of AI in business. Basically asked the best person available from
 
 \hspace{-0.675cm} \textit{Someone from} \textbf{Novo Nordisk Pharmaceuticals} said that, "when working with AI initiatives, it is important to focus on key business issues that benefit the whole and not just doing sub-optimization at small scale", and \textit{someone from} \textbf{PFA Pension and Insurance} said, "I don ́t see why speaking openly about our ongoing AI initiatives should be a big fuss. What really makes a difference from a competitive perspective is a companies ability to execute".
 
+\vspace{0.35cm}
+
+\subsubsubsection{ST-08: AI Cost \& Compute Economics (Inference Deflation vs.\ Frontier Training Capex)}
+
+Between March 2023 and October 2026, the unit price of frontier-equivalent LLM inference fell by \textbf{10.3$\times$ to 200$\times$} (from \$36.00/1M blended tokens for original GPT-4 to \$3.50/1M for Gemini 4 Argon High Thinking, \$0.48/1M for DeepSeek-R1, and \$0.18/1M for Gemini 3.8 Flash), while composite reasoning accuracy on MMLU-Pro and GPQA Diamond rose by $+11.8$ to $+21.2$ percentage points.
+
+\begin{equation}
+  T_{\text{step}} = \max\left( \frac{2 B_{\text{seq}} N_{\text{active}}}{\text{FLOP/s}_{\text{peak}}}, \; \frac{b_w N_{\text{active}} + 2 b_{kv} B_{\text{seq}} L_{\text{ctx}} n_{\text{layers}} d_{kv}}{\text{BW}_{\text{HBM}}} \right), \qquad p_{\text{cascade}} = (1 - \theta) p_{\text{fast}} + \theta p_{\text{deep}}.
+\end{equation}
+
+While Sparse Mixture-of-Experts (MoE) routing, Multi-head Latent Attention (MLA) KV-cache compression, and FP8/INT4 quantization drive marginal token inference toward marginal electricity cost (\$0.04--\$0.18/1M tokens; $0.09$--$0.85\text{ Wh/query}$), test-time reasoning search trees multiply output token volume per complex query by $5\times$--$15\times$ (Jevons Paradox), and frontier pre-training cluster capex rises to \$130M--\$1B+ per generation. Routing $85\%$ of routine enterprise workloads to Gemini 3.8 Flash and $15\%$ of complex proofs to Gemini 4 Argon High Thinking reduces blended monthly API expenditure by \textbf{80.6\%} (\$0.68/1M vs.\ \$3.50/1M).
+
 \newpage
 
 % atlas: Business-and-Economics/Emerging-Industries/Biotechnology

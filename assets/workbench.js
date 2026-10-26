@@ -5,9 +5,11 @@
   const RUNS_KEY = "liam_workbench_study_runs_v1";
   const LOCKOUT_KEY = "liam_workbench_ip_lockout_v1";
   const DELETED_KEY = "liam_workbench_deleted_v1";
+  const DELEGATED_PWDS_KEY = "liam_workbench_delegated_pwds_v1";
   const ADMIN_SESSION_KEY = "liam_workbench_admin_session_v1";
   const ADMIN_SESSION_TTL_MS = 30 * 60 * 1000; // 30 minutes across all internal site branches
   const CLOUD_SYNC_URL = "https://ntfy.sh/liam_wb_cloud_sync_67wxyE7LLICn";
+  const GITHUB_CLOUD_JSON_API = "https://api.github.com/repos/l2mcgrat/liammspandasprojects/contents/assets/data/live-cloud-studies.json";
   const REPO_ISSUES = "https://github.com/l2mcgrat/pandas_projects/issues/new";
 
   const FAILED_ATTEMPT_MESSAGES = [
@@ -77,6 +79,7 @@
 
   let sessionUnlocked = false;
   let unlockedApiKey = "";
+  let unlockedGithubPat = "";
   let selectedRunnerModel = "argon-high";
   let pendingStudyToRun = null;
 
@@ -387,18 +390,51 @@
 
   const updateKeyStatusBadge = () => {
     const el = document.getElementById("wb-key-status");
-    if (!el) return;
+    const patEl = document.getElementById("wb-pat-status");
     const vault = loadJson(VAULT_KEY);
-    if (unlockedApiKey) {
-      el.textContent = `✓ Active in session (ends in …${unlockedApiKey.slice(-4)})`;
-      el.style.color = "#8fe0a8";
-    } else if (vault && vault.hasKey) {
-      el.textContent = `✓ Saved in encrypted vault (ends in …${vault.keyTail || "****"}) — unlock Admin to activate`;
-      el.style.color = "#9ddacf";
-    } else {
-      el.textContent = "⚠ No API key saved in this browser yet — paste your Google AI Studio key (AQ....eQ3w) below";
-      el.style.color = "#f7ab65";
+    if (el) {
+      if (unlockedApiKey) {
+        el.textContent = `✓ Active in session (ends in …${unlockedApiKey.slice(-4)})`;
+        el.style.color = "#8fe0a8";
+      } else if (vault && vault.hasKey) {
+        el.textContent = `✓ Saved in encrypted vault (ends in …${vault.keyTail || "****"}) — unlock Admin to activate`;
+        el.style.color = "#9ddacf";
+      } else {
+        el.textContent = "⚠ No API key saved in this browser yet — paste your Google AI Studio key (AQ....eQ3w) below";
+        el.style.color = "#f7ab65";
+      }
     }
+    if (patEl) {
+      if (unlockedGithubPat || (vault && vault.hasPat)) {
+        patEl.textContent = `✓ GitHub PAT saved (ends in …${(unlockedGithubPat || vault.patTail || "****").slice(-4)}) — mobile studies auto-commit to live repo!`;
+        patEl.style.color = "#8fe0a8";
+      } else {
+        patEl.textContent = "Optional: paste a GitHub Fine-Grained PAT once so mobile studies commit permanently to GitHub";
+        patEl.style.color = "#a4acc3";
+      }
+    }
+  };
+
+  const getActiveDelegatedPasswords = () => {
+    const store = loadJson(DELEGATED_PWDS_KEY);
+    const list = Array.isArray(store.passwords) ? store.passwords : [];
+    const now = Date.now();
+    const valid = list.filter((p) => p && p.hashB64 && (p.expiresAt === null || Number(p.expiresAt) > now));
+    if (valid.length !== list.length) {
+      saveJson(DELEGATED_PWDS_KEY, { passwords: valid });
+    }
+    return valid;
+  };
+
+  const matchesDelegatedPassword = (candidate) => {
+    if (!candidate) return null;
+    const valid = getActiveDelegatedPasswords();
+    for (const item of valid) {
+      const saltStr = item.salt || DEFAULT_SALT_STR;
+      const derived = toB64(deriveKeyBytes(candidate, utf8Bytes(saltStr)));
+      if (derived === item.hashB64) return item;
+    }
+    return null;
   };
 
   const cleanAndValidateApiKey = (raw) => {
@@ -417,6 +453,7 @@
 
   const recoverSavedVaultData = (passphrase, vault) => {
     let existingApiKey = "";
+    let existingGithubPat = "";
     let existingModel = "";
     let verified = false;
     if (passphrase && vault && vault.cipher && vault.tag) {
@@ -425,37 +462,42 @@
         if (parsed && parsed.verifier === "LIAM_WB_OK") {
           verified = true;
           existingApiKey = parsed.apiKey || "";
+          existingGithubPat = parsed.githubPat || "";
           existingModel = parsed.runnerModel || "";
         }
       } catch {
         /* try owner backup below */
       }
     }
-    if (!existingApiKey && vault && vault.ownerBackup && vault.ownerBackup.cipher) {
+    if ((!existingApiKey || !existingGithubPat) && vault && vault.ownerBackup && vault.ownerBackup.cipher) {
       try {
         const backup = openVault(DEFAULT_HASH_B64, vault.ownerBackup);
         if (backup && backup.verifier === "LIAM_WB_OK") {
-          existingApiKey = backup.apiKey || "";
+          if (!existingApiKey) existingApiKey = backup.apiKey || "";
+          if (!existingGithubPat) existingGithubPat = backup.githubPat || "";
           if (!existingModel) existingModel = backup.runnerModel || "";
         }
       } catch {
         /* ignore */
       }
     }
-    return { verified, existingApiKey, existingModel };
+    return { verified, existingApiKey, existingGithubPat, existingModel };
   };
 
-  const persistVaultRecord = (passphraseToSeal, apiKey, runnerModel) => {
+  const persistVaultRecord = (passphraseToSeal, apiKey, runnerModel, githubPat = "") => {
     const effectivePass = passphraseToSeal || DEFAULT_HASH_B64;
     const payload = {
       verifier: "LIAM_WB_OK",
       apiKey: apiKey || "",
+      githubPat: githubPat || "",
       runnerModel: runnerModel || "argon-high",
     };
     const sealed = sealVault(effectivePass, payload);
     sealed.ownerBackup = sealVault(DEFAULT_HASH_B64, payload);
     sealed.hasKey = Boolean(apiKey);
     sealed.keyTail = apiKey ? apiKey.slice(-4) : "";
+    sealed.hasPat = Boolean(githubPat);
+    sealed.patTail = githubPat ? githubPat.slice(-4) : "";
     saveJson(VAULT_KEY, sealed);
   };
 
@@ -703,8 +745,8 @@
       const data = new FormData(authForm);
       const rawPass = String(data.get("passphrase") || "");
       const passphrase = rawPass.trim();
-      const newPassphrase = String(data.get("newPassphrase") || "").trim();
       const rawNewKey = String(data.get("apiKey") || "").trim();
+      const rawNewPat = String(data.get("githubPat") || "").trim();
       const chosenModel = String(data.get("runnerModel") || "argon-high");
 
       const keyCheck = cleanAndValidateApiKey(rawNewKey);
@@ -721,37 +763,39 @@
         const vault = loadJson(VAULT_KEY);
         const recovered = recoverSavedVaultData(passphrase, vault);
         let verified = recovered.verified;
+        let matchedDelegated = null;
         const existingApiKey = recovered.existingApiKey;
+        const existingGithubPat = recovered.existingGithubPat || "";
         const existingModel = chosenModel || recovered.existingModel || "argon-high";
 
         if (!verified && passphrase.length > 0 && (matchesDefaultPassphrase(passphrase) || matchesDefaultPassphrase(rawPass))) {
           verified = true;
         }
+        if (!verified && passphrase.length > 0) {
+          matchedDelegated = matchesDelegatedPassword(passphrase) || matchesDelegatedPassword(rawPass);
+          if (matchedDelegated) verified = true;
+        }
         if (!verified) {
           throw new Error("Passphrase mismatch");
-        }
-
-        if (newPassphrase && newPassphrase.length < 4) {
-          if (authStatus) {
-            authStatus.classList.add("is-error");
-            authStatus.textContent = "New passphrase must be at least 4 characters.";
-          }
-          return;
         }
 
         // Valid passphrase entered: lift any IP lockout and reset the 1-10 failed-attempt loop!
         unlockCurrentIp();
 
-        const effectivePass = newPassphrase || passphrase;
         const effectiveApiKey = newKey || existingApiKey;
+        const effectiveGithubPat = rawNewPat || existingGithubPat;
         selectedRunnerModel = existingModel;
 
-        persistVaultRecord(effectivePass, effectiveApiKey, selectedRunnerModel);
+        // Always seal vault with DEFAULT_HASH_B64 so the Master Passphrase is never overwritten by a friend password!
+        persistVaultRecord(DEFAULT_HASH_B64, effectiveApiKey, selectedRunnerModel, effectiveGithubPat);
 
         sessionUnlocked = true;
-        sessionExpiresAt = Date.now() + ADMIN_SESSION_TTL_MS;
+        sessionExpiresAt = matchedDelegated && matchedDelegated.expiresAt
+          ? Math.min(Date.now() + ADMIN_SESSION_TTL_MS, Number(matchedDelegated.expiresAt))
+          : Date.now() + ADMIN_SESSION_TTL_MS;
         unlockedSessionIp = clientIp;
         unlockedApiKey = effectiveApiKey;
+        unlockedGithubPat = effectiveGithubPat;
         saveAdminSession(sessionExpiresAt, clientIp, selectedRunnerModel);
         if (unlockedApiKey) discoverLiveModels(unlockedApiKey);
         if (authStatus) authStatus.classList.remove("is-error");
@@ -773,8 +817,8 @@
         if (modelSel) modelSel.value = selectedRunnerModel;
         closeDialog(authDialog);
         announce(
-          newPassphrase
-            ? `Passphrase changed & Admin unlocked for ${currentIpIndex} (${MODEL_LABELS[selectedRunnerModel]}).`
+          matchedDelegated
+            ? `Admin unlocked via delegated password "${matchedDelegated.label}" (${MODEL_LABELS[selectedRunnerModel]}).`
             : `Admin unlocked for ${currentIpIndex} (${MODEL_LABELS[selectedRunnerModel]}).`
         );
         if (pendingStudyToRun) {
@@ -809,6 +853,162 @@
           if (passInput) passInput.placeholder = "Last Try 👉🤢👈👉😶👈👉😼👈👉😈👈";
         }
         updateAuthIndicators();
+      }
+    });
+  }
+
+  // ---- Dedicated Top-Bar Admin Password & Delegated Access Manager (#wb-password-dialog) ----
+  const pwdDialog = document.getElementById("wb-password-dialog");
+  const pwdForm = document.getElementById("wb-password-form");
+  const pwdStatus = document.getElementById("wb-pwd-status");
+  const pwdDurationSel = document.getElementById("wb-pwd-duration");
+  const pwdCustomWrap = document.getElementById("wb-pwd-custom-wrap");
+  const pwdActiveList = document.getElementById("wb-pwd-active-list");
+  const pwdRevokeAllBtn = document.getElementById("wb-pwd-revoke-all");
+
+  const formatExpiryCountdown = (expiresAt) => {
+    if (expiresAt === null || expiresAt === undefined) return "∞ Infinite (Never expires until revoked)";
+    const diffMs = Number(expiresAt) - Date.now();
+    if (diffMs <= 0) return "Expired";
+    const hours = Math.floor(diffMs / 3600000);
+    const mins = Math.ceil((diffMs % 3600000) / 60000);
+    return hours > 0 ? `Expires in ${hours}h ${mins}m` : `Expires in ${mins}m`;
+  };
+
+  const renderDelegatedPasswordsList = () => {
+    if (!pwdActiveList) return;
+    const valid = getActiveDelegatedPasswords();
+    pwdActiveList.replaceChildren();
+    if (valid.length === 0) {
+      const p = cell("p", "No delegated passwords active — only your Master Passphrase is enabled.");
+      p.className = "sports-note";
+      pwdActiveList.appendChild(p);
+      return;
+    }
+    valid.forEach((item) => {
+      const row = document.createElement("div");
+      row.className = "wb-pwd-row";
+      const info = document.createElement("div");
+      const title = cell("strong", item.label || "Delegated Password");
+      const meta = cell("small", ` · Created ${item.createdOn || todayIso()} · ${formatExpiryCountdown(item.expiresAt)}`);
+      info.append(title, meta);
+      const revBtn = cell("button", "🚫 Revoke");
+      revBtn.type = "button";
+      revBtn.className = "button ghost wb-delete-study-btn";
+      revBtn.addEventListener("click", () => {
+        const remaining = getActiveDelegatedPasswords().filter((p) => p.id !== item.id);
+        saveJson(DELEGATED_PWDS_KEY, { passwords: remaining });
+        renderDelegatedPasswordsList();
+        if (typeof pushCloudSync === "function") pushCloudSync();
+        if (pwdStatus) {
+          pwdStatus.classList.remove("is-error");
+          pwdStatus.textContent = `Revoked password "${item.label}". Your Master Passphrase remains active.`;
+        }
+      });
+      row.append(info, revBtn);
+      pwdActiveList.appendChild(row);
+    });
+  };
+
+  if (pwdDurationSel && pwdCustomWrap) {
+    pwdDurationSel.addEventListener("change", () => {
+      pwdCustomWrap.hidden = pwdDurationSel.value !== "custom";
+    });
+  }
+
+  document.querySelectorAll("[data-wb-password-open]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      renderDelegatedPasswordsList();
+      if (pwdStatus) {
+        pwdStatus.classList.remove("is-error");
+        pwdStatus.textContent = "Create a temporary or infinite password for a friend (default: 12 hours), or revoke existing passwords below.";
+      }
+      openDialog(pwdDialog);
+    });
+  });
+
+  if (pwdRevokeAllBtn) {
+    pwdRevokeAllBtn.addEventListener("click", () => {
+      const masterInput = document.getElementById("wb-pwd-master");
+      const masterVal = masterInput ? masterInput.value.trim() : "";
+      if (!masterVal || !matchesDefaultPassphrase(masterVal)) {
+        if (pwdStatus) {
+          pwdStatus.classList.add("is-error");
+          pwdStatus.textContent = "⚠ Enter your Master Passphrase in the box above to authorize revoking all delegated passwords.";
+        }
+        if (masterInput) masterInput.focus();
+        return;
+      }
+      saveJson(DELEGATED_PWDS_KEY, { passwords: [] });
+      renderDelegatedPasswordsList();
+      if (typeof pushCloudSync === "function") pushCloudSync();
+      if (pwdStatus) {
+        pwdStatus.classList.remove("is-error");
+        pwdStatus.textContent = "🔥 All delegated passwords revoked! Only your Master Passphrase can unlock Admin now.";
+      }
+    });
+  }
+
+  if (pwdForm) {
+    pwdForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      const data = new FormData(pwdForm);
+      const label = String(data.get("pwdLabel") || "Friend Access").trim() || "Friend Access";
+      const durMode = String(data.get("durationHours") || "12");
+      const customHrs = Number(data.get("customHours") || 12);
+      const newPass = String(data.get("newPassphrase") || "").trim();
+      const confirmPass = String(data.get("confirmPassphrase") || "").trim();
+      const masterPass = String(data.get("masterPassphrase") || "").trim();
+
+      if (!masterPass || !matchesDefaultPassphrase(masterPass)) {
+        if (pwdStatus) {
+          pwdStatus.classList.add("is-error");
+          pwdStatus.textContent = "⚠ Master Passphrase verification failed. Only the owner with the Master Passphrase can issue new passwords.";
+        }
+        return;
+      }
+      if (newPass.length < 4) {
+        if (pwdStatus) {
+          pwdStatus.classList.add("is-error");
+          pwdStatus.textContent = "⚠ New access password must be at least 4 characters.";
+        }
+        return;
+      }
+      if (newPass !== confirmPass) {
+        if (pwdStatus) {
+          pwdStatus.classList.add("is-error");
+          pwdStatus.textContent = "⚠ New password and Confirm password do not match. Please check both fields.";
+        }
+        return;
+      }
+
+      let expiresAt = null;
+      let durLabel = "Infinite (∞)";
+      if (durMode !== "infinite") {
+        const hrs = durMode === "custom" ? Math.max(1, customHrs) : Math.max(1, Number(durMode) || 12);
+        expiresAt = Date.now() + hrs * 3600000;
+        durLabel = `${hrs} hour(s)`;
+      }
+
+      const saltStr = `liam-del-${Date.now()}`;
+      const hashB64 = toB64(deriveKeyBytes(newPass, utf8Bytes(saltStr)));
+      const list = getActiveDelegatedPasswords();
+      list.push({
+        id: `PWD-${Date.now().toString(36).toUpperCase()}`,
+        label,
+        salt: saltStr,
+        hashB64,
+        createdOn: todayIso(),
+        expiresAt,
+      });
+      saveJson(DELEGATED_PWDS_KEY, { passwords: list });
+      renderDelegatedPasswordsList();
+      if (typeof pushCloudSync === "function") pushCloudSync();
+      pwdForm.reset();
+      if (pwdCustomWrap) pwdCustomWrap.hidden = true;
+      if (pwdStatus) {
+        pwdStatus.classList.remove("is-error");
+        pwdStatus.textContent = `✓ Saved & activated password "${label}" (valid for ${durLabel}). Your Master Passphrase also remains permanently active!`;
       }
     });
   }
@@ -1057,7 +1257,7 @@
     const tableHtml = rows.length
       ? `<div class="sports-table-wrap" style="margin: 12px 0;"><table class="wb-inline-study-table"><thead><tr>${cols.map((c) => `<th scope="col">${esc(c)}</th>`).join("")}</tr></thead><tbody>${rows.map((r) => `<tr>${r.map((cellVal, ci) => ci === 0 ? `<th scope="row">${esc(cellVal)}</th>` : `<td>${esc(cellVal)}</td>`).join("")}</tr>`).join("")}</tbody></table></div>`
       : "";
-    container.innerHTML = kpiHtml + inspectorHtml + svgHtml + tableHtml;
+    container.innerHTML = svgHtml + kpiHtml + inspectorHtml + tableHtml;
     container.hidden = false;
   };
 
@@ -2160,7 +2360,47 @@
     syncTopics();
   });
 
-  // ---- Mobile <-> Web Cross-Device Live Cloud Sync ----
+  // ---- Mobile <-> Web Cross-Device Live Cloud Sync (<3.5KB Inline Packets + GitHub Repo Commit) ----
+  const commitCloudStudiesToGitHub = async (fullPayload) => {
+    let pat = unlockedGithubPat;
+    if (!pat) {
+      const vault = loadJson(VAULT_KEY);
+      const rec = recoverSavedVaultData("", vault);
+      if (rec.existingGithubPat) pat = rec.existingGithubPat;
+    }
+    if (!pat || typeof fetch !== "function") return false;
+    try {
+      const getResp = await fetch(GITHUB_CLOUD_JSON_API, {
+        headers: {
+          Authorization: `Bearer ${pat}`,
+          Accept: "application/vnd.github+json",
+        },
+      });
+      let sha = undefined;
+      if (getResp.ok) {
+        const meta = await getResp.json();
+        sha = meta.sha;
+      }
+      const contentB64 = btoa(unescape(encodeURIComponent(JSON.stringify(fullPayload, null, 2))));
+      const putResp = await fetch(GITHUB_CLOUD_JSON_API, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${pat}`,
+          Accept: "application/vnd.github+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `Auto-sync Workbench study & queue state (${todayIso()})`,
+          content: contentB64,
+          ...(sha ? { sha } : {}),
+        }),
+      });
+      return putResp.ok;
+    } catch {
+      return false;
+    }
+  };
+
   const pushCloudSync = () => {
     if (typeof fetch !== "function") return;
     try {
@@ -2170,9 +2410,19 @@
         if (v && Number(v.tokens) > 0) {
           slimRuns[k] = {
             study: v.study,
-            summary: String(v.summary || "").slice(0, 3500),
-            analytics: v.analytics,
-            tex: String(v.tex || "").slice(0, 4500),
+            summary: String(v.summary || "").slice(0, 1400),
+            analytics: {
+              chartTitle: v.analytics?.chartTitle,
+              chartSubtitle: v.analytics?.chartSubtitle,
+              chartUnit: v.analytics?.chartUnit,
+              kpis: (v.analytics?.kpis || []).slice(0, 4),
+              inspectorTitle: v.analytics?.inspectorTitle,
+              inspectorParams: (v.analytics?.inspectorParams || []).slice(0, 4),
+              inspectorAttrs: (v.analytics?.inspectorAttrs || []).slice(0, 4),
+              bars: (v.analytics?.bars || []).slice(0, 8),
+              tableColumns: v.analytics?.tableColumns,
+              tableRows: (v.analytics?.tableRows || []).slice(0, 8),
+            },
             dataset: v.dataset,
             mode: v.mode,
             tokens: v.tokens,
@@ -2180,95 +2430,161 @@
           };
         }
       });
-      const payload = {
+
+      // 1. Send compact (<3.5KB) index packet so ntfy.sh stores it inline in env.message (never an expiring attachment!)
+      const indexPacket = {
         v: 1,
         ts: Date.now(),
         entries: loadLocal(),
-        runs: slimRuns,
         deleted: getDeletedIds(),
+        delegatedPwds: getActiveDelegatedPasswords(),
       };
       fetch(CLOUD_SYNC_URL, {
         method: "POST",
-        body: JSON.stringify(payload),
-      }).catch(() => {
-        /* ignore offline */
+        body: JSON.stringify(indexPacket),
+      }).catch(() => {});
+
+      // 2. Send each study run in its own compact (<3.5KB) packet so ntfy.sh keeps every study inline!
+      Object.entries(slimRuns).forEach(([sid, rec]) => {
+        const runPacket = { v: 1, ts: Date.now(), runs: { [sid]: rec } };
+        fetch(CLOUD_SYNC_URL, {
+          method: "POST",
+          body: JSON.stringify(runPacket),
+        }).catch(() => {});
+      });
+
+      // 3. Also commit full payload permanently to GitHub repo if GitHub PAT is configured in Admin Vault
+      commitCloudStudiesToGitHub({
+        version: 1,
+        updatedAt: new Date().toISOString(),
+        entries: loadLocal(),
+        runs,
+        deleted: getDeletedIds(),
+        delegatedPwds: getActiveDelegatedPasswords(),
       });
     } catch {
       /* ignore */
     }
   };
 
-  const pullCloudSync = async () => {
-    if (typeof fetch !== "function") return;
-    try {
-      const resp = await fetch(`${CLOUD_SYNC_URL}/json?poll=1&since=all`);
-      if (!resp.ok) return;
-      const text = await resp.text();
-      const lines = text.trim().split("\n").filter(Boolean);
-      if (!lines.length) return;
-      let changed = false;
-      const localStore = loadLocal();
-      const localRuns = loadJson(RUNS_KEY);
-      const delSet = new Set(getDeletedIds());
-
-      lines.forEach((line) => {
-        try {
-          const env = JSON.parse(line);
-          if (!env || env.event !== "message" || !env.message) return;
-          const packet = JSON.parse(env.message);
-          if (!packet || packet.v !== 1) return;
-          if (Array.isArray(packet.deleted)) {
-            packet.deleted.forEach((id) => {
-              if (!delSet.has(id)) {
-                delSet.add(id);
-                document.querySelectorAll(`[data-study-row="${id}"]`).forEach((tr) => tr.remove());
-                changed = true;
-              }
-            });
-          }
-          if (packet.entries && typeof packet.entries === "object") {
-            Object.entries(packet.entries).forEach(([table, arr]) => {
-              if (!Array.isArray(arr)) return;
-              localStore[table] = localStore[table] || [];
-              const existingIds = new Set(localStore[table].map((x) => x.id));
-              arr.forEach((item) => {
-                if (item && item.id && !existingIds.has(item.id) && !delSet.has(item.id)) {
-                  const domHas = document.querySelector(`[data-study-row="${item.id}"], [data-theory-row="${item.id}"], [data-app-row="${item.id}"]`);
-                  localStore[table].push(item);
-                  existingIds.add(item.id);
-                  if (!domHas) appendRow(table, item);
-                  changed = true;
-                }
-              });
-            });
-          }
-          if (packet.runs && typeof packet.runs === "object") {
-            Object.entries(packet.runs).forEach(([sid, runRec]) => {
-              if (runRec && Number(runRec.tokens) > 0 && !delSet.has(sid)) {
-                const cur = localRuns[sid];
-                if (!cur || !Number(cur.tokens)) {
-                  localRuns[sid] = runRec;
-                  if (runRec.study) markStudyCompletedInDom(runRec.study, runRec);
-                  changed = true;
-                }
-              }
-            });
-          }
-        } catch {
-          /* skip non-sync message */
+  const applySyncPacket = (packet, localStore, localRuns, delSet) => {
+    let changed = false;
+    if (!packet || (packet.v !== 1 && packet.version !== 1)) return false;
+    if (Array.isArray(packet.deleted)) {
+      packet.deleted.forEach((id) => {
+        if (!delSet.has(id)) {
+          delSet.add(id);
+          document.querySelectorAll(`[data-study-row="${id}"]`).forEach((tr) => tr.remove());
+          changed = true;
         }
       });
+    }
+    if (Array.isArray(packet.delegatedPwds) && packet.delegatedPwds.length > 0) {
+      const curPwds = getActiveDelegatedPasswords();
+      const seenIds = new Set(curPwds.map((p) => p.id));
+      let pwdChanged = false;
+      packet.delegatedPwds.forEach((p) => {
+        if (p && p.id && !seenIds.has(p.id)) {
+          curPwds.push(p);
+          seenIds.add(p.id);
+          pwdChanged = true;
+        }
+      });
+      if (pwdChanged) {
+        saveJson(DELEGATED_PWDS_KEY, { passwords: curPwds });
+        renderDelegatedPasswordsList();
+      }
+    }
+    if (packet.entries && typeof packet.entries === "object") {
+      Object.entries(packet.entries).forEach(([table, arr]) => {
+        if (!Array.isArray(arr)) return;
+        localStore[table] = localStore[table] || [];
+        const existingIds = new Set(localStore[table].map((x) => x.id));
+        arr.forEach((item) => {
+          if (item && item.id && !existingIds.has(item.id) && !delSet.has(item.id)) {
+            const domHas = document.querySelector(`[data-study-row="${item.id}"], [data-theory-row="${item.id}"], [data-app-row="${item.id}"]`);
+            localStore[table].push(item);
+            existingIds.add(item.id);
+            if (!domHas) appendRow(table, item);
+            changed = true;
+          }
+        });
+      });
+    }
+    if (packet.runs && typeof packet.runs === "object") {
+      Object.entries(packet.runs).forEach(([sid, runRec]) => {
+        if (runRec && Number(runRec.tokens) > 0 && !delSet.has(sid)) {
+          const cur = localRuns[sid];
+          if (!cur || !Number(cur.tokens)) {
+            if (!runRec.tex && runRec.study) {
+              runRec.tex = buildLatexPaper(runRec.study, runRec.summary || "", runRec.analytics || {});
+            }
+            localRuns[sid] = runRec;
+            if (runRec.study) markStudyCompletedInDom(runRec.study, runRec);
+            changed = true;
+          }
+        }
+      });
+    }
+    return changed;
+  };
 
-      if (changed) {
-        saveJson(DELETED_KEY, { ids: Array.from(delSet) });
-        saveLocal(localStore);
-        saveJson(RUNS_KEY, localRuns);
-        refreshIpFilterOptions();
-        applyStudyFilters();
-        syncLockoutDom();
+  const pullCloudSync = async () => {
+    if (typeof fetch !== "function") return;
+    const localStore = loadLocal();
+    const localRuns = loadJson(RUNS_KEY);
+    const delSet = new Set(getDeletedIds());
+    let changed = false;
+
+    // 1. Check permanent repo-committed live-cloud-studies.json first
+    try {
+      const brand = document.querySelector(".site-header .brand");
+      const rootPrefix = brand ? (brand.getAttribute("href") || "index.html").replace(/index\.html$/, "") : "../";
+      const repoResp = await fetch(`${rootPrefix}assets/data/live-cloud-studies.json?t=${Date.now()}`);
+      if (repoResp.ok) {
+        const repoData = await repoResp.json();
+        if (applySyncPacket(repoData, localStore, localRuns, delSet)) changed = true;
+      }
+    } catch {
+      /* ignore offline */
+    }
+
+    // 2. Poll live cross-device ntfy.sh JSON relay (supporting both inline messages and attachments)
+    try {
+      const resp = await fetch(`${CLOUD_SYNC_URL}/json?poll=1&since=all`);
+      if (resp.ok) {
+        const text = await resp.text();
+        const lines = text.trim().split("\n").filter(Boolean);
+        for (const line of lines) {
+          try {
+            const env = JSON.parse(line);
+            if (!env || env.event !== "message") continue;
+            let packet = null;
+            if (env.attachment && env.attachment.url) {
+              const attResp = await fetch(env.attachment.url);
+              if (attResp.ok) packet = await attResp.json();
+            } else if (env.message && env.message.startsWith("{")) {
+              packet = JSON.parse(env.message);
+            }
+            if (packet && applySyncPacket(packet, localStore, localRuns, delSet)) {
+              changed = true;
+            }
+          } catch {
+            /* skip non-sync message */
+          }
+        }
       }
     } catch {
       /* offline or blocked */
+    }
+
+    if (changed) {
+      saveJson(DELETED_KEY, { ids: Array.from(delSet) });
+      saveLocal(localStore);
+      saveJson(RUNS_KEY, localRuns);
+      refreshIpFilterOptions();
+      applyStudyFilters();
+      syncLockoutDom();
     }
   };
 

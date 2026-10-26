@@ -389,6 +389,39 @@ caption { text-align:left; font-size:11px; color:#969db5; padding:14px; }
 .gdoc-sync-row input { flex:1 1 260px; min-width:0; min-height:40px; padding:8px 11px; border:1px solid var(--line); border-radius:6px; background:#080b14; color:var(--text); font-size:13px; }
 .gdoc-sync-status { margin:0; font-size:12.5px; color:#8fe0a8; }
 
+/* PowerBI-Style Interactive Visual Controls (Sliders, Slicers, Drilldown, Drillout, Table Tooltips & Drillthrough) */
+.bi-toolbar { margin:14px 0 16px; padding:14px 16px; border:1px solid #9ddacf44; border-radius:10px; background:linear-gradient(160deg,#12192be6,#0b0f1ce6); display:grid; gap:12px; }
+.bi-toolbar-head { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 14px; padding-bottom:8px; border-bottom:1px solid #ffffff14; }
+.bi-toolbar-title { font:700 11.5px/1.3 Consolas,"Segoe UI",monospace; text-transform:uppercase; letter-spacing:.08em; color:#9ddacf; }
+.bi-drill-bar { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.bi-btn { appearance:none; padding:5px 11px; border:1px solid #ffffff24; border-radius:6px; background:#141a2e; color:#d8dcf0; font:600 11.5px/1.3 Inter,"Segoe UI",sans-serif; cursor:pointer; transition:border-color .16s ease,background .16s ease,color .16s ease; }
+.bi-btn:hover,.bi-btn.is-active { border-color:#9ddacf; background:#9ddacf22; color:#ffffff; }
+.bi-btn.is-drillout { border-color:#f7ab6566; color:#f7ab65; }
+.bi-btn.is-drillout.is-active,.bi-btn.is-drillout:hover { border-color:#f7ab65; background:#f7ab6524; color:#fff; }
+.bi-sliders-row { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr)); gap:10px 16px; align-items:end; }
+.bi-slider-label { display:grid; gap:4px; font-size:11.5px; font-weight:600; color:#b8c0d8; }
+.bi-slider-label output { font:700 11.5px/1.2 Consolas,monospace; color:#9ddacf; }
+.bi-slider-label input[type="range"] { width:100%; accent-color:#9ddacf; cursor:pointer; }
+.bi-slicer-row { display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+.bi-slicer-title { font-size:11.5px; font-weight:650; color:#b8c0d8; margin-right:4px; }
+.bi-slicer-pill { appearance:none; padding:4px 10px; border:1px solid #ffffff1f; border-radius:999px; background:#0d111f; color:#aeb6ce; font:600 11.5px/1.3 Inter,"Segoe UI",sans-serif; cursor:pointer; transition:border-color .15s ease,background .15s ease,color .15s ease; }
+.bi-slicer-pill.is-active,.bi-slicer-pill:hover { border-color:#9ddacf; background:#9ddacf24; color:#ffffff; }
+.bi-crumbs { font:600 11.5px/1.4 Consolas,monospace; color:#edcc93; }
+.bi-table-tooltip { position:fixed; z-index:110; max-width:min(480px,92vw); max-height:70dvh; overflow:auto; padding:12px 14px; border:1px solid #9ddacf88; border-top:3px solid #9ddacf; border-radius:10px; background:linear-gradient(165deg,#141b2efc,#0a0d18fc); box-shadow:0 22px 56px #000e; color:#eef0fa; font:400 12px/1.45 Inter,"Segoe UI",sans-serif; pointer-events:auto; }
+.bi-table-tooltip h4 { margin:0 0 4px; font-size:13px; color:#9ddacf; }
+.bi-table-tooltip p { margin:0 0 8px; font-size:11.5px; color:#b8c0d8; }
+.bi-table-tooltip table { width:100%; border-collapse:collapse; font-size:11.5px; margin-bottom:8px; }
+.bi-table-tooltip th,.bi-table-tooltip td { padding:5px 7px; border-bottom:1px solid #ffffff14; text-align:left; }
+.bi-table-tooltip thead th { font-size:10px; text-transform:uppercase; letter-spacing:.05em; color:#9ddacf; background:#ffffff08; }
+.bi-drillthrough-banner { margin:8px 0 12px; padding:10px 14px; border:1px solid #f7ab6588; border-radius:8px; background:#f7ab6518; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 12px; font-size:12.5px; color:#ffe6cc; }
+
+/* Admin Delegated Password Manager List */
+.wb-pwd-list-wrap { margin-top:8px; padding-top:10px; border-top:1px solid #ffffff18; display:grid; gap:8px; }
+.wb-pwd-active-list { display:grid; gap:8px; max-height:190px; overflow-y:auto; }
+.wb-pwd-row { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:8px 12px; padding:8px 12px; border:1px solid #9ddacf44; border-radius:8px; background:#0b0f1b; font-size:12.5px; }
+.wb-pwd-row strong { color:#9ddacf; }
+.wb-pwd-row small { color:var(--muted); font:600 11px/1.3 Consolas,monospace; }
+
 @media (hover: none) and (pointer: coarse) {
   .reader-layout { grid-template-columns:1fr!important; }
   .reader-sidebar { position:static!important; max-height:none!important; padding:0!important; }
@@ -465,9 +498,19 @@ caption { text-align:left; font-size:11px; color:#969db5; padding:14px; }
   .reader-sidebar { position:static; max-height:none; padding:0; }
   .contents-panel { background:#161b2a; border:1px solid #ffffff1a; padding:17px; border-radius:8px; }
   #reader-toc { max-height:330px; overflow:auto; }
-  .tex-paper { font-size:15px; padding:22px; }
-  .tex-paper h1 { font-size:25px; }
-  .tex-paper h2 { font-size:21px; }
+  .tex-paper { font-size:14.5px; line-height:1.78; padding:18px 14px; border-radius:6px; }
+  .tex-paper h1 { font-size:22px; margin:32px 0 16px; }
+  .tex-paper h2 { font-size:19px; margin:26px 0 14px; }
+  .tex-paper h3 { font-size:16.5px; margin:22px 0 12px; }
+  .tex-paper h4 { font-size:15px; margin:18px 0 10px; }
+  .tex-paper mjx-container { font-size:94%!important; max-width:100%; }
+  .tex-paper mjx-container[display="true"] { font-size:88%!important; margin:.75em 0!important; padding:4px 0; overflow-x:auto; max-width:100%; }
+  .tex-paper .tex-display-math { margin:14px 0; padding:4px 0; max-width:100%; overflow-x:auto; }
+  .tex-paper table { font-size:11.5px; }
+  .tex-paper td,.tex-paper th { padding:6px 8px; }
+  .site-header nav.top-symbol-bar { gap:5px; justify-content:center; }
+  .site-header nav .top-sym-tile { min-width:54px; min-height:46px; padding:5px 6px 4px; }
+  .site-header nav .top-sym-tile .symbol-caption { font-size:8.5px; }
   .site-footer { width:calc(100% - 40px); flex-wrap:wrap; gap:12px; }
   .site-footer a { display:inline-flex; align-items:center; min-width:44px; min-height:44px; }
   .site-footer span { display:none; }
