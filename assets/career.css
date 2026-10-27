@@ -7,7 +7,7 @@
   overflow-wrap: anywhere;
 }
 
-.resume-page { max-width: 1040px; }
+.resume-page { width: 100%; max-width: none; }
 .career-navigation { display: flex; flex-wrap: wrap; gap: 12px 28px; font-size: 13px; margin-bottom: 36px; }
 .career-navigation a,
 .career-profile-links a { text-decoration: underline; text-underline-offset: 5px; text-decoration-color: var(--career-rule); }

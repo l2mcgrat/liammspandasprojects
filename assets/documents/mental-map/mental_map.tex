@@ -4684,7 +4684,19 @@ Because every NAICS industry is a convex combination of six occupational role fa
 
 % atlas: Business-and-Economics/Macroeconomics/Fiscal-Policy
 \subsubsection{Fiscal Policy}\label{sec:fiscal-policy}
-\textit{Open for notes: this destination is outlined on the website and ready for its first entry.}
+
+\subsubsubsection{ST-09: Taxes on Generations Over Time Periods (Real Burden, Rewards, Commutes \& Sin Excise)}
+
+To evaluate inter-generational fiscal equity in constant 2024 Canadian dollars ($\text{2024 CAD}$, 1985--2025) normalized for cohort population size $N_{g,t}$ and CPI inflation ($\text{CPI}_t / \text{CPI}_{2024}$), we define the real per-capita \textbf{Net Fiscal Incidence} ($\text{NFI}_{g,t}$) and \textbf{Fiscal Reward-to-Tax Ratio} ($\Gamma_{g,t}$):
+\begin{equation}
+  \text{NFI}_{g,t} = \frac{1}{N_{g,t}\left(\text{CPI}_t / \text{CPI}_{2024}\right)}\left[\sum_{k \in \mathcal{K}} \tau_{k,g,t} B_{k,g,t} - \sum_{m \in \mathcal{M}} R_{m,g,t}\right] = \tilde{T}_{g,t} - \tilde{R}_{g,t}, \qquad \Gamma_{g,t} = \frac{\tilde{R}_{g,t}}{\tilde{T}_{g,t}}.
+\end{equation}
+Across Statistics Canada DHEA, SHS, Census Commuting, CTNS Nicotine, and CIHI Health Expenditure tables:
+\begin{itemize}
+  \item \textbf{Peak Tax-Bearing Cohorts (Gen X \& Millennials):} Generation X (ages 45--60) pays \$31,420/capita in total taxes against \$12,840/capita in cash and health/education transfers ($\Gamma = 0.41\times$, net burden $-\$18,580/\text{capita}$). Millennials (ages 29--44) pay \$26,890/capita against \$13,450/capita in rewards ($\Gamma = 0.50\times$), carrying a $1.97\times$ larger real net fiscal burden than Baby Boomers did at ages 26--44 in 1990 (\$19,850 tax vs.\ \$13,040 reward, $\Gamma = 0.66\times$).
+  \item \textbf{Senior Transfer \& Healthcare Multiplier (Ages 61+):} Baby Boomers (ages 61--79) pay the highest municipal property tax (\$2,640/capita on $76\%$ homeownership) and \$14,180/capita total tax, but receive \$27,510/capita in OAS/CPP pensions and CIHI healthcare ($\Gamma = 1.94\times$), rising to $\Gamma = 3.68\times$ (\$33,560 rewards vs.\ \$9,120 tax) for the Silent Generation (80+).
+  \item \textbf{Exurban Commutes, Carbon/Fuel Tax \& Youth Vaping Excise:} Priced into outer suburban rings, Millennials and Gen X have the longest one-way commutes ($28.4$ and $27.6\text{ min}$; $81.6\%$--$84.8\%$ auto share), paying \$780--\$815/capita in road-fuel excise and carbon levies ($\gamma = 1.34$). Meanwhile, federal/provincial vaping excise duties fall $64.2\%$ on Generation Z (\$168/capita; $19.7\%$ prevalence at ages 20--24 vs.\ $\leq 1.5\%$ for Boomers).
+\end{itemize}
 
 % atlas: Business-and-Economics/Macroeconomics/International-Trade
 \subsubsection{International Trade}\label{sec:international-trade}

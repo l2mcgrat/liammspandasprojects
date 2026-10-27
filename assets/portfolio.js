@@ -240,6 +240,148 @@
     };
   };
 
+  const formatClockJs = (sec) => {
+    const s = Math.round(Number(sec) || 0);
+    const m = Math.floor(s / 60);
+    const rem = s % 60;
+    return `${m}:${String(rem).padStart(2, "0")}`;
+  };
+
+  const formatShortDayJs = (isoDate) => {
+    const parts = String(isoDate || "").split("-");
+    if (parts.length < 3) return isoDate;
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const mo = months[(parseInt(parts[1], 10) || 1) - 1] || parts[1];
+    const d = parseInt(parts[2], 10) || 1;
+    return `${mo} ${d}`;
+  };
+
+  const applyLiveLogUpdateToDom = (key, rawText) => {
+    if (!rawText || typeof rawText !== "string") return;
+    const lines = rawText.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
+    if (!lines.length) return;
+
+    // 1. Auto-detect Tempo Run Log (even if pasted into the 'running' box on Running/index.html)
+    if (key === "tempo" || lines.some((l) => /^Tempo\s+Run\s*[-:]/i.test(l))) {
+      const tempoRuns = [];
+      let cur = null;
+      lines.forEach((ln) => {
+        const mDate = ln.match(/^\(?(\d{1,2})[\/.\-](\d{1,2})[\/.\-](20\d{2})\)?$/);
+        if (mDate) {
+          cur = {
+            date: `${mDate[3]}-${mDate[1].padStart(2, "0")}-${mDate[2].padStart(2, "0")}`,
+          };
+          return;
+        }
+        const mRun = ln.match(/^Tempo\s+Run\s*[-:]\s*(\d+(?:\.\d+)?)\s*km\s*\((.+)\)/i);
+        if (cur && mRun) {
+          cur.distanceKm = parseFloat(mRun[1]);
+          cur.route = mRun[2].trim();
+          return;
+        }
+        const mTime = ln.match(/^(\d{1,2})[:.](\d{2})\.(\d{1,2})$/);
+        if (cur && cur.distanceKm && !cur.timeRaw && mTime) {
+          cur.timeRaw = ln;
+          cur.timeSeconds = parseInt(mTime[1], 10) * 60 + parseInt(mTime[2], 10) + parseFloat(`0.${mTime[3]}`);
+          return;
+        }
+        const mPace = ln.match(/^(\d{1,2}):(\d{2}(?:\.\d+)?)\s*min\/km\s*[-:]\s*(\d+(?:\.\d+)?)\s*m\/s/i);
+        if (cur && cur.timeSeconds && mPace) {
+          cur.writtenPace = { raw: ln };
+          cur.paceSeconds = Math.round((cur.timeSeconds / cur.distanceKm) * 100) / 100;
+          cur.speed = Math.round(((cur.distanceKm * 1000) / cur.timeSeconds) * 100) / 100;
+          tempoRuns.push(cur);
+          cur = null;
+        }
+      });
+
+      if (tempoRuns.length > 0) {
+        const totalKm = Math.round(tempoRuns.reduce((a, r) => a + r.distanceKm, 0) * 10) / 10;
+        const tempoTitle = document.getElementById("running-tempo-title");
+        if (tempoTitle) tempoTitle.textContent = `Continuous runs, ${totalKm} km so far.`;
+        const chipsList = document.getElementById("tempo-chips-list") || document.querySelector("#running-tempo .athletics-chips");
+        if (chipsList) {
+          chipsList.innerHTML = tempoRuns
+            .map((r, i) => `<li class="series-${i % 4}">${formatShortDayJs(r.date)} · ${r.route} · ${r.distanceKm} km @ ${formatClockJs(r.paceSeconds)}/km</li>`)
+            .join("");
+        }
+        const tempoTableBody = document.querySelector("#tempo-table tbody");
+        if (tempoTableBody) {
+          tempoTableBody.innerHTML = tempoRuns
+            .map(
+              (r) =>
+                `<tr><th scope="row">${formatShortDayJs(r.date)}</th><td>${r.route}</td><td>${r.distanceKm} km</td><td>${r.timeRaw}</td><td>${formatClockJs(r.paceSeconds)} /km</td><td>${r.speed} m/s</td><td>${r.writtenPace.raw}</td></tr>`
+            )
+            .join("");
+        }
+        const tempoHost = document.querySelector(".bi-tempo-host");
+        if (tempoHost) {
+          tempoHost.setAttribute("data-bi-tempo", JSON.stringify(tempoRuns));
+          window.dispatchEvent(new CustomEvent("liam-bi-refresh-tempo", { detail: tempoRuns }));
+        }
+      }
+    }
+
+    // 2. Auto-detect Weightlifting Log and dynamically update sessions, table & interactive BI chart
+    if (key === "weightlifting" && lines.some((l) => /\d+\s*x\s*\d+/i.test(l))) {
+      const sessions = [];
+      let lastYear = 0;
+      lines.forEach((ln) => {
+        const mDay = ln.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](20\d{2})\s*(?:[-:]\s*)?([A-Za-z].*)$/);
+        if (mDay) {
+          let yr = parseInt(mDay[3], 10);
+          if (lastYear && yr < lastYear) yr = lastYear;
+          else lastYear = yr;
+          const rawSplit = mDay[4].trim();
+          const firstWord = rawSplit.split(/[^A-Za-z]+/)[0].toLowerCase();
+          const split = firstWord === "back" ? "Back" : firstWord === "chest" ? "Chest" : "Shoulders";
+          sessions.push({
+            date: `${yr}-${mDay[1].padStart(2, "0")}-${mDay[2].padStart(2, "0")}`,
+            splitRaw: rawSplit,
+            split,
+            exercises: [],
+            sets: 0,
+            reps: 0,
+            volume: 0,
+          });
+          return;
+        }
+        if (!sessions.length) return;
+        const mEx = ln.match(/^([A-Za-z][A-Za-z0-9\s'()/&]*?)\s*(?:([;:])\s*|[-,]\s*|\s+)(?=\d+\s*[xX*]|\s*$)(.*)$/);
+        if (mEx) {
+          const name = mEx[1].trim().replace(/Assited/g, "Assisted").replace(/Dumbell/g, "Dumbbell");
+          const rest = mEx[3].trim();
+          const sets = [];
+          rest.split(",").forEach((tok) => {
+            const t = tok.trim().replace(/\.$/, "");
+            const ms = t.match(/^(\d+)\s*[xX*]\s*(\d+(?:\.\d+)?)\s*(?:lbs?|lb)?$/i);
+            if (ms) {
+              sets.push({ reps: parseInt(ms[1], 10), weight: parseFloat(ms[2]) });
+            } else if (/^(\d+)\s*[xX*]\s*(?:bw|bodyweight)$/i.test(t)) {
+              const mbw = t.match(/^(\d+)/);
+              sets.push({ reps: parseInt(mbw[1], 10), weight: 0 });
+            }
+          });
+          const kind = !sets.length ? "unrecorded" : /assisted/i.test(name) ? "assisted" : sets.every((s) => s.weight === 0) ? "bodyweight" : "loaded";
+          const vol = kind === "loaded" ? Math.round(sets.reduce((a, s) => a + s.reps * s.weight, 0)) : 0;
+          const repsSum = sets.reduce((a, s) => a + s.reps, 0);
+          const curSess = sessions[sessions.length - 1];
+          curSess.exercises.push({ name, kind, sets, setCount: sets.length, reps: repsSum, volume: vol });
+          curSess.sets += sets.length;
+          curSess.reps += repsSum;
+          curSess.volume += vol;
+        }
+      });
+      if (sessions.length > 0) {
+        const liftHost = document.getElementById("bi-lifting-host");
+        if (liftHost) {
+          liftHost.setAttribute("data-bi-lifting", JSON.stringify(sessions));
+          window.dispatchEvent(new CustomEvent("liam-bi-refresh-lifting", { detail: sessions }));
+        }
+      }
+    }
+  };
+
   const runSingleGdocSync = async (box) => {
     const key = box.getAttribute("data-gdoc-sync");
     const lastDate = box.getAttribute("data-gdoc-last-date") || "2026-10-18";
@@ -271,21 +413,22 @@
       }
       try {
         const syncedStore = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
-        syncedStore[key] = { docId, newest, lineCount: lines.length, tail: lines.slice(-12), syncedAt: new Date().toISOString() };
+        syncedStore[key] = { docId, newest, lineCount: lines.length, rawText: text, tail: lines.slice(-12), syncedAt: new Date().toISOString() };
         localStorage.setItem(SYNCED_LOGS_KEY, JSON.stringify(syncedStore));
       } catch {
         /* ignore quota */
       }
+      applyLiveLogUpdateToDom(key, text);
       if (newest <= lastDate) {
         if (status) {
           status.style.color = "#8fe0a8";
-          status.textContent = `✓ Synced & up to date! Latest Google Doc entry is ${newest} (${allDates.length} dated entries, ${lines.length} lines · matches built ${lastDate}) · 0 API tokens used.`;
+          status.textContent = `✓ Synced & dynamically updated page! Latest Google Doc entry is ${newest} (${allDates.length} dated entries, ${lines.length} lines) · 0 API tokens used.`;
         }
       } else {
         box.setAttribute("data-gdoc-last-date", newest);
         if (status) {
           status.style.color = "#8fe0a8";
-          status.textContent = `✓ Updated from Google Docs! Pulled ${lines.length} lines with new entries through ${newest} (${allDates.length} total sessions · 0 API tokens used).`;
+          status.textContent = `✓ Updated charts & tables live from Google Docs! Pulled ${lines.length} lines through ${newest} (${allDates.length} sessions · 0 API tokens used).`;
         }
       }
       return { key, ok: true, newest, lines: lines.length };
@@ -297,6 +440,16 @@
       return { key, ok: false, newest: lastDate };
     }
   };
+
+  // Re-apply any previously synced Google Doc logs from localStorage on page load so charts/tables stay updated
+  try {
+    const cachedLogs = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
+    Object.entries(cachedLogs).forEach(([k, v]) => {
+      if (v && v.rawText) applyLiveLogUpdateToDom(k, v.rawText);
+    });
+  } catch {
+    /* ignore */
+  }
 
   document.querySelectorAll("[data-gdoc-sync]").forEach((box) => {
     const key = box.getAttribute("data-gdoc-sync");
@@ -499,11 +652,15 @@
           return `<figure class="sports-chart athletics-chart" style="margin:16px 0;padding:18px;border:1px solid #ffffff1a;border-radius:8px;background:#0d111d;"><figcaption style="margin-bottom:10px;"><strong style="display:block;font-size:15px;">${esc(analytics?.chartTitle || "Empirical Benchmark Chart")}</strong><small style="color:#a4acc3;">${esc(analytics?.chartSubtitle || "")}</small></figcaption><svg viewBox="0 0 900 ${height}" style="width:100%;height:auto;" role="img">${parts.join("")}</svg></figure>`;
         };
 
-        // 1. On an Atlas leaf page (or hosted study page when a 2nd/3rd study is added to the same subsubsection), append a Study Tab section below
-        const leafMain = document.querySelector("main.atlas-leaf, main.study-page");
+        // 1. On an Atlas leaf page, hosted study page, OR Topic/Field branch page (.atlas-page), inject cards & Study Tabs
+        const leafMain = document.querySelector("main.atlas-leaf, main.study-page, main.atlas-page");
         if (leafMain) {
-          const canonicalIds = new Set(["ST-01", "ST-02", "ST-05", "ST-06", "ST-08"]);
-          const matching = runEntries.filter((r) => current.includes(`/${r.study.atlasPath}/`) && !canonicalIds.has(r.study.id));
+          const canonicalIds = new Set(["ST-01", "ST-02", "ST-05", "ST-06", "ST-08", "ST-09"]);
+          const matching = runEntries.filter(
+            (r) =>
+              !canonicalIds.has(r.study.id) &&
+              (current.includes(`/${r.study.atlasPath}/`) || r.study.atlasPath.split("/").slice(0, 2).join("/") && current.endsWith(`/${r.study.atlasPath.split("/").slice(0, 2).join("/")}/index.html`))
+          );
           if (matching.length > 0) {
             const ledeEl = leafMain.querySelector(".leaf-hero .lede");
             if (ledeEl && /first study is being prepared/i.test(ledeEl.textContent)) {
@@ -511,8 +668,17 @@
             }
             const brand = document.querySelector(".site-header .brand");
             const rootPrefix = brand ? (brand.getAttribute("href") || "index.html").replace(/index\.html$/, "") : "../../../";
+            const featGrid = leafMain.querySelector(".atlas-feature-grid");
             matching.forEach((rec) => {
               const st = rec.study;
+              if (featGrid && !document.getElementById(`wb-feat-card-${st.id}`)) {
+                const card = document.createElement("a");
+                card.id = `wb-feat-card-${st.id}`;
+                card.className = "atlas-feature";
+                card.href = `#wb-live-tab-${st.id}`;
+                card.innerHTML = `<span class="eyebrow">WORKBENCH · ${esc(st.id)} · ${esc(st.createdOn || "2026-10-27")}</span><h3>${esc(st.title)}</h3><p>${esc(String(st.question || "").slice(0, 160))}…</p><span class="button ghost">Open ↗</span>`;
+                featGrid.insertBefore(card, featGrid.firstChild);
+              }
               if (document.getElementById(`wb-live-tab-${st.id}`)) return;
               const an = rec.analytics || {};
               const kpis = Array.isArray(an.kpis) ? an.kpis : [];
@@ -590,7 +756,7 @@
                 `<p class="eyebrow">Live Workbench Study Tab · ${esc(st.id)} · ${esc(rec.mode)}</p>`,
                 `<h2>${esc(st.title)}</h2>`,
                 `<p style="color:#a4acc3;"><strong>Primary datasets:</strong> ${esc(rec.dataset || st.dataset)}</p>`,
-                renderSvg(st.id, an),
+                renderSvg(st.id, an) + (Array.isArray(an.extraCharts) ? an.extraCharts.map((ch, idx) => renderSvg(`${st.id}-extra-${idx + 2}`, ch)).join("") : ""),
                 kpisBlock,
                 inspectorBlock,
                 `<div class="tex-paper" style="margin:16px 0;padding:24px;border-radius:8px;">${formatStudyProseHtml(rec.summary)}</div>`,
@@ -611,7 +777,7 @@
         // 2. On Mental-Map/index.html, inject any newly run non-canonical Workbench studies into their matching section with formatted MathJax
         const mmPaper = document.querySelector(".document-page .tex-paper");
         if (mmPaper && current.includes("/Mental-Map/")) {
-          const canonicalIds = new Set(["ST-01", "ST-02", "ST-05", "ST-06", "ST-08"]);
+          const canonicalIds = new Set(["ST-01", "ST-02", "ST-05", "ST-06", "ST-08", "ST-09"]);
           let injectedAny = false;
           runEntries.forEach((rec) => {
             const st = rec.study;
@@ -647,35 +813,38 @@
   };
   integratePublishedStudyRuns();
 
-  // Pull cross-device Mobile <-> Web study runs on Atlas leaf pages & Mental Map
-  if (typeof fetch === "function" && (document.querySelector("main.atlas-leaf, main.study-page") || current.includes("/Mental-Map/"))) {
+  // Pull cross-device Mobile <-> Web study runs on Atlas leaf/branch pages & Mental Map (including >4KB attachments)
+  if (typeof fetch === "function" && (document.querySelector("main.atlas-leaf, main.study-page, main.atlas-page") || current.includes("/Mental-Map/"))) {
     fetch("https://ntfy.sh/liam_wb_cloud_sync_67wxyE7LLICn/json?poll=1&since=all")
       .then((r) => (r.ok ? r.text() : ""))
-      .then((txt) => {
+      .then(async (txt) => {
         if (!txt) return;
         const localRuns = JSON.parse(localStorage.getItem("liam_workbench_study_runs_v1") || "{}") || {};
         let updated = false;
-        txt
-          .trim()
-          .split("\n")
-          .filter(Boolean)
-          .forEach((line) => {
-            try {
-              const env = JSON.parse(line);
-              if (!env || env.event !== "message" || !env.message) return;
-              const pkt = JSON.parse(env.message);
-              if (pkt && pkt.v === 1 && pkt.runs && typeof pkt.runs === "object") {
-                Object.entries(pkt.runs).forEach(([sid, rec]) => {
-                  if (rec && Number(rec.tokens) > 0 && (!localRuns[sid] || !Number(localRuns[sid].tokens))) {
-                    localRuns[sid] = rec;
-                    updated = true;
-                  }
-                });
-              }
-            } catch {
-              /* ignore */
+        const lines = txt.trim().split("\n").filter(Boolean);
+        for (const line of lines) {
+          try {
+            const env = JSON.parse(line);
+            if (!env || env.event !== "message") continue;
+            let pkt = null;
+            if (env.attachment && env.attachment.url) {
+              const attResp = await fetch(env.attachment.url);
+              if (attResp.ok) pkt = await attResp.json();
+            } else if (env.message && env.message.startsWith("{")) {
+              pkt = JSON.parse(env.message);
             }
-          });
+            if (pkt && pkt.v === 1 && pkt.runs && typeof pkt.runs === "object") {
+              Object.entries(pkt.runs).forEach(([sid, rec]) => {
+                if (rec && Number(rec.tokens) > 0 && (!localRuns[sid] || !Number(localRuns[sid].tokens))) {
+                  localRuns[sid] = rec;
+                  updated = true;
+                }
+              });
+            }
+          } catch {
+            /* ignore */
+          }
+        }
         if (updated) {
           localStorage.setItem("liam_workbench_study_runs_v1", JSON.stringify(localRuns));
           integratePublishedStudyRuns();
@@ -687,12 +856,12 @@
   }
 
   // ============================================================================
-  // PowerBI-Style Interactive Visual Engine (Sliders, Slicers, Drilldown, Drillout,
-  // 190cm Wingspan Biomechanical Energy Conversion, Report-Table Tooltips & Drillthrough)
+  // PowerBI-Style Interactive Visual Engine (Sliders, Slicers, True Drilldown vs.
+  // Drillout, Dual-Axis Bar + Line with 'Energy / Pounds' Swap Toggle, Ordinal
+  // Dates without Year, Dynamic Flat/Angled Labels & Scrollable Wide SVG)
   // ============================================================================
   const escHtml = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-  // Shared floating Report-Page Table Tooltip
   let biTooltipEl = null;
   const getBiTooltip = () => {
     if (!biTooltipEl) {
@@ -723,6 +892,45 @@
     }
     tip.style.left = `${left}px`;
     tip.style.top = `${top}px`;
+  };
+
+  // Ordinal Day Formatter without Year: "2026-09-14" -> "Sep 14th", "2026-12-31" -> "Dec 31st", "2027-01-01" -> "Jan 1st"
+  const MONTHS_SHORT = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const MONTHS_FULL = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const ordinalSuffix = (d) => {
+    if (d >= 11 && d <= 13) return `${d}th`;
+    switch (d % 10) {
+      case 1: return `${d}st`;
+      case 2: return `${d}nd`;
+      case 3: return `${d}rd`;
+      default: return `${d}th`;
+    }
+  };
+  const formatOrdinalDay = (isoDate) => {
+    const parts = String(isoDate || "").split("-");
+    if (parts.length < 3) return String(isoDate || "");
+    const moIdx = (parseInt(parts[1], 10) || 1) - 1;
+    const dayNum = parseInt(parts[2], 10) || 1;
+    return `${MONTHS_SHORT[moIdx] || parts[1]} ${ordinalSuffix(dayNum)}`;
+  };
+
+  const dateToHierarchy = (isoDate) => {
+    const parts = String(isoDate || "2026-10-01").split("-");
+    const mo = parseInt(parts[1], 10) || 10;
+    const qtrNum = Math.ceil(mo / 3);
+    const qtrRanges = { 1: "Jan–Mar", 2: "Apr–Jun", 3: "Jul–Sep", 4: "Oct–Dec" };
+    const dObj = new Date(`${isoDate}T12:00:00`);
+    const dayOfWeek = (dObj.getDay() + 6) % 7;
+    const mon = new Date(dObj);
+    mon.setDate(dObj.getDate() - dayOfWeek);
+    const weekIso = mon.toISOString().slice(0, 10);
+    return {
+      qtr: `Q${qtrNum} · ${qtrRanges[qtrNum]}`,
+      month: MONTHS_FULL[mo - 1] || "October",
+      week: `Wk ${formatOrdinalDay(weekIso)}`,
+      day: formatOrdinalDay(isoDate),
+      rawDate: isoDate,
+    };
   };
 
   // Biomechanical 190 cm Wingspan Calorie Model (W = 1.90 m)
@@ -759,69 +967,160 @@
     return Math.round(kcal * 10) / 10;
   };
 
-  const dateToHierarchy = (isoDate, drilloutExpanded = false) => {
-    const [yrStr, moStr] = String(isoDate || "2026-10-01").split("-");
-    const yr = parseInt(yrStr, 10) || 2026;
-    const mo = parseInt(moStr, 10) || 10;
-    const qtrNum = Math.ceil(mo / 3);
-    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const qtrMonths = { 1: "Jan/Feb/Mar", 2: "Apr/May/Jun", 3: "Jul/Aug/Sep", 4: "Oct/Nov/Dec" };
-    const dObj = new Date(`${isoDate}T12:00:00`);
-    const dayOfWeek = (dObj.getDay() + 6) % 7;
-    const mon = new Date(dObj);
-    mon.setDate(dObj.getDate() - dayOfWeek);
-    const weekIso = mon.toISOString().slice(0, 10);
-    return {
-      year: `${yr}`,
-      qtr: drilloutExpanded ? `${monthNames[mo - 1]} ${yr} (Q${qtrNum})` : `Q${qtrNum} ${yr} (${qtrMonths[qtrNum]})`,
-      month: `${monthNames[mo - 1]} ${yr}`,
-      week: `Wk ${weekIso.slice(5)}`,
-      day: isoDate,
-    };
+  const estimateSetEffectiveLbs = (exName, exKind, reps, weightLbs) => {
+    const r = Number(reps) || 0;
+    const w = Number(weightLbs) || 0;
+    if (r <= 0) return 0;
+    if (exKind === "loaded" && w > 0) return r * w;
+    if (exKind === "assisted") return Math.round(r * Math.max(40, 194 - w));
+    const grp = classifyExerciseMuscle(exName);
+    return Math.round(r * (grp === "Abs" ? 35 : 65));
+  };
+
+  // Helper: Draw a Dual-Axis Bar (Left Y-Axis) + Line (Right Y-Axis) SVG with Dynamic Flat/Angled X-Labels & Scrollable Width
+  const buildDualAxisSvgMarkup = ({
+    svgEl,
+    titleId,
+    titleText,
+    descText,
+    items,
+    barValFn,
+    lineValFn,
+    barUnit,
+    lineUnit,
+    barFormatFn,
+    lineFormatFn,
+    barColorFn,
+  }) => {
+    const n = Math.max(1, items.length);
+    const containerW = svgEl.parentElement?.clientWidth || 960;
+    const minStep = 64;
+    const naturalStep = (containerW - 180) / n;
+    const svgWidth = naturalStep >= minStep ? Math.max(960, containerW) : Math.max(960, 180 + n * minStep);
+    const useAngledLabels = (svgWidth - 180) / n < 78 || items.some((it) => String(it.label || "").length > 11);
+    const svgHeight = useAngledLabels ? 365 : 335;
+    const leftPad = 82;
+    const rightPad = svgWidth - 82;
+    const topPad = 44;
+    const bottomPad = 285;
+    const plotW = rightPad - leftPad;
+    const plotH = bottomPad - topPad;
+
+    svgEl.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+    svgEl.style.minWidth = svgWidth > containerW ? `${svgWidth}px` : "100%";
+
+    const barVals = items.map(barValFn);
+    const lineVals = items.map(lineValFn);
+    const maxBar = Math.max(1, ...barVals);
+    const maxLine = Math.max(1, ...lineVals);
+
+    const parts = [
+      `<title id="${escHtml(titleId)}">${escHtml(titleText)}</title>`,
+      `<desc id="${escHtml(titleId.replace("-title", "-desc"))}">${escHtml(descText)}</desc>`,
+      `<text x="${leftPad - 8}" y="22" text-anchor="end" fill="#9ddacf" font-weight="700" font-size="11.5">▮ Bars: ${escHtml(barUnit)}</text>`,
+      `<text x="${rightPad + 8}" y="22" text-anchor="start" fill="#f7ab65" font-weight="700" font-size="11.5">● Line: ${escHtml(lineUnit)}</text>`,
+    ];
+
+    for (let k = 0; k <= 4; k++) {
+      const bTick = (maxBar * k) / 4;
+      const lTick = (maxLine * k) / 4;
+      const ty = bottomPad - (k / 4) * plotH;
+      const bLbl = barFormatFn ? barFormatFn(bTick) : `${Math.round(bTick)} ${barUnit}`;
+      const lLbl = lineFormatFn ? lineFormatFn(lTick) : `${Math.round(lTick)} ${lineUnit}`;
+      parts.push(
+        `<line class="chart-grid" x1="${leftPad}" x2="${rightPad}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/>` +
+        `<text x="${leftPad - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end" fill="#9ddacf">${escHtml(bLbl)}</text>` +
+        `<text x="${rightPad + 8}" y="${(ty + 4).toFixed(1)}" text-anchor="start" fill="#f7ab65">${escHtml(lLbl)}</text>`
+      );
+    }
+
+    const step = plotW / n;
+    const linePts = [];
+
+    items.forEach((it, idx) => {
+      const bVal = barVals[idx];
+      const lVal = lineVals[idx];
+      const cx = leftPad + (idx + 0.5) * step;
+      const bw = Math.min(54, Math.max(16, step * 0.62));
+      const bh = Math.max(4, (bVal / maxBar) * plotH);
+      const bx = cx - bw / 2;
+      const by = bottomPad - bh;
+      const ly = bottomPad - (lVal / maxLine) * plotH;
+      linePts.push({ cx, ly, lVal, it, idx });
+
+      const bText = barFormatFn ? barFormatFn(bVal) : `${Math.round(bVal)} ${barUnit}`;
+      const clsOrFill = barColorFn ? barColorFn(it, idx) : 'class="athletics-bar series-0"';
+      const xLabel = String(it.label || it.key || "");
+      const labelAttr = useAngledLabels
+        ? `x="${cx.toFixed(1)}" y="${bottomPad + 18}" text-anchor="end" transform="rotate(-28, ${cx.toFixed(1)}, ${bottomPad + 18})"`
+        : `x="${cx.toFixed(1)}" y="${bottomPad + 22}" text-anchor="middle"`;
+
+      parts.push(
+        `<rect ${clsOrFill} data-bi-bar="${idx}" x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" style="cursor:pointer;"></rect>` +
+        `<text x="${cx.toFixed(1)}" y="${Math.max(34, by - 7).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#eeeef7" font-weight="600">${escHtml(bText)}</text>` +
+        `<text ${labelAttr} font-size="11">${escHtml(xLabel)}</text>`
+      );
+    });
+
+    if (linePts.length > 1) {
+      parts.push(
+        `<polyline fill="none" stroke="#f7ab65" stroke-width="2.8" stroke-linejoin="round" points="${linePts.map((p) => `${p.cx.toFixed(1)},${p.ly.toFixed(1)}`).join(" ")}"/>`
+      );
+    }
+    linePts.forEach((p) => {
+      const lText = lineFormatFn ? lineFormatFn(p.lVal) : `${Math.round(p.lVal)} ${lineUnit}`;
+      parts.push(
+        `<circle data-bi-bar="${p.idx}" cx="${p.cx.toFixed(1)}" cy="${p.ly.toFixed(1)}" r="4.5" fill="#f7ab65" stroke="#0d101b" stroke-width="1.8" style="cursor:pointer;">` +
+        `<title>${escHtml(p.it.label || p.it.key)}: ${escHtml(lText)}</title></circle>`
+      );
+    });
+
+    svgEl.innerHTML = parts.join("");
   };
 
   // ---- 1. Weightlifting Interactive PowerBI Dashboard ----
   const liftingHost = document.getElementById("bi-lifting-host");
   if (liftingHost && liftingHost.hasAttribute("data-bi-lifting")) {
     try {
-      const rawSessions = JSON.parse(liftingHost.getAttribute("data-bi-lifting") || "[]");
+      let rawSessions = JSON.parse(liftingHost.getAttribute("data-bi-lifting") || "[]");
       if (Array.isArray(rawSessions) && rawSessions.length > 0) {
         const allMuscles = ["Chest", "Back", "Shoulders", "Triceps", "Biceps", "Abs", "Legs"];
         const activeMuscles = new Set(allMuscles);
-        const levels = ["year", "qtr", "month", "week", "day", "set"];
+        const levels = ["qtr", "month", "week", "day", "set"];
         const levelLabels = {
-          year: "Year",
           qtr: "Fiscal Qtr",
           month: "Month",
           week: "Week",
           day: "Day (Workout)",
           set: "Workout & Set (Clustered)",
         };
-        let currentLevelIdx = 4; // Default: Day (Workout)
-        let drilloutMode = false; // When true: expands Fiscal Qtr -> Months & switches metric from Volume (lb) to Biomechanical Energy (kcal)
+        let currentLevelIdx = 3; // Default: Day (Workout)
+        let swapAxes = false; // False: Bars = Pounds (lb), Line = Energy (kcal). True: Bars = Energy (kcal), Line = Pounds (lb)
         let minReps = 1;
         let startIdx = 0;
         let endIdx = rawSessions.length - 1;
-        let focusedDate = rawSessions[rawSessions.length - 1].date;
+        // True PowerBI Drilldown Scope: tracks parent selection when drilling down (cleared when drilling out!)
+        let drillScope = { qtr: null, month: null, week: null, dayIso: rawSessions[rawSessions.length - 1].date };
 
         const toolbar = document.createElement("div");
         toolbar.className = "bi-toolbar";
         toolbar.innerHTML = [
           `<div class="bi-toolbar-head">`,
-          `<div><span class="bi-toolbar-title">⚡ Interactive BI Controls · Hierarchy Drilldown, Muscle Slicer &amp; 190cm Wingspan Energy (kcal)</span>`,
-          `<div class="bi-crumbs" id="bi-lift-crumbs">Level: Day (Workout) · Metric: Loaded Volume (lb)</div></div>`,
+          `<div><span class="bi-toolbar-title">⚡ Interactive BI Controls · Dual-Axis (Pounds &amp; Energy), Drilldown vs. Drillout &amp; Muscle Slicer</span>`,
+          `<div class="bi-crumbs" id="bi-lift-crumbs">Level: Day (Workout) · Bars: Volume (lb) · Line: Energy (kcal)</div></div>`,
           `<div class="bi-drill-bar">`,
-          `<button type="button" class="bi-btn" id="bi-lift-up">↑ Drill Up</button>`,
-          `<button type="button" class="bi-btn" id="bi-lift-down">↓ Drill Down (to Sets)</button>`,
-          `<button type="button" class="bi-btn is-drillout" id="bi-lift-drillout" title="Expand Fiscal Qtr into Months &amp; convert weight×reps into Calories Expended (kcal) using 190 cm wingspan ROM">⚡ Drillout: Expand Qtr &amp; Energy (kcal)</button>`,
+          `<button type="button" class="bi-btn" id="bi-lift-up" title="Step up one hierarchy level">↑ Drill Up</button>`,
+          `<button type="button" class="bi-btn" id="bi-lift-down" title="Drill down into the selected period only (e.g. Q4 → Oct → Oct Weeks → single week's workouts → sets)">↓ Drill Down (Into Period)</button>`,
+          `<button type="button" class="bi-btn" id="bi-lift-drillout" title="Expand ALL visible periods to the next level across the whole range (e.g. Q3+Q4 → all months → all weeks → all workouts)">↔ Drill Out (Expand All)</button>`,
+          `<button type="button" class="bi-btn is-drillout" id="bi-lift-swap-axis" title="Swap which metric is on the Primary Bars (left axis) vs. Secondary Line (right axis)">⇄ Energy / Pounds</button>`,
           `<button type="button" class="bi-btn" id="bi-lift-reset">↺ Reset</button>`,
           `</div></div>`,
           `<div class="bi-sliders-row">`,
-          `<label class="bi-slider-label"><span>Start Session Date: <output id="bi-lift-start-out">${rawSessions[0].date}</output></span>`,
+          `<label class="bi-slider-label"><span>Start Session: <output id="bi-lift-start-out">${formatOrdinalDay(rawSessions[0].date)}</output></span>`,
           `<input type="range" id="bi-lift-start" min="0" max="${rawSessions.length - 1}" value="0"></label>`,
-          `<label class="bi-slider-label"><span>End Session Date: <output id="bi-lift-end-out">${rawSessions[rawSessions.length - 1].date}</output></span>`,
+          `<label class="bi-slider-label"><span>End Session: <output id="bi-lift-end-out">${formatOrdinalDay(rawSessions[rawSessions.length - 1].date)}</output></span>`,
           `<input type="range" id="bi-lift-end" min="0" max="${rawSessions.length - 1}" value="${rawSessions.length - 1}"></label>`,
-          `<label class="bi-slider-label"><span>Min Reps Filter (filters sets &amp; columns): <output id="bi-lift-reps-out">1+ reps</output></span>`,
+          `<label class="bi-slider-label"><span>Min Reps Filter (removes lower-rep sets): <output id="bi-lift-reps-out">1+ reps</output></span>`,
           `<input type="range" id="bi-lift-reps" min="1" max="25" value="1"></label>`,
           `<label class="bi-slider-label"><span>Hierarchy Level</span>`,
           `<select id="bi-lift-level" class="bi-btn" style="width:100%;padding:6px 8px;">`,
@@ -876,12 +1175,42 @@
 
           cards.forEach((card) => {
             const mGrp = card.getAttribute("data-muscle-group") || "Chest";
+            const exName = card.getAttribute("data-exercise-name") || "";
+            const exKind = card.getAttribute("data-exercise-kind") || "loaded";
             const pts = JSON.parse(card.getAttribute("data-exercise-points") || "[]");
             const inWindow = pts.filter((p) => p.date >= startIso && p.date <= endIso && (Number(p.reps) || 0) >= minReps);
             card.hidden = !activeMuscles.has(mGrp) || inWindow.length === 0;
+            if (!card.hidden) {
+              // Update small multiple X-axis labels to ordinal dates without year (Sep 14th, Oct 25th) and add table tooltip
+              const spark = card.querySelector("svg.athletics-spark");
+              if (spark && !card.hasAttribute("data-spark-wired")) {
+                card.setAttribute("data-spark-wired", "1");
+                spark.querySelectorAll("text").forEach((tEl) => {
+                  if (Number(tEl.getAttribute("y")) >= 165) {
+                    const txt = tEl.textContent || "";
+                    const m = txt.match(/^([A-Za-z]{3})\s+(\d+)$/);
+                    if (m) tEl.textContent = `${m[1]} ${ordinalSuffix(parseInt(m[2], 10))}`;
+                  }
+                });
+                card.style.cursor = "pointer";
+                card.addEventListener("click", (ev) => {
+                  const rowsHtml = inWindow
+                    .map((p) => {
+                      const kcal = estimateSetKcal(exName, exKind, p.reps, p.value);
+                      return `<tr><td>${escHtml(formatOrdinalDay(p.date))}</td><td>${p.value ?? 0} lb</td><td>${p.reps} reps</td><td>${p.best10 ?? "—"}</td><td>${p.best12 ?? "—"}</td><td>${kcal} kcal</td></tr>`;
+                    })
+                    .join("");
+                  showBiTooltip(
+                    ev,
+                    `<h4>${escHtml(exName)} (${escHtml(mGrp)}) · ${inWindow.length} Sessions</h4>` +
+                    `<p>Filtered to ≥${minReps} reps · ${formatOrdinalDay(startIso)} → ${formatOrdinalDay(endIso)}</p>` +
+                    `<table><thead><tr><th>Date</th><th>Top Set</th><th>Reps</th><th>10+ Reps</th><th>12+ Reps</th><th>Top Set kcal</th></tr></thead><tbody>${rowsHtml}</tbody></table>`
+                  );
+                });
+              }
+            }
           });
 
-          // Bucket cards by muscle group when multiple muscle groups are selected
           if (activeMuscles.size >= 1) {
             allMuscles.forEach((mGrp) => {
               if (!activeMuscles.has(mGrp)) return;
@@ -889,7 +1218,7 @@
               if (matching.length === 0) return;
               const sec = document.createElement("div");
               sec.className = `muscle-bucket-section muscle-${mGrp.toLowerCase()}`;
-              sec.innerHTML = `<div class="muscle-bucket-header"><span>■ ${escHtml(mGrp)} Bucket (${matching.length} tracked exercise${matching.length === 1 ? "" : "s"})</span><small>Filtered: ≥${minReps} reps · ${startIso} → ${endIso}</small></div><div class="muscle-bucket-grid"></div>`;
+              sec.innerHTML = `<div class="muscle-bucket-header"><span>■ ${escHtml(mGrp)} Bucket (${matching.length} tracked exercise${matching.length === 1 ? "" : "s"})</span><small>Filtered: ≥${minReps} reps · ${formatOrdinalDay(startIso)} → ${formatOrdinalDay(endIso)}</small></div><div class="muscle-bucket-grid"></div>`;
               const innerGrid = sec.querySelector(".muscle-bucket-grid");
               matching.forEach((c) => innerGrid.appendChild(c));
               grid.appendChild(sec);
@@ -907,17 +1236,36 @@
           const levelSel = document.getElementById("bi-lift-level");
           if (levelSel) levelSel.value = String(currentLevelIdx);
 
-          const filteredSessions = rawSessions.filter((s) => s.date >= startIso && s.date <= endIso);
-          const unitStr = drilloutMode ? "kcal" : "lb";
-          if (crumbsEl) {
-            crumbsEl.textContent = `Hierarchy: ${levelLabels[levelKey]}${levelKey === "set" ? ` (${focusedDate})` : ""} · Metric: ${drilloutMode ? "Biomechanical Energy Expended (kcal · 190cm wingspan ROM)" : "Loaded Mechanical Volume (lb)"} · Min Reps: ≥${minReps} reps · Active Muscles: ${Array.from(activeMuscles).join(", ") || "None"}`;
+          // Apply Time Slider + Active Drilldown Scope
+          let scopedSessions = rawSessions.filter((s) => s.date >= startIso && s.date <= endIso);
+          if (currentLevelIdx >= 1 && drillScope.qtr) {
+            scopedSessions = scopedSessions.filter((s) => dateToHierarchy(s.date).qtr === drillScope.qtr);
+          }
+          if (currentLevelIdx >= 2 && drillScope.month) {
+            scopedSessions = scopedSessions.filter((s) => dateToHierarchy(s.date).month === drillScope.month);
+          }
+          if (currentLevelIdx >= 3 && drillScope.week) {
+            scopedSessions = scopedSessions.filter((s) => dateToHierarchy(s.date).week === drillScope.week);
+          }
+          if (!scopedSessions.length) {
+            scopedSessions = rawSessions.filter((s) => s.date >= startIso && s.date <= endIso);
           }
 
-          // Final Drilldown Level ("set"): Clustered Column of each Exercise and each Set's Weight (lb) or Energy (kcal)
+          const scopeTrail = [drillScope.qtr, drillScope.month, drillScope.week].filter(Boolean).join(" → ");
+          const barName = swapAxes ? "Energy Expended (kcal)" : "Mechanical Volume (lb)";
+          const lineName = swapAxes ? "Mechanical Volume (lb)" : "Energy Expended (kcal)";
+          if (crumbsEl) {
+            crumbsEl.textContent = `Level: ${levelLabels[levelKey]}${scopeTrail ? ` [Drilled into: ${scopeTrail}]` : " [All in Range]"} · ▮ Bars: ${barName} · ● Line: ${lineName} · Min Reps: ≥${minReps}`;
+          }
+
+          // Final Drilldown Level ("set"): Clustered Column of each Exercise and each Set's Weight (lb) + Secondary Line of Energy (kcal)
           if (levelKey === "set") {
-            const targetSession = filteredSessions.find((s) => s.date === focusedDate) || filteredSessions[filteredSessions.length - 1] || rawSessions[rawSessions.length - 1];
+            const targetSession =
+              scopedSessions.find((s) => s.date === drillScope.dayIso) ||
+              scopedSessions[scopedSessions.length - 1] ||
+              rawSessions[rawSessions.length - 1];
             if (!targetSession) return;
-            focusedDate = targetSession.date;
+            drillScope.dayIso = targetSession.date;
             const exList = (targetSession.exercises || [])
               .map((ex) => {
                 const mGrp = classifyExerciseMuscle(ex.name);
@@ -928,181 +1276,208 @@
               })
               .filter(Boolean);
 
-            const maxVal = Math.max(
-              20,
-              ...exList.flatMap((ex) =>
-                ex.qualSets.map((st) => (drilloutMode ? estimateSetKcal(ex.name, ex.kind, st.reps, st.weight) : Number(st.weight) || 10))
-              )
-            );
-            const high = Math.ceil(maxVal / 25) * 25;
-            const parts = [];
-            for (let k = 0; k <= 4; k++) {
-              const tv = Math.round((high * k) / 4);
-              const ty = 290 - (tv / high) * 235;
-              parts.push(`<line class="chart-grid" x1="75" x2="870" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/><text x="66" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv} ${unitStr}</text>`);
-            }
-            const groupStep = 770 / Math.max(1, exList.length);
-            const setColors = ["#69d4cf", "#bba1ff", "#f7ab65", "#8fe0a8", "#f28b82", "#edcc93"];
-            exList.forEach((ex, gIdx) => {
-              const gx = 88 + gIdx * groupStep;
-              const nSets = ex.qualSets.length;
-              const barW = Math.min(26, (groupStep * 0.78) / Math.max(1, nSets));
+            const flatSets = [];
+            exList.forEach((ex) => {
               ex.qualSets.forEach((st, sIdx) => {
-                const val = drilloutMode ? estimateSetKcal(ex.name, ex.kind, st.reps, st.weight) : Number(st.weight) || 0;
-                const bh = Math.max(4, (val / high) * 235);
-                const bx = gx + sIdx * (barW + 2);
-                const by = 290 - bh;
-                parts.push(
-                  `<rect data-bi-bar="${ gIdx }-${ sIdx }" fill="${setColors[sIdx % setColors.length]}" x="${bx.toFixed(1)}" y="${by.toFixed(1)}" width="${barW.toFixed(1)}" height="${bh.toFixed(1)}" style="cursor:pointer;">` +
-                  `<title>${escHtml(ex.name)} · Set ${sIdx + 1}: ${st.reps} reps × ${st.weight} lb (${estimateSetKcal(ex.name, ex.kind, st.reps, st.weight)} kcal)</title></rect>` +
-                  `<text x="${(bx + barW / 2).toFixed(1)}" y="${(by - 5).toFixed(1)}" text-anchor="middle" font-size="9.5">${val}${unitStr === "kcal" ? "" : ""}</text>`
-                );
+                const wLb = Number(st.weight) || (ex.kind === "bodyweight" ? 45 : 0);
+                const kcal = estimateSetKcal(ex.name, ex.kind, st.reps, st.weight);
+                flatSets.push({
+                  label: `${ex.name.split(" ").slice(0, 2).join(" ")} S${sIdx + 1}`,
+                  fullEx: ex.name,
+                  muscleGroup: ex.muscleGroup,
+                  setNum: sIdx + 1,
+                  reps: st.reps,
+                  weightLb: wLb,
+                  kcal,
+                  qualSets: ex.qualSets,
+                  exKind: ex.kind,
+                });
               });
-              const shortEx = ex.name.length > 18 ? ex.name.slice(0, 17) + "…" : ex.name;
-              parts.push(`<text x="${(gx + (nSets * (barW + 2)) / 2).toFixed(1)}" y="314" text-anchor="middle" font-size="10.5">${escHtml(shortEx)} (${ex.muscleGroup})</text>`);
             });
-            svg.innerHTML = `<title id="lifting-volume-svg-title">Clustered Set Breakdown (${focusedDate})</title><desc id="lifting-volume-svg-desc">Each cluster is one exercise; each bar is one set meeting ≥${minReps} reps (${unitStr}).</desc>` + parts.join("");
-            svg.querySelectorAll("[data-bi-bar]").forEach((rectEl) => {
-              const [gIdx] = rectEl.getAttribute("data-bi-bar").split("-").map(Number);
-              const ex = exList[gIdx];
-              if (!ex) return;
-              const showTip = (ev) => {
-                const rowsHtml = ex.qualSets
-                  .map((st, idx) => `<tr><td>Set ${idx + 1}</td><td>${st.reps} reps</td><td>${st.weight} lb</td><td>${st.reps * st.weight} lb</td><td>${estimateSetKcal(ex.name, ex.kind, st.reps, st.weight)} kcal</td></tr>`)
-                  .join("");
-                showBiTooltip(
-                  ev,
-                  `<h4>${escHtml(targetSession.date)} · ${escHtml(ex.name)} (${escHtml(ex.muscleGroup)})</h4>` +
-                  `<p>Filtered to sets with ≥${minReps} reps · 190 cm wingspan ROM model</p>` +
-                  `<table><thead><tr><th>Set</th><th>Reps</th><th>Load (lb)</th><th>Volume (lb)</th><th>Energy (kcal)</th></tr></thead><tbody>${rowsHtml}</tbody></table>`
-                );
-              };
-              rectEl.addEventListener("mouseenter", showTip);
-              rectEl.addEventListener("click", showTip);
-            });
+
+            if (flatSets.length > 0) {
+              buildDualAxisSvgMarkup({
+                svgEl: svg,
+                titleId: "lifting-volume-svg-title",
+                titleText: `Workout & Set Breakdown (${formatOrdinalDay(targetSession.date)})`,
+                descText: `Each bar is one qualifying set (≥${minReps} reps) on ${formatOrdinalDay(targetSession.date)}.`,
+                items: flatSets,
+                barValFn: (it) => (swapAxes ? it.kcal : it.weightLb),
+                lineValFn: (it) => (swapAxes ? it.weightLb : it.kcal),
+                barUnit: swapAxes ? "kcal" : "lb",
+                lineUnit: swapAxes ? "lb" : "kcal",
+                barFormatFn: (v) => (swapAxes ? `${Math.round(v * 10) / 10} kcal` : `${Math.round(v)} lb`),
+                lineFormatFn: (v) => (swapAxes ? `${Math.round(v)} lb` : `${Math.round(v * 10) / 10} kcal`),
+                barColorFn: (it) => `class="athletics-bar split-${targetSession.split}"`,
+              });
+              svg.querySelectorAll("[data-bi-bar]").forEach((el) => {
+                const it = flatSets[Number(el.getAttribute("data-bi-bar"))];
+                if (!it) return;
+                const showTip = (ev) => {
+                  const rowsHtml = it.qualSets
+                    .map((st, idx) => `<tr><td>Set ${idx + 1}</td><td>${st.reps} reps</td><td>${st.weight} lb</td><td>${estimateSetKcal(it.fullEx, it.exKind, st.reps, st.weight)} kcal</td></tr>`)
+                    .join("");
+                  showBiTooltip(
+                    ev,
+                    `<h4>${escHtml(formatOrdinalDay(targetSession.date))} · ${escHtml(it.fullEx)} (${escHtml(it.muscleGroup)})</h4>` +
+                    `<p>Set ${it.setNum}: ${it.reps} reps × ${it.weightLb} lb · ${it.kcal} kcal (190 cm wingspan ROM)</p>` +
+                    `<table><thead><tr><th>Set</th><th>Reps</th><th>Weight (lb)</th><th>Energy (kcal)</th></tr></thead><tbody>${rowsHtml}</tbody></table>`
+                  );
+                };
+                el.addEventListener("mouseenter", showTip);
+                el.addEventListener("click", showTip);
+              });
+            }
             updateMultiplesBucketing();
             return;
           }
 
-          // Aggregate sessions into buckets for Year / Fiscal Qtr / Month / Week / Day
+          // Aggregate sessions into buckets for Fiscal Qtr / Month / Week / Day
+          // IMPORTANT: Completely omit any session/bucket where the Muscle Slicer or Min Reps filter leaves 0 qualifying sets!
           const bucketsMap = new Map();
-          filteredSessions.forEach((sess) => {
-            const h = dateToHierarchy(sess.date, drilloutMode);
-            const key = h[levelKey] || sess.date;
-            if (!bucketsMap.has(key)) {
-              bucketsMap.set(key, { key, split: sess.split, sessions: [], volumeLb: 0, totalKcal: 0, setsCount: 0, workoutDetails: [] });
-            }
-            const b = bucketsMap.get(key);
-            let sessVol = 0;
+          scopedSessions.forEach((sess) => {
+            const h = dateToHierarchy(sess.date);
+            const key = h[levelKey] || h.day;
+            let sessLoadedLb = 0;
+            let sessEffectiveLb = 0;
             let sessKcal = 0;
             let sessSets = 0;
+            const sessDetails = [];
+
             (sess.exercises || []).forEach((ex) => {
               const mGrp = classifyExerciseMuscle(ex.name);
               if (!activeMuscles.has(mGrp)) return;
               const qualSets = (ex.sets || []).filter((st) => (Number(st.reps) || 0) >= minReps);
               if (!qualSets.length) return;
+              let exLb = 0;
+              let exKcal = 0;
               qualSets.forEach((st) => {
-                if (ex.kind === "loaded") sessVol += (Number(st.reps) || 0) * (Number(st.weight) || 0);
-                sessKcal += estimateSetKcal(ex.name, ex.kind, st.reps, st.weight);
+                const loaded = ex.kind === "loaded" ? (Number(st.reps) || 0) * (Number(st.weight) || 0) : 0;
+                const eff = estimateSetEffectiveLbs(ex.name, ex.kind, st.reps, st.weight);
+                const kc = estimateSetKcal(ex.name, ex.kind, st.reps, st.weight);
+                sessLoadedLb += loaded;
+                sessEffectiveLb += eff;
+                sessKcal += kc;
+                exLb += loaded > 0 ? loaded : eff;
+                exKcal += kc;
                 sessSets += 1;
               });
-              b.workoutDetails.push({
+              sessDetails.push({
                 date: sess.date,
+                dateOrd: formatOrdinalDay(sess.date),
                 muscle: mGrp,
                 exercise: ex.name,
                 setsStr: qualSets.map((x) => `${x.reps}×${x.weight}lb`).join(", "),
-                vol: Math.round(qualSets.reduce((acc, x) => acc + (ex.kind === "loaded" ? x.reps * x.weight : 0), 0)),
-                kcal: Math.round(qualSets.reduce((acc, x) => acc + estimateSetKcal(ex.name, ex.kind, x.reps, x.weight), 0) * 10) / 10,
+                vol: Math.round(exLb),
+                kcal: Math.round(exKcal * 10) / 10,
               });
             });
+
+            // Only include this workout in the bucket if it has at least 1 qualifying set for the selected muscle groups!
             if (sessSets > 0) {
+              if (!bucketsMap.has(key)) {
+                bucketsMap.set(key, {
+                  key,
+                  label: key,
+                  split: sess.split,
+                  hierarchy: h,
+                  sessions: [],
+                  volumeLb: 0,
+                  totalKcal: 0,
+                  setsCount: 0,
+                  workoutDetails: [],
+                });
+              }
+              const b = bucketsMap.get(key);
               b.sessions.push(sess);
-              b.volumeLb += sessVol;
+              b.volumeLb += sessLoadedLb > 0 ? sessLoadedLb : sessEffectiveLb;
               b.totalKcal += sessKcal;
               b.setsCount += sessSets;
+              b.workoutDetails.push(...sessDetails);
             }
           });
 
-          const buckets = Array.from(bucketsMap.values());
-          const metricVal = (b) => {
-            if (!drilloutMode) return b.volumeLb;
-            return levelKey === "day" ? Math.round(b.totalKcal) : Math.round(b.totalKcal / Math.max(1, b.sessions.length));
-          };
-          const maxMetric = Math.max(100, ...buckets.map(metricVal));
-          const stepUnit = drilloutMode ? 100 : 5000;
-          const high = Math.ceil(maxMetric / stepUnit) * stepUnit;
-          const parts = [];
-          for (let k = 0; k <= 4; k++) {
-            const tv = Math.round((high * k) / 4);
-            const ty = 290 - (tv / high) * 235;
-            const tickLbl = drilloutMode ? `${tv} kcal` : `${(tv / 1000).toFixed(tv % 1000 === 0 ? 0 : 1)}k lb`;
-            parts.push(`<line class="chart-grid" x1="78" x2="870" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/><text x="68" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tickLbl}</text>`);
+          const buckets = Array.from(bucketsMap.values()).filter((b) => b.setsCount > 0 && (b.volumeLb > 0 || b.totalKcal > 0));
+          if (!buckets.length) {
+            svg.innerHTML = `<title id="lifting-volume-svg-title">No matching workouts</title><desc id="lifting-volume-svg-desc">No sets match the current muscle/rep filter.</desc><text x="450" y="170" text-anchor="middle" fill="#a4acc3">No workouts match the selected Muscle Group / Min Reps filter in this range.</text>`;
+            updateMultiplesBucketing();
+            return;
           }
 
-          const step = 760 / Math.max(1, buckets.length);
-          buckets.forEach((b, idx) => {
-            const val = metricVal(b);
-            const bx = 92 + idx * step;
-            const bw = Math.max(12, step * 0.66);
-            const bh = Math.max(4, (val / high) * 235);
-            const by = 290 - bh;
-            const barValStr = drilloutMode ? `${val} kcal` : `${(val / 1000).toFixed(1)}k lb`;
-            const xLbl = b.key.length > 12 ? b.key.slice(0, 12) : b.key;
-            parts.push(
-              `<rect class="athletics-bar split-${b.split}" data-bi-bar="${idx}" x="${(bx + (step - bw) / 2).toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" style="cursor:pointer;">` +
-              `<title>${escHtml(b.key)}: ${barValStr} (${b.setsCount} qualifying sets · click to drill down)</title></rect>` +
-              `<text x="${(bx + step / 2).toFixed(1)}" y="${(by - 7).toFixed(1)}" text-anchor="middle" font-size="10.5">${barValStr}</text>` +
-              `<text x="${(bx + step / 2).toFixed(1)}" y="314" text-anchor="middle" font-size="10.5">${escHtml(xLbl)}</text>`
-            );
+          const lbValFn = (b) => Math.round(b.volumeLb);
+          const kcalValFn = (b) => (levelKey === "day" ? Math.round(b.totalKcal) : Math.round(b.totalKcal / Math.max(1, b.sessions.length)));
+          const fmtLb = (v) => (v >= 1000 ? `${(v / 1000).toFixed(1)}k lb` : `${Math.round(v)} lb`);
+          const fmtKcal = (v) => `${Math.round(v)} kcal`;
+
+          buildDualAxisSvgMarkup({
+            svgEl: svg,
+            titleId: "lifting-volume-svg-title",
+            titleText: `Weightlifting (${levelLabels[levelKey]})`,
+            descText: `Dual-axis chart of ${barName} (bars) and ${lineName} (line).`,
+            items: buckets,
+            barValFn: swapAxes ? kcalValFn : lbValFn,
+            lineValFn: swapAxes ? lbValFn : kcalValFn,
+            barUnit: swapAxes ? "kcal" : "lb",
+            lineUnit: swapAxes ? "lb" : "kcal",
+            barFormatFn: swapAxes ? fmtKcal : fmtLb,
+            lineFormatFn: swapAxes ? fmtLb : fmtKcal,
+            barColorFn: (b) => `class="athletics-bar split-${b.split}"`,
           });
 
-          svg.innerHTML = `<title id="lifting-volume-svg-title">Weightlifting (${levelLabels[levelKey]})</title><desc id="lifting-volume-svg-desc">Interactive ${levelLabels[levelKey]} chart in ${unitStr}.</desc>` + parts.join("");
+          const drillIntoBucket = (b) => {
+            if (!b) return;
+            if (levelKey === "qtr") {
+              drillScope = { qtr: b.key, month: null, week: null, dayIso: b.sessions[b.sessions.length - 1]?.date || null };
+              currentLevelIdx = 1;
+            } else if (levelKey === "month") {
+              drillScope = { ...drillScope, month: b.key, week: null, dayIso: b.sessions[b.sessions.length - 1]?.date || null };
+              currentLevelIdx = 2;
+            } else if (levelKey === "week") {
+              drillScope = { ...drillScope, week: b.key, dayIso: b.sessions[b.sessions.length - 1]?.date || null };
+              currentLevelIdx = 3;
+            } else if (levelKey === "day") {
+              drillScope = { ...drillScope, dayIso: b.sessions[b.sessions.length - 1]?.date || null };
+              currentLevelIdx = 4;
+            }
+            getBiTooltip().hidden = true;
+            renderLiftingVisual();
+          };
 
-          svg.querySelectorAll("[data-bi-bar]").forEach((rectEl) => {
-            const b = buckets[Number(rectEl.getAttribute("data-bi-bar"))];
+          svg.querySelectorAll("[data-bi-bar]").forEach((el) => {
+            const b = buckets[Number(el.getAttribute("data-bi-bar"))];
             if (!b) return;
             const showTip = (ev) => {
               const rowsHtml = b.workoutDetails
                 .slice(0, 12)
-                .map((w) => `<tr><td>${escHtml(w.date.slice(5))}</td><td>${escHtml(w.muscle)}</td><td>${escHtml(w.exercise)}</td><td>${escHtml(w.setsStr)}</td><td>${w.vol.toLocaleString()} lb</td><td>${w.kcal} kcal</td></tr>`)
+                .map((w) => `<tr><td>${escHtml(w.dateOrd)}</td><td>${escHtml(w.muscle)}</td><td>${escHtml(w.exercise)}</td><td>${escHtml(w.setsStr)}</td><td>${w.vol.toLocaleString()} lb</td><td>${w.kcal} kcal</td></tr>`)
                 .join("");
               const moreNote = b.workoutDetails.length > 12 ? `<p>+ ${b.workoutDetails.length - 12} more exercises in this period</p>` : "";
               showBiTooltip(
                 ev,
                 `<h4>${escHtml(b.key)} · ${b.sessions.length} Workout(s) · ${b.setsCount} Sets (≥${minReps} reps)</h4>` +
-                `<p>Loaded Volume: <strong>${b.volumeLb.toLocaleString()} lb</strong> · Total Energy: <strong>${Math.round(b.totalKcal)} kcal</strong> (Avg ${Math.round(b.totalKcal / Math.max(1, b.sessions.length))} kcal/workout)</p>` +
+                `<p>Volume: <strong>${b.volumeLb.toLocaleString()} lb</strong> · Total Energy: <strong>${Math.round(b.totalKcal)} kcal</strong> (Avg ${Math.round(b.totalKcal / Math.max(1, b.sessions.length))} kcal/workout)</p>` +
                 `<table><thead><tr><th>Date</th><th>Muscle</th><th>Exercise</th><th>Qualifying Sets</th><th>Vol (lb)</th><th>Energy</th></tr></thead><tbody>${rowsHtml}</tbody></table>` +
                 moreNote +
                 `<div style="display:flex;gap:8px;justify-content:flex-end;">` +
-                `<button type="button" class="bi-btn" id="bi-tip-drilldown">↓ Drill Down Here</button>` +
+                `<button type="button" class="bi-btn" id="bi-tip-drilldown">↓ Drill Down Into ${escHtml(b.key)}</button>` +
                 `<button type="button" class="bi-btn is-drillout" id="bi-tip-drillthrough">↗ Drillthrough to Log Table</button>` +
                 `</div>`
               );
-              document.getElementById("bi-tip-drilldown")?.addEventListener("click", () => {
-                if (b.sessions.length > 0) focusedDate = b.sessions[b.sessions.length - 1].date;
-                currentLevelIdx = Math.min(levels.length - 1, currentLevelIdx + 1);
-                getBiTooltip().hidden = true;
-                renderLiftingVisual();
-              });
+              document.getElementById("bi-tip-drilldown")?.addEventListener("click", () => drillIntoBucket(b));
               document.getElementById("bi-tip-drillthrough")?.addEventListener("click", () => {
                 getBiTooltip().hidden = true;
-                const dSet = new Set(b.sessions.map((s) => {
-                  const dt = new Date(`${s.date}T12:00:00`);
-                  return dt.toLocaleDateString("en-US", { month: "short", day: "numeric" });
-                }));
+                const dSet = new Set(
+                  b.sessions.map((s) => {
+                    const dt = new Date(`${s.date}T12:00:00`);
+                    return dt.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+                  })
+                );
                 filterLogTable(b.key, dSet, activeMuscles);
               });
             };
-            rectEl.addEventListener("mouseenter", showTip);
-            rectEl.addEventListener("click", (ev) => {
-              showTip(ev);
-            });
-            rectEl.addEventListener("dblclick", () => {
-              if (b.sessions.length > 0) focusedDate = b.sessions[b.sessions.length - 1].date;
-              currentLevelIdx = Math.min(levels.length - 1, currentLevelIdx + 1);
-              getBiTooltip().hidden = true;
-              renderLiftingVisual();
-            });
+            el.addEventListener("mouseenter", showTip);
+            el.addEventListener("click", showTip);
+            el.addEventListener("dblclick", () => drillIntoBucket(b));
           });
 
           updateMultiplesBucketing();
@@ -1116,13 +1491,13 @@
         startSlider?.addEventListener("input", () => {
           startIdx = Math.min(Number(startSlider.value), endIdx);
           startSlider.value = String(startIdx);
-          document.getElementById("bi-lift-start-out").textContent = rawSessions[startIdx].date;
+          document.getElementById("bi-lift-start-out").textContent = formatOrdinalDay(rawSessions[startIdx].date);
           renderLiftingVisual();
         });
         endSlider?.addEventListener("input", () => {
           endIdx = Math.max(Number(endSlider.value), startIdx);
           endSlider.value = String(endIdx);
-          document.getElementById("bi-lift-end-out").textContent = rawSessions[endIdx].date;
+          document.getElementById("bi-lift-end-out").textContent = formatOrdinalDay(rawSessions[endIdx].date);
           renderLiftingVisual();
         });
         repsSlider?.addEventListener("input", () => {
@@ -1135,31 +1510,50 @@
           renderLiftingVisual();
         });
         document.getElementById("bi-lift-up")?.addEventListener("click", () => {
+          if (currentLevelIdx === 4) drillScope.dayIso = null;
+          else if (currentLevelIdx === 3) drillScope.week = null;
+          else if (currentLevelIdx === 2) drillScope.month = null;
+          else if (currentLevelIdx === 1) drillScope.qtr = null;
           currentLevelIdx = Math.max(0, currentLevelIdx - 1);
           renderLiftingVisual();
         });
+        // Drill Down button: enters the latest visible parent period at the current level
         document.getElementById("bi-lift-down")?.addEventListener("click", () => {
+          const lastSess = rawSessions[endIdx] || rawSessions[rawSessions.length - 1];
+          const h = dateToHierarchy(lastSess.date);
+          if (currentLevelIdx === 0) drillScope.qtr = drillScope.qtr || h.qtr;
+          else if (currentLevelIdx === 1) drillScope.month = drillScope.month || h.month;
+          else if (currentLevelIdx === 2) drillScope.week = drillScope.week || h.week;
+          else if (currentLevelIdx === 3) drillScope.dayIso = drillScope.dayIso || lastSess.date;
           currentLevelIdx = Math.min(levels.length - 1, currentLevelIdx + 1);
           renderLiftingVisual();
         });
-        const drilloutBtn = document.getElementById("bi-lift-drillout");
-        drilloutBtn?.addEventListener("click", () => {
-          drilloutMode = !drilloutMode;
-          drilloutBtn.classList.toggle("is-active", drilloutMode);
+        // Drill Out button: clears single-parent scope and expands ALL periods in the range to the next finer level
+        document.getElementById("bi-lift-drillout")?.addEventListener("click", () => {
+          drillScope = { qtr: null, month: null, week: null, dayIso: rawSessions[endIdx]?.date || null };
+          currentLevelIdx = Math.min(3, currentLevelIdx + 1);
+          renderLiftingVisual();
+        });
+        // Energy / Pounds dual-axis swap button
+        const swapBtn = document.getElementById("bi-lift-swap-axis");
+        swapBtn?.addEventListener("click", () => {
+          swapAxes = !swapAxes;
+          swapBtn.classList.toggle("is-active", swapAxes);
           renderLiftingVisual();
         });
         document.getElementById("bi-lift-reset")?.addEventListener("click", () => {
-          currentLevelIdx = 4;
-          drilloutMode = false;
-          drilloutBtn?.classList.remove("is-active");
+          currentLevelIdx = 3;
+          swapAxes = false;
+          swapBtn?.classList.remove("is-active");
+          drillScope = { qtr: null, month: null, week: null, dayIso: rawSessions[rawSessions.length - 1].date };
           minReps = 1;
           startIdx = 0;
           endIdx = rawSessions.length - 1;
           if (startSlider) startSlider.value = "0";
           if (endSlider) endSlider.value = String(endIdx);
           if (repsSlider) repsSlider.value = "1";
-          document.getElementById("bi-lift-start-out").textContent = rawSessions[0].date;
-          document.getElementById("bi-lift-end-out").textContent = rawSessions[endIdx].date;
+          document.getElementById("bi-lift-start-out").textContent = formatOrdinalDay(rawSessions[0].date);
+          document.getElementById("bi-lift-end-out").textContent = formatOrdinalDay(rawSessions[endIdx].date);
           document.getElementById("bi-lift-reps-out").textContent = "1+ reps";
           allMuscles.forEach((m) => activeMuscles.add(m));
           toolbar.querySelectorAll("[data-muscle-slicer]").forEach((p) => p.classList.add("is-active"));
@@ -1181,6 +1575,21 @@
           allMuscles.forEach((m) => activeMuscles.add(m));
           toolbar.querySelectorAll("[data-muscle-slicer]").forEach((p) => p.classList.add("is-active"));
           renderLiftingVisual();
+        });
+
+        window.addEventListener("resize", () => renderLiftingVisual());
+        window.addEventListener("liam-bi-refresh-lifting", (ev) => {
+          if (Array.isArray(ev.detail) && ev.detail.length > 0) {
+            rawSessions = ev.detail;
+            endIdx = rawSessions.length - 1;
+            if (startSlider) startSlider.max = String(endIdx);
+            if (endSlider) {
+              endSlider.max = String(endIdx);
+              endSlider.value = String(endIdx);
+            }
+            document.getElementById("bi-lift-end-out").textContent = formatOrdinalDay(rawSessions[endIdx].date);
+            renderLiftingVisual();
+          }
         });
 
         renderLiftingVisual();
@@ -1210,8 +1619,8 @@
           `<div class="bi-crumbs" id="bi-comp-crumbs">Level 1: All 6 Primary Fields (36 leaves each · click any bar to drill down)</div></div>`,
           `<div class="bi-drill-bar">`,
           `<button type="button" class="bi-btn" id="bi-comp-up">↑ Drill Up</button>`,
-          `<button type="button" class="bi-btn" id="bi-comp-down">↓ Drill Down</button>`,
-          `<button type="button" class="bi-btn is-drillout" id="bi-comp-expand36">⚡ Drillout: Expand All 36 Subsections</button>`,
+          `<button type="button" class="bi-btn" id="bi-comp-down">↓ Drill Down (Into Field)</button>`,
+          `<button type="button" class="bi-btn" id="bi-comp-expand36">↔ Drill Out (All 36 Subsections)</button>`,
           `<button type="button" class="bi-btn is-active" data-comp-metric="pct">Active %</button>`,
           `<button type="button" class="bi-btn" data-comp-metric="words">Words (Prose)</button>`,
           `<button type="button" class="bi-btn" data-comp-metric="eqs">LaTeX Formulae</button>`,
@@ -1226,7 +1635,7 @@
           let items = [];
           if (expandAll36) {
             items = fieldsData.flatMap((f, fi) => f.topics.map((t, ti) => ({ ...t, label: `${f.title.split(" ")[0]} · ${t.title}`, fi, ti })));
-            if (crumbs) crumbs.textContent = `Drillout Active: Expanded All 36 Subsections (6 × 6 Topics) · Metric: ${compMetric === "pct" ? "Active Completion (%)" : compMetric === "words" ? "Mental Map Words" : "LaTeX Formulae"}`;
+            if (crumbs) crumbs.textContent = `Drill Out Active: Expanded All 36 Subsections (6 × 6 Topics) · Metric: ${compMetric === "pct" ? "Active Completion (%)" : compMetric === "words" ? "Mental Map Words" : "LaTeX Formulae"}`;
           } else if (compLevel === 0) {
             items = fieldsData.map((f, fi) => ({ ...f, label: f.title, fi }));
             if (crumbs) crumbs.textContent = `Level 1: All 6 Fields (click any bar to drill down into its 6 Subsections) · Metric: ${compMetric.toUpperCase()}`;
@@ -1366,137 +1775,322 @@
     }
   }
 
-  // ---- 3. Universal Interactive Time-Range, Drilldown & Table Tooltip for Swimming, Running, Sleep & Diet ----
-  const wireDatedBiHost = (selector, attrName, svgTitleId, valFn, unitStr, kcalFn, tableId) => {
+  // ---- 3. Universal Dual-Axis Interactive BI Engine for Swimming, Running Intervals, Tempo, Sleep & Diet ----
+  const wireDatedBiHost = ({
+    selector,
+    attrName,
+    svgTitleId,
+    primaryLabel,
+    primaryUnit,
+    secondaryLabel,
+    secondaryUnit,
+    swapBtnLabel,
+    primaryValFn,
+    secondaryValFn,
+    primaryAggMode = "sum",
+    secondaryAggMode = "sum",
+    tableId,
+    refreshEventName,
+  }) => {
     const host = document.querySelector(selector);
     if (!host || !host.hasAttribute(attrName)) return;
     try {
-      const raw = JSON.parse(host.getAttribute(attrName) || "[]");
-      const list = Array.isArray(raw) ? raw : Array.isArray(raw.sessions) ? raw.sessions : [];
-      if (list.length < 2) return;
-      const levels = ["year", "qtr", "month", "week", "day"];
-      let lvlIdx = 4;
-      let drillout = false;
+      const parseHostList = () => {
+        const raw = JSON.parse(host.getAttribute(attrName) || "[]");
+        return Array.isArray(raw) ? raw : Array.isArray(raw.sessions) ? raw.sessions : [];
+      };
+      let list = parseHostList();
+      if (list.length < 1) return;
+
+      const levels = ["qtr", "month", "week", "day"];
+      const levelNames = { qtr: "Fiscal Qtr", month: "Month", week: "Week", day: "Day" };
+      let lvlIdx = 3; // Default: Day
+      let swapAxes = false;
       let sIdx = 0;
       let eIdx = list.length - 1;
+      let scope = { qtr: null, month: null, week: null };
 
       const bar = document.createElement("div");
       bar.className = "bi-toolbar";
       bar.innerHTML = [
         `<div class="bi-toolbar-head">`,
-        `<div><span class="bi-toolbar-title">⚡ Interactive Time Slider, Hierarchy Drilldown &amp; Energy Drillout</span>`,
-        `<div class="bi-crumbs" data-bi-sub-crumbs>Level: Day · Unit: ${escHtml(unitStr)}</div></div>`,
+        `<div><span class="bi-toolbar-title">⚡ Interactive BI Controls · Dual-Axis, Hierarchy Drilldown &amp; Drillout</span>`,
+        `<div class="bi-crumbs" data-bi-sub-crumbs>Level: Day · ▮ Bars: ${escHtml(primaryLabel)} (${escHtml(primaryUnit)}) · ● Line: ${escHtml(secondaryLabel)} (${escHtml(secondaryUnit)})</div></div>`,
         `<div class="bi-drill-bar">`,
         `<button type="button" class="bi-btn" data-bi-sub-up>↑ Drill Up</button>`,
-        `<button type="button" class="bi-btn" data-bi-sub-down>↓ Drill Down</button>`,
-        `<button type="button" class="bi-btn is-drillout" data-bi-sub-drillout>⚡ Drillout: Expand Qtr &amp; Energy (kcal)</button>`,
+        `<button type="button" class="bi-btn" data-bi-sub-down title="Drill down into the selected period only">↓ Drill Down (Into Period)</button>`,
+        `<button type="button" class="bi-btn" data-bi-sub-drillout title="Expand all visible periods across the range to the next finer level">↔ Drill Out (Expand All)</button>`,
+        `<button type="button" class="bi-btn is-drillout" data-bi-sub-swap title="Swap which metric is on the Bars (left axis) vs. Line (right axis)">⇄ ${escHtml(swapBtnLabel)}</button>`,
         `<button type="button" class="bi-btn" data-bi-sub-reset>↺ Reset</button>`,
         `</div></div>`,
         `<div class="bi-sliders-row">`,
-        `<label class="bi-slider-label"><span>From Date: <output data-bi-sub-sout>${list[0].date}</output></span><input type="range" data-bi-sub-s min="0" max="${list.length - 1}" value="0"></label>`,
-        `<label class="bi-slider-label"><span>To Date: <output data-bi-sub-eout>${list[list.length - 1].date}</output></span><input type="range" data-bi-sub-e min="0" max="${list.length - 1}" value="${list.length - 1}"></label>`,
+        `<label class="bi-slider-label"><span>From Date: <output data-bi-sub-sout>${formatOrdinalDay(list[0].date)}</output></span><input type="range" data-bi-sub-s min="0" max="${list.length - 1}" value="0"></label>`,
+        `<label class="bi-slider-label"><span>To Date: <output data-bi-sub-eout>${formatOrdinalDay(list[list.length - 1].date)}</output></span><input type="range" data-bi-sub-e min="0" max="${list.length - 1}" value="${list.length - 1}"></label>`,
+        `<label class="bi-slider-label"><span>Hierarchy Level</span><select data-bi-sub-level class="bi-btn" style="width:100%;padding:6px 8px;">`,
+        levels.map((lv, i) => `<option value="${i}"${i === lvlIdx ? " selected" : ""}>${i + 1}. ${levelNames[lv]}</option>`).join(""),
+        `</select></label>`,
         `</div>`,
       ].join("");
       host.insertBefore(bar, host.firstChild);
 
       const renderSub = () => {
-        if (lvlIdx === 4 && !drillout && sIdx === 0 && eIdx === list.length - 1) return;
         const svg = document.getElementById(svgTitleId)?.closest("svg");
         if (!svg) return;
         const levelKey = levels[lvlIdx];
-        const slice = list.slice(sIdx, eIdx + 1);
+        const lvlSel = bar.querySelector("[data-bi-sub-level]");
+        if (lvlSel) lvlSel.value = String(lvlIdx);
+
+        let slice = list.slice(sIdx, eIdx + 1);
+        if (lvlIdx >= 1 && scope.qtr) slice = slice.filter((it) => dateToHierarchy(it.date).qtr === scope.qtr);
+        if (lvlIdx >= 2 && scope.month) slice = slice.filter((it) => dateToHierarchy(it.date).month === scope.month);
+        if (lvlIdx >= 3 && scope.week) slice = slice.filter((it) => dateToHierarchy(it.date).week === scope.week);
+        if (!slice.length) slice = list.slice(sIdx, eIdx + 1);
+
         const bMap = new Map();
         slice.forEach((it) => {
-          const h = dateToHierarchy(it.date, drillout);
-          const k = h[levelKey] || it.date;
-          if (!bMap.has(k)) bMap.set(k, { key: k, items: [], sumVal: 0, sumKcal: 0 });
+          const h = dateToHierarchy(it.date);
+          const k = h[levelKey] || h.day;
+          if (!bMap.has(k)) bMap.set(k, { key: k, label: k, items: [], pVals: [], sVals: [] });
           const b = bMap.get(k);
           b.items.push(it);
-          b.sumVal += valFn(it);
-          b.sumKcal += kcalFn(it);
+          b.pVals.push(primaryValFn(it));
+          b.sVals.push(secondaryValFn(it));
         });
-        const buckets = Array.from(bMap.values());
-        const u = drillout ? "kcal" : unitStr;
-        const mVal = (b) => Math.round((drillout ? b.sumKcal : b.sumVal) / (levelKey === "day" ? 1 : Math.max(1, b.items.length)));
-        const maxV = Math.max(10, ...buckets.map(mVal));
-        const parts = [];
-        for (let k = 0; k <= 4; k++) {
-          const tv = Math.round((maxV * k) / 4);
-          const ty = 290 - (k / 4) * 235;
-          parts.push(`<line class="chart-grid" x1="78" x2="870" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/><text x="68" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv} ${u}</text>`);
-        }
-        const step = 760 / Math.max(1, buckets.length);
-        buckets.forEach((b, idx) => {
-          const v = mVal(b);
-          const bx = 92 + idx * step;
-          const bw = Math.max(14, step * 0.64);
-          const bh = Math.max(4, (v / maxV) * 235);
-          const by = 290 - bh;
-          parts.push(
-            `<rect class="athletics-bar series-0" data-bi-bar="${idx}" x="${(bx + (step - bw) / 2).toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}" style="cursor:pointer;"></rect>` +
-            `<text x="${(bx + step / 2).toFixed(1)}" y="${(by - 7).toFixed(1)}" text-anchor="middle" font-size="10.5">${v} ${u}</text>` +
-            `<text x="${(bx + step / 2).toFixed(1)}" y="314" text-anchor="middle" font-size="10.5">${escHtml(b.key.slice(0, 12))}</text>`
-          );
+
+        const agg = (arr, mode) => {
+          if (!arr.length) return 0;
+          if (mode === "last") return arr[arr.length - 1];
+          const sum = arr.reduce((a, v) => a + v, 0);
+          return mode === "avg" ? Math.round((sum / arr.length) * 10) / 10 : Math.round(sum * 10) / 10;
+        };
+
+        const buckets = Array.from(bMap.values())
+          .map((b) => ({
+            ...b,
+            pAgg: agg(b.pVals, levelKey === "day" ? "sum" : primaryAggMode),
+            sAgg: agg(b.sVals, secondaryAggMode),
+          }))
+          .filter((b) => b.items.length > 0 && (b.pAgg !== 0 || b.sAgg !== 0));
+
+        if (!buckets.length) return;
+
+        const barMetricLbl = swapAxes ? `${secondaryLabel} (${secondaryUnit})` : `${primaryLabel} (${primaryUnit})`;
+        const lineMetricLbl = swapAxes ? `${primaryLabel} (${primaryUnit})` : `${secondaryLabel} (${secondaryUnit})`;
+        const scopeStr = [scope.qtr, scope.month, scope.week].filter(Boolean).join(" → ");
+        bar.querySelector("[data-bi-sub-crumbs]").textContent = `Level: ${levelNames[levelKey]}${scopeStr ? ` [${scopeStr}]` : ""} · ▮ Bars: ${barMetricLbl} · ● Line: ${lineMetricLbl}`;
+
+        buildDualAxisSvgMarkup({
+          svgEl: svg,
+          titleId: svgTitleId,
+          titleText: `${primaryLabel} vs. ${secondaryLabel} (${levelNames[levelKey]})`,
+          descText: `Interactive ${levelNames[levelKey]} chart showing ${barMetricLbl} as bars and ${lineMetricLbl} as a line.`,
+          items: buckets,
+          barValFn: (b) => (swapAxes ? b.sAgg : b.pAgg),
+          lineValFn: (b) => (swapAxes ? b.pAgg : b.sAgg),
+          barUnit: swapAxes ? secondaryUnit : primaryUnit,
+          lineUnit: swapAxes ? primaryUnit : secondaryUnit,
         });
-        svg.innerHTML = `<title id="${svgTitleId}">Interactive View (${levelKey})</title><desc id="${svgTitleId.replace("-title", "-desc")}">Interactive view in ${u}.</desc>` + parts.join("");
-        bar.querySelector("[data-bi-sub-crumbs]").textContent = `Hierarchy: ${levelKey.toUpperCase()} · Metric: ${drillout ? "Avg Energy (kcal)" : unitStr} · Window: ${list[sIdx].date} → ${list[eIdx].date}`;
-        svg.querySelectorAll("[data-bi-bar]").forEach((rectEl) => {
-          const b = buckets[Number(rectEl.getAttribute("data-bi-bar"))];
+
+        const drillIn = (b) => {
+          if (!b || lvlIdx >= 3) return;
+          if (levelKey === "qtr") {
+            scope = { qtr: b.key, month: null, week: null };
+            lvlIdx = 1;
+          } else if (levelKey === "month") {
+            scope = { ...scope, month: b.key, week: null };
+            lvlIdx = 2;
+          } else if (levelKey === "week") {
+            scope = { ...scope, week: b.key };
+            lvlIdx = 3;
+          }
+          getBiTooltip().hidden = true;
+          renderSub();
+        };
+
+        svg.querySelectorAll("[data-bi-bar]").forEach((el) => {
+          const b = buckets[Number(el.getAttribute("data-bi-bar"))];
           if (!b) return;
           const showTip = (ev) => {
             const rowsHtml = b.items
               .slice(0, 10)
-              .map((it) => `<tr><td>${escHtml(it.date)}</td><td>${valFn(it)} ${escHtml(unitStr)}</td><td>${Math.round(kcalFn(it))} kcal</td></tr>`)
+              .map(
+                (it) =>
+                  `<tr><td>${escHtml(formatOrdinalDay(it.date))}</td><td>${primaryValFn(it)} ${escHtml(primaryUnit)}</td><td>${secondaryValFn(it)} ${escHtml(secondaryUnit)}</td></tr>`
+              )
               .join("");
             showBiTooltip(
               ev,
-              `<h4>${escHtml(b.key)} (${b.items.length} session${b.items.length === 1 ? "" : "s"})</h4>` +
-              `<table><thead><tr><th>Date</th><th>Primary (${escHtml(unitStr)})</th><th>Energy (kcal)</th></tr></thead><tbody>${rowsHtml}</tbody></table>`
+              `<h4>${escHtml(b.key)} · ${b.items.length} Entry(s)</h4>` +
+              `<p>${escHtml(primaryLabel)}: <strong>${b.pAgg} ${escHtml(primaryUnit)}</strong> · ${escHtml(secondaryLabel)}: <strong>${b.sAgg} ${escHtml(secondaryUnit)}</strong></p>` +
+              `<table><thead><tr><th>Date</th><th>${escHtml(primaryLabel)}</th><th>${escHtml(secondaryLabel)}</th></tr></thead><tbody>${rowsHtml}</tbody></table>` +
+              (lvlIdx < 3 ? `<div style="display:flex;justify-content:flex-end;"><button type="button" class="bi-btn" id="bi-sub-tip-in">↓ Drill Down Into ${escHtml(b.key)}</button></div>` : "")
             );
+            document.getElementById("bi-sub-tip-in")?.addEventListener("click", () => drillIn(b));
           };
-          rectEl.addEventListener("mouseenter", showTip);
-          rectEl.addEventListener("click", showTip);
+          el.addEventListener("mouseenter", showTip);
+          el.addEventListener("click", showTip);
+          el.addEventListener("dblclick", () => drillIn(b));
         });
       };
 
       const sIn = bar.querySelector("[data-bi-sub-s]");
       const eIn = bar.querySelector("[data-bi-sub-e]");
+      const lvlSel = bar.querySelector("[data-bi-sub-level]");
       sIn?.addEventListener("input", () => {
         sIdx = Math.min(Number(sIn.value), eIdx);
         sIn.value = String(sIdx);
-        bar.querySelector("[data-bi-sub-sout]").textContent = list[sIdx].date;
+        bar.querySelector("[data-bi-sub-sout]").textContent = formatOrdinalDay(list[sIdx].date);
         renderSub();
       });
       eIn?.addEventListener("input", () => {
         eIdx = Math.max(Number(eIn.value), sIdx);
         eIn.value = String(eIdx);
-        bar.querySelector("[data-bi-sub-eout]").textContent = list[eIdx].date;
+        bar.querySelector("[data-bi-sub-eout]").textContent = formatOrdinalDay(list[eIdx].date);
+        renderSub();
+      });
+      lvlSel?.addEventListener("change", () => {
+        lvlIdx = Number(lvlSel.value) || 0;
         renderSub();
       });
       bar.querySelector("[data-bi-sub-up]")?.addEventListener("click", () => {
+        if (lvlIdx === 3) scope.week = null;
+        else if (lvlIdx === 2) scope.month = null;
+        else if (lvlIdx === 1) scope.qtr = null;
         lvlIdx = Math.max(0, lvlIdx - 1);
         renderSub();
       });
       bar.querySelector("[data-bi-sub-down]")?.addEventListener("click", () => {
+        const lastIt = list[eIdx] || list[list.length - 1];
+        const h = dateToHierarchy(lastIt.date);
+        if (lvlIdx === 0) scope.qtr = scope.qtr || h.qtr;
+        else if (lvlIdx === 1) scope.month = scope.month || h.month;
+        else if (lvlIdx === 2) scope.week = scope.week || h.week;
         lvlIdx = Math.min(levels.length - 1, lvlIdx + 1);
         renderSub();
       });
-      const doBtn = bar.querySelector("[data-bi-sub-drillout]");
-      doBtn?.addEventListener("click", () => {
-        drillout = !drillout;
-        doBtn.classList.toggle("is-active", drillout);
+      bar.querySelector("[data-bi-sub-drillout]")?.addEventListener("click", () => {
+        scope = { qtr: null, month: null, week: null };
+        lvlIdx = Math.min(levels.length - 1, lvlIdx + 1);
+        renderSub();
+      });
+      const swapBtn = bar.querySelector("[data-bi-sub-swap]");
+      swapBtn?.addEventListener("click", () => {
+        swapAxes = !swapAxes;
+        swapBtn.classList.toggle("is-active", swapAxes);
         renderSub();
       });
       bar.querySelector("[data-bi-sub-reset]")?.addEventListener("click", () => {
-        window.location.reload();
+        lvlIdx = 3;
+        swapAxes = false;
+        swapBtn?.classList.remove("is-active");
+        scope = { qtr: null, month: null, week: null };
+        sIdx = 0;
+        eIdx = list.length - 1;
+        if (sIn) sIn.value = "0";
+        if (eIn) eIn.value = String(eIdx);
+        bar.querySelector("[data-bi-sub-sout]").textContent = formatOrdinalDay(list[0].date);
+        bar.querySelector("[data-bi-sub-eout]").textContent = formatOrdinalDay(list[eIdx].date);
+        renderSub();
       });
+
+      window.addEventListener("resize", () => renderSub());
+      if (refreshEventName) {
+        window.addEventListener(refreshEventName, (ev) => {
+          if (Array.isArray(ev.detail) && ev.detail.length > 0) {
+            list = ev.detail;
+            eIdx = list.length - 1;
+            if (sIn) sIn.max = String(eIdx);
+            if (eIn) {
+              eIn.max = String(eIdx);
+              eIn.value = String(eIdx);
+            }
+            bar.querySelector("[data-bi-sub-eout]").textContent = formatOrdinalDay(list[eIdx].date);
+            renderSub();
+          }
+        });
+      }
+
+      renderSub();
     } catch {
       /* ignore */
     }
   };
 
-  wireDatedBiHost(".bi-swimming-host", "data-bi-swimming", "swimming-sessions-svg-title", (s) => Number(s.meters) || 0, "m", (s) => Math.round((Number(s.meters) || 0) * 0.29), "swimming-table");
-  wireDatedBiHost(".bi-running-host", "data-bi-running", "running-intervals-svg-title", (s) => Math.round(Number(s.average) || 0), "s/loop", (s) => Math.round((Number(s.count) || 4) * 0.95 * 88 * 1.036), "running-table");
-  wireDatedBiHost(".bi-sleep-host", "data-bi-sleep", "sleep-hours-svg-title", (s) => Number(s.hours) || 0, "h", (s) => Math.round((Number(s.hours) || 0) * 72), "sleep-table");
-  wireDatedBiHost(".bi-diet-host", "data-bi-diet", "diet-balance-svg-title", (s) => Number(s.deficit) || 0, "kcal deficit", (s) => Number(s.expenditure) || 0, "diet-table");
+  // Swimming: 2nd-axis line shows the Running Total (cumulativeMeters, 'last' value at the end of each week/period)!
+  wireDatedBiHost({
+    selector: ".bi-swimming-host",
+    attrName: "data-bi-swimming",
+    svgTitleId: "swimming-sessions-svg-title",
+    primaryLabel: "Session Distance",
+    primaryUnit: "m",
+    secondaryLabel: "Running Total",
+    secondaryUnit: "m",
+    swapBtnLabel: "Running Total / Distance",
+    primaryValFn: (s) => Number(s.meters) || 0,
+    secondaryValFn: (s) => Number(s.cumulativeMeters) || Number(s.meters) || 0,
+    primaryAggMode: "sum",
+    secondaryAggMode: "last",
+    tableId: "swimming-table",
+  });
+  wireDatedBiHost({
+    selector: ".bi-running-host",
+    attrName: "data-bi-running",
+    svgTitleId: "running-intervals-svg-title",
+    primaryLabel: "Mean Loop Time",
+    primaryUnit: "s",
+    secondaryLabel: "Energy Expended",
+    secondaryUnit: "kcal",
+    swapBtnLabel: "Energy / Loop Time",
+    primaryValFn: (s) => Math.round(Number(s.average) || 0),
+    secondaryValFn: (s) => Math.round((Number(s.count) || 4) * 0.95 * 88 * 1.036),
+    primaryAggMode: "avg",
+    secondaryAggMode: "sum",
+    tableId: "running-table",
+  });
+  wireDatedBiHost({
+    selector: ".bi-tempo-host",
+    attrName: "data-bi-tempo",
+    svgTitleId: "running-tempo-chart-svg-title",
+    primaryLabel: "Pace per km",
+    primaryUnit: "s/km",
+    secondaryLabel: "Energy Expended",
+    secondaryUnit: "kcal",
+    swapBtnLabel: "Energy / Pace",
+    primaryValFn: (r) => Math.round(Number(r.paceSeconds) || 0),
+    secondaryValFn: (r) => Math.round((Number(r.distanceKm) || 4.6) * 88 * 1.036),
+    primaryAggMode: "avg",
+    secondaryAggMode: "sum",
+    tableId: "tempo-table",
+    refreshEventName: "liam-bi-refresh-tempo",
+  });
+  wireDatedBiHost({
+    selector: ".bi-sleep-host",
+    attrName: "data-bi-sleep",
+    svgTitleId: "sleep-hours-svg-title",
+    primaryLabel: "Sleep Duration",
+    primaryUnit: "h",
+    secondaryLabel: "Basal Recovery Energy",
+    secondaryUnit: "kcal",
+    swapBtnLabel: "Energy / Hours",
+    primaryValFn: (s) => Number(s.hours) || 0,
+    secondaryValFn: (s) => Math.round((Number(s.hours) || 0) * 77),
+    primaryAggMode: "avg",
+    secondaryAggMode: "sum",
+    tableId: "sleep-table",
+  });
+  wireDatedBiHost({
+    selector: ".bi-diet-host",
+    attrName: "data-bi-diet",
+    svgTitleId: "diet-balance-svg-title",
+    primaryLabel: "Daily Caloric Deficit",
+    primaryUnit: "kcal",
+    secondaryLabel: "Total Expenditure",
+    secondaryUnit: "kcal",
+    swapBtnLabel: "Expenditure / Deficit",
+    primaryValFn: (s) => Number(s.deficit) || 0,
+    secondaryValFn: (s) => Number(s.expenditure) || 0,
+    primaryAggMode: "avg",
+    secondaryAggMode: "avg",
+    tableId: "diet-table",
+  });
 })();

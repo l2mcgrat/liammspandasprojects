@@ -22,7 +22,7 @@ html:has(main.home-snap) .site-footer { scroll-snap-align:end; }
 @keyframes creator-cue-glow { 0%,100% { box-shadow:0 12px 40px -22px #9e8ee5,0 0 0 0 #b5a6f400; } 50% { box-shadow:0 12px 40px -22px #9e8ee5,0 0 0 6px #b5a6f414; } }
 
 /* Creator sections */
-.creator-section { --creator-accent:#b5a6f4; --creator-warm:#edcc93; --creator-soft:#b5a6f424; --creator-line:#b5a6f466; --creator-glow:#9e8ee5aa; --creator-deep:#1b1733; position:relative; isolation:isolate; display:grid; align-content:center; width:min(1320px,calc(100% - 96px)); margin:0 auto; padding:clamp(18px,4svh,48px) 0; }
+.creator-section { --creator-accent:#b5a6f4; --creator-warm:#edcc93; --creator-soft:#b5a6f424; --creator-line:#b5a6f466; --creator-glow:#9e8ee5aa; --creator-deep:#1b1733; position:relative; isolation:isolate; display:grid; align-content:center; width:calc(100% - clamp(32px,6vw,120px)); max-width:none; margin:0 auto; padding:clamp(18px,4svh,48px) 0; }
 .creator-section::before { content:""; position:absolute; z-index:-1; inset:0; background:radial-gradient(ellipse 60% 70% at 28% 50%,var(--creator-soft),transparent 70%); pointer-events:none; }
 .creator-section::after { content:""; position:absolute; top:0; left:20%; right:20%; height:1px; background:linear-gradient(90deg,transparent,#ffffff1c,transparent); }
 .creator-theme-azure { --creator-accent:#8fc2ff; --creator-warm:#f2c58c; --creator-soft:#5f9cff1f; --creator-line:#8fc2ff66; --creator-glow:#5f9cffaa; --creator-deep:#0f1b33; }

@@ -1251,7 +1251,11 @@
         .join("") +
       `</div></article>`;
 
-    const svgHtml = renderAnalyticsSvgHtml(study.id, analytics);
+    const svgHtml =
+      renderAnalyticsSvgHtml(study.id, analytics) +
+      (Array.isArray(analytics.extraCharts)
+        ? analytics.extraCharts.map((ch, idx) => renderAnalyticsSvgHtml(`${study.id}-extra-${idx + 2}`, ch)).join("")
+        : "");
     const cols = Array.isArray(analytics.tableColumns) && analytics.tableColumns.length ? analytics.tableColumns : ["Item", "Primary", "Secondary", "Notes"];
     const rows = Array.isArray(analytics.tableRows) ? analytics.tableRows : [];
     const tableHtml = rows.length
@@ -1459,6 +1463,17 @@
         `  "bars": [`,
         `    {"label": "Entity / Country / Chemistry 1", "primary": 160, "secondary": 0, "note": "Empirical note"},`,
         `    {"label": "Entity / Country / Chemistry 2", "primary": 250, "secondary": 0, "note": "Empirical note"}`,
+        `  ],`,
+        `  "extraCharts": [`,
+        `    {`,
+        `      "chartTitle": "Plot 2 · Secondary Breakdown / Historical Time-Series / Micro-Driver Chart (with units)",`,
+        `      "chartSubtitle": "One-sentence explanation of this second empirical chart",`,
+        `      "chartUnit": "units",`,
+        `      "bars": [`,
+        `        {"label": "Category / Era 1", "primary": 120, "secondary": 35, "note": "Empirical note"},`,
+        `        {"label": "Category / Era 2", "primary": 185, "secondary": 42, "note": "Empirical note"}`,
+        `      ]`,
+        `    }`,
         `  ],`,
         `  "tableColumns": ["Entity / Regime", "Primary Metric", "Secondary Metric", "Cost / Threshold", "Key Mechanism"],`,
         `  "tableRows": [`,
