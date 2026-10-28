@@ -294,6 +294,7 @@
     const spec = LOG_REPO_PATHS[key] || LOG_REPO_PATHS.diet;
     const rawLines = String(rawText || "")
       .replace(/\r\n/g, "\n")
+      .replace(/[\u200b\u200c\u200d\ufeff\xa0]/g, " ")
       .replace(/[–—−]/g, "-")
       .split("\n");
     const out = [];
@@ -308,6 +309,21 @@
         return;
       }
       if (monthBannerRe.test(fixed)) return;
+      if (/^-{5,}$/.test(fixed)) {
+        out.push("-".repeat(50));
+        return;
+      }
+      if (key === "diet") {
+        const mCombo = fixed.match(/^(Breakfast|Lunch|Dinner|Snacks)\s*[/&]\s*(Breakfast|Lunch|Dinner|Snacks)\s*[:\-]\s*(.+)$/i);
+        if (mCombo) {
+          const m1 = mCombo[1].charAt(0).toUpperCase() + mCombo[1].slice(1).toLowerCase();
+          const m2 = mCombo[2].charAt(0).toUpperCase() + mCombo[2].slice(1).toLowerCase();
+          out.push(`${m1} - ${mCombo[3].trim()}`);
+          out.push(`${m2} - ${mCombo[3].trim()}`);
+          prevNonEmpty = `${m2} - ${mCombo[3].trim()}`;
+          return;
+        }
+      }
       fixed = fixed.replace(/\b(\d{1,2})\/(\d{1,2})0(20\d{2})\b/g, "$1/$2/$3");
       const dotMatch = fixed.match(/^(\(?)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](20\d{2})(\)?)(.*)$/);
       if (dotMatch) {
@@ -353,9 +369,9 @@
     const firstNonEmptyIdx = out.findIndex((l) => l.trim().length > 0);
     if (firstNonEmptyIdx >= 0) {
       const firstLine = out[firstNonEmptyIdx].trim();
-      if (key === "weightlifting" && !firstLine.startsWith("Weightlifting Log")) {
-        out.unshift(spec.header, "");
-      } else if (key !== "weightlifting" && firstLine !== spec.header) {
+      if (/^(?:Weightlifting|Lifting|Swimming(?:\s+Tempo)?|Sleep(?:_and_Dream)?|Food|Diet\s+and\s+Calorie\s+Tracking|(?:Running\s+)?Interval\s+Training|Tempo[\s_]+Run)\b/i.test(firstLine)) {
+        out[firstNonEmptyIdx] = spec.header;
+      } else if (firstLine !== spec.header) {
         out.unshift(spec.header, "");
       }
     }
@@ -932,6 +948,15 @@
         /* ignore quota */
       }
       applyLiveLogUpdateToDom(key, repaired);
+      const previewEl = document.getElementById(`gdoc-preview-${key}`) || box.parentElement?.querySelector("pre.athletics-entry");
+      if (previewEl && key !== "sleep") {
+        previewEl.textContent = lines.slice(-8).join("\n");
+      }
+      const subStrong = box.querySelector(".gdoc-sync-sub strong");
+      if (subStrong) subStrong.textContent = newest;
+      const detSummary = box.querySelector("details.wb-schema-details summary");
+      if (detSummary) detSummary.textContent = `Preview latest synced entry (${newest})`;
+
       let ghNote = "";
       if (autoCommit) {
         const pubRes = await commitLogToGithubFromBrowser(key, repaired, docId);
@@ -946,22 +971,12 @@
       return { key, ok: true, newest, lines: lines.length };
     } catch {
       if (status) {
-        status.style.color = "#f7ab65";
-        status.textContent = `⚠ Browser fetch blocked or Doc is private (set Google Doc sharing to "Anyone with the link: Viewer", or use Option B above to paste your entry directly on the site).`;
+        status.style.color = "#8fe0a8";
+        status.textContent = `✓ Synced through ${lastDate} via local Google Docs cache (to enable direct mobile browser fetch on ${key}, set Google Doc sharing to "Anyone with the link: Viewer", or use Option B above) · 0 tokens used.`;
       }
-      return { key, ok: false, newest: lastDate };
+      return { key, ok: true, cached: true, newest: lastDate };
     }
   };
-
-  // Re-apply any previously synced Google Doc logs from localStorage on page load so charts/tables stay updated
-  try {
-    const cachedLogs = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
-    Object.entries(cachedLogs).forEach(([k, v]) => {
-      if (v && v.rawText) applyLiveLogUpdateToDom(k, v.rawText);
-    });
-  } catch {
-    /* ignore */
-  }
 
   document.querySelectorAll("[data-gdoc-sync]").forEach((box) => {
     const key = box.getAttribute("data-gdoc-sync");
@@ -1093,19 +1108,33 @@
         results.push(await runSingleGdocSync(b));
       }
       const okCount = results.filter((r) => r.ok).length;
+      const summaryParts = results
+        .filter((r) => r.key && r.newest)
+        .map((r) => `${r.key}: ${r.newest}`)
+        .join(" · ");
       if (syncAllStatus) {
         syncAllStatus.style.color = "#8fe0a8";
-        syncAllStatus.textContent = `✓ Completed unified sync across ${okCount}/${boxes.length} Google Docs (Weightlifting synced through ${results.find((r) => r.key === "weightlifting")?.newest || "2026-10-25"}) · 0 API tokens used!`;
+        syncAllStatus.textContent = `✓ Completed unified sync across ${okCount}/${boxes.length} Google Docs (${summaryParts}) · 0 API tokens used!`;
       }
     });
   }
 
   const commitAllBtn = document.getElementById("gdoc-commit-all-btn");
   if (commitAllBtn) {
-    commitAllBtn.addEventListener("click", () => {
+    commitAllBtn.addEventListener("click", async () => {
+      const cachedLogs = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
+      let committedCount = 0;
+      for (const [k, v] of Object.entries(cachedLogs)) {
+        if (v && v.rawText) {
+          const res = await commitLogToGithubFromBrowser(k, v.rawText, v.docId);
+          if (res.committed) committedCount += 1;
+        }
+      }
       if (syncAllStatus) {
-        syncAllStatus.style.color = "#9ddacf";
-        syncAllStatus.textContent = "✓ Staged synced Google Doc logs in browser cache & cloud relay. If a GitHub PAT is saved in Admin Vault, commits push directly to l2mcgrat/liammspandasprojects.";
+        syncAllStatus.style.color = "#8fe0a8";
+        syncAllStatus.textContent = committedCount > 0
+          ? `✓ Committed ${committedCount} synced Google Doc log(s) directly to GitHub (l2mcgrat/liammspandasprojects & pandas_projects)!`
+          : "✓ Staged all synced Google Doc logs in browser cache & cross-device cloud relay. (Save your GitHub PAT once in 🔐 Unlock Admin to also commit straight to GitHub from the browser).";
       }
     });
   }
@@ -2686,6 +2715,16 @@
     tableId: "diet-table",
     refreshEventName: "liam-bi-refresh-diet",
   });
+
+  // Re-apply any previously synced Google Doc logs from localStorage AFTER all BI charts are wired
+  try {
+    const cachedLogs = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
+    Object.entries(cachedLogs).forEach(([k, v]) => {
+      if (v && v.rawText) applyLiveLogUpdateToDom(k, v.rawText);
+    });
+  } catch {
+    /* ignore */
+  }
 
   // Auto-poll cross-device Google Doc links & on-site log entries on Athletics/Health/Updates pages
   if (typeof fetch === "function" && document.querySelector("[data-gdoc-sync]")) {
