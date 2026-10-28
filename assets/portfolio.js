@@ -256,12 +256,216 @@
     return `${mo} ${d}`;
   };
 
+  const LOG_REPO_PATHS = {
+    running: {
+      header: "Interval Training Data",
+      rec: "records/athletics/running/Interval_Data.txt",
+      pub: "Gaming-and-Performance-Log/Athletics/Running/Interval_Data.txt",
+    },
+    tempo: {
+      header: "Tempo_Run_Log",
+      rec: "records/athletics/running/Tempo_Run_Log.txt",
+      pub: "Gaming-and-Performance-Log/Athletics/Running/Tempo_Run_Log.txt",
+    },
+    swimming: {
+      header: "Swimming Log",
+      rec: "records/athletics/swimming/Swimming_Log.txt",
+      pub: "Gaming-and-Performance-Log/Athletics/Swimming/Swimming_Log.txt",
+    },
+    weightlifting: {
+      header: "Weightlifting Log (Dropsets Excluded)",
+      rec: "records/athletics/weightlifting/Weightlifting_Log.txt",
+      pub: "Gaming-and-Performance-Log/Athletics/Weightlifting/Weightlifting_Log.txt",
+    },
+    sleep: {
+      header: "Sleep_and_Dream_Log",
+      rec: "records/health/sleep/Sleep_and_Dream_Log.txt",
+      pub: "Gaming-and-Performance-Log/Health/Sleep/Sleep_and_Dream_Log.txt",
+    },
+    diet: {
+      header: "Diet and Calorie Tracking",
+      rec: "records/health/diet/Diet_and_Calorie_Tracking.txt",
+      pub: "Gaming-and-Performance-Log/Health/Diet/Diet_and_Calorie_Tracking.txt",
+    },
+  };
+
+  // Zero-token deterministic regex cleaner matching site_content/log_sync.py
+  const repairLogTextInBrowser = (key, rawText) => {
+    const spec = LOG_REPO_PATHS[key] || LOG_REPO_PATHS.diet;
+    const rawLines = String(rawText || "")
+      .replace(/\r\n/g, "\n")
+      .replace(/[–—−]/g, "-")
+      .split("\n");
+    const out = [];
+    let prevNonEmpty = "";
+    let lastYear = 0;
+    const monthBannerRe = /^(?:January|February|March|April|May|June|July|August|September|October|November|December)\s+20\d{2}$/i;
+
+    rawLines.forEach((line) => {
+      let fixed = line.trim();
+      if (!fixed) {
+        out.push("");
+        return;
+      }
+      if (monthBannerRe.test(fixed)) return;
+      fixed = fixed.replace(/\b(\d{1,2})\/(\d{1,2})0(20\d{2})\b/g, "$1/$2/$3");
+      const dotMatch = fixed.match(/^(\(?)\s*(\d{1,2})[\/.\-](\d{1,2})[\/.\-](20\d{2})(\)?)(.*)$/);
+      if (dotMatch) {
+        fixed = `${dotMatch[1]}${dotMatch[2]}/${dotMatch[3]}/${dotMatch[4]}${dotMatch[5]}${dotMatch[6]}`;
+      }
+      if (key === "diet") {
+        let m;
+        if ((m = fixed.match(/^(Breakfast|Lunch|Dinner|Snacks)\s*[:\-]\s*(.+)$/i))) {
+          const mealName = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
+          fixed = `${mealName} - ${m[2].trim()}`;
+        } else if ((m = fixed.match(/^Total Expenditure\s*[:\-]\s*(\d+)\s*(?:k?cals?)?(?:\s*\((.+)\))?$/i))) {
+          fixed = `Total Expenditure - ${m[1]}cals${m[2] ? ` (${m[2]})` : ""}`;
+        } else if ((m = fixed.match(/^Total Consumption\s*[:\-]\s*(.+)$/i))) {
+          const body = m[1].trim().replace(/(\d+)\s*k?cals?\b/gi, "$1cals");
+          fixed = `Total Consumption - ${body}`;
+        } else if ((m = fixed.match(/^Net Expenditure\s*[:\-]\s*([+-]?\d+)\s*(?:k?cals?)?\s*(loss|gain)?$/i))) {
+          const val = parseInt(m[1], 10);
+          const dir = (m[2] || (val < 0 ? "gain" : "loss")).toLowerCase();
+          fixed = `Net Expenditure - ${Math.abs(val)}cal ${dir}`;
+        }
+      } else if (key === "swimming") {
+        const m = fixed.match(/^\(?(\d{1,2}\/\d{1,2}\/\d{4})\)?\s*[-:]?\s*(\d+)\s*(m|y|yd|yds|yards?|meters?|metres?)\s*[-:]\s*(.+)$/i);
+        if (m) {
+          const unit = m[3].toLowerCase().startsWith("y") ? "y" : "m";
+          fixed = `(${m[1]}) - ${m[2]}${unit} - ${m[4].trim()}`;
+        }
+      } else if (key === "sleep") {
+        if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(prevNonEmpty)) {
+          const m = fixed.match(/^(\d+(?:\.\d+)?)\s*(?:hrs?|hours?|h)?$/i);
+          if (m) fixed = `${m[1]}hrs`;
+        }
+      }
+      const yrMatch = fixed.match(/^(\(?(\d{1,2})\/(\d{1,2})\/)(20\d{2})(\)?(?:\s*-\s*.+)?)$/);
+      if (yrMatch) {
+        const yr = parseInt(yrMatch[4], 10);
+        if (lastYear && yr < lastYear) fixed = `${yrMatch[1]}${lastYear}${yrMatch[5]}`;
+        else lastYear = yr;
+      }
+      out.push(fixed);
+      prevNonEmpty = fixed;
+    });
+
+    const firstNonEmptyIdx = out.findIndex((l) => l.trim().length > 0);
+    if (firstNonEmptyIdx >= 0) {
+      const firstLine = out[firstNonEmptyIdx].trim();
+      if (key === "weightlifting" && !firstLine.startsWith("Weightlifting Log")) {
+        out.unshift(spec.header, "");
+      } else if (key !== "weightlifting" && firstLine !== spec.header) {
+        out.unshift(spec.header, "");
+      }
+    }
+    return out.join("\n").trim() + "\n";
+  };
+
+  const getGithubPatFromVault = () => {
+    try {
+      const vault = JSON.parse(localStorage.getItem("liam_workbench_vault_v1") || "{}") || {};
+      if (vault.ownerGithubPat && vault.ownerGithubPat.startsWith("v1:")) {
+        const raw = atob(vault.ownerGithubPat.slice(3));
+        const salt = "liam_wb_salt_2026_v1::owner_vault_key";
+        let out = "";
+        for (let i = 0; i < raw.length; i++) {
+          out += String.fromCharCode(raw.charCodeAt(i) ^ salt.charCodeAt(i % salt.length));
+        }
+        if (out.startsWith("ghp_") || out.startsWith("github_pat_")) return out;
+      }
+    } catch {
+      /* ignore */
+    }
+    return "";
+  };
+
+  const commitFileToGithubRepo = async (pat, repo, path, contentText, message) => {
+    const apiBase = `https://api.github.com/repos/${repo}/contents/${path}`;
+    const headers = {
+      Accept: "application/vnd.github+json",
+      Authorization: `Bearer ${pat}`,
+      "X-GitHub-Api-Version": "2022-11-28",
+    };
+    let sha = undefined;
+    try {
+      const getResp = await fetch(apiBase, { headers, cache: "no-store" });
+      if (getResp.ok) {
+        const meta = await getResp.json();
+        if (meta && meta.sha) sha = meta.sha;
+      }
+    } catch {
+      /* file may be new */
+    }
+    const b64 = btoa(unescape(encodeURIComponent(contentText)));
+    const putResp = await fetch(apiBase, {
+      method: "PUT",
+      headers: { ...headers, "Content-Type": "application/json" },
+      body: JSON.stringify({ message, content: b64, ...(sha ? { sha } : {}) }),
+    });
+    return putResp.ok;
+  };
+
+  const commitLogToGithubFromBrowser = async (key, rawText, docId = "") => {
+    const repaired = repairLogTextInBrowser(key, rawText);
+    const spec = LOG_REPO_PATHS[key];
+    if (!spec) return { committed: false, relayed: false };
+
+    // Always broadcast Google Doc link / log tail to cross-device ntfy relay so phone & desktop stay in sync
+    let relayed = false;
+    try {
+      const packet = JSON.stringify({
+        app: "liam_gdoc_log_v1",
+        key,
+        docId: docId || extractGdocId(loadGdocLinks()[key] || ""),
+        rawText: repaired.length <= 3200 ? repaired : undefined,
+        ts: Date.now(),
+      });
+      const r = await fetch("https://ntfy.sh/liam_wb_sync_67wxyE7L_v1", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=UTF-8", Title: `Log sync ${key}` },
+        body: packet,
+      });
+      relayed = r.ok;
+    } catch {
+      /* ignore network error */
+    }
+
+    const pat = getGithubPatFromVault();
+    if (!pat) return { committed: false, relayed, repaired };
+
+    try {
+      const msg = `Sync ${key} log (${spec.rec}) from live site`;
+      const okLive = await commitFileToGithubRepo(pat, "l2mcgrat/liammspandasprojects", spec.pub, repaired, msg);
+      await commitFileToGithubRepo(pat, "l2mcgrat/pandas_projects", spec.rec, repaired, msg);
+      await commitFileToGithubRepo(pat, "l2mcgrat/pandas_projects", `LiamMs_PandasProjects/${spec.pub}`, repaired, msg);
+      return { committed: okLive, relayed, repaired };
+    } catch {
+      return { committed: false, relayed, repaired };
+    }
+  };
+
+  const updateKpiCardOnPage = (labelText, newValue, newSmall) => {
+    document.querySelectorAll(".sports-metrics .sports-metric").forEach((card) => {
+      const span = card.querySelector("span");
+      const strong = card.querySelector("strong");
+      const small = card.querySelector("small");
+      if (!span || !strong) return;
+      const cleanLbl = span.textContent.replace("ⓘ", "").replace("?", "").trim();
+      if (cleanLbl.toLowerCase() === labelText.toLowerCase()) {
+        strong.textContent = newValue;
+        if (small && newSmall !== undefined) small.textContent = newSmall;
+      }
+    });
+  };
+
   const applyLiveLogUpdateToDom = (key, rawText) => {
     if (!rawText || typeof rawText !== "string") return;
-    const lines = rawText.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
+    const repaired = repairLogTextInBrowser(key, rawText);
+    const lines = repaired.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
     if (!lines.length) return;
 
-    // 1. Auto-detect Tempo Run Log (even if pasted into the 'running' box on Running/index.html)
+    // 1. Tempo Run Log (or Running page when a Tempo Run log is synced)
     if (key === "tempo" || lines.some((l) => /^Tempo\s+Run\s*[-:]/i.test(l))) {
       const tempoRuns = [];
       let cur = null;
@@ -322,10 +526,118 @@
       }
     }
 
-    // 2. Auto-detect Weightlifting Log and dynamically update sessions, table & interactive BI chart
+    // 2. Running Intervals Log (I1 - (M/D/YYYY) - N Intervals)
+    if (key === "running" && lines.some((l) => /^I\d+\s*-\s*\(?\d{1,2}\/\d{1,2}\/20\d{2}\)?/i.test(l))) {
+      const sessions = [];
+      let cur = null;
+      lines.forEach((ln) => {
+        const mHdr = ln.match(/^I(\d+)\s*-\s*\(?(\d{1,2})\/(\d{1,2})\/(20\d{2})\)?\s*-\s*(\d+)\s*Intervals?/i);
+        if (mHdr) {
+          cur = {
+            route: `I${mHdr[1]}`,
+            date: `${mHdr[4]}-${mHdr[2].padStart(2, "0")}-${mHdr[3].padStart(2, "0")}`,
+            count: parseInt(mHdr[5], 10),
+            intervals: [],
+            recordedAverage: null,
+            rawLines: [ln],
+          };
+          sessions.push(cur);
+          return;
+        }
+        if (!cur) return;
+        const mAvg = ln.match(/^Avg:\s*(\d{1,2}):(\d{2}(?:\.\d+)?)$/i);
+        if (mAvg) {
+          cur.recordedAverage = { raw: `${mAvg[1]}:${mAvg[2]}` };
+          cur.rawLines.push(ln);
+          return;
+        }
+        const mInt = ln.match(/^(\d{1,2}):(\d{2}(?:\.\d+)?)$/);
+        if (mInt) {
+          const secs = parseInt(mInt[1], 10) * 60 + parseFloat(mInt[2]);
+          cur.intervals.push({ number: cur.intervals.length + 1, raw: ln, seconds: secs });
+          cur.rawLines.push(ln);
+        }
+      });
+      const valid = sessions.filter((s) => s.intervals.length > 0);
+      if (valid.length > 0) {
+        valid.forEach((s) => {
+          const secs = s.intervals.map((i) => i.seconds);
+          s.average = secs.reduce((a, v) => a + v, 0) / secs.length;
+          s.best = Math.min(...secs);
+          s.worst = Math.max(...secs);
+          s.spread = Math.round((s.worst - s.best) * 10) / 10;
+          s.fade = Math.round((secs[secs.length - 1] - secs[0]) * 10) / 10;
+          s.pacePerKm = s.average / 0.95;
+        });
+        const totalInts = valid.reduce((a, s) => a + s.intervals.length, 0);
+        const last = valid[valid.length - 1];
+        updateKpiCardOnPage("Sessions logged", String(valid.length), `${totalInts} intervals in total`);
+        updateKpiCardOnPage("Latest average", formatClockJs(last.average), `${formatShortDayJs(last.date)} session`);
+        updateKpiCardOnPage("Latest spread", `${last.spread} s`, "Slowest minus fastest interval");
+        const runTableBody = document.querySelector("#running-table tbody");
+        if (runTableBody) {
+          runTableBody.innerHTML = valid
+            .map(
+              (s) =>
+                `<tr><th scope="row">${formatShortDayJs(s.date)}</th><td>${s.route}</td><td>${s.intervals.map((i) => i.raw).join(" · ")}</td><td>${formatClockJs(s.average)}</td><td>${s.recordedAverage ? s.recordedAverage.raw : "— (none written)"}</td><td>${formatClockJs(s.best)}</td><td>${s.spread} s</td><td>${s.fade >= 0 ? `+${s.fade}` : s.fade} s</td><td>${formatClockJs(s.pacePerKm)}</td></tr>`
+            )
+            .join("");
+        }
+        const previewEl = document.getElementById("gdoc-preview-running");
+        if (previewEl) previewEl.textContent = last.rawLines.join("\n");
+        const runHost = document.querySelector(".bi-running-host");
+        if (runHost) {
+          window.dispatchEvent(new CustomEvent("liam-bi-refresh-running", { detail: valid }));
+        }
+      }
+    }
+
+    // 3. Swimming Log ((M/D/YYYY) - 2000m/y - 5x400 of ...)
+    if (key === "swimming" && lines.some((l) => /^\(?\d{1,2}\/\d{1,2}\/20\d{2}\)?\s*-\s*\d+\s*[my]/i.test(l))) {
+      const sessions = [];
+      let cumMeters = 0;
+      let yardCount = 0;
+      lines.forEach((ln) => {
+        const m = ln.match(/^\(?(\d{1,2})\/(\d{1,2})\/(20\d{2})\)?\s*-\s*(\d+)\s*([my])\s*-\s*(.+)$/i);
+        if (!m) return;
+        const date = `${m[3]}-${m[1].padStart(2, "0")}-${m[2].padStart(2, "0")}`;
+        const distance = parseInt(m[4], 10);
+        const unit = m[5].toLowerCase();
+        if (unit === "y") yardCount += 1;
+        const meters = unit === "y" ? Math.round(distance * 0.9144) : distance;
+        cumMeters += meters;
+        sessions.push({ date, distance, unit, meters, orderRaw: m[6].trim(), cumulativeMeters: cumMeters, rawLine: ln });
+      });
+      if (sessions.length > 0) {
+        const avgM = Math.round(cumMeters / sessions.length);
+        const maxM = Math.max(...sessions.map((s) => s.meters));
+        updateKpiCardOnPage("Sessions logged", String(sessions.length), `${yardCount} in yards, ${sessions.length - yardCount} in metres`);
+        updateKpiCardOnPage("Total distance", `${cumMeters.toLocaleString()} m`, `${formatShortDayJs(sessions[0].date)} → ${formatShortDayJs(sessions[sessions.length - 1].date)}`);
+        updateKpiCardOnPage("Average session", `${avgM.toLocaleString()} m`, `Longest ${maxM.toLocaleString()} m`);
+        const swimTableBody = document.querySelector("#swimming-table tbody");
+        if (swimTableBody) {
+          swimTableBody.innerHTML = sessions
+            .map(
+              (s) =>
+                `<tr><th scope="row">${formatShortDayJs(s.date)}</th><td>${s.distance.toLocaleString()} ${s.unit === "y" ? "yd" : "m"}</td><td>${s.meters.toLocaleString()} m</td><td>${s.orderRaw}</td><td>${s.cumulativeMeters.toLocaleString()} m</td></tr>`
+            )
+            .join("");
+        }
+        const previewEl = document.getElementById("gdoc-preview-swimming");
+        if (previewEl) previewEl.textContent = sessions[sessions.length - 1].rawLine;
+        const swimHost = document.querySelector(".bi-swimming-host");
+        if (swimHost) {
+          swimHost.setAttribute("data-bi-swimming", JSON.stringify(sessions));
+          window.dispatchEvent(new CustomEvent("liam-bi-refresh-swimming", { detail: sessions }));
+        }
+      }
+    }
+
+    // 4. Weightlifting Log (M/D/YYYY - Split & Exercise; 12x95lbs...)
     if (key === "weightlifting" && lines.some((l) => /\d+\s*x\s*\d+/i.test(l))) {
       const sessions = [];
       let lastYear = 0;
+      const exNamesSet = new Set();
       lines.forEach((ln) => {
         const mDay = ln.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](20\d{2})\s*(?:[-:]\s*)?([A-Za-z].*)$/);
         if (mDay) {
@@ -343,6 +655,7 @@
             sets: 0,
             reps: 0,
             volume: 0,
+            rawLines: [ln],
           });
           return;
         }
@@ -350,6 +663,7 @@
         const mEx = ln.match(/^([A-Za-z][A-Za-z0-9\s'()/&]*?)\s*(?:([;:])\s*|[-,]\s*|\s+)(?=\d+\s*[xX*]|\s*$)(.*)$/);
         if (mEx) {
           const name = mEx[1].trim().replace(/Assited/g, "Assisted").replace(/Dumbell/g, "Dumbbell");
+          exNamesSet.add(name);
           const rest = mEx[3].trim();
           const sets = [];
           rest.split(",").forEach((tok) => {
@@ -370,9 +684,32 @@
           curSess.sets += sets.length;
           curSess.reps += repsSum;
           curSess.volume += vol;
+          curSess.rawLines.push(ln);
         }
       });
       if (sessions.length > 0) {
+        const totalSets = sessions.reduce((a, s) => a + s.sets, 0);
+        const totalReps = sessions.reduce((a, s) => a + s.reps, 0);
+        const totalVol = sessions.reduce((a, s) => a + s.volume, 0);
+        updateKpiCardOnPage("Sessions logged", String(sessions.length), `${formatShortDayJs(sessions[0].date)} → ${formatShortDayJs(sessions[sessions.length - 1].date)}`);
+        updateKpiCardOnPage("Working sets", String(totalSets), `${totalReps.toLocaleString()} reps`);
+        updateKpiCardOnPage("Loaded volume", `${totalVol.toLocaleString()} lb`, "Reps × weight, loaded lifts only");
+        updateKpiCardOnPage("Exercises", String(exNamesSet.size), "Names kept as logged");
+        const liftTableBody = document.querySelector("#lifting-table tbody");
+        if (liftTableBody) {
+          const allRows = [];
+          sessions.forEach((s) => {
+            s.exercises.forEach((e) => {
+              const setsStr = e.sets.map((x) => `${x.reps}×${x.weight}`).join(", ") || "— nothing written";
+              allRows.push(`<tr><th scope="row">${formatShortDayJs(s.date)}</th><td>${s.splitRaw}</td><td>${e.name}</td><td>${setsStr}</td><td>${e.kind}</td></tr>`);
+            });
+          });
+          liftTableBody.innerHTML = allRows.join("");
+          const sumEl = document.getElementById("lifting-table")?.closest("details")?.querySelector("summary");
+          if (sumEl) sumEl.textContent = `Show all ${totalSets} working sets`;
+        }
+        const previewEl = document.getElementById("gdoc-preview-weightlifting");
+        if (previewEl) previewEl.textContent = sessions[sessions.length - 1].rawLines.join("\n");
         const liftHost = document.getElementById("bi-lifting-host");
         if (liftHost) {
           liftHost.setAttribute("data-bi-lifting", JSON.stringify(sessions));
@@ -380,9 +717,188 @@
         }
       }
     }
+
+    // 5. Sleep & Dream Log (M/D/YYYY, Xhrs, dreams / No dreams recorded)
+    if (key === "sleep" && lines.some((l) => /^\d+(?:\.\d+)?hrs$/i.test(l))) {
+      const nights = [];
+      let cur = null;
+      lines.forEach((ln) => {
+        if (ln === "Sleep_and_Dream_Log") return;
+        const mDate = ln.match(/^(\d{1,2})\/(\d{1,2})\/(20\d{2})$/);
+        if (mDate) {
+          cur = {
+            date: `${mDate[3]}-${mDate[1].padStart(2, "0")}-${mDate[2].padStart(2, "0")}`,
+            hours: null,
+            dreams: [],
+            noDreamsWritten: false,
+            rawLines: [ln],
+          };
+          nights.push(cur);
+          return;
+        }
+        if (!cur) return;
+        const mHrs = ln.match(/^(\d+(?:\.\d+)?)hrs$/i);
+        if (cur.hours === null && mHrs) {
+          cur.hours = parseFloat(mHrs[1]);
+          cur.rawLines.push(ln);
+          return;
+        }
+        if (/^No dreams recorded\.?$/i.test(ln)) {
+          cur.noDreamsWritten = true;
+          cur.rawLines.push(ln);
+        } else {
+          cur.dreams.push(ln);
+          cur.rawLines.push(ln);
+        }
+      });
+      const validNights = nights.filter((n) => n.hours !== null);
+      if (validNights.length > 0) {
+        const avgH = Math.round((validNights.reduce((a, n) => a + n.hours, 0) / validNights.length) * 100) / 100;
+        const minH = Math.min(...validNights.map((n) => n.hours));
+        const maxH = Math.max(...validNights.map((n) => n.hours));
+        const totalDreams = validNights.reduce((a, n) => a + n.dreams.length, 0);
+        const withDreams = validNights.filter((n) => n.dreams.length > 0);
+        updateKpiCardOnPage("Nights logged", String(validNights.length), `${formatShortDayJs(validNights[0].date)} → ${formatShortDayJs(validNights[validNights.length - 1].date)}`);
+        updateKpiCardOnPage("Average sleep", `${avgH} h`, `Shortest ${minH} h · longest ${maxH} h`);
+        updateKpiCardOnPage("Dreams written down", String(totalDreams), `Across ${withDreams.length} nights`);
+        const sleepBi = validNights.map((n) => ({
+          date: n.date,
+          hours: n.hours,
+          recall: n.dreams.length > 0,
+          dreamCount: n.dreams.length,
+        }));
+        const previewEl = document.getElementById("gdoc-preview-sleep");
+        if (previewEl) previewEl.textContent = validNights[validNights.length - 1].rawLines.join("\n");
+        const sleepHost = document.querySelector(".bi-sleep-host");
+        if (sleepHost) {
+          sleepHost.setAttribute("data-bi-sleep", JSON.stringify(sleepBi));
+          window.dispatchEvent(new CustomEvent("liam-bi-refresh-sleep", { detail: sleepBi }));
+        }
+      }
+    }
+
+    // 6. Diet and Calorie Tracking Log (M/D/YYYY, Breakfast/Lunch/Dinner/Snacks, Total Expenditure, Total Consumption, Net Expenditure)
+    if (key === "diet" && lines.some((l) => /^Total\s+Expenditure\s*-/i.test(l))) {
+      const days = [];
+      let cur = null;
+      lines.forEach((ln) => {
+        if (ln === "Diet and Calorie Tracking" || /^-{5,}$/.test(ln) || /^Week of /i.test(ln)) return;
+        const mDay = ln.match(/^(\d{1,2})\/(\d{1,2})\/(20\d{2})(?:\s*-\s*(\d+)\s*cals?\s*(loss|gain))?$/i);
+        if (mDay) {
+          cur = {
+            date: `${mDay[3]}-${mDay[1].padStart(2, "0")}-${mDay[2].padStart(2, "0")}`,
+            meals: [],
+            expenditure: 0,
+            expenditureNote: null,
+            consumption: 0,
+            writtenNet: null,
+            rawLines: [ln],
+          };
+          days.push(cur);
+          return;
+        }
+        if (!cur) return;
+        const mMeal = ln.match(/^(Breakfast|Lunch|Dinner|Snacks)\s*-\s*(.+)$/i);
+        if (mMeal) {
+          const rawMeal = mMeal[2].trim();
+          const macroMatches = Array.from(rawMeal.matchAll(/(\d+)\/(\d+)\/(\d+)\s*g?\b/g));
+          const c = macroMatches.reduce((a, m) => a + parseInt(m[1], 10), 0);
+          const f = macroMatches.reduce((a, m) => a + parseInt(m[2], 10), 0);
+          const p = macroMatches.reduce((a, m) => a + parseInt(m[3], 10), 0);
+          cur.meals.push({ meal: mMeal[1], raw: rawMeal, carbs: c || 0, fat: f || 0, protein: p || 0 });
+          cur.rawLines.push(ln);
+          return;
+        }
+        const mExp = ln.match(/^Total Expenditure\s*-\s*(\d+)\s*cals?(?:\s*\((.+)\))?$/i);
+        if (mExp) {
+          cur.expenditure = parseInt(mExp[1], 10);
+          cur.expenditureNote = mExp[2] || null;
+          cur.rawLines.push(ln);
+          return;
+        }
+        const mCon = ln.match(/^Total Consumption\s*-\s*(.+)$/i);
+        if (mCon) {
+          const calsM = mCon[1].match(/(\d+)\s*cals?\b/i);
+          if (calsM) cur.consumption = parseInt(calsM[1], 10);
+          cur.rawLines.push(ln);
+          return;
+        }
+        const mNet = ln.match(/^Net Expenditure\s*-\s*(\d+)\s*cals?\s*(loss|gain)$/i);
+        if (mNet) {
+          cur.writtenNet = parseInt(mNet[1], 10) * (mNet[2].toLowerCase() === "loss" ? 1 : -1);
+          cur.rawLines.push(ln);
+        }
+      });
+
+      const validDays = days.filter((d) => d.expenditure > 0 && d.consumption > 0);
+      if (validDays.length > 0) {
+        validDays.forEach((d) => {
+          d.deficit = d.expenditure - d.consumption;
+          d.activity = d.expenditure - 2050;
+          d.mealMacros = {
+            carbs: d.meals.reduce((a, m) => a + m.carbs, 0),
+            fat: d.meals.reduce((a, m) => a + m.fat, 0),
+            protein: d.meals.reduce((a, m) => a + m.protein, 0),
+          };
+        });
+        const totalDef = validDays.reduce((a, d) => a + d.deficit, 0);
+        const avgDef = Math.round(totalDef / validDays.length);
+        const avgExp = Math.round(validDays.reduce((a, d) => a + d.expenditure, 0) / validDays.length);
+        const estLbs = Math.round((totalDef / 3500) * 100) / 100;
+        const onTarget = validDays.filter((d) => d.deficit >= 500).length;
+
+        updateKpiCardOnPage("Days tracked", String(validDays.length), `${formatShortDayJs(validDays[0].date)} → ${formatShortDayJs(validDays[validDays.length - 1].date)}`);
+        updateKpiCardOnPage("Average deficit", `${avgDef.toLocaleString()} kcal`, `${onTarget} of ${validDays.length} days at the 500 kcal target`);
+        updateKpiCardOnPage("Estimated loss", `${estLbs} lb`, `${totalDef.toLocaleString()} kcal ÷ 3,500`);
+        updateKpiCardOnPage("Burn above BMR", `${(avgExp - 2050).toLocaleString()} kcal`, "Training plus high NEAT, daily average");
+
+        const fmtSigned = (v) => (v >= 0 ? `+${v.toLocaleString()}` : `-${Math.abs(v).toLocaleString()}`);
+        const dietTableBody = document.querySelector("#diet-table tbody");
+        if (dietTableBody) {
+          // Preserve existing training labels by date if present in DOM
+          const existingTraining = {};
+          dietTableBody.querySelectorAll("tr").forEach((tr) => {
+            const cells = tr.querySelectorAll("th, td");
+            if (cells.length >= 7) existingTraining[cells[0].textContent.trim()] = cells[6].textContent.trim();
+          });
+          dietTableBody.innerHTML = validDays
+            .map((d) => {
+              const dayShort = formatShortDayJs(d.date);
+              const outStr = `${d.expenditure.toLocaleString()}${d.expenditureNote ? ` (${d.expenditureNote})` : ""}`;
+              const macStr = `${d.mealMacros.carbs}/${d.mealMacros.fat}/${d.mealMacros.protein} g`;
+              const netStr = fmtSigned(-d.deficit);
+              const wNetStr = d.writtenNet !== null ? fmtSigned(-d.writtenNet) : "—";
+              const trnStr = existingTraining[dayShort] || "Logged on site";
+              return `<tr><th scope="row">${dayShort}</th><td>${outStr}</td><td>${d.consumption.toLocaleString()}</td><td>${macStr}</td><td>${netStr}</td><td>${wNetStr}</td><td>${trnStr}</td></tr>`;
+            })
+            .join("");
+        }
+        const mealsTableBody = document.querySelector("#diet-meals-table tbody");
+        if (mealsTableBody) {
+          const mealRows = [];
+          validDays.forEach((d) => {
+            d.meals.forEach((m) => {
+              mealRows.push(`<tr><th scope="row">${formatShortDayJs(d.date)}</th><td>${m.meal}</td><td>${m.raw}</td></tr>`);
+            });
+          });
+          mealsTableBody.innerHTML = mealRows.join("");
+          const sumEl = document.getElementById("diet-meals-table")?.closest("details")?.querySelector("summary");
+          if (sumEl) sumEl.textContent = `Show all ${mealRows.length} meal lines`;
+        }
+        const previewEl = document.getElementById("gdoc-preview-diet");
+        if (previewEl) {
+          previewEl.textContent = validDays[validDays.length - 1].rawLines.join("\n");
+        }
+        const dietHost = document.querySelector(".bi-diet-host");
+        if (dietHost) {
+          dietHost.setAttribute("data-bi-diet", JSON.stringify(validDays));
+          window.dispatchEvent(new CustomEvent("liam-bi-refresh-diet", { detail: validDays }));
+        }
+      }
+    }
   };
 
-  const runSingleGdocSync = async (box) => {
+  const runSingleGdocSync = async (box, autoCommit = true) => {
     const key = box.getAttribute("data-gdoc-sync");
     const lastDate = box.getAttribute("data-gdoc-last-date") || "2026-10-18";
     const defaultUrl = box.getAttribute("data-gdoc-default-url") || "";
@@ -395,7 +911,7 @@
     if (!docId) {
       if (status) {
         status.style.color = "#9ddacf";
-        status.textContent = `✓ Checked local build cache: ${key} is validated through ${lastDate} (0 API tokens used). Paste a Google Doc share link above to enable live cloud pulls.`;
+        status.textContent = `✓ Checked local build cache: ${key} is validated through ${lastDate} (0 API tokens used). Paste a Google Doc share link in Option A or paste a new entry in Option B above!`;
       }
       return { key, ok: true, cached: true, newest: lastDate };
     }
@@ -405,37 +921,33 @@
     }
     try {
       const text = await fetchGoogleDocTextWithFallback(docId);
-      const lines = text.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
+      const repaired = repairLogTextInBrowser(key, text);
+      const lines = repaired.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
       const { allDates, newest } = parseDatesFromLogLines(lines, lastDate);
-      const previewEl = document.getElementById(`gdoc-preview-${key}`) || box.parentElement?.querySelector("pre.athletics-entry");
-      if (previewEl && key !== "sleep") {
-        previewEl.textContent = lines.slice(-8).join("\n");
-      }
       try {
         const syncedStore = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
-        syncedStore[key] = { docId, newest, lineCount: lines.length, rawText: text, tail: lines.slice(-12), syncedAt: new Date().toISOString() };
+        syncedStore[key] = { docId, newest, lineCount: lines.length, rawText: repaired, tail: lines.slice(-12), syncedAt: new Date().toISOString() };
         localStorage.setItem(SYNCED_LOGS_KEY, JSON.stringify(syncedStore));
       } catch {
         /* ignore quota */
       }
-      applyLiveLogUpdateToDom(key, text);
-      if (newest <= lastDate) {
-        if (status) {
-          status.style.color = "#8fe0a8";
-          status.textContent = `✓ Synced & dynamically updated page! Latest Google Doc entry is ${newest} (${allDates.length} dated entries, ${lines.length} lines) · 0 API tokens used.`;
-        }
-      } else {
-        box.setAttribute("data-gdoc-last-date", newest);
-        if (status) {
-          status.style.color = "#8fe0a8";
-          status.textContent = `✓ Updated charts & tables live from Google Docs! Pulled ${lines.length} lines through ${newest} (${allDates.length} sessions · 0 API tokens used).`;
-        }
+      applyLiveLogUpdateToDom(key, repaired);
+      let ghNote = "";
+      if (autoCommit) {
+        const pubRes = await commitLogToGithubFromBrowser(key, repaired, docId);
+        if (pubRes.committed) ghNote = " & committed .txt to GitHub";
+        else if (pubRes.relayed) ghNote = " & synced to cross-device relay";
+      }
+      box.setAttribute("data-gdoc-last-date", newest);
+      if (status) {
+        status.style.color = "#8fe0a8";
+        status.textContent = `✓ Updated charts, KPIs & tables live from Google Docs${ghNote}! Pulled ${lines.length} lines through ${newest} (${allDates.length} entries · 0 API tokens used).`;
       }
       return { key, ok: true, newest, lines: lines.length };
     } catch {
       if (status) {
         status.style.color = "#f7ab65";
-        status.textContent = `⚠ Browser fetch blocked or Doc is private (set Google Doc sharing to "Anyone with the link: Viewer", or run 'python -B -m site_content.log_sync' locally). Built cache (${lastDate}) active · 0 tokens used.`;
+        status.textContent = `⚠ Browser fetch blocked or Doc is private (set Google Doc sharing to "Anyone with the link: Viewer", or use Option B above to paste your entry directly on the site).`;
       }
       return { key, ok: false, newest: lastDate };
     }
@@ -461,7 +973,7 @@
 
     const saveBtn = box.querySelector(`[data-gdoc-save-btn="${key}"]`);
     if (saveBtn) {
-      saveBtn.addEventListener("click", () => {
+      saveBtn.addEventListener("click", async () => {
         const val = input ? input.value.trim() : "";
         const id = extractGdocId(val);
         if (val && !id) {
@@ -475,18 +987,95 @@
         if (val) links[key] = val;
         else delete links[key];
         saveGdocLinks(links);
-        if (status) {
+        if (val) {
+          await runSingleGdocSync(box, true);
+        } else if (status) {
           status.style.color = "#8fe0a8";
-          status.textContent = val
-            ? `✓ Saved Google Doc ID (${id.slice(0, 10)}…) for ${key}. Click "Check & Refresh Log Now" to pull new entries.`
-            : `Cleared saved Google Doc link for ${key}.`;
+          status.textContent = `Cleared saved Google Doc link for ${key}.`;
         }
       });
     }
 
     const refreshBtn = box.querySelector(`[data-gdoc-refresh-btn="${key}"]`);
     if (refreshBtn) {
-      refreshBtn.addEventListener("click", () => runSingleGdocSync(box));
+      refreshBtn.addEventListener("click", () => runSingleGdocSync(box, true));
+    }
+
+    const commitBtn = box.querySelector(`[data-gdoc-commit-btn="${key}"]`);
+    if (commitBtn) {
+      commitBtn.addEventListener("click", async () => {
+        const cached = (JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {})[key];
+        if (!cached || !cached.rawText) {
+          await runSingleGdocSync(box, true);
+          return;
+        }
+        if (status) {
+          status.style.color = "#9ddacf";
+          status.textContent = `☁️ Committing ${key} log to GitHub & cross-device relay…`;
+        }
+        const res = await commitLogToGithubFromBrowser(key, cached.rawText, cached.docId);
+        if (status) {
+          status.style.color = "#8fe0a8";
+          status.textContent = res.committed
+            ? `✓ Committed ${LOG_REPO_PATHS[key]?.rec || key} directly to GitHub (l2mcgrat/liammspandasprojects & pandas_projects)!`
+            : `✓ Synced ${key} log to browser & cross-device relay! (To also commit straight to GitHub from the browser, save your GitHub PAT once in 🔐 Unlock Admin).`;
+        }
+      });
+    }
+
+    const appendBtn = box.querySelector(`[data-gdoc-append-btn="${key}"]`);
+    if (appendBtn) {
+      appendBtn.addEventListener("click", async () => {
+        const ta = document.getElementById(`gdoc-append-text-${key}`);
+        const newEntry = ta ? ta.value.trim() : "";
+        if (!newEntry) {
+          if (status) {
+            status.style.color = "#f28b82";
+            status.textContent = "⚠ Paste or type a log entry in the Option B text box above first.";
+          }
+          return;
+        }
+        if (status) {
+          status.style.color = "#9ddacf";
+          status.textContent = `⚡ Validating entry with 0-token regex rules, updating charts & publishing…`;
+        }
+        // Fetch current canonical .txt file from the same folder (or localStorage cache) and append the new entry
+        let baseText = "";
+        try {
+          const syncedStore = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
+          if (syncedStore[key]?.rawText) {
+            baseText = syncedStore[key].rawText;
+          } else {
+            const fileName = (LOG_REPO_PATHS[key]?.pub || "").split("/").pop();
+            if (fileName) {
+              const r = await fetch(fileName, { cache: "no-store" });
+              if (r.ok) baseText = await r.text();
+            }
+          }
+        } catch {
+          /* fallback to empty base */
+        }
+        const combined = repairLogTextInBrowser(key, `${baseText.trim()}\n\n${newEntry}\n`);
+        const lines = combined.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
+        const { allDates, newest } = parseDatesFromLogLines(lines, box.getAttribute("data-gdoc-last-date") || "2026-10-28");
+        try {
+          const syncedStore = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
+          syncedStore[key] = { docId: "on-site-entry", newest, lineCount: lines.length, rawText: combined, tail: lines.slice(-12), syncedAt: new Date().toISOString() };
+          localStorage.setItem(SYNCED_LOGS_KEY, JSON.stringify(syncedStore));
+        } catch {
+          /* ignore quota */
+        }
+        applyLiveLogUpdateToDom(key, combined);
+        const pubRes = await commitLogToGithubFromBrowser(key, combined);
+        box.setAttribute("data-gdoc-last-date", newest);
+        if (ta) ta.value = "";
+        if (status) {
+          status.style.color = "#8fe0a8";
+          status.textContent = pubRes.committed
+            ? `✓ Appended ${newest} entry, updated all charts & tables on this page, and committed ${LOG_REPO_PATHS[key]?.rec} directly to GitHub (0 API tokens)!`
+            : `✓ Appended ${newest} entry and updated all charts, KPIs & tables on this page (${allDates.length} entries · 0 API tokens)!`;
+        }
+      });
     }
   });
 
@@ -2031,6 +2620,7 @@
     primaryAggMode: "sum",
     secondaryAggMode: "last",
     tableId: "swimming-table",
+    refreshEventName: "liam-bi-refresh-swimming",
   });
   wireDatedBiHost({
     selector: ".bi-running-host",
@@ -2046,6 +2636,7 @@
     primaryAggMode: "avg",
     secondaryAggMode: "sum",
     tableId: "running-table",
+    refreshEventName: "liam-bi-refresh-running",
   });
   wireDatedBiHost({
     selector: ".bi-tempo-host",
@@ -2077,6 +2668,7 @@
     primaryAggMode: "avg",
     secondaryAggMode: "sum",
     tableId: "sleep-table",
+    refreshEventName: "liam-bi-refresh-sleep",
   });
   wireDatedBiHost({
     selector: ".bi-diet-host",
@@ -2092,5 +2684,46 @@
     primaryAggMode: "avg",
     secondaryAggMode: "avg",
     tableId: "diet-table",
+    refreshEventName: "liam-bi-refresh-diet",
   });
+
+  // Auto-poll cross-device Google Doc links & on-site log entries on Athletics/Health/Updates pages
+  if (typeof fetch === "function" && document.querySelector("[data-gdoc-sync]")) {
+    fetch("https://ntfy.sh/liam_wb_sync_67wxyE7L_v1/json?poll=1&since=all")
+      .then((r) => (r.ok ? r.text() : ""))
+      .then(async (txt) => {
+        if (!txt) return;
+        const lines = txt.trim().split("\n").filter(Boolean);
+        const links = loadGdocLinks();
+        let linksChanged = false;
+        const latestByKey = {};
+        for (const line of lines) {
+          try {
+            const env = JSON.parse(line);
+            if (!env || env.event !== "message" || !env.message || !env.message.startsWith("{")) continue;
+            const pkt = JSON.parse(env.message);
+            if (pkt && pkt.app === "liam_gdoc_log_v1" && pkt.key) {
+              latestByKey[pkt.key] = pkt;
+              if (pkt.docId && pkt.docId !== "on-site-entry" && !links[pkt.key]) {
+                links[pkt.key] = `https://docs.google.com/document/d/${pkt.docId}/edit`;
+                linksChanged = true;
+              }
+            }
+          } catch {
+            /* skip */
+          }
+        }
+        if (linksChanged) saveGdocLinks(links);
+        Object.values(latestByKey).forEach((pkt) => {
+          const input = document.getElementById(`gdoc-url-${pkt.key}`);
+          if (input && !input.value && pkt.docId && pkt.docId !== "on-site-entry") {
+            input.value = `https://docs.google.com/document/d/${pkt.docId}/edit`;
+          }
+          if (pkt.rawText) {
+            applyLiveLogUpdateToDom(pkt.key, pkt.rawText);
+          }
+        });
+      })
+      .catch(() => {});
+  }
 })();
