@@ -1819,6 +1819,7 @@
   };
 
   let openFollowUpModalForStudy = () => {};
+  let openReRunModalForStudy = () => {};
 
   const markStudyCompletedInDom = (study, resultRecord) => {
     const hasLiveTokens = Boolean(resultRecord && Number(resultRecord.tokens) > 0);
@@ -1848,7 +1849,7 @@
       rerunInlineBtn.type = "button";
       rerunInlineBtn.className = "button ghost wb-run-study-btn";
       rerunInlineBtn.textContent = hasLiveTokens ? "↻ Re-Study Deeper" : "▶ Run study now";
-      rerunInlineBtn.addEventListener("click", () => requestRunStudy(study));
+      rerunInlineBtn.addEventListener("click", () => openReRunModalForStudy(study));
       outputCell.appendChild(rerunInlineBtn);
 
       const followUpBtn = document.createElement("button");
@@ -1883,17 +1884,19 @@
         `<div class="wb-bucket-bar" style="margin: 4px 0 8px;">` +
         `<a class="wb-bucket-chip is-active" href="../${study.atlasPath}/index.html">📊 Open ${study.atlasPath.split("/").pop().replace(/-/g, " ")} Destination Tab ↗</a>` +
         `<a class="wb-bucket-chip" href="../Mental-Map/index.html#sec:${slug}">🧠 View in Mental Map (§ ${study.atlasPath.split("/").pop().replace(/-/g, " ")}) ↗</a>` +
+        `<button class="wb-bucket-chip" type="button" id="wb-modal-open-rerun">↻ Re-Study Deeper (Edit All Criteria)</button>` +
         `<button class="wb-bucket-chip" type="button" id="wb-modal-open-followup">➕ Add Follow-Up Study / Extrapolate Theory or App</button>` +
         `</div>` +
         linkagesBar;
       destLinksEl.hidden = false;
-      const modalFuBtn = document.getElementById("wb-modal-open-followup");
-      if (modalFuBtn) {
-        modalFuBtn.addEventListener("click", () => {
-          closeDialog(runDialog);
-          openFollowUpModalForStudy(study);
-        });
-      }
+      document.getElementById("wb-modal-open-rerun")?.addEventListener("click", () => {
+        closeDialog(runDialog);
+        openReRunModalForStudy(study);
+      });
+      document.getElementById("wb-modal-open-followup")?.addEventListener("click", () => {
+        closeDialog(runDialog);
+        openFollowUpModalForStudy(study);
+      });
     }
     renderStudyAnalyticsDom(visualsEl, study, resultRecord);
     if (summaryEl) {
@@ -1909,9 +1912,15 @@
   };
 
   const detectRequestedChartTypes = (study) => {
-    const picked = new Set(Array.isArray(study.chartTypes) ? study.chartTypes : []);
-    document.querySelectorAll(`[data-restudy-chart="${study.id}"] input[type="checkbox"]:checked`).forEach((cb) => {
-      if (cb.value) picked.add(cb.value);
+    const rawList = Array.isArray(study.chartTypes)
+      ? study.chartTypes
+      : String(study.chartTypes || "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+    const picked = new Set(rawList.filter((x) => x && x !== "auto"));
+    document.querySelectorAll(`input[name="tipChartType-${study.id}"]:checked`).forEach((cb) => {
+      if (cb.value && cb.value !== "auto") picked.add(cb.value);
     });
     const qLower = String(study.question || "").toLowerCase();
     if (/box\s*(?:and|&)?\s*whisker|boxplot|quartile|iqr/i.test(qLower)) picked.add("box_whisker");
@@ -2301,31 +2310,40 @@
   };
 
   const attachRunButtonListener = (btn) => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
       const id = btn.getAttribute("data-run-study-id") || btn.getAttribute("data-restudy-id") || "ST-RUN";
+      const isRestudyBtn = btn.hasAttribute("data-restudy-id") || /^ST-/i.test(id);
       const useNewEl = document.querySelector(`[data-restudy-new="${id}"]`);
       const useUpdEl = document.querySelector(`[data-restudy-updated="${id}"]`);
       const useNew = useNewEl ? useNewEl.checked : true;
       const useUpdated = useUpdEl ? useUpdEl.checked : false;
-      const scopeNotes = [];
-      if (useNew) scopeNotes.push("search for & incorporate the newest external benchmark datasets");
-      if (useUpdated) scopeNotes.push("re-evaluate updated / internal site datasets (records/athletics, records/health, Smash, basketball)");
       const baseDataset = btn.getAttribute("data-study-dataset") || "";
       const rowEl = document.querySelector(`[data-study-row="${id}"]`);
-      const rawCharts = btn.getAttribute("data-study-charts") || (rowEl ? rowEl.getAttribute("data-study-charts") : "") || "";
-      const rawLinkages = rowEl ? rowEl.getAttribute("data-study-linkages") || "" : "";
+      const tipCheckedCharts = Array.from(document.querySelectorAll(`input[name="tipChartType-${id}"]:checked`)).map((cb) => cb.value);
+      const rawCharts = tipCheckedCharts.length
+        ? tipCheckedCharts.join(",")
+        : btn.getAttribute("data-study-charts") || (rowEl ? rowEl.getAttribute("data-study-charts") : "") || "auto";
+      const rawLinkages = btn.getAttribute("data-study-linkages") || (rowEl ? rowEl.getAttribute("data-study-linkages") || "" : "");
       const study = {
         id,
         parentId: rowEl ? rowEl.getAttribute("data-study-parent") || null : null,
-        title: btn.getAttribute("data-study-title") || "Queued Study",
-        atlasPath: btn.getAttribute("data-study-path") || "",
-        question: btn.getAttribute("data-study-question") || "",
-        dataset: scopeNotes.length ? `${baseDataset} [Re-Study Scope: ${scopeNotes.join(" + ")}]` : baseDataset,
-        chartTypes: rawCharts ? rawCharts.split(",").map((x) => x.trim()).filter(Boolean) : [],
+        title: (rowEl ? rowEl.getAttribute("data-study-title") : "") || btn.getAttribute("data-study-title") || "Queued Study",
+        atlasPath: (rowEl ? rowEl.getAttribute("data-study-path") : "") || btn.getAttribute("data-study-path") || "",
+        question: (rowEl ? rowEl.getAttribute("data-study-question") : "") || btn.getAttribute("data-study-question") || "",
+        dataset: (rowEl ? rowEl.getAttribute("data-study-dataset") : "") || baseDataset,
+        status: (rowEl ? rowEl.getAttribute("data-study-status-val") : "") || "published",
+        chartTypes: rawCharts ? rawCharts.split(",").map((x) => x.trim()).filter(Boolean) : ["auto"],
         linkages: rawLinkages ? rawLinkages.split(",").map((x) => x.trim()).filter(Boolean) : [],
-        createdOn: todayIso(),
+        scopeNew: useNew,
+        scopeUpdated: useUpdated,
+        createdOn: (rowEl ? rowEl.getAttribute("data-study-date") : "") || todayIso(),
       };
-      requestRunStudy(study);
+      if (isRestudyBtn) {
+        openReRunModalForStudy(study);
+      } else {
+        requestRunStudy(study);
+      }
     });
   };
 
@@ -2342,6 +2360,14 @@
         atlasPath: btn.getAttribute("data-study-path") || (rowEl ? rowEl.getAttribute("data-study-path") : "") || "",
         question: btn.getAttribute("data-study-question") || (rowEl ? rowEl.getAttribute("data-study-question") : "") || "",
         dataset: btn.getAttribute("data-study-dataset") || (rowEl ? rowEl.getAttribute("data-study-dataset") : "") || "",
+        chartTypes: (btn.getAttribute("data-study-charts") || (rowEl ? rowEl.getAttribute("data-study-charts") : "") || "auto")
+          .split(",")
+          .map((x) => x.trim())
+          .filter(Boolean),
+        linkages: (btn.getAttribute("data-study-linkages") || (rowEl ? rowEl.getAttribute("data-study-linkages") : "") || "")
+          .split(",")
+          .map((x) => x.trim())
+          .filter(Boolean),
       };
       openFollowUpModalForStudy(study);
     });
@@ -2353,27 +2379,27 @@
   if (rerunBtn) {
     rerunBtn.addEventListener("click", () => {
       if (!activeModalResult || !activeModalResult.study) return;
-      if (!unlockedApiKey) {
-        const keyBarEl = document.getElementById("wb-run-key-bar");
-        const inlineInput = document.getElementById("wb-run-inline-key");
-        if (keyBarEl) keyBarEl.hidden = false;
-        if (inlineInput) inlineInput.focus();
-        const statusModalEl = document.getElementById("wb-run-status");
-        if (statusModalEl) {
-          statusModalEl.textContent = "🔑 Paste your AQ....eQ3w key from Google AI Studio below and click ⚡ Save Key & Run Gemini Argon.";
-        }
-        return;
-      }
       const modNew = document.getElementById("wb-modal-scope-new");
       const modUpd = document.getElementById("wb-modal-scope-updated");
-      const scopes = [];
-      if (!modNew || modNew.checked) scopes.push("New External Datasets");
-      if (modUpd && modUpd.checked) scopes.push("Updated / Internal Site Datasets");
+      const modalCharts = Array.from(document.querySelectorAll('input[name="modalChartTypes"]:checked')).map((cb) => cb.value);
+      const baseStudy = {
+        ...activeModalResult.study,
+        scopeNew: !modNew || modNew.checked,
+        scopeUpdated: Boolean(modUpd && modUpd.checked),
+        ...(modalCharts.length ? { chartTypes: modalCharts } : {}),
+      };
+      closeDialog(runDialog);
+      openReRunModalForStudy(baseStudy);
+    });
+  }
+
+  const runFollowUpBtn = document.getElementById("wb-run-followup");
+  if (runFollowUpBtn) {
+    runFollowUpBtn.addEventListener("click", () => {
+      if (!activeModalResult || !activeModalResult.study) return;
       const baseStudy = { ...activeModalResult.study };
-      if (scopes.length) {
-        baseStudy.dataset = `${String(baseStudy.dataset || "").replace(/\s*\[Re-Study Scope:.*\]$/, "")} [Re-Study Scope: ${scopes.join(" + ")}]`;
-      }
-      requestRunStudy(baseStudy);
+      closeDialog(runDialog);
+      openFollowUpModalForStudy(baseStudy);
     });
   }
 
@@ -3530,36 +3556,255 @@
     openDialog(authDialog);
   }
 
+  // Helper to pre-select a 3-stage cascading Atlas selector inside any container
+  const preselectCascadePath = (containerEl, atlasPath) => {
+    if (!containerEl || !atlasPath) return;
+    const cascadeBox = containerEl.querySelector("[data-wb-cascade]");
+    if (!cascadeBox) return;
+    const parts = String(atlasPath).split("/");
+    const fieldSel = cascadeBox.querySelector("[data-wb-cascade-field], [data-cascade-field]");
+    const topicSel = cascadeBox.querySelector("[data-wb-cascade-topic], [data-cascade-topic]");
+    const leafSel = cascadeBox.querySelector("[data-wb-cascade-leaf], [data-cascade-leaf]");
+    if (fieldSel && parts[0]) {
+      fieldSel.value = parts[0];
+      fieldSel.dispatchEvent(new Event("change"));
+    }
+    if (topicSel && parts.length >= 2) {
+      topicSel.value = `${parts[0]}/${parts[1]}`;
+      topicSel.dispatchEvent(new Event("change"));
+    }
+    if (leafSel) {
+      leafSel.value = atlasPath;
+    }
+  };
+
+  // ---- Re-Run / Configure Study Modal (All Initial Selection Criteria) ----
+  const rerunDialog = document.getElementById("wb-rerun-dialog");
+  const rerunForm = document.getElementById("wb-rerun-form");
+  const rerunBaseIdInput = document.getElementById("wb-rerun-base-id");
+  const rerunModeSel = document.getElementById("wb-rerun-mode");
+  const rerunTargetIdInput = document.getElementById("wb-rerun-target-id");
+  const rerunTitleInput = document.getElementById("wb-rerun-title");
+  const rerunStatusSel = document.getElementById("wb-rerun-status");
+  const rerunQuestionInput = document.getElementById("wb-rerun-question");
+  const rerunDatasetInput = document.getElementById("wb-rerun-dataset");
+  const rerunLinkagesInput = document.getElementById("wb-rerun-linkages");
+  const rerunScopeNewCheck = document.getElementById("wb-rerun-scope-new");
+  const rerunScopeUpdCheck = document.getElementById("wb-rerun-scope-updated");
+
+  const syncRerunModeTargetId = () => {
+    const baseId = normalizeStudyId(rerunBaseIdInput ? rerunBaseIdInput.value : "ST-01-00");
+    const mode = rerunModeSel ? rerunModeSel.value : "inplace";
+    if (rerunTargetIdInput) {
+      rerunTargetIdInput.value = mode === "followup" ? nextFollowUpStudyId(baseId) : baseId;
+    }
+  };
+  if (rerunModeSel) {
+    rerunModeSel.addEventListener("change", syncRerunModeTargetId);
+  }
+
+  document.querySelectorAll("[data-rerun-site-dataset]").forEach((chip) => {
+    chip.addEventListener("click", () => {
+      const snippet = chip.getAttribute("data-rerun-site-dataset") || "";
+      if (!rerunDatasetInput || !snippet) return;
+      const active = chip.classList.toggle("is-active");
+      if (active) {
+        rerunDatasetInput.value = rerunDatasetInput.value.trim() ? `${rerunDatasetInput.value.trim()} | ${snippet}` : snippet;
+        if (rerunScopeUpdCheck) rerunScopeUpdCheck.checked = true;
+      } else {
+        rerunDatasetInput.value = rerunDatasetInput.value
+          .replace(snippet, "")
+          .replace(/^\s*\|\s*|\s*\|\s*$/g, "")
+          .replace(/\s*\|\s*\|\s*/g, " | ")
+          .trim();
+      }
+      rerunDatasetInput.dispatchEvent(new Event("input"));
+    });
+  });
+
+  openReRunModalForStudy = (study) => {
+    if (!rerunDialog || !study) {
+      if (study) requestRunStudy(study);
+      return;
+    }
+    const normId = normalizeStudyId(study.id);
+    const rowEl = document.querySelector(`[data-study-row="${normId}"]`);
+    const titleVal = study.title || (rowEl ? rowEl.getAttribute("data-study-title") : "") || normId;
+    const pathVal = study.atlasPath || (rowEl ? rowEl.getAttribute("data-study-path") : "") || "";
+    const questionVal = study.question || (rowEl ? rowEl.getAttribute("data-study-question") : "") || "";
+    const rawDatasetVal = String(study.dataset || (rowEl ? rowEl.getAttribute("data-study-dataset") : "") || "").replace(
+      /\s*\[Re-Study Scope:.*\]$/i,
+      ""
+    );
+    const statusVal = study.status || (rowEl ? rowEl.getAttribute("data-study-status-val") : "") || "published";
+    const linkagesVal = Array.isArray(study.linkages)
+      ? study.linkages.join(", ")
+      : String(study.linkages || (rowEl ? rowEl.getAttribute("data-study-linkages") : "") || "");
+
+    const dlgTitleEl = document.getElementById("wb-rerun-dialog-title");
+    if (dlgTitleEl) dlgTitleEl.textContent = `Re-Run / Configure ${normId}: ${titleVal}`;
+    if (rerunBaseIdInput) rerunBaseIdInput.value = normId;
+    if (rerunModeSel) rerunModeSel.value = "inplace";
+    syncRerunModeTargetId();
+
+    if (rerunTitleInput) {
+      rerunTitleInput.value = titleVal;
+      rerunTitleInput.dispatchEvent(new Event("input"));
+    }
+    if (rerunStatusSel) rerunStatusSel.value = statusVal;
+    preselectCascadePath(rerunDialog, pathVal);
+
+    if (rerunQuestionInput) {
+      rerunQuestionInput.value = questionVal;
+      rerunQuestionInput.dispatchEvent(new Event("input"));
+    }
+    if (rerunDatasetInput) {
+      rerunDatasetInput.value = rawDatasetVal;
+      rerunDatasetInput.dispatchEvent(new Event("input"));
+    }
+    if (rerunLinkagesInput) rerunLinkagesInput.value = linkagesVal;
+
+    // Sync site data chips active state
+    document.querySelectorAll("[data-rerun-site-dataset]").forEach((chip) => {
+      const snip = chip.getAttribute("data-rerun-site-dataset") || "";
+      chip.classList.toggle("is-active", Boolean(snip && rawDatasetVal.includes(snip)));
+    });
+
+    // Pre-check multi-select Output Plot & Visual Types
+    const chartSet = new Set(
+      (Array.isArray(study.chartTypes)
+        ? study.chartTypes
+        : String(study.chartTypes || (rowEl ? rowEl.getAttribute("data-study-charts") : "") || "auto").split(",")
+      )
+        .map((s) => s.trim())
+        .filter(Boolean)
+    );
+    detectRequestedChartTypes({ ...study, question: questionVal, chartTypes: Array.from(chartSet) }).forEach((c) => chartSet.add(c));
+    document.querySelectorAll('input[name="rerunChartTypes"]').forEach((cb) => {
+      cb.checked = chartSet.has(cb.value);
+    });
+
+    if (rerunScopeNewCheck) rerunScopeNewCheck.checked = study.scopeNew !== undefined ? Boolean(study.scopeNew) : true;
+    if (rerunScopeUpdCheck) {
+      rerunScopeUpdCheck.checked =
+        study.scopeUpdated !== undefined ? Boolean(study.scopeUpdated) : /Internal Site Data/i.test(rawDatasetVal);
+    }
+
+    openDialog(rerunDialog);
+  };
+
+  if (rerunForm) {
+    rerunForm.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const data = new FormData(rerunForm);
+      const baseId = normalizeStudyId(data.get("baseId") || "ST-01-00");
+      const mode = String(data.get("rerunMode") || "inplace");
+      const targetId = mode === "followup" ? nextFollowUpStudyId(baseId) : baseId;
+      const title = String(data.get("title") || "").trim();
+      const status = String(data.get("status") || "published");
+      const atlasPath = String(data.get("atlasPath") || "").trim();
+      const question = String(data.get("question") || "").trim();
+      const rawDataset = String(data.get("dataset") || "")
+        .trim()
+        .replace(/\s*\[Re-Study Scope:.*\]$/i, "");
+      const scopeNotes = [];
+      if (rerunScopeNewCheck && rerunScopeNewCheck.checked) {
+        scopeNotes.push("search for & incorporate the newest external benchmark datasets");
+      }
+      if (rerunScopeUpdCheck && rerunScopeUpdCheck.checked) {
+        scopeNotes.push("re-evaluate updated / internal site datasets (records/athletics, records/health, Smash, basketball)");
+      }
+      const dataset = scopeNotes.length
+        ? `${rawDataset || "Auto-discover relevant public datasets"} [Re-Study Scope: ${scopeNotes.join(" + ")}]`
+        : rawDataset || "Auto-discover relevant public datasets";
+      const chartTypes = data
+        .getAll("rerunChartTypes")
+        .map((x) => String(x).trim())
+        .filter((x) => x && x !== "auto");
+      const linkages = parseLinkagesInput(data.get("linkages"));
+
+      const studyObj = {
+        id: targetId,
+        parentId: mode === "followup" ? baseId : null,
+        createdOn: todayIso(),
+        title,
+        atlasPath,
+        question,
+        dataset,
+        status,
+        chartTypes: chartTypes.length ? chartTypes : detectRequestedChartTypes({ question, chartTypes: [] }),
+        linkages,
+      };
+
+      const current = loadLocal();
+      current.studyQueue = current.studyQueue || [];
+      if (mode === "followup") {
+        if (!linkages.some((l) => l.startsWith(baseId))) {
+          studyObj.linkages.unshift(`${baseId} | Parent: ${title} | ${atlasPath}`);
+        }
+        current.studyQueue.push(studyObj);
+        saveLocal(current);
+        appendRow("studyQueue", studyObj);
+      } else {
+        // Update existing study row in DOM and in local store if present
+        const rowEl = document.querySelector(`[data-study-row="${baseId}"]`);
+        if (rowEl) {
+          rowEl.setAttribute("data-study-title", title);
+          rowEl.setAttribute("data-study-path", atlasPath);
+          rowEl.setAttribute("data-study-field", (atlasPath || "").split("/")[0] || "");
+          rowEl.setAttribute("data-study-question", question);
+          rowEl.setAttribute("data-study-dataset", rawDataset || dataset);
+          rowEl.setAttribute("data-study-charts", studyObj.chartTypes.join(","));
+          rowEl.setAttribute("data-study-linkages", linkages.join(", "));
+          rowEl.setAttribute("data-study-status-val", status);
+          const titleSpan = rowEl.querySelector(".wb-study-link-title");
+          if (titleSpan) titleSpan.textContent = title;
+          const qP = rowEl.querySelector(".wb-pbi-question");
+          if (qP) qP.textContent = question;
+          const dataTd = rowEl.querySelector(".wb-col-data");
+          if (dataTd) dataTd.textContent = rawDataset || dataset;
+          const linkTd = rowEl.querySelector(".wb-col-linkages");
+          if (linkTd) linkTd.innerHTML = renderLinkagesBadgesHtml(linkages, atlasPath);
+        }
+        const existingIdx = current.studyQueue.findIndex((s) => normalizeStudyId(s.id) === baseId);
+        if (existingIdx >= 0) {
+          current.studyQueue[existingIdx] = { ...current.studyQueue[existingIdx], ...studyObj };
+          saveLocal(current);
+        }
+      }
+
+      refreshIpFilterOptions();
+      applyStudyFilters();
+      closeDialog(rerunDialog);
+      requestRunStudy(studyObj);
+    });
+  }
+
   // ---- Follow-Up Study & Theory / Application Extrapolation Modal ----
   const followUpDialog = document.getElementById("wb-followup-dialog");
   const followUpForm = document.getElementById("wb-followup-form");
-  const followUpCloseBtn = document.getElementById("wb-followup-close");
-  const followUpModeSel = document.getElementById("wb-followup-mode");
-  const followUpParentIdInput = document.getElementById("wb-followup-parent-id");
+  const followUpModeSel = document.getElementById("wb-fu-mode");
+  const followUpParentIdInput = document.getElementById("wb-fu-parent-id");
   const followUpParentLabel = document.getElementById("wb-followup-parent-label");
-  const followUpNextIdEl = document.getElementById("wb-followup-next-id");
-  const followUpTitleInput = document.getElementById("wb-followup-title");
-  const followUpQuestionInput = document.getElementById("wb-followup-question");
-  const followUpDatasetInput = document.getElementById("wb-followup-dataset");
-  const followUpBenefitLabel = document.getElementById("wb-followup-benefit-label");
-  const followUpBenefitInput = document.getElementById("wb-followup-benefit");
-  const followUpChartsWrap = document.getElementById("wb-followup-charts-wrap");
-  const followUpLinkagesInput = document.getElementById("wb-followup-linkages");
+  const followUpNextIdEl = document.getElementById("wb-fu-next-id");
+  const followUpTitleInput = document.getElementById("wb-fu-title");
+  const followUpQuestionInput = document.getElementById("wb-fu-question");
+  const followUpDatasetInput = document.getElementById("wb-fu-dataset");
+  const followUpChartsWrap = document.getElementById("wb-fu-charts-wrap");
+  const followUpLinkagesInput = document.getElementById("wb-fu-linkages");
 
   const syncFollowUpModeUi = () => {
     const parentId = followUpParentIdInput ? followUpParentIdInput.value : "ST-01-00";
     const mode = followUpModeSel ? followUpModeSel.value : "followup_study";
     if (followUpNextIdEl) {
-      if (mode === "followup_study") {
-        followUpNextIdEl.textContent = nextFollowUpStudyId(parentId);
-      } else if (mode === "theory") {
-        followUpNextIdEl.textContent = nextSequentialId("TH", "wb-theory-body", "theoryQueue");
-      } else {
-        followUpNextIdEl.textContent = nextSequentialId("AP", "wb-apps-body", "applicationsQueue");
-      }
-    }
-    if (followUpBenefitLabel) {
-      followUpBenefitLabel.hidden = mode !== "application";
+      const nextId =
+        mode === "followup_study"
+          ? nextFollowUpStudyId(parentId)
+          : mode === "theory"
+          ? nextSequentialId("TH", "wb-theory-body", "theoryQueue")
+          : nextSequentialId("AP", "wb-apps-body", "applicationsQueue");
+      if ("value" in followUpNextIdEl) followUpNextIdEl.value = nextId;
+      followUpNextIdEl.textContent = nextId;
     }
     if (followUpChartsWrap) {
       followUpChartsWrap.hidden = mode !== "followup_study";
@@ -3568,9 +3813,6 @@
 
   if (followUpModeSel) {
     followUpModeSel.addEventListener("change", syncFollowUpModeUi);
-  }
-  if (followUpCloseBtn && followUpDialog) {
-    followUpCloseBtn.addEventListener("click", () => closeDialog(followUpDialog));
   }
 
   openFollowUpModalForStudy = (study) => {
@@ -3584,30 +3826,11 @@
     syncFollowUpModeUi();
     if (followUpTitleInput) followUpTitleInput.value = `${study.title} — Follow-Up`;
     if (followUpQuestionInput) followUpQuestionInput.value = "";
-    if (followUpDatasetInput) followUpDatasetInput.value = study.dataset || "";
-    if (followUpBenefitInput) followUpBenefitInput.value = "";
+    if (followUpDatasetInput) followUpDatasetInput.value = String(study.dataset || "").replace(/\s*\[Re-Study Scope:.*\]$/i, "");
     if (followUpLinkagesInput) {
       followUpLinkagesInput.value = `${normId} | Parent Study: ${study.title} | ${study.atlasPath}`;
     }
-    // Pre-select the parent study's Atlas destination in the 3-stage cascading selector
-    const cascadeBox = followUpDialog.querySelector("[data-wb-cascade]");
-    if (cascadeBox && study.atlasPath) {
-      const parts = study.atlasPath.split("/");
-      const fieldSel = cascadeBox.querySelector("[data-cascade-field]");
-      const topicSel = cascadeBox.querySelector("[data-cascade-topic]");
-      const leafSel = cascadeBox.querySelector("[data-cascade-leaf]");
-      if (fieldSel && parts[0]) {
-        fieldSel.value = parts[0];
-        fieldSel.dispatchEvent(new Event("change"));
-      }
-      if (topicSel && parts.length >= 2) {
-        topicSel.value = `${parts[0]}/${parts[1]}`;
-        topicSel.dispatchEvent(new Event("change"));
-      }
-      if (leafSel) {
-        leafSel.value = study.atlasPath;
-      }
-    }
+    preselectCascadePath(followUpDialog, study.atlasPath);
     openDialog(followUpDialog);
   };
 
@@ -3628,14 +3851,62 @@
       }
       const createdOn = todayIso();
       const current = loadLocal();
-      const runNow = Boolean(document.getElementById("wb-followup-run-now")?.checked);
+      const runNow = Boolean(document.getElementById("wb-fu-run-now")?.checked);
 
       let createdId = "";
       let studyToRun = null;
 
       if (mode === "followup_study") {
         createdId = nextFollowUpStudyId(parentId);
-        const chartTypes = data.getAll("chartTypes").map((x) => String(x).trim()).filter(Boolean);
+        const chartTypes = data
+          .getAll("fuChartTypes")
+          .map((x) => String(x).trim())
+          .filter((x) => x && x !== "auto");
+
+        // Check if optional Theory and/or Application extrapolation checkboxes are checked
+        const extrapTheory = Boolean(document.getElementById("wb-fu-extrap-theory")?.checked);
+        const extrapApp = Boolean(document.getElementById("wb-fu-extrap-app")?.checked);
+        const theoryPrompt = document.getElementById("wb-fu-theory-prompt")?.value?.trim() || `Derive the governing mathematical and physical laws underlying ${title} (${question}).`;
+        const appPrompt = document.getElementById("wb-fu-app-prompt")?.value?.trim() || `Engineer an applied real-world system or policy mechanism based on ${title} (${question}).`;
+
+        if (extrapTheory) {
+          const thId = nextSequentialId("TH", "wb-theory-body", "theoryQueue");
+          linkages.push(`${thId} | Theory: ${title} | ${atlasPath}`);
+          const thEntry = {
+            id: thId,
+            createdOn,
+            category: `Extrapolated from ${createdId}`,
+            title: `${title} — Theoretical Foundations`,
+            atlasPath,
+            scopePrompt: theoryPrompt,
+            linkages: [`${createdId} | ${title} | ${atlasPath}`, parentLinkToken],
+            status: "queued",
+            notes: `Extrapolated from ${createdId}`,
+          };
+          current.theoryQueue = current.theoryQueue || [];
+          current.theoryQueue.push(thEntry);
+          appendRow("theoryQueue", thEntry);
+        }
+        if (extrapApp) {
+          const apId = nextSequentialId("AP", "wb-apps-body", "applicationsQueue");
+          linkages.push(`${apId} | Application: ${title} | ${atlasPath}`);
+          const apEntry = {
+            id: apId,
+            createdOn,
+            domain: `Applied System from ${createdId}`,
+            title: `${title} — Applied System`,
+            atlasPath,
+            systemDesign: appPrompt,
+            societalBenefit: `Translates empirical findings from ${createdId} (${parentId}) into a scalable engineering / policy intervention.`,
+            linkages: [`${createdId} | ${title} | ${atlasPath}`, parentLinkToken],
+            status: "queued",
+            notes: `Extrapolated from ${createdId}`,
+          };
+          current.applicationsQueue = current.applicationsQueue || [];
+          current.applicationsQueue.push(apEntry);
+          appendRow("applicationsQueue", apEntry);
+        }
+
         const entry = {
           id: createdId,
           parentId,
@@ -3686,7 +3957,7 @@
         };
       } else {
         createdId = nextSequentialId("AP", "wb-apps-body", "applicationsQueue");
-        const benefit = String(data.get("societalBenefit") || "").trim() || "Cross-disciplinary engineering application.";
+        const benefit = document.getElementById("wb-fu-app-prompt")?.value?.trim() || "Cross-disciplinary engineering application.";
         const entry = {
           id: createdId,
           createdOn,
@@ -3726,7 +3997,7 @@
         if (!curLinks.some((l) => l.startsWith(createdId))) {
           curLinks.push(reverseToken);
           parentTr.setAttribute("data-study-linkages", curLinks.join(", "));
-          const linkCell = parentTr.querySelector(".wb-linkages-cell")?.parentElement;
+          const linkCell = parentTr.querySelector(".wb-col-linkages") || parentTr.querySelector(".wb-linkages-cell")?.parentElement;
           if (linkCell) {
             linkCell.innerHTML = renderLinkagesBadgesHtml(curLinks, parentTr.getAttribute("data-study-path") || "");
           }
