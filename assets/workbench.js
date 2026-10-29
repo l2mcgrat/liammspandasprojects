@@ -1424,6 +1424,14 @@
     let lastApiError = "";
     let mode = "local deterministic scaffold · 0 API tokens (no Google AI Studio key saved yet — paste your AQ....eQ3w key below)";
     const needsDatasetSearch = !study.dataset || /auto-discover/i.test(study.dataset);
+    let wakeLockSentinel = null;
+    if (navigator && navigator.wakeLock && typeof navigator.wakeLock.request === "function") {
+      try {
+        wakeLockSentinel = await navigator.wakeLock.request("screen");
+      } catch {
+        /* ignore wakeLock unsupported */
+      }
+    }
     if (unlockedApiKey) {
       discoverLiveModels(unlockedApiKey);
       const prompt = [
@@ -1660,6 +1668,13 @@
       }
       if (!summaryText && lastApiError) {
         mode = `Google AI Studio API error (${lastApiError}) · 0 API tokens`;
+      }
+    }
+    if (wakeLockSentinel && typeof wakeLockSentinel.release === "function") {
+      try {
+        await wakeLockSentinel.release();
+      } catch {
+        /* ignore */
       }
     }
     if (!summaryText) {

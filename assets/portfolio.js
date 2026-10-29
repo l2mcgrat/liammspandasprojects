@@ -280,6 +280,12 @@
       rec: "records/athletics/running/Tempo_Run_Log.txt",
       pub: "Gaming-and-Performance-Log/Athletics/Running/Tempo_Run_Log.txt",
     },
+    long_run: {
+      header: "Long_Run_Log",
+      rec: "records/athletics/running/Long_Run_Log.txt",
+      pub: "Gaming-and-Performance-Log/Athletics/Running/Long_Run_Log.txt",
+      placeholderDocId: "1Yw_Vjd-VCPS599GW6NN45AqPCHBpWE2yNSrR9qr9ouM",
+    },
     swimming: {
       header: "Swimming Log",
       rec: "records/athletics/swimming/Swimming_Log.txt",
@@ -493,6 +499,101 @@
     });
   };
 
+  const mondayWeekIso = (isoDate) => {
+    const dObj = new Date(`${isoDate}T12:00:00`);
+    if (isNaN(dObj.getTime())) return isoDate;
+    const dayOfWeek = (dObj.getDay() + 6) % 7;
+    const mon = new Date(dObj);
+    mon.setDate(dObj.getDate() - dayOfWeek);
+    return mon.toISOString().slice(0, 10);
+  };
+
+  const recomputeRunningWeeklyTotalsInDom = (overrideIntervals, overrideTempo, overrideLongRuns) => {
+    const weeklyHost = document.getElementById("bi-running-weekly-host");
+    if (!weeklyHost) return;
+    let intervalSessions = overrideIntervals;
+    let tempoRuns = overrideTempo;
+    let longRuns = overrideLongRuns || [];
+
+    if (!intervalSessions) {
+      try {
+        const runHost = document.querySelector(".bi-running-host");
+        const raw = JSON.parse(runHost?.getAttribute("data-bi-running") || "{}");
+        intervalSessions = Array.isArray(raw) ? raw : raw.sessions || [];
+      } catch {
+        intervalSessions = [];
+      }
+    }
+    if (!tempoRuns) {
+      try {
+        const tempoHost = document.querySelector(".bi-tempo-host");
+        tempoRuns = JSON.parse(tempoHost?.getAttribute("data-bi-tempo") || "[]") || [];
+      } catch {
+        tempoRuns = [];
+      }
+    }
+
+    const weekMap = new Map();
+    const ensureWk = (wk) => {
+      if (!weekMap.has(wk)) weekMap.set(wk, { intervalKm: 0, tempoKm: 0, longKm: 0 });
+      return weekMap.get(wk);
+    };
+
+    intervalSessions.forEach((s) => {
+      const wk = mondayWeekIso(s.date);
+      const w = ensureWk(wk);
+      w.intervalKm = Math.round((w.intervalKm + (Number(s.count) || 0) * 0.95) * 100) / 100;
+    });
+    tempoRuns.forEach((r) => {
+      const wk = mondayWeekIso(r.date);
+      const w = ensureWk(wk);
+      w.tempoKm = Math.round((w.tempoKm + (Number(r.distanceKm) || 0)) * 100) / 100;
+    });
+    longRuns.forEach((lr) => {
+      const wk = mondayWeekIso(lr.date);
+      const w = ensureWk(wk);
+      w.longKm = Math.round((w.longKm + (Number(lr.distanceKm) || 0)) * 100) / 100;
+    });
+
+    const sortedWeeks = Array.from(weekMap.keys()).sort();
+    let cumKm = 0;
+    const weeksList = sortedWeeks.map((wk) => {
+      const w = weekMap.get(wk);
+      const tot = Math.round((w.intervalKm + w.tempoKm + w.longKm) * 100) / 100;
+      cumKm = Math.round((cumKm + tot) * 100) / 100;
+      return {
+        date: wk,
+        weekOf: wk,
+        intervalKm: w.intervalKm,
+        tempoKm: w.tempoKm,
+        longKm: w.longKm,
+        totalKm: tot,
+        cumulativeKm: cumKm,
+      };
+    });
+
+    if (!weeksList.length) return;
+
+    const wkTitle = document.getElementById("running-weekly-title");
+    if (wkTitle) {
+      wkTitle.textContent = `Intervals + Tempo + Long Runs: ${cumKm} km total across ${weeksList.length} weeks.`;
+    }
+    const wkTbody = document.querySelector("#running-weeks-table tbody");
+    if (wkTbody) {
+      wkTbody.innerHTML = weeksList
+        .map(
+          (w) =>
+            `<tr><th scope="row">Week of ${formatShortDayJs(w.weekOf)}</th><td>${w.intervalKm} km</td><td>${w.tempoKm} km</td><td>${w.longKm > 0 ? `${w.longKm} km` : "0 km (post-winter)"}</td><td>${w.totalKm} km</td><td>${w.cumulativeKm} km</td></tr>`
+        )
+        .join("");
+    }
+    weeklyHost.setAttribute(
+      "data-bi-running-weekly",
+      JSON.stringify({ weeks: weeksList, longRunDocId: "1Yw_Vjd-VCPS599GW6NN45AqPCHBpWE2yNSrR9qr9ouM" })
+    );
+    window.dispatchEvent(new CustomEvent("liam-bi-refresh-running-weekly", { detail: weeksList }));
+  };
+
   const applyLiveLogUpdateToDom = (key, rawText) => {
     if (!rawText || typeof rawText !== "string") return;
     const repaired = repairLogTextInBrowser(key, rawText);
@@ -557,6 +658,7 @@
           tempoHost.setAttribute("data-bi-tempo", JSON.stringify(tempoRuns));
           window.dispatchEvent(new CustomEvent("liam-bi-refresh-tempo", { detail: tempoRuns }));
         }
+        recomputeRunningWeeklyTotalsInDom(null, tempoRuns, null);
       }
     }
 
@@ -621,8 +723,10 @@
         if (previewEl) previewEl.textContent = last.rawLines.join("\n");
         const runHost = document.querySelector(".bi-running-host");
         if (runHost) {
+          runHost.setAttribute("data-bi-running", JSON.stringify(valid));
           window.dispatchEvent(new CustomEvent("liam-bi-refresh-running", { detail: valid }));
         }
+        recomputeRunningWeeklyTotalsInDom(valid, null, null);
       }
     }
 
@@ -631,6 +735,7 @@
       const sessions = [];
       let cumMeters = 0;
       let yardCount = 0;
+      const swimWeeksMap = new Map();
       lines.forEach((ln) => {
         const m = ln.match(/^\(?(\d{1,2})\/(\d{1,2})\/(20\d{2})\)?\s*-\s*(\d+)\s*([my])\s*-\s*(.+)$/i);
         if (!m) return;
@@ -641,13 +746,30 @@
         const meters = unit === "y" ? Math.round(distance * 0.9144) : distance;
         cumMeters += meters;
         sessions.push({ date, distance, unit, meters, orderRaw: m[6].trim(), cumulativeMeters: cumMeters, rawLine: ln });
+        const wk = mondayWeekIso(date);
+        swimWeeksMap.set(wk, (swimWeeksMap.get(wk) || 0) + meters);
       });
       if (sessions.length > 0) {
         const avgM = Math.round(cumMeters / sessions.length);
         const maxM = Math.max(...sessions.map((s) => s.meters));
+        const maxWeekM = Math.max(0, ...Array.from(swimWeeksMap.values()));
         updateKpiCardOnPage("Sessions logged", String(sessions.length), `${yardCount} in yards, ${sessions.length - yardCount} in metres`);
         updateKpiCardOnPage("Total distance", `${cumMeters.toLocaleString()} m`, `${formatShortDayJs(sessions[0].date)} → ${formatShortDayJs(sessions[sessions.length - 1].date)}`);
         updateKpiCardOnPage("Average session", `${avgM.toLocaleString()} m`, `Longest ${maxM.toLocaleString()} m`);
+        if (maxWeekM > 0) {
+          updateKpiCardOnPage("Best week", `${maxWeekM.toLocaleString()} m`, "Weeks start on Monday");
+        }
+        const swimWeeksTbody = document.querySelector("#swimming-weeks-table tbody");
+        if (swimWeeksTbody) {
+          let wkCum = 0;
+          swimWeeksTbody.innerHTML = Array.from(swimWeeksMap.entries())
+            .sort((a, b) => a[0].localeCompare(b[0]))
+            .map(([wkIso, mVal]) => {
+              wkCum += mVal;
+              return `<tr><th scope="row">Week of ${formatShortDayJs(wkIso)}</th><td>${mVal.toLocaleString()} m</td><td>${wkCum.toLocaleString()} m</td></tr>`;
+            })
+            .join("");
+        }
         const swimTableBody = document.querySelector("#swimming-table tbody");
         if (swimTableBody) {
           swimTableBody.innerHTML = sessions
@@ -2747,6 +2869,225 @@
     tableId: "tempo-table",
     refreshEventName: "liam-bi-refresh-tempo",
   });
+
+  // Combined Weekly Running Volume (Stacked Column: Intervals + Tempo + Long Run placeholder) + 2nd-Axis Cumulative Running Total
+  const runWeeklyHost = document.getElementById("bi-running-weekly-host");
+  if (runWeeklyHost && runWeeklyHost.hasAttribute("data-bi-running-weekly")) {
+    try {
+      const parseWeeklyPayload = () => {
+        const raw = JSON.parse(runWeeklyHost.getAttribute("data-bi-running-weekly") || "{}");
+        return Array.isArray(raw) ? raw : Array.isArray(raw.weeks) ? raw.weeks : [];
+      };
+      let wkList = parseWeeklyPayload();
+      if (wkList.length > 0) {
+        const levels = ["qtr", "month", "week"];
+        const levelNames = { qtr: "Fiscal Qtr", month: "Month", week: "Week (Stacked)" };
+        let lvlIdx = 2; // Default: Week (Stacked)
+        let swapAxes = false;
+        let scope = { qtr: null, month: null };
+
+        const bar = document.createElement("div");
+        bar.className = "bi-toolbar";
+        bar.innerHTML = [
+          `<div class="bi-toolbar-head">`,
+          `<div><span class="bi-toolbar-title">⚡ Interactive Combined Running BI · Stacked Columns (Intervals + Tempo + Long Run) &amp; Cumulative Running Total</span>`,
+          `<div class="bi-crumbs" id="bi-runwk-crumbs">Level: Week (Stacked) · ▮ Stacked Bars: Weekly Volume (km) · ● Line: Running Total (km)</div></div>`,
+          `<div class="bi-drill-bar">`,
+          `<button type="button" class="bi-btn" id="bi-runwk-up">↑ Drill Up</button>`,
+          `<button type="button" class="bi-btn" id="bi-runwk-down">↓ Drill Down (Into Period)</button>`,
+          `<button type="button" class="bi-btn" id="bi-runwk-drillout">↔ Drill Out (Expand All)</button>`,
+          `<button type="button" class="bi-btn is-drillout" id="bi-runwk-swap">⇄ Running Total / Weekly km</button>`,
+          `<button type="button" class="bi-btn" id="bi-runwk-reset">↺ Reset</button>`,
+          `</div></div>`,
+        ].join("");
+        runWeeklyHost.insertBefore(bar, runWeeklyHost.firstChild);
+
+        const renderRunWeeklyStacked = () => {
+          const svg = document.getElementById("running-weekly-combined-svg-title")?.closest("svg");
+          if (!svg) return;
+          const levelKey = levels[lvlIdx];
+          let slice = wkList.slice();
+          if (lvlIdx >= 1 && scope.qtr) slice = slice.filter((w) => dateToHierarchy(w.weekOf).qtr === scope.qtr);
+          if (lvlIdx >= 2 && scope.month) slice = slice.filter((w) => dateToHierarchy(w.weekOf).month === scope.month);
+          if (!slice.length) slice = wkList.slice();
+
+          const bMap = new Map();
+          slice.forEach((w) => {
+            const h = dateToHierarchy(w.weekOf);
+            const k = levelKey === "week" ? `Wk ${formatOrdinalDay(w.weekOf)}` : h[levelKey];
+            if (!bMap.has(k)) {
+              bMap.set(k, { key: k, label: k, intervalKm: 0, tempoKm: 0, longKm: 0, totalKm: 0, cumulativeKm: 0, weeks: [] });
+            }
+            const b = bMap.get(k);
+            b.intervalKm = Math.round((b.intervalKm + (Number(w.intervalKm) || 0)) * 100) / 100;
+            b.tempoKm = Math.round((b.tempoKm + (Number(w.tempoKm) || 0)) * 100) / 100;
+            b.longKm = Math.round((b.longKm + (Number(w.longKm) || 0)) * 100) / 100;
+            b.totalKm = Math.round((b.intervalKm + b.tempoKm + b.longKm) * 100) / 100;
+            b.cumulativeKm = Number(w.cumulativeKm) || b.totalKm;
+            b.weeks.push(w);
+          });
+
+          const buckets = Array.from(bMap.values()).filter((b) => b.totalKm > 0);
+          if (!buckets.length) return;
+
+          const crumbsEl = document.getElementById("bi-runwk-crumbs");
+          const scopeTrail = [scope.qtr, scope.month].filter(Boolean).join(" → ");
+          if (crumbsEl) {
+            crumbsEl.textContent = `Level: ${levelNames[levelKey]}${scopeTrail ? ` [${scopeTrail}]` : ""} · ▮ Bars: ${swapAxes ? "Running Total (km)" : "Stacked Weekly Volume (Intervals + Tempo + Long Run km)"} · ● Line: ${swapAxes ? "Weekly Volume (km)" : "Running Total (km)"}`;
+          }
+
+          if (swapAxes) {
+            buildDualAxisSvgMarkup({
+              svgEl: svg,
+              titleId: "running-weekly-combined-svg-title",
+              titleText: `Cumulative Running Total vs. Weekly Volume (${levelNames[levelKey]})`,
+              descText: `Bars show cumulative running total (km) and line shows weekly running volume (km).`,
+              items: buckets,
+              barValFn: (b) => b.cumulativeKm,
+              lineValFn: (b) => b.totalKm,
+              barUnit: "km",
+              lineUnit: "km",
+            });
+          } else {
+            // Custom Stacked Column + 2nd-Axis Cumulative Running Total Line
+            const n = Math.max(1, buckets.length);
+            const containerW = svg.parentElement?.clientWidth || 960;
+            const svgWidth = Math.max(960, containerW, 180 + n * 78);
+            const svgHeight = 345;
+            const leftPad = 82;
+            const rightPad = svgWidth - 82;
+            const topPad = 44;
+            const bottomPad = 285;
+            const plotW = rightPad - leftPad;
+            const plotH = bottomPad - topPad;
+            svg.setAttribute("viewBox", `0 0 ${svgWidth} ${svgHeight}`);
+
+            const maxBar = Math.max(8, ...buckets.map((b) => b.totalKm));
+            const maxLine = Math.max(8, ...buckets.map((b) => b.cumulativeKm));
+
+            const parts = [
+              `<title id="running-weekly-combined-svg-title">Weekly running volume by type (stacked km) and cumulative running total (km)</title>`,
+              `<desc id="running-weekly-combined-svg-desc">Stacked columns show Interval Training, Tempo Runs, and Long Runs on the left axis; line shows cumulative running total on the right axis.</desc>`,
+              `<text x="${leftPad - 8}" y="22" text-anchor="end" fill="#9ddacf" font-weight="700" font-size="11.5">▮ Stacked Bars: km</text>`,
+              `<text x="${rightPad + 8}" y="22" text-anchor="start" fill="#f7ab65" font-weight="700" font-size="11.5">● Running Total: km</text>`,
+            ];
+            for (let k = 0; k <= 4; k++) {
+              const bTick = Math.round(((maxBar * k) / 4) * 10) / 10;
+              const lTick = Math.round(((maxLine * k) / 4) * 10) / 10;
+              const ty = bottomPad - (k / 4) * plotH;
+              parts.push(
+                `<line class="chart-grid" x1="${leftPad}" x2="${rightPad}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/>` +
+                `<text x="${leftPad - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end" fill="#9ddacf">${bTick} km</text>` +
+                `<text x="${rightPad + 8}" y="${(ty + 4).toFixed(1)}" text-anchor="start" fill="#f7ab65">${lTick} km</text>`
+              );
+            }
+            const step = plotW / n;
+            const linePts = [];
+            buckets.forEach((b, idx) => {
+              const cx = leftPad + (idx + 0.5) * step;
+              const bw = Math.min(58, Math.max(20, step * 0.6));
+              const bx = cx - bw / 2;
+              const hInt = (b.intervalKm / maxBar) * plotH;
+              const hTmp = (b.tempoKm / maxBar) * plotH;
+              const hLng = (b.longKm / maxBar) * plotH;
+              const yInt = bottomPad - hInt;
+              const yTmp = yInt - hTmp;
+              const yLng = yTmp - hLng;
+
+              if (hInt > 0) {
+                parts.push(`<rect class="athletics-bar series-0" data-bi-bar="${idx}" x="${bx.toFixed(1)}" y="${yInt.toFixed(1)}" width="${bw.toFixed(1)}" height="${hInt.toFixed(1)}" style="cursor:pointer;"></rect>`);
+              }
+              if (hTmp > 0) {
+                parts.push(`<rect class="athletics-bar series-1" data-bi-bar="${idx}" x="${bx.toFixed(1)}" y="${yTmp.toFixed(1)}" width="${bw.toFixed(1)}" height="${hTmp.toFixed(1)}" style="cursor:pointer;"></rect>`);
+              }
+              if (hLng > 0) {
+                parts.push(`<rect class="athletics-bar series-2" data-bi-bar="${idx}" x="${bx.toFixed(1)}" y="${yLng.toFixed(1)}" width="${bw.toFixed(1)}" height="${hLng.toFixed(1)}" style="cursor:pointer;"></rect>`);
+              }
+              const topY = Math.min(yInt, yTmp, yLng);
+              parts.push(
+                `<text x="${cx.toFixed(1)}" y="${Math.max(34, topY - 7).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#eeeef7" font-weight="600">${b.totalKm} km</text>` +
+                `<text x="${cx.toFixed(1)}" y="${bottomPad + 22}" text-anchor="middle" font-size="11">${escHtml(b.label)}</text>`
+              );
+              const ly = bottomPad - (b.cumulativeKm / maxLine) * plotH;
+              linePts.push({ cx, ly, b, idx });
+            });
+            if (linePts.length > 1) {
+              parts.push(`<polyline fill="none" stroke="#f7ab65" stroke-width="2.8" stroke-linejoin="round" points="${linePts.map((p) => `${p.cx.toFixed(1)},${p.ly.toFixed(1)}`).join(" ")}"/>`);
+            }
+            linePts.forEach((p) => {
+              parts.push(
+                `<circle data-bi-bar="${p.idx}" cx="${p.cx.toFixed(1)}" cy="${p.ly.toFixed(1)}" r="4.5" fill="#f7ab65" stroke="#0d101b" stroke-width="1.8" style="cursor:pointer;">` +
+                `<title>${escHtml(p.b.label)} · Running Total: ${p.b.cumulativeKm} km</title></circle>`
+              );
+            });
+            svg.innerHTML = parts.join("");
+          }
+
+          svg.querySelectorAll("[data-bi-bar]").forEach((el) => {
+            const b = buckets[Number(el.getAttribute("data-bi-bar"))];
+            if (!b) return;
+            const showTip = (ev) => {
+              showBiTooltip(
+                ev,
+                `<h4>${escHtml(b.label)} · Combined Running Breakdown</h4>` +
+                `<p>Weekly Total: <strong>${b.totalKm} km</strong> · End-of-Period Running Total: <strong>${b.cumulativeKm} km</strong></p>` +
+                `<table><thead><tr><th>Training Modality</th><th>Distance (km)</th><th>Share</th></tr></thead><tbody>` +
+                `<tr><td>■ Interval Training (I1 Loop)</td><td>${b.intervalKm} km</td><td>${Math.round((b.intervalKm / Math.max(0.01, b.totalKm)) * 100)}%</td></tr>` +
+                `<tr><td>■ Tempo / Continuous Run</td><td>${b.tempoKm} km</td><td>${Math.round((b.tempoKm / Math.max(0.01, b.totalKm)) * 100)}%</td></tr>` +
+                `<tr><td>■ Long Run (Post-Winter Placeholder)</td><td>${b.longKm} km</td><td>${Math.round((b.longKm / Math.max(0.01, b.totalKm)) * 100)}%</td></tr>` +
+                `</tbody></table>`
+              );
+            };
+            el.addEventListener("mouseenter", showTip);
+            el.addEventListener("click", showTip);
+          });
+        };
+
+        document.getElementById("bi-runwk-up")?.addEventListener("click", () => {
+          if (lvlIdx === 2) scope.month = null;
+          else if (lvlIdx === 1) scope.qtr = null;
+          lvlIdx = Math.max(0, lvlIdx - 1);
+          renderRunWeeklyStacked();
+        });
+        document.getElementById("bi-runwk-down")?.addEventListener("click", () => {
+          const lastW = wkList[wkList.length - 1];
+          const h = dateToHierarchy(lastW.weekOf);
+          if (lvlIdx === 0) scope.qtr = scope.qtr || h.qtr;
+          else if (lvlIdx === 1) scope.month = scope.month || h.month;
+          lvlIdx = Math.min(2, lvlIdx + 1);
+          renderRunWeeklyStacked();
+        });
+        document.getElementById("bi-runwk-drillout")?.addEventListener("click", () => {
+          scope = { qtr: null, month: null };
+          lvlIdx = Math.min(2, lvlIdx + 1);
+          renderRunWeeklyStacked();
+        });
+        const swapBtn = document.getElementById("bi-runwk-swap");
+        swapBtn?.addEventListener("click", () => {
+          swapAxes = !swapAxes;
+          swapBtn.classList.toggle("is-active", swapAxes);
+          renderRunWeeklyStacked();
+        });
+        document.getElementById("bi-runwk-reset")?.addEventListener("click", () => {
+          lvlIdx = 2;
+          swapAxes = false;
+          swapBtn?.classList.remove("is-active");
+          scope = { qtr: null, month: null };
+          renderRunWeeklyStacked();
+        });
+        window.addEventListener("resize", () => renderRunWeeklyStacked());
+        window.addEventListener("liam-bi-refresh-running-weekly", (ev) => {
+          if (Array.isArray(ev.detail) && ev.detail.length > 0) {
+            wkList = ev.detail;
+            renderRunWeeklyStacked();
+          }
+        });
+        renderRunWeeklyStacked();
+      }
+    } catch {
+      /* ignore */
+    }
+  }
   wireDatedBiHost({
     selector: ".bi-sleep-host",
     attrName: "data-bi-sleep",
