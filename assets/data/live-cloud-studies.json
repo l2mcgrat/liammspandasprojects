@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "updatedAt": "2026-10-29T06:59:45.779Z",
+  "updatedAt": "2026-10-29T07:30:11.605Z",
   "entries": {
     "wishlistTodos": [
       {
@@ -23,6 +23,20 @@
         "question": "How to the total amount of recalls compare between different automotive companies, the severity of each recall should be part of a stacked column chart. Total cost and total customer loss from each.",
         "dataset": "Auto-discover (New External Datasets)",
         "status": "in-progress",
+        "studyRoute": null,
+        "paperRoute": null,
+        "clicks": 1,
+        "ipIndex": "IP#OWNER",
+        "notes": "Added from browser Workbench"
+      },
+      {
+        "id": "ST-11",
+        "createdOn": "2026-10-29",
+        "title": "Temperature Patterns",
+        "atlasPath": "Science-and-Engineering/Chemistry/Physical-Chemistry",
+        "question": "I want to see the medium to long term temperature swings that occur in different regions between (timewise) local maxima and minima for highs and low temperatures recorded for each day. I'm curious how much humidty plays a role in these temperature swings so i've outline a few different regions. I would want line plots and box and whisker plots showing temperature for every day of this year for a few key locations around the world (Barrie Ontario, Vancouver BC, Dublin Ireland, Rio de Janeiro Brazil, Dubai UAE, etc), and Box and Whisker plots containing data from 20 or more areas within a 200km radius of each of these locations for each month of the year up until November 1st. My plans later on is to build some theory as to why this happens and understand the applications that could be used for weather control and storm prevention if that is even something that's possible to geoengineer around.",
+        "dataset": "Auto-discover (New External Datasets)",
+        "status": "queued",
         "studyRoute": null,
         "paperRoute": null,
         "clicks": 1,
