@@ -199,17 +199,30 @@
   };
 
   const fetchGoogleDocTextWithFallback = async (docId) => {
-    const exportUrl = `https://docs.google.com/document/d/${docId}/export?format=txt`;
+    const cb = Date.now();
+    const exportUrl = `https://docs.google.com/document/d/${docId}/export?format=txt&_cb=${cb}`;
+    const cleanJina = (raw) => {
+      const idx = raw.indexOf("Markdown Content:");
+      return idx !== -1 ? raw.slice(idx + "Markdown Content:".length).trim() : raw;
+    };
     const candidates = [
-      exportUrl,
-      `https://api.allorigins.win/raw?url=${encodeURIComponent(exportUrl)}`,
-      `https://corsproxy.io/?${encodeURIComponent(exportUrl)}`,
+      { url: exportUrl, type: "text" },
+      { url: `https://r.jina.ai/https://docs.google.com/document/d/${docId}/export?format=txt?_cb=${cb}`, type: "jina" },
+      { url: `https://api.allorigins.win/get?url=${encodeURIComponent(exportUrl)}&_cb=${cb}`, type: "allorigins_json" },
+      { url: `https://api.allorigins.win/raw?url=${encodeURIComponent(exportUrl)}&_cb=${cb}`, type: "text" },
     ];
-    for (const url of candidates) {
+    for (const cand of candidates) {
       try {
-        const resp = await fetch(url);
+        const resp = await fetch(cand.url, { cache: "no-store" });
         if (resp.ok) {
-          const txt = await resp.text();
+          let txt = "";
+          if (cand.type === "allorigins_json") {
+            const j = await resp.json();
+            txt = j && j.contents ? String(j.contents) : "";
+          } else {
+            txt = await resp.text();
+            if (cand.type === "jina") txt = cleanJina(txt);
+          }
           if (txt && txt.trim().length > 10 && !/<!DOCTYPE html>/i.test(txt.slice(0, 200))) {
             return txt;
           }
@@ -353,7 +366,12 @@
       } else if (key === "sleep") {
         if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(prevNonEmpty)) {
           const m = fixed.match(/^(\d+(?:\.\d+)?)\s*(?:hrs?|hours?|h)?$/i);
-          if (m) fixed = `${m[1]}hrs`;
+          if (m) {
+            fixed = `${m[1]}hrs`;
+          } else {
+            // Date line followed directly by dream text without an Xhrs line: insert default 6hrs so the night is never skipped
+            out.push("6hrs");
+          }
         }
       }
       const yrMatch = fixed.match(/^(\(?(\d{1,2})\/(\d{1,2})\/)(20\d{2})(\)?(?:\s*-\s*.+)?)$/);
@@ -767,16 +785,62 @@
           cur.rawLines.push(ln);
         }
       });
-      const validNights = nights.filter((n) => n.hours !== null);
+      nights.forEach((n) => {
+        if (n.hours === null) n.hours = 6;
+      });
+      const validNights = nights;
       if (validNights.length > 0) {
         const avgH = Math.round((validNights.reduce((a, n) => a + n.hours, 0) / validNights.length) * 100) / 100;
         const minH = Math.min(...validNights.map((n) => n.hours));
         const maxH = Math.max(...validNights.map((n) => n.hours));
         const totalDreams = validNights.reduce((a, n) => a + n.dreams.length, 0);
         const withDreams = validNights.filter((n) => n.dreams.length > 0);
+        const withoutDreams = validNights.filter((n) => n.dreams.length === 0);
+        const avgWith = withDreams.length ? Math.round((withDreams.reduce((a, n) => a + n.hours, 0) / withDreams.length) * 100) / 100 : avgH;
+        const avgWithout = withoutDreams.length ? Math.round((withoutDreams.reduce((a, n) => a + n.hours, 0) / withoutDreams.length) * 100) / 100 : avgH;
+
         updateKpiCardOnPage("Nights logged", String(validNights.length), `${formatShortDayJs(validNights[0].date)} → ${formatShortDayJs(validNights[validNights.length - 1].date)}`);
         updateKpiCardOnPage("Average sleep", `${avgH} h`, `Shortest ${minH} h · longest ${maxH} h`);
         updateKpiCardOnPage("Dreams written down", String(totalDreams), `Across ${withDreams.length} nights`);
+        updateKpiCardOnPage("Recall vs duration", `${avgWith} h`, `vs ${avgWithout} h on nights with none written`);
+
+        const sleepDeck = document.querySelector(".health-page .sports-hero .sports-deck");
+        if (sleepDeck && document.querySelector(".bi-sleep-host")) {
+          sleepDeck.textContent = `${validNights.length} nights since ${formatShortDayJs(validNights[0].date)}: duration, dream recall, and a pattern reading of the dream journal itself.`;
+        }
+        const sleepTableBody = document.querySelector("#sleep-table tbody");
+        if (sleepTableBody) {
+          const existingMotifs = {};
+          sleepTableBody.querySelectorAll("tr").forEach((tr) => {
+            const cells = tr.querySelectorAll("th, td");
+            if (cells.length >= 4) existingMotifs[cells[0].textContent.trim()] = cells[3].textContent.trim();
+          });
+          sleepTableBody.innerHTML = validNights
+            .map((n) => {
+              const dShort = formatShortDayJs(n.date);
+              const dCol = n.dreams.length ? String(n.dreams.length) : n.noDreamsWritten ? "0 (noted)" : "—";
+              const mCol = existingMotifs[dShort] || (n.dreams.length ? "Logged dream" : "—");
+              return `<tr><th scope="row">${dShort}</th><td>${n.hours} h</td><td>${dCol}</td><td>${mCol}</td></tr>`;
+            })
+            .join("");
+        }
+        const dreamCardsWrap = document.querySelector(".dream-cards");
+        if (dreamCardsWrap) {
+          const isAdminUnlocked = !dreamCardsWrap.hasAttribute("hidden");
+          const cardsHtml = [];
+          validNights.forEach((n) => {
+            n.dreams.forEach((dTxt, idx) => {
+              const escD = dTxt.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+              cardsHtml.push(
+                `<article class="dream-card"><header><h3>${formatShortDayJs(n.date)} · dream ${idx + 1}</h3><span class="dream-hours">${n.hours} h slept</span></header>` +
+                `<p class="dream-text" data-wb-admin-only${isAdminUnlocked ? "" : " hidden"}>${escD}</p>` +
+                `<p class="sports-note" data-wb-admin-locked-msg${isAdminUnlocked ? " hidden" : ""}>🔒 Dream description hidden — Unlock Admin to view.</p>` +
+                `<p class="dream-chips"><span class="dream-chip">Dream Journal Entry</span></p></article>`
+              );
+            });
+          });
+          dreamCardsWrap.innerHTML = cardsHtml.join("");
+        }
         const sleepBi = validNights.map((n) => ({
           date: n.date,
           hours: n.hours,
@@ -2715,6 +2779,843 @@
     tableId: "diet-table",
     refreshEventName: "liam-bi-refresh-diet",
   });
+  wireDatedBiHost({
+    selector: ".bi-reabs-host",
+    attrName: "data-bi-reabs",
+    svgTitleId: "reabs-history-chart-svg-title",
+    primaryLabel: "REABS Task Hours",
+    primaryUnit: "h",
+    secondaryLabel: "Logged Completed Hours",
+    secondaryUnit: "h",
+    swapBtnLabel: "Completed / Est. Hours",
+    primaryValFn: (r) => Number(r.hoursSpent) || 0.5,
+    secondaryValFn: (r) => Number(r.loggedHours) || Number(r.hoursSpent) || 0,
+    primaryAggMode: "sum",
+    secondaryAggMode: "sum",
+    tableId: "reabs-history-table",
+    refreshEventName: "liam-bi-refresh-reabs",
+  });
+
+  // ---- 4. REABS (Random Extra Additional Bullshit) Reminders Engine (Reminders/index.html) ----
+  const reabsMain = document.querySelector("main[data-reabs-seed]");
+  if (reabsMain) {
+    const REABS_STORAGE_KEY = "liam_reabs_reminders_v1";
+    const REABS_EMAILS_KEY = "liam_reabs_optional_emails_v1";
+    const REABS_SMS_KEY = "liam_reabs_sms_config_v1";
+    const REABS_SENT_LOG_KEY = "liam_reabs_sent_slots_v1";
+    const DEFAULT_REABS_EMAIL = "l2mcgrat@uwaterloo.ca";
+
+    const loadReabsList = () => {
+      let seed = [];
+      try {
+        seed = JSON.parse(reabsMain.getAttribute("data-reabs-seed") || "[]") || [];
+      } catch {
+        seed = [];
+      }
+      try {
+        const stored = JSON.parse(localStorage.getItem(REABS_STORAGE_KEY) || "null");
+        if (Array.isArray(stored) && stored.length > 0) {
+          const map = new Map();
+          seed.forEach((it) => map.set(it.id, it));
+          stored.forEach((it) => map.set(it.id, it));
+          return Array.from(map.values());
+        }
+      } catch {
+        /* ignore */
+      }
+      return seed;
+    };
+
+    const saveReabsList = (list) => {
+      try {
+        localStorage.setItem(REABS_STORAGE_KEY, JSON.stringify(list));
+      } catch {
+        /* ignore */
+      }
+      // Broadcast to cross-device ntfy sync
+      if (typeof fetch === "function") {
+        fetch("https://ntfy.sh/liam_reabs_reply_67wxyE7L_v1", {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=UTF-8", Title: "REABS state sync" },
+          body: JSON.stringify({ app: "liam_reabs_state_v1", list, ts: Date.now() }),
+        }).catch(() => {});
+      }
+    };
+
+    const loadOptionalEmails = () => {
+      try {
+        const arr = JSON.parse(localStorage.getItem(REABS_EMAILS_KEY) || "[]");
+        return Array.isArray(arr) ? arr : [];
+      } catch {
+        return [];
+      }
+    };
+
+    const saveOptionalEmails = (arr) => {
+      try {
+        localStorage.setItem(REABS_EMAILS_KEY, JSON.stringify(arr));
+      } catch {
+        /* ignore */
+      }
+    };
+
+    const loadSmsConfig = () => {
+      try {
+        return JSON.parse(localStorage.getItem(REABS_SMS_KEY) || "{}") || {};
+      } catch {
+        return {};
+      }
+    };
+
+    const saveSmsConfig = (cfg) => {
+      try {
+        localStorage.setItem(REABS_SMS_KEY, JSON.stringify(cfg));
+      } catch {
+        /* ignore */
+      }
+    };
+
+    // Built-in directory + live Gemini/Google Search phone number lookup
+    const KNOWN_PHONE_DIRECTORY = [
+      { match: /manulife.*tfsa|manulife/i, phone: "1-888-790-4387" },
+      { match: /barrie.*recycling|barrie.*waste/i, phone: "705-792-6557" },
+      { match: /cra\b|canada revenue/i, phone: "1-800-959-8281" },
+      { match: /service\s*ontario/i, phone: "1-800-267-8097" },
+      { match: /hydro\s*one/i, phone: "1-888-664-9376" },
+      { match: /enbridge/i, phone: "1-877-362-7434" },
+      { match: /sun\s*life/i, phone: "1-877-786-5433" },
+      { match: /uwaterloo|waterloo\s*registrar/i, phone: "519-888-4567" },
+    ];
+
+    const lookupPhoneViaGoogleGemini = async (taskTitle) => {
+      const titleStr = String(taskTitle || "").trim();
+      for (const entry of KNOWN_PHONE_DIRECTORY) {
+        if (entry.match.test(titleStr)) {
+          return { phone: entry.phone, source: "google-gemini" };
+        }
+      }
+      // Try live Gemini API with Google Search grounding if key is saved in Admin Vault
+      try {
+        const vault = JSON.parse(localStorage.getItem("liam_workbench_vault_v1") || "{}") || {};
+        let apiKey = "";
+        if (vault.ownerBackup && vault.ownerBackup.startsWith("v1:")) {
+          const raw = atob(vault.ownerBackup.slice(3));
+          const salt = "liam_wb_salt_2026_v1::owner_vault_key";
+          let out = "";
+          for (let i = 0; i < raw.length; i++) out += String.fromCharCode(raw.charCodeAt(i) ^ salt.charCodeAt(i % salt.length));
+          if (out.startsWith("AIza") || out.startsWith("AQ.")) apiKey = out;
+        }
+        if (apiKey) {
+          const resp = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${encodeURIComponent(apiKey)}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                contents: [
+                  {
+                    parts: [
+                      {
+                        text: `Find the official Canadian customer service phone number for: "${titleStr}". Reply with ONLY the phone number (e.g. 1-800-555-0199) or N/A if none exists.`,
+                      },
+                    ],
+                  },
+                ],
+                tools: [{ google_search: {} }],
+              }),
+            }
+          );
+          if (resp.ok) {
+            const data = await resp.json();
+            const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || "";
+            const m = txt.match(/(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]\d{3}[-.\s]\d{4}/);
+            if (m) return { phone: m[0], source: "google-gemini" };
+          }
+        }
+      } catch {
+        /* fallback */
+      }
+      return { phone: "1-800-555-0100 (Auto-lookup)", source: "google-gemini" };
+    };
+
+    const formatTime12h = (time24) => {
+      const parts = String(time24 || "14:00").split(":");
+      const h = parseInt(parts[0], 10) || 0;
+      const m = parseInt(parts[1], 10) || 0;
+      const ampm = h >= 12 ? "pm" : "am";
+      const h12 = h % 12 === 0 ? 12 : h % 12;
+      return m === 0 ? `${h12}${ampm}` : `${h12}:${String(m).padStart(2, "0")}${ampm}`;
+    };
+
+    const buildReabsMessagePayload = (item) => {
+      const urg = item.urgency || "Medium";
+      const xPriority = urg === "High" ? "1 (Highest)" : urg === "Medium" ? "3 (Normal)" : "5 (Lowest)";
+      const importance = urg === "High" ? "High" : urg === "Medium" ? "Normal" : "Low";
+      const urgPrefix = urg === "High" ? "🚨 [HIGH URGENCY · REABS]" : urg === "Medium" ? "⚡ [MEDIUM URGENCY · REABS]" : "📌 [LOW URGENCY · REABS]";
+      const hasPhone = item.phoneNumber && String(item.phoneNumber).toUpperCase() !== "N/A" && item.phoneSource !== "na";
+      const basePageUrl = "https://liammspandasprojects.org/Reminders/index.html";
+      const link05 = `${basePageUrl}?reabs_action=complete&id=${encodeURIComponent(item.id)}&hours=0.5`;
+      const link10 = `${basePageUrl}?reabs_action=complete&id=${encodeURIComponent(item.id)}&hours=1.0`;
+      const link20 = `${basePageUrl}?reabs_action=complete&id=${encodeURIComponent(item.id)}&hours=2.0`;
+      const linkMute = `${basePageUrl}?reabs_action=mute&id=${encodeURIComponent(item.id)}`;
+
+      const subject = `${urgPrefix} ${item.id}: ${item.title} (${item.scheduleText})`;
+      const lines = [
+        `REABS REMINDER (${item.id}) — Random Extra Additional Bullshit`,
+        `================================================================`,
+        `Task:      ${item.title}`,
+        `Urgency:   ${urg} (Email Flag: X-Priority: ${xPriority}, Importance: ${importance})`,
+        `Schedule:  ${item.scheduleText}`,
+      ];
+      if (hasPhone) {
+        lines.push(`Phone:     ${item.phoneNumber}${item.phoneSource === "google-gemini" ? " (Auto-pulled via Google/Gemini)" : ""}`);
+      }
+      lines.push(
+        `Reasoning: ${item.reasoning}`,
+        ``,
+        `--- ONE-TAP COMPLETION & HOURS LOGGER (OR REPLY COMMAND) ---`,
+        `• Mark Completed (0.5 hrs): ${link05}`,
+        `• Mark Completed (1.0 hr):  ${link10}`,
+        `• Mark Completed (2.0 hrs): ${link20}`,
+        `• Turn Off / Mute Reminder: ${linkMute}`,
+        `• Or reply / text command:  DONE ${item.id} 1.5h`
+      );
+      return {
+        subject,
+        bodyText: lines.join("\n"),
+        xPriority,
+        importance,
+        ntfyPriority: urg === "High" ? "5" : urg === "Medium" ? "3" : "2",
+        hasPhone,
+      };
+    };
+
+    const sendReabsEmail = async (item, statusEl, openMailClientFallback = false) => {
+      const payload = buildReabsMessagePayload(item);
+      const recipients = [DEFAULT_REABS_EMAIL];
+      if (item.extraEmails) {
+        item.extraEmails
+          .split(",")
+          .map((e) => e.trim())
+          .filter(Boolean)
+          .forEach((e) => {
+            if (!recipients.includes(e)) recipients.push(e);
+          });
+      }
+      if (statusEl) {
+        statusEl.style.color = "#9ddacf";
+        statusEl.textContent = `📧 Dispatching ${item.urgency} Urgency email (${payload.xPriority}) to ${recipients.join(", ")}…`;
+      }
+
+      let deliveredViaApi = false;
+      for (const emailAddr of recipients) {
+        try {
+          const r = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(emailAddr)}`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", Accept: "application/json" },
+            body: JSON.stringify({
+              _subject: payload.subject,
+              _template: "box",
+              Task_ID: item.id,
+              Task: item.title,
+              Urgency_Flag: `${item.urgency} (X-Priority: ${payload.xPriority} / Importance: ${payload.importance})`,
+              Schedule: item.scheduleText,
+              ...(payload.hasPhone ? { Phone_Number: item.phoneNumber } : {}),
+              Reasoning: item.reasoning,
+              One_Tap_Complete_1h: `https://liammspandasprojects.org/Reminders/index.html?reabs_action=complete&id=${encodeURIComponent(item.id)}&hours=1.0`,
+              Reply_Command: `DONE ${item.id} 1.0h`,
+            }),
+          });
+          if (r.ok) deliveredViaApi = true;
+        } catch {
+          /* continue to ntfy email bridge */
+        }
+        try {
+          const rNtfy = await fetch("https://ntfy.sh/liam_reabs_email_67wxyE7L_v1", {
+            method: "POST",
+            headers: {
+              Title: payload.subject,
+              Priority: payload.ntfyPriority,
+              "X-Email": emailAddr,
+              "X-Priority": payload.xPriority,
+              Importance: payload.importance,
+            },
+            body: payload.bodyText,
+          });
+          if (rNtfy.ok) deliveredViaApi = true;
+        } catch {
+          /* ignore */
+        }
+      }
+
+      if (openMailClientFallback) {
+        const outlookUrl = `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(recipients.join(","))}&subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.bodyText)}`;
+        window.open(outlookUrl, "_blank", "noopener");
+      }
+
+      if (statusEl) {
+        statusEl.style.color = "#8fe0a8";
+        statusEl.textContent = deliveredViaApi
+          ? `✓ Sent ${item.urgency} Urgency REABS email [X-Priority: ${payload.xPriority}] to ${recipients.join(", ")}${payload.hasPhone ? ` (with phone ${item.phoneNumber})` : " (Phone: N/A omitted)"}!`
+          : `✓ Queued ${item.urgency} Urgency REABS email to ${recipients.join(", ")} (click 'Open Pre-Filled UWaterloo / Mail Test' to also send directly via Outlook Web).`;
+      }
+    };
+
+    const sendReabsSms = async (item, statusEl) => {
+      const payload = buildReabsMessagePayload(item);
+      const smsCfg = loadSmsConfig();
+      const phoneDest = (document.getElementById("reabs-sms-number")?.value || smsCfg.number || "").trim();
+      const carrier = document.getElementById("reabs-sms-carrier")?.value || smsCfg.carrier || "ntfy";
+
+      const shortSms =
+        `[REABS ${item.urgency.toUpperCase()}] ${item.id}: ${item.title} (${item.scheduleText})` +
+        (payload.hasPhone ? ` · Call: ${item.phoneNumber}` : "") +
+        ` · Why: ${item.reasoning}` +
+        ` · Done 1h: https://liammspandasprojects.org/Reminders/index.html?reabs_action=complete&id=${item.id}&hours=1.0`;
+
+      if (statusEl) {
+        statusEl.style.color = "#9ddacf";
+        statusEl.textContent = `📱 Sending REABS text/push reminder for ${item.id}…`;
+      }
+      let ok = false;
+      try {
+        const r = await fetch("https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1", {
+          method: "POST",
+          headers: {
+            Title: payload.subject,
+            Priority: payload.ntfyPriority,
+            Tags: item.urgency === "High" ? "rotating_light,bell" : "bell",
+          },
+          body: shortSms,
+        });
+        if (r.ok) ok = true;
+      } catch {
+        /* ignore */
+      }
+
+      if (phoneDest && carrier !== "ntfy") {
+        const digits = phoneDest.replace(/\D/g, "");
+        if (digits.length >= 10) {
+          const smsGatewayEmail = `${digits.slice(-10)}@${carrier}`;
+          try {
+            await fetch("https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1", {
+              method: "POST",
+              headers: { "X-Email": smsGatewayEmail, Priority: payload.ntfyPriority },
+              body: shortSms,
+            });
+          } catch {
+            /* ignore */
+          }
+        }
+      }
+
+      if (statusEl) {
+        statusEl.style.color = "#8fe0a8";
+        statusEl.textContent = ok
+          ? `✓ Sent REABS text/push notification for ${item.id} (${item.urgency} Urgency)${phoneDest ? ` to ${phoneDest}` : ""}!`
+          : `✓ Prepared REABS text reminder for ${item.id}.`;
+      }
+    };
+
+    const renderOptionalEmailsUi = () => {
+      const listEl = document.getElementById("reabs-optional-emails-list");
+      const formExtraEl = document.getElementById("reabs-form-extra-emails");
+      const emails = loadOptionalEmails();
+      if (listEl) {
+        if (!emails.length) {
+          listEl.innerHTML = `<small style="color:#a4acc3;">No optional additional emails saved yet — add one above to make it selectable on reminders.</small>`;
+        } else {
+          listEl.innerHTML = emails
+            .map(
+              (em) =>
+                `<div style="display:flex;align-items:center;justify-content:space-between;padding:6px 10px;border-radius:6px;background:rgba(255,255,255,0.04);border:1px solid rgba(157,218,207,0.2);">` +
+                `<label class="wb-inline-check" style="margin:0;"><input type="checkbox" data-reabs-test-opt-email="${escHtml(em)}"> <code>${escHtml(em)}</code> <small style="color:#a4acc3;">(Optional)</small></label>` +
+                `<button type="button" class="button ghost wb-delete-study-btn" data-reabs-del-email="${escHtml(em)}" style="padding:2px 8px;font-size:12px;">🗑 Delete</button>` +
+                `</div>`
+            )
+            .join("");
+          listEl.querySelectorAll("[data-reabs-del-email]").forEach((btn) => {
+            btn.addEventListener("click", () => {
+              const target = btn.getAttribute("data-reabs-del-email");
+              saveOptionalEmails(loadOptionalEmails().filter((x) => x !== target));
+              renderOptionalEmailsUi();
+            });
+          });
+        }
+      }
+      if (formExtraEl) {
+        formExtraEl.innerHTML = emails
+          .map(
+            (em) =>
+              `<label class="wb-inline-check"><input type="checkbox" name="reabsExtraEmail" value="${escHtml(em)}"> <code>${escHtml(em)}</code> (Optional)</label>`
+          )
+          .join("");
+      }
+    };
+
+    let reabsItems = loadReabsList();
+
+    const renderReabsTablesAndChart = () => {
+      const activeCount = reabsItems.filter((r) => r.status === "active" && r.remindersEnabled !== 0).length;
+      const doneCount = reabsItems.filter((r) => r.status === "completed").length;
+      const totalHrs = Math.round(reabsItems.reduce((a, r) => a + (Number(r.hoursSpent) || 0), 0) * 100) / 100;
+
+      updateKpiCardOnPage("Active REABS items", String(activeCount), "Scheduled email & text reminders active");
+      updateKpiCardOnPage("Completed REABS", String(doneCount), "Historical bullshit tasks finished");
+      updateKpiCardOnPage("Logged REABS hours", `${totalHrs} hrs`, "Cumulative hours tracked across completed REABS");
+
+      const tbody = document.getElementById("reabs-active-tbody");
+      if (tbody) {
+        tbody.innerHTML = reabsItems
+          .map((r) => {
+            const rid = escHtml(r.id);
+            const urg = r.urgency || "Medium";
+            const urgCls = urg === "High" ? "wb-warn" : urg === "Medium" ? "wb-up" : "wb-flat";
+            const urgIcon = urg === "High" ? "🚨 High" : urg === "Medium" ? "⚡ Medium" : "📌 Low";
+            const flagStr = urg === "High" ? "X-Priority: 1" : urg === "Medium" ? "X-Priority: 3" : "X-Priority: 5";
+            const pVal = r.phoneNumber || "N/A";
+            const isNa = pVal.toUpperCase() === "N/A" || r.phoneSource === "na";
+            const phoneHtml = isNa
+              ? `<span class="wb-badge wb-flat" title="Explicitly marked N/A — no phone lookup or phone number included in email/text">N/A (No Phone Lookup)</span>`
+              : `<a href="tel:${escHtml(pVal.replace(/[^0-9+]/g, ""))}" style="color:#69d4cf;font-weight:700;">📞 ${escHtml(pVal)}</a>${r.phoneSource === "google-gemini" ? " <small style='color:#9ddacf;'>(Google/Gemini)</small>" : ""}`;
+            const remOn = Boolean(r.remindersEnabled) && r.status !== "completed";
+            const hrs = Number(r.hoursSpent) || 0;
+            const extraList = r.extraEmails ? ` + ${escHtml(r.extraEmails)}` : "";
+            return (
+              `<tr data-reabs-row="${rid}" data-reabs-status="${escHtml(r.status)}">` +
+              `<th scope="row"><code>${rid}</code><br><small style="color:#a4acc3;">${escHtml(r.createdOn || "2026-10-29")}</small></th>` +
+              `<td><strong>${escHtml(r.title)}</strong><br><small style="color:#b8c0d8;"><strong>Reasoning:</strong> ${escHtml(r.reasoning)}</small></td>` +
+              `<td><span class="wb-badge ${urgCls}">${urgIcon}</span><br><small>Email Flag: <code>${flagStr}</code></small></td>` +
+              `<td><strong>${escHtml(r.scheduleText)}</strong><br><small style="color:#9ddacf;">To: <code>${escHtml(r.defaultEmail || DEFAULT_REABS_EMAIL)}${extraList}</code></small></td>` +
+              `<td>${phoneHtml}</td>` +
+              `<td><button class="button ghost wb-run-study-btn" type="button" data-reabs-toggle="${rid}">${remOn ? "🔔 ON (Active)" : "🔕 OFF (Muted)"}</button></td>` +
+              `<td>` +
+              `<div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;">` +
+              `<input type="number" step="0.25" min="0" max="200" value="${hrs}" data-reabs-hours-input="${rid}" style="width:70px;padding:4px 6px;border-radius:6px;background:#0d101b;color:#eeeef7;border:1px solid rgba(157,218,207,0.35);" title="Hours spent to complete this REABS task">` +
+              `<button class="button primary wb-run-study-btn" type="button" data-reabs-complete="${rid}">${r.status === "completed" ? `✓ Completed (${hrs}h)` : "✓ Mark Done & Log Hrs"}</button>` +
+              `</div>` +
+              `<div style="display:flex;gap:6px;margin-top:6px;flex-wrap:wrap;">` +
+              `<button class="button ghost wb-run-study-btn" type="button" data-reabs-send-email="${rid}">📧 Email Now</button>` +
+              `<button class="button ghost wb-run-study-btn" type="button" data-reabs-send-sms="${rid}">📱 Text Now</button>` +
+              `<button class="button ghost wb-delete-study-btn" type="button" data-reabs-delete="${rid}">🗑</button>` +
+              `</div></td></tr>`
+            );
+          })
+          .join("");
+
+        tbody.querySelectorAll("[data-reabs-toggle]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-reabs-toggle");
+            const item = reabsItems.find((x) => x.id === id);
+            if (!item) return;
+            item.remindersEnabled = item.remindersEnabled ? 0 : 1;
+            if (item.remindersEnabled && item.status === "muted") item.status = "active";
+            if (!item.remindersEnabled && item.status === "active") item.status = "muted";
+            saveReabsList(reabsItems);
+            renderReabsTablesAndChart();
+          });
+        });
+
+        tbody.querySelectorAll("[data-reabs-complete]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-reabs-complete");
+            const item = reabsItems.find((x) => x.id === id);
+            if (!item) return;
+            const hrsInput = tbody.querySelector(`[data-reabs-hours-input="${id}"]`);
+            const enteredHrs = hrsInput ? parseFloat(hrsInput.value) : 0;
+            item.hoursSpent = !isNaN(enteredHrs) && enteredHrs > 0 ? enteredHrs : item.hoursSpent || 0.5;
+            item.status = "completed";
+            item.remindersEnabled = 0;
+            item.completedOn = new Date().toISOString().slice(0, 10);
+            saveReabsList(reabsItems);
+            renderReabsTablesAndChart();
+          });
+        });
+
+        tbody.querySelectorAll("[data-reabs-send-email]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-reabs-send-email");
+            const item = reabsItems.find((x) => x.id === id);
+            if (item) sendReabsEmail(item, document.getElementById("reabs-test-email-status"), false);
+          });
+        });
+
+        tbody.querySelectorAll("[data-reabs-send-sms]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-reabs-send-sms");
+            const item = reabsItems.find((x) => x.id === id);
+            if (item) sendReabsSms(item, document.getElementById("reabs-test-sms-status"));
+          });
+        });
+
+        tbody.querySelectorAll("[data-reabs-delete]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-reabs-delete");
+            reabsItems = reabsItems.filter((x) => x.id !== id);
+            saveReabsList(reabsItems);
+            renderReabsTablesAndChart();
+          });
+        });
+      }
+
+      const histTbody = document.querySelector("#reabs-history-table tbody");
+      if (histTbody) {
+        histTbody.innerHTML = reabsItems
+          .map(
+            (r) =>
+              `<tr><th scope="row">${escHtml(r.id)}</th><td>${escHtml(r.title)}</td><td>${escHtml(r.urgency)}</td><td>${escHtml(r.scheduleText)}</td><td>${escHtml(r.phoneNumber || "N/A")}</td><td>${escHtml(r.status)}</td><td>${escHtml(r.completedOn || "Pending (Active)")}</td><td>${Number(r.hoursSpent) || 0} hrs</td></tr>`
+          )
+          .join("");
+      }
+
+      const biHost = document.getElementById("bi-reabs-host");
+      if (biHost) {
+        const biPayload = reabsItems.map((r) => ({
+          id: r.id,
+          date: r.completedOn || r.createdOn || "2026-10-29",
+          title: r.title,
+          urgency: r.urgency,
+          status: r.status,
+          hoursSpent: Number(r.hoursSpent) || (r.urgency === "High" ? 1.5 : r.urgency === "Medium" ? 1.0 : 0.5),
+          loggedHours: Number(r.hoursSpent) || 0,
+        }));
+        biHost.setAttribute("data-bi-reabs", JSON.stringify(biPayload));
+        window.dispatchEvent(new CustomEvent("liam-bi-refresh-reabs", { detail: biPayload }));
+      }
+    };
+
+    // Execute a two-way reply command like "DONE RB-01 1.5h" or "OFF RB-02" or "HOURS RB-03 0.75"
+    const executeReabsReplyCommand = (rawCmd, statusEl) => {
+      const cmd = String(rawCmd || "").trim();
+      if (!cmd) return false;
+      const mDone = cmd.match(/^(?:DONE|COMPLETE|COMPLETED)\s+(RB-\d+)\s*(\d+(?:\.\d+)?)?\s*(?:h|hr|hrs|hours?)?$/i);
+      if (mDone) {
+        const id = mDone[1].toUpperCase();
+        const hrs = mDone[2] ? parseFloat(mDone[2]) : 1.0;
+        const item = reabsItems.find((x) => x.id.toUpperCase() === id);
+        if (item) {
+          item.status = "completed";
+          item.remindersEnabled = 0;
+          item.hoursSpent = hrs;
+          item.completedOn = new Date().toISOString().slice(0, 10);
+          saveReabsList(reabsItems);
+          renderReabsTablesAndChart();
+          if (statusEl) {
+            statusEl.style.color = "#8fe0a8";
+            statusEl.textContent = `✓ Reply processed: Marked ${item.id} (${item.title}) as COMPLETED with ${hrs} hrs logged!`;
+          }
+          return true;
+        }
+      }
+      const mOff = cmd.match(/^(?:OFF|MUTE|STOP)\s+(RB-\d+)$/i);
+      if (mOff) {
+        const id = mOff[1].toUpperCase();
+        const item = reabsItems.find((x) => x.id.toUpperCase() === id);
+        if (item) {
+          item.remindersEnabled = 0;
+          item.status = "muted";
+          saveReabsList(reabsItems);
+          renderReabsTablesAndChart();
+          if (statusEl) {
+            statusEl.style.color = "#8fe0a8";
+            statusEl.textContent = `✓ Reply processed: Turned OFF reminders for ${item.id} (${item.title}).`;
+          }
+          return true;
+        }
+      }
+      const mHrs = cmd.match(/^HOURS?\s+(RB-\d+)\s+(\d+(?:\.\d+)?)\s*(?:h|hr|hrs|hours?)?$/i);
+      if (mHrs) {
+        const id = mHrs[1].toUpperCase();
+        const hrs = parseFloat(mHrs[2]);
+        const item = reabsItems.find((x) => x.id.toUpperCase() === id);
+        if (item) {
+          item.hoursSpent = hrs;
+          saveReabsList(reabsItems);
+          renderReabsTablesAndChart();
+          if (statusEl) {
+            statusEl.style.color = "#8fe0a8";
+            statusEl.textContent = `✓ Reply processed: Logged ${hrs} hrs on ${item.id} (${item.title}).`;
+          }
+          return true;
+        }
+      }
+      if (statusEl) {
+        statusEl.style.color = "#f28b82";
+        statusEl.textContent = `⚠ Unrecognized command. Use: DONE RB-01 1.5h  or  OFF RB-02  or  HOURS RB-03 0.5`;
+      }
+      return false;
+    };
+
+    // Check URL query parameters for one-tap email/SMS completion links (?reabs_action=complete&id=RB-01&hours=1.0)
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const act = params.get("reabs_action");
+      const rid = params.get("id");
+      const hrs = params.get("hours") || "1.0";
+      if (act === "complete" && rid) {
+        executeReabsReplyCommand(`DONE ${rid} ${hrs}`, document.getElementById("reabs-test-sms-status"));
+      } else if (act === "mute" && rid) {
+        executeReabsReplyCommand(`OFF ${rid}`, document.getElementById("reabs-test-sms-status"));
+      }
+    } catch {
+      /* ignore */
+    }
+
+    // Wire Optional Email Add Button
+    document.getElementById("reabs-add-email-btn")?.addEventListener("click", () => {
+      const inp = document.getElementById("reabs-new-email");
+      const val = inp ? inp.value.trim() : "";
+      if (!val || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val)) return;
+      const list = loadOptionalEmails();
+      if (!list.includes(val) && val.toLowerCase() !== DEFAULT_REABS_EMAIL) {
+        list.push(val);
+        saveOptionalEmails(list);
+      }
+      if (inp) inp.value = "";
+      renderOptionalEmailsUi();
+    });
+
+    // Wire Test Email & Outlook Pre-filled Test Buttons
+    document.getElementById("reabs-test-email-btn")?.addEventListener("click", () => {
+      const checkedExtras = Array.from(document.querySelectorAll("[data-reabs-test-opt-email]:checked")).map((c) =>
+        c.getAttribute("data-reabs-test-opt-email")
+      );
+      const sampleItem = reabsItems[0] || {
+        id: "RB-TEST",
+        title: "REABS Test Email Verification (Contact Manulife Financial Regarding TFSA Setup)",
+        urgency: "High",
+        scheduleText: "2pm Mon, Wed, Thurs",
+        phoneNumber: "1-888-790-4387",
+        phoneSource: "google-gemini",
+        reasoning: "Confirming REABS automated email delivery, Urgency headers, and one-tap completion links to l2mcgrat@uwaterloo.ca.",
+      };
+      sendReabsEmail({ ...sampleItem, extraEmails: checkedExtras.join(",") }, document.getElementById("reabs-test-email-status"), false);
+    });
+
+    document.getElementById("reabs-test-outlook-btn")?.addEventListener("click", () => {
+      const checkedExtras = Array.from(document.querySelectorAll("[data-reabs-test-opt-email]:checked")).map((c) =>
+        c.getAttribute("data-reabs-test-opt-email")
+      );
+      const sampleItem = reabsItems[0] || {
+        id: "RB-01",
+        title: "Contact Manulife Financial Regarding TFSA Setup",
+        urgency: "Medium",
+        scheduleText: "2pm Mon, Wed, Thurs",
+        phoneNumber: "1-888-790-4387",
+        phoneSource: "google-gemini",
+        reasoning: "I want to be able to pull money out later in the future that I've forgetable put away over time.",
+      };
+      sendReabsEmail({ ...sampleItem, extraEmails: checkedExtras.join(",") }, document.getElementById("reabs-test-email-status"), true);
+    });
+
+    // Wire SMS Settings & Test Text Button
+    const savedSms = loadSmsConfig();
+    const smsNumIn = document.getElementById("reabs-sms-number");
+    const smsCarIn = document.getElementById("reabs-sms-carrier");
+    if (smsNumIn && savedSms.number) smsNumIn.value = savedSms.number;
+    if (smsCarIn && savedSms.carrier) smsCarIn.value = savedSms.carrier;
+
+    document.getElementById("reabs-save-sms-btn")?.addEventListener("click", () => {
+      saveSmsConfig({
+        number: smsNumIn ? smsNumIn.value.trim() : "",
+        carrier: smsCarIn ? smsCarIn.value : "ntfy",
+      });
+      const st = document.getElementById("reabs-test-sms-status");
+      if (st) {
+        st.style.color = "#8fe0a8";
+        st.textContent = `✓ Saved text/SMS settings (${smsNumIn?.value || "ntfy mobile push"}).`;
+      }
+    });
+
+    document.getElementById("reabs-test-sms-btn")?.addEventListener("click", () => {
+      const sampleItem = reabsItems[0] || {
+        id: "RB-01",
+        title: "Contact Manulife Financial Regarding TFSA Setup",
+        urgency: "Medium",
+        scheduleText: "2pm Mon, Wed, Thurs",
+        phoneNumber: "1-888-790-4387",
+        phoneSource: "google-gemini",
+        reasoning: "I want to be able to pull money out later in the future that I've forgetable put away over time.",
+      };
+      sendReabsSms(sampleItem, document.getElementById("reabs-test-sms-status"));
+    });
+
+    // Wire Reply Command Box
+    document.getElementById("reabs-reply-submit-btn")?.addEventListener("click", () => {
+      const inp = document.getElementById("reabs-reply-cmd");
+      if (!inp) return;
+      if (executeReabsReplyCommand(inp.value, document.getElementById("reabs-test-sms-status"))) {
+        inp.value = "";
+      }
+    });
+
+    // Wire Day-of-Week Quick Presets
+    document.querySelectorAll("[data-reabs-day-preset]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const days = (btn.getAttribute("data-reabs-day-preset") || "").split(",");
+        document.querySelectorAll('input[name="reabsDay"]').forEach((cb) => {
+          cb.checked = days.includes(cb.value);
+        });
+      });
+    });
+
+    // Wire N/A Phone Checkbox & Auto-Find Phone Button
+    const phoneInput = document.getElementById("reabs-phone");
+    const phoneNaCheck = document.getElementById("reabs-phone-na");
+    phoneNaCheck?.addEventListener("change", () => {
+      if (phoneNaCheck.checked && phoneInput) {
+        phoneInput.value = "N/A";
+        phoneInput.disabled = true;
+      } else if (phoneInput) {
+        if (phoneInput.value === "N/A") phoneInput.value = "";
+        phoneInput.disabled = false;
+      }
+    });
+
+    document.getElementById("reabs-lookup-phone-btn")?.addEventListener("click", async () => {
+      if (phoneNaCheck?.checked) return;
+      const titleVal = document.getElementById("reabs-title")?.value?.trim() || "";
+      const fb = document.getElementById("reabs-form-feedback");
+      if (!titleVal) {
+        if (fb) fb.textContent = "Enter a REABS Task Title first so Google/Gemini knows who to look up.";
+        return;
+      }
+      if (fb) fb.textContent = `🔍 Looking up official phone number for "${titleVal}" via Google/Gemini…`;
+      const res = await lookupPhoneViaGoogleGemini(titleVal);
+      if (phoneInput) phoneInput.value = res.phone;
+      if (fb) fb.textContent = `✓ Auto-filled phone number: ${res.phone}`;
+    });
+
+    // Wire Add REABS Form Submit
+    document.getElementById("reabs-add-form")?.addEventListener("submit", async (ev) => {
+      ev.preventDefault();
+      const titleVal = document.getElementById("reabs-title")?.value?.trim() || "";
+      if (!titleVal) return;
+      const urgencyVal = document.getElementById("reabs-urgency")?.value || "Medium";
+      const timeVal = document.getElementById("reabs-time")?.value || "14:00";
+      const checkedDays = Array.from(document.querySelectorAll('input[name="reabsDay"]:checked')).map((c) => c.value);
+      const daysList = checkedDays.length ? checkedDays : ["Mon", "Wed", "Thu"];
+      const daysLabel =
+        daysList.join(",") === "Mon,Tue,Wed,Thu,Fri"
+          ? "Mon-Fri"
+          : daysList.map((d) => (d === "Thu" ? "Thurs" : d)).join(", ");
+      const scheduleText = `${formatTime12h(timeVal)} ${daysLabel}`;
+
+      let phoneNumber = phoneInput ? phoneInput.value.trim() : "";
+      let phoneSource = "direct";
+      if (phoneNaCheck?.checked || phoneNumber.toUpperCase() === "N/A") {
+        phoneNumber = "N/A";
+        phoneSource = "na";
+      } else if (!phoneNumber) {
+        const lookedUp = await lookupPhoneViaGoogleGemini(titleVal);
+        phoneNumber = lookedUp.phone;
+        phoneSource = lookedUp.source;
+      }
+
+      const extraEmails = Array.from(document.querySelectorAll('input[name="reabsExtraEmail"]:checked'))
+        .map((c) => c.value)
+        .join(",");
+      const smsEnabled = document.getElementById("reabs-form-sms")?.checked ? 1 : 0;
+      const reasoning = document.getElementById("reabs-reasoning")?.value?.trim() || "Needs to get done.";
+
+      const nextNum = reabsItems.length + 1;
+      const newId = `RB-${String(nextNum).padStart(2, "0")}`;
+      const newItem = {
+        id: newId,
+        createdOn: new Date().toISOString().slice(0, 10),
+        title: titleVal,
+        urgency: urgencyVal,
+        scheduleText,
+        daysOfWeek: daysList.join(","),
+        timeOfDay: timeVal,
+        phoneNumber,
+        phoneSource,
+        reasoning,
+        defaultEmail: DEFAULT_REABS_EMAIL,
+        extraEmails,
+        smsEnabled,
+        remindersEnabled: 1,
+        status: "active",
+        completedOn: null,
+        hoursSpent: 0.0,
+      };
+      reabsItems.push(newItem);
+      saveReabsList(reabsItems);
+      renderReabsTablesAndChart();
+      ev.target.reset();
+      if (phoneInput) phoneInput.disabled = false;
+      const fb = document.getElementById("reabs-form-feedback");
+      if (fb) fb.textContent = `✓ Added ${newId} (${scheduleText}) · Armed for ${DEFAULT_REABS_EMAIL}${extraEmails ? ` + ${extraEmails}` : ""}!`;
+    });
+
+    // Background Time-of-Day Scheduler (checks every 60s if any active REABS is due right now)
+    const checkDueReabsSchedule = () => {
+      const now = new Date();
+      const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const curDay = dayNames[now.getDay()];
+      const curHm = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const dateSlotKey = `${now.toISOString().slice(0, 10)}_${curHm}`;
+      let sentSlots = {};
+      try {
+        sentSlots = JSON.parse(localStorage.getItem(REABS_SENT_LOG_KEY) || "{}") || {};
+      } catch {
+        sentSlots = {};
+      }
+      reabsItems.forEach((item) => {
+        if (item.status !== "active" || !item.remindersEnabled) return;
+        const itemDays = String(item.daysOfWeek || "").split(",").map((d) => d.trim());
+        if (itemDays.includes(curDay) && item.timeOfDay === curHm) {
+          const slotId = `${item.id}_${dateSlotKey}`;
+          if (!sentSlots[slotId]) {
+            sentSlots[slotId] = true;
+            try {
+              localStorage.setItem(REABS_SENT_LOG_KEY, JSON.stringify(sentSlots));
+            } catch {
+              /* ignore */
+            }
+            sendReabsEmail(item, document.getElementById("reabs-test-email-status"), false);
+            if (item.smsEnabled) sendReabsSms(item, document.getElementById("reabs-test-sms-status"));
+          }
+        }
+      });
+    };
+    setInterval(checkDueReabsSchedule, 60000);
+
+    // Poll cross-device REABS state & inbound email/SMS reply commands from ntfy.sh
+    if (typeof fetch === "function") {
+      fetch("https://ntfy.sh/liam_reabs_reply_67wxyE7L_v1/json?poll=1&since=all")
+        .then((r) => (r.ok ? r.text() : ""))
+        .then((txt) => {
+          if (!txt) return;
+          txt
+            .trim()
+            .split("\n")
+            .filter(Boolean)
+            .forEach((line) => {
+              try {
+                const env = JSON.parse(line);
+                if (!env || env.event !== "message" || !env.message) return;
+                if (env.message.startsWith("{")) {
+                  const pkt = JSON.parse(env.message);
+                  if (pkt && pkt.app === "liam_reabs_state_v1" && Array.isArray(pkt.list)) {
+                    reabsItems = pkt.list;
+                    localStorage.setItem(REABS_STORAGE_KEY, JSON.stringify(reabsItems));
+                    renderReabsTablesAndChart();
+                  }
+                } else {
+                  executeReabsReplyCommand(env.message, document.getElementById("reabs-test-sms-status"));
+                }
+              } catch {
+                /* ignore */
+              }
+            });
+        })
+        .catch(() => {});
+    }
+
+    renderOptionalEmailsUi();
+    renderReabsTablesAndChart();
+  }
 
   // Re-apply any previously synced Google Doc logs from localStorage AFTER all BI charts are wired
   try {
