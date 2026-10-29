@@ -1137,14 +1137,473 @@
     return [cols.map(escCsv).join(","), ...rows.map((r) => r.map(escCsv).join(","))].join("\n");
   };
 
-  const renderAnalyticsSvgHtml = (studyId, analytics) => {
+  const PALETTE_COLORS = ["#69d4cf", "#f7ab65", "#8fe0a8", "#a78bfa", "#f28b82", "#ffd166", "#5ec2f7", "#f48fb1"];
+
+  const ensureMathJaxLoadedAndTypeset = (rootEl) => {
+    const runTypeset = () => {
+      if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+        window.MathJax.typesetPromise(rootEl ? [rootEl] : undefined).catch(() => {});
+      }
+    };
+    if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+      runTypeset();
+      return;
+    }
+    if (document.getElementById("MathJax-script")) {
+      setTimeout(runTypeset, 450);
+      return;
+    }
+    const brand = document.querySelector(".site-header .brand");
+    const rootPrefix = brand ? (brand.getAttribute("href") || "index.html").replace(/index\.html$/, "") : "../";
+    const cfgScript = document.createElement("script");
+    cfgScript.src = `${rootPrefix}assets/math-config.js`;
+    document.head.appendChild(cfgScript);
+    const mjScript = document.createElement("script");
+    mjScript.id = "MathJax-script";
+    mjScript.src = `${rootPrefix}assets/vendor/mathjax/tex-chtml.js`;
+    mjScript.onload = () => setTimeout(runTypeset, 150);
+    document.head.appendChild(mjScript);
+  };
+
+  const formatStudyNarrativeHtml = (rawText) => {
     const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-    const bars = Array.isArray(analytics?.bars) && analytics.bars.length ? analytics.bars : buildFallbackAnalytics({}).bars;
+    let cleaned = String(rawText || "")
+      .replace(/\\documentclass(?:\[[^\]]*\])?\{[^}]+\}/g, "")
+      .replace(/\\usepackage(?:\[[^\]]*\])?\{[^}]+\}/g, "")
+      .replace(/\\setlength\{[^}]+\}\{[^}]+\}/g, "")
+      .replace(/\\(?:maketitle|tableofcontents|newpage|clearpage)/g, "")
+      .replace(/\\begin\{document\}|\\end\{document\}/g, "")
+      .replace(/\\text\{--\}/g, "–")
+      .replace(/\s+-\s+(?=(?:\\\(|\\textbf|\*\*|\$))/g, "\n- ");
+
+    const formatInline = (str) => {
+      let s = esc(str);
+      s = s.replace(/\\textbf\{([^{}]+)\}/g, "<strong>$1</strong>");
+      s = s.replace(/\\textit\{([^{}]+)\}/g, "<em>$1</em>");
+      s = s.replace(/\\texttt\{([^{}]+)\}/g, "<code>$1</code>");
+      s = s.replace(/\$\$([\s\S]+?)\$\$/g, (_, eq) => `<div class="tex-display-math">\\[${eq}\\]</div>`);
+      s = s.replace(/\\\[([\s\S]+?)\\\]/g, (_, eq) => `<div class="tex-display-math">\\[${eq}\\]</div>`);
+      s = s.replace(/\\begin\{(equation\*?|align\*?)\}([\s\S]+?)\\end\{\1\}/g, (_, env, eq) => `<div class="tex-display-math">\\[\\begin{${env}}${eq}\\end{${env}}\\]</div>`);
+      s = s.replace(/\\\(([^\n]+?)\\\)/g, (_, eq) => `<span class="math inline">\\(${eq}\\)</span>`);
+      s = s.replace(/\$([^\n$]+?)\$/g, (full, eq) => {
+        if (/^\d[\d,.]*(\s|$)/.test(eq) && !/[\\^_{}]/.test(eq)) return full;
+        return `<span class="math inline">\\(${eq}\\)</span>`;
+      });
+      s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+      s = s.replace(/\*([^*\n]+)\*/g, "<em>$1</em>");
+      return s;
+    };
+
+    const blocks = cleaned.split(/\n{2,}/);
+    return blocks
+      .map((block) => {
+        const trimmed = block.trim();
+        if (!trimmed) return "";
+        const lines = trimmed.split("\n");
+        if (lines.length > 1 && lines.some((l) => /^\s*(?:[-*]|\d+\.)\s+/.test(l))) {
+          const outParts = [];
+          let listItems = [];
+          lines.forEach((ln) => {
+            const mLi = ln.match(/^\s*(?:[-*]|\d+\.)\s+(.+)$/);
+            if (mLi) {
+              listItems.push(`<li>${formatInline(mLi[1])}</li>`);
+            } else {
+              if (listItems.length) {
+                outParts.push(`<ul>${listItems.join("")}</ul>`);
+                listItems = [];
+              }
+              outParts.push(`<p>${formatInline(ln)}</p>`);
+            }
+          });
+          if (listItems.length) outParts.push(`<ul>${listItems.join("")}</ul>`);
+          return outParts.join("");
+        }
+        if (/^#{1,4}\s+/.test(trimmed)) {
+          return `<h4>${formatInline(trimmed.replace(/^#{1,4}\s+/, ""))}</h4>`;
+        }
+        return `<p>${formatInline(trimmed)}</p>`;
+      })
+      .join("");
+  };
+
+  // Universal Multi-Type SVG Chart Renderer (box_whisker, line, stacked_column, clustered_column, pie_donut, radar, sankey, histogram, horizontal_bar)
+  const renderUniversalChartSvg = (studyId, chartSpec) => {
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const type = String(chartSpec?.type || "horizontal_bar").toLowerCase();
+    const title = esc(chartSpec?.chartTitle || "Empirical Study Chart");
+    const subtitle = esc(chartSpec?.chartSubtitle || "");
+    const unit = esc(chartSpec?.chartUnit || "");
+    const wrapFigure = (svgInner, height = 340, extraLegendHtml = "") =>
+      `<figure class="sports-chart athletics-chart" style="margin:14px 0;">` +
+      `<figcaption><span class="chart-title">${title}</span><small>${subtitle}</small>${extraLegendHtml}</figcaption>` +
+      `<svg viewBox="0 0 900 ${height}" role="img" aria-label="${title}">${svgInner}</svg>` +
+      `</figure>`;
+
+    // 1. BOX AND WHISKER PLOT (min, q1, median, q3, max)
+    if (type === "box_whisker" && Array.isArray(chartSpec.boxes) && chartSpec.boxes.length > 0) {
+      const boxes = chartSpec.boxes;
+      const allVals = boxes.flatMap((b) => [Number(b.min) || 0, Number(b.q1) || 0, Number(b.median) || 0, Number(b.q3) || 0, Number(b.max) || 0]);
+      const minV = Math.floor(Math.min(...allVals) - 2);
+      const maxV = Math.ceil(Math.max(...allVals) + 2);
+      const span = Math.max(1, maxV - minV);
+      const left = 74, right = 860, top = 36, bottom = 276;
+      const plotW = right - left, plotH = bottom - top;
+      const yOf = (v) => bottom - ((v - minV) / span) * plotH;
+      const parts = [];
+      for (let k = 0; k <= 5; k++) {
+        const tv = Math.round((minV + (span * k) / 5) * 10) / 10;
+        const ty = yOf(tv);
+        parts.push(
+          `<line class="chart-grid" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/>` +
+          `<text x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv}${unit}</text>`
+        );
+      }
+      if (minV < 0 && maxV > 0) {
+        const y0 = yOf(0);
+        parts.push(`<line stroke="#f7ab6588" stroke-dasharray="4 3" x1="${left}" x2="${right}" y1="${y0.toFixed(1)}" y2="${y0.toFixed(1)}"/>`);
+      }
+      const step = plotW / boxes.length;
+      boxes.forEach((b, idx) => {
+        const cx = left + (idx + 0.5) * step;
+        const bw = Math.min(36, Math.max(14, step * 0.52));
+        const yMin = yOf(Number(b.min) || 0);
+        const yQ1 = yOf(Number(b.q1) || 0);
+        const yMed = yOf(Number(b.median) || 0);
+        const yQ3 = yOf(Number(b.q3) || 0);
+        const yMax = yOf(Number(b.max) || 0);
+        const col = PALETTE_COLORS[idx % PALETTE_COLORS.length];
+        const iqr = Math.round(((Number(b.q3) || 0) - (Number(b.q1) || 0)) * 10) / 10;
+        const tip = `${b.label}: Min ${b.min}${unit}, Q1 ${b.q1}${unit}, Median ${b.median}${unit}, Q3 ${b.q3}${unit}, Max ${b.max}${unit} (IQR ${iqr}${unit})`;
+        parts.push(
+          `<g>` +
+          `<title>${esc(tip)}</title>` +
+          `<line stroke="${col}" stroke-width="2" x1="${cx.toFixed(1)}" x2="${cx.toFixed(1)}" y1="${yMax.toFixed(1)}" y2="${yMin.toFixed(1)}"/>` +
+          `<line stroke="${col}" stroke-width="2" x1="${(cx - bw * 0.35).toFixed(1)}" x2="${(cx + bw * 0.35).toFixed(1)}" y1="${yMax.toFixed(1)}" y2="${yMax.toFixed(1)}"/>` +
+          `<line stroke="${col}" stroke-width="2" x1="${(cx - bw * 0.35).toFixed(1)}" x2="${(cx + bw * 0.35).toFixed(1)}" y1="${yMin.toFixed(1)}" y2="${yMin.toFixed(1)}"/>` +
+          `<rect fill="${col}44" stroke="${col}" stroke-width="2" x="${(cx - bw / 2).toFixed(1)}" y="${Math.min(yQ3, yQ1).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(4, Math.abs(yQ1 - yQ3)).toFixed(1)}"/>` +
+          `<line stroke="#ffffff" stroke-width="2.6" x1="${(cx - bw / 2).toFixed(1)}" x2="${(cx + bw / 2).toFixed(1)}" y1="${yMed.toFixed(1)}" y2="${yMed.toFixed(1)}"/>` +
+          `<text x="${cx.toFixed(1)}" y="${Math.max(24, yMax - 6).toFixed(1)}" text-anchor="middle" font-size="9.5" fill="#9ddacf">${b.median}${unit}</text>` +
+          `<text x="${cx.toFixed(1)}" y="${bottom + 18}" text-anchor="end" transform="rotate(-28, ${cx.toFixed(1)}, ${bottom + 18})" font-size="10">${esc(String(b.label || "").slice(0, 22))}</text>` +
+          `</g>`
+        );
+      });
+      return wrapFigure(parts.join(""), 355, `<div class="sports-legend" style="margin-top:6px;"><span>📦 Box: 25th–75th Percentile (Q1–Q3 IQR)</span><span>― White Bar: Median</span><span>┬┴ Whiskers: Min &amp; Max across 200 km Station Network</span></div>`);
+    }
+
+    // 2. MULTI-SERIES LINE PLOT
+    if (type === "line" && Array.isArray(chartSpec.series) && chartSpec.series.length > 0) {
+      const xLabels = Array.isArray(chartSpec.xLabels) && chartSpec.xLabels.length ? chartSpec.xLabels : chartSpec.series[0].values.map((_, i) => `T${i + 1}`);
+      const allVals = chartSpec.series.flatMap((s) => (s.values || []).map((v) => Number(v) || 0));
+      const minV = Math.floor(Math.min(0, ...allVals) - 2);
+      const maxV = Math.ceil(Math.max(1, ...allVals) + 2);
+      const span = Math.max(1, maxV - minV);
+      const left = 74, right = 860, top = 36, bottom = 280;
+      const plotW = right - left, plotH = bottom - top;
+      const xOf = (i) => left + (i / Math.max(1, xLabels.length - 1)) * plotW;
+      const yOf = (v) => bottom - ((v - minV) / span) * plotH;
+      const parts = [];
+      for (let k = 0; k <= 5; k++) {
+        const tv = Math.round((minV + (span * k) / 5) * 10) / 10;
+        const ty = yOf(tv);
+        parts.push(
+          `<line class="chart-grid" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/>` +
+          `<text x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv}${unit}</text>`
+        );
+      }
+      xLabels.forEach((xl, i) => {
+        const cx = xOf(i);
+        parts.push(`<text x="${cx.toFixed(1)}" y="${bottom + 20}" text-anchor="middle" font-size="10.5">${esc(xl)}</text>`);
+      });
+      const legendHtml = chartSpec.series
+        .map((s, si) => `<span style="color:${esc(s.color || PALETTE_COLORS[si % PALETTE_COLORS.length])};font-weight:600;">● ${esc(s.name)}</span>`)
+        .join(" · ");
+      chartSpec.series.forEach((s, si) => {
+        const col = s.color || PALETTE_COLORS[si % PALETTE_COLORS.length];
+        const vals = s.values || [];
+        const pts = vals.map((v, i) => `${xOf(i).toFixed(1)},${yOf(Number(v) || 0).toFixed(1)}`).join(" ");
+        parts.push(`<polyline fill="none" stroke="${esc(col)}" stroke-width="2.6" stroke-linejoin="round" points="${pts}"/>`);
+        vals.forEach((v, i) => {
+          const cx = xOf(i), cy = yOf(Number(v) || 0);
+          parts.push(
+            `<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="4" fill="${esc(col)}" stroke="#0d101b" stroke-width="1.5">` +
+            `<title>${esc(s.name)} (${esc(xLabels[i] || i)}): ${v}${unit}</title></circle>`
+          );
+        });
+      });
+      return wrapFigure(parts.join(""), 330, `<div class="sports-legend" style="margin-top:6px;">${legendHtml}</div>`);
+    }
+
+    // 3. VERTICAL STACKED COLUMN CHART
+    if (type === "stacked_column" && Array.isArray(chartSpec.categories) && Array.isArray(chartSpec.stacks)) {
+      const cats = chartSpec.categories;
+      const stacks = chartSpec.stacks;
+      const totals = cats.map((_, ci) => stacks.reduce((a, st) => a + (Number(st.values?.[ci]) || 0), 0));
+      const maxTot = Math.max(1, ...totals);
+      const left = 74, right = 860, top = 38, bottom = 278;
+      const plotW = right - left, plotH = bottom - top;
+      const parts = [];
+      for (let k = 0; k <= 4; k++) {
+        const tv = Math.round(((maxTot * k) / 4) * 10) / 10;
+        const ty = bottom - (k / 4) * plotH;
+        parts.push(
+          `<line class="chart-grid" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/>` +
+          `<text x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv} ${unit}</text>`
+        );
+      }
+      const step = plotW / Math.max(1, cats.length);
+      cats.forEach((cat, ci) => {
+        const cx = left + (ci + 0.5) * step;
+        const bw = Math.min(48, Math.max(18, step * 0.58));
+        const bx = cx - bw / 2;
+        let curY = bottom;
+        stacks.forEach((st, si) => {
+          const val = Math.max(0, Number(st.values?.[ci]) || 0);
+          if (val <= 0) return;
+          const h = (val / maxTot) * plotH;
+          curY -= h;
+          const col = st.color || PALETTE_COLORS[si % PALETTE_COLORS.length];
+          parts.push(
+            `<rect fill="${esc(col)}" x="${bx.toFixed(1)}" y="${curY.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}">` +
+            `<title>${esc(cat)} · ${esc(st.name)}: ${val} ${unit} (Total: ${totals[ci]} ${unit})</title></rect>`
+          );
+        });
+        parts.push(
+          `<text x="${cx.toFixed(1)}" y="${Math.max(26, curY - 6).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#eeeef7" font-weight="700">${totals[ci]}</text>` +
+          `<text x="${cx.toFixed(1)}" y="${bottom + 20}" text-anchor="middle" font-size="11">${esc(cat)}</text>`
+        );
+      });
+      const legendHtml = stacks
+        .map((st, si) => `<span style="color:${esc(st.color || PALETTE_COLORS[si % PALETTE_COLORS.length])};font-weight:600;">■ ${esc(st.name)}</span>`)
+        .join(" · ");
+      return wrapFigure(parts.join(""), 325, `<div class="sports-legend" style="margin-top:6px;">${legendHtml}</div>`);
+    }
+
+    // 4. CLUSTERED COLUMN + DUAL-AXIS LINE CHART
+    if (type === "clustered_column" && Array.isArray(chartSpec.items) && chartSpec.items.length > 0) {
+      const items = chartSpec.items;
+      const bUnit = esc(chartSpec.barUnit || unit);
+      const lUnit = esc(chartSpec.lineUnit || "");
+      const maxB = Math.max(1, ...items.map((it) => Number(it.primary) || 0));
+      const maxL = Math.max(1, ...items.map((it) => Number(it.secondary) || 0));
+      const left = 78, right = 822, top = 40, bottom = 278;
+      const plotW = right - left, plotH = bottom - top;
+      const parts = [
+        `<text x="${left - 8}" y="22" text-anchor="end" fill="#69d4cf" font-weight="700" font-size="11">▮ Bars: ${bUnit}</text>`,
+        `<text x="${right + 8}" y="22" text-anchor="start" fill="#f7ab65" font-weight="700" font-size="11">● Line: ${lUnit}</text>`,
+      ];
+      for (let k = 0; k <= 4; k++) {
+        const bTick = Math.round(((maxB * k) / 4) * 10) / 10;
+        const lTick = Math.round(((maxL * k) / 4) * 10) / 10;
+        const ty = bottom - (k / 4) * plotH;
+        parts.push(
+          `<line class="chart-grid" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/>` +
+          `<text x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end" fill="#69d4cf">${bTick} ${bUnit}</text>` +
+          `<text x="${right + 8}" y="${(ty + 4).toFixed(1)}" text-anchor="start" fill="#f7ab65">${lTick} ${lUnit}</text>`
+        );
+      }
+      const step = plotW / items.length;
+      const linePts = [];
+      items.forEach((it, idx) => {
+        const cx = left + (idx + 0.5) * step;
+        const bw = Math.min(46, Math.max(16, step * 0.56));
+        const pVal = Number(it.primary) || 0;
+        const sVal = Number(it.secondary) || 0;
+        const bh = Math.max(4, (pVal / maxB) * plotH);
+        const by = bottom - bh;
+        const ly = bottom - (sVal / maxL) * plotH;
+        linePts.push({ cx, ly, sVal, label: it.label });
+        parts.push(
+          `<rect fill="#69d4cf" x="${(cx - bw / 2).toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}">` +
+          `<title>${esc(it.label)}: ${pVal} ${bUnit} | ${sVal} ${lUnit}</title></rect>` +
+          `<text x="${cx.toFixed(1)}" y="${Math.max(28, by - 6).toFixed(1)}" text-anchor="middle" font-size="10" fill="#eeeef7">${pVal} ${bUnit}</text>` +
+          `<text x="${cx.toFixed(1)}" y="${bottom + 20}" text-anchor="middle" font-size="11">${esc(it.label)}</text>`
+        );
+      });
+      if (linePts.length > 1) {
+        parts.push(`<polyline fill="none" stroke="#f7ab65" stroke-width="2.8" points="${linePts.map((p) => `${p.cx.toFixed(1)},${p.ly.toFixed(1)}`).join(" ")}"/>`);
+      }
+      linePts.forEach((p) => {
+        parts.push(`<circle cx="${p.cx.toFixed(1)}" cy="${p.ly.toFixed(1)}" r="4.5" fill="#f7ab65" stroke="#0d101b" stroke-width="1.6"><title>${esc(p.label)}: ${p.sVal} ${lUnit}</title></circle>`);
+      });
+      return wrapFigure(parts.join(""), 325);
+    }
+
+    // 5. PIE / DONUT CHART
+    if (type === "pie_donut") {
+      const slices = Array.isArray(chartSpec.slices) && chartSpec.slices.length
+        ? chartSpec.slices
+        : (chartSpec.bars || []).map((b) => ({ label: b.label, value: Number(b.primary) || 1 }));
+      const total = Math.max(1, slices.reduce((a, s) => a + (Number(s.value) || 0), 0));
+      const cx = 230, cy = 165, rOut = 115, rIn = 58;
+      let curAngle = -Math.PI / 2;
+      const parts = [];
+      slices.forEach((s, idx) => {
+        const val = Math.max(0, Number(s.value) || 0);
+        const frac = val / total;
+        const nextAngle = curAngle + frac * Math.PI * 2;
+        const x1 = cx + rOut * Math.cos(curAngle), y1 = cy + rOut * Math.sin(curAngle);
+        const x2 = cx + rOut * Math.cos(nextAngle), y2 = cy + rOut * Math.sin(nextAngle);
+        const x3 = cx + rIn * Math.cos(nextAngle), y3 = cy + rIn * Math.sin(nextAngle);
+        const x4 = cx + rIn * Math.cos(curAngle), y4 = cy + rIn * Math.sin(curAngle);
+        const largeArc = frac > 0.5 ? 1 : 0;
+        const col = s.color || PALETTE_COLORS[idx % PALETTE_COLORS.length];
+        const pct = Math.round(frac * 1000) / 10;
+        const dPath = `M ${x1.toFixed(1)} ${y1.toFixed(1)} A ${rOut} ${rOut} 0 ${largeArc} 1 ${x2.toFixed(1)} ${y2.toFixed(1)} L ${x3.toFixed(1)} ${y3.toFixed(1)} A ${rIn} ${rIn} 0 ${largeArc} 0 ${x4.toFixed(1)} ${y4.toFixed(1)} Z`;
+        parts.push(`<path d="${dPath}" fill="${esc(col)}" stroke="#0d101b" stroke-width="2"><title>${esc(s.label)}: ${val}${unit} (${pct}%)</title></path>`);
+        const legY = 48 + idx * 28;
+        parts.push(
+          `<rect x="430" y="${legY - 11}" width="14" height="14" rx="3" fill="${esc(col)}"/>` +
+          `<text x="452" y="${legY}" fill="#eeeef7" font-size="12">${esc(String(s.label || "").slice(0, 36))} — <tspan fill="#9ddacf" font-weight="700">${val}${unit} (${pct}%)</tspan></text>`
+        );
+        curAngle = nextAngle;
+      });
+      parts.push(`<text x="${cx}" y="${cy + 5}" text-anchor="middle" fill="#eeeef7" font-weight="700" font-size="14">Total: ${Math.round(total * 10) / 10}${unit}</text>`);
+      return wrapFigure(parts.join(""), 330);
+    }
+
+    // 6. RADAR / SPIDER MULTI-AXIS CHART
+    if (type === "radar" && Array.isArray(chartSpec.axes) && Array.isArray(chartSpec.profiles)) {
+      const axes = chartSpec.axes;
+      const profiles = chartSpec.profiles;
+      const nAx = Math.max(3, axes.length);
+      const cx = 250, cy = 175, maxR = 122;
+      const parts = [];
+      [25, 50, 75, 100].forEach((lvl) => {
+        const r = (lvl / 100) * maxR;
+        const ringPts = axes
+          .map((_, i) => {
+            const ang = -Math.PI / 2 + (i * 2 * Math.PI) / nAx;
+            return `${(cx + r * Math.cos(ang)).toFixed(1)},${(cy + r * Math.sin(ang)).toFixed(1)}`;
+          })
+          .join(" ");
+        parts.push(`<polygon points="${ringPts}" fill="none" stroke="#ffffff1c" stroke-width="1"/>`);
+      });
+      axes.forEach((ax, i) => {
+        const ang = -Math.PI / 2 + (i * 2 * Math.PI) / nAx;
+        const xEnd = cx + maxR * Math.cos(ang), yEnd = cy + maxR * Math.sin(ang);
+        const xLbl = cx + (maxR + 24) * Math.cos(ang), yLbl = cy + (maxR + 18) * Math.sin(ang);
+        parts.push(
+          `<line x1="${cx}" y1="${cy}" x2="${xEnd.toFixed(1)}" y2="${yEnd.toFixed(1)}" stroke="#ffffff26"/>` +
+          `<text x="${xLbl.toFixed(1)}" y="${(yLbl + 4).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#d7dcf0">${esc(ax)}</text>`
+        );
+      });
+      profiles.forEach((prof, pi) => {
+        const col = prof.color || PALETTE_COLORS[pi % PALETTE_COLORS.length];
+        const scores = prof.scores || [];
+        const polyPts = axes
+          .map((_, i) => {
+            const sc = Math.max(0, Math.min(100, Number(scores[i]) || 50));
+            const r = (sc / 100) * maxR;
+            const ang = -Math.PI / 2 + (i * 2 * Math.PI) / nAx;
+            return `${(cx + r * Math.cos(ang)).toFixed(1)},${(cy + r * Math.sin(ang)).toFixed(1)}`;
+          })
+          .join(" ");
+        parts.push(`<polygon points="${polyPts}" fill="${esc(col)}26" stroke="${esc(col)}" stroke-width="2.4"><title>${esc(prof.name)}</title></polygon>`);
+        const legY = 55 + pi * 30;
+        parts.push(
+          `<rect x="500" y="${legY - 11}" width="14" height="14" rx="3" fill="${esc(col)}"/>` +
+          `<text x="522" y="${legY}" fill="#eeeef7" font-size="12" font-weight="600">${esc(prof.name)}</text>`
+        );
+      });
+      return wrapFigure(parts.join(""), 350);
+    }
+
+    // 7. SANKEY FLOW DIAGRAM
+    if (type === "sankey" && Array.isArray(chartSpec.flows) && chartSpec.flows.length > 0) {
+      const flows = chartSpec.flows;
+      const sources = Array.from(new Set(flows.map((f) => f.from)));
+      const targets = Array.from(new Set(flows.map((f) => f.to)));
+      const height = 340;
+      const leftX = 195, rightX = 685;
+      const srcTotals = Object.fromEntries(sources.map((s) => [s, flows.filter((f) => f.from === s).reduce((a, x) => a + (Number(x.value) || 1), 0)]));
+      const tgtTotals = Object.fromEntries(targets.map((t) => [t, flows.filter((f) => f.to === t).reduce((a, x) => a + (Number(x.value) || 1), 0)]));
+      const grandTotal = Math.max(1, Object.values(srcTotals).reduce((a, v) => a + v, 0));
+      const usableH = 230;
+      const srcPos = {};
+      let sy = 40;
+      sources.forEach((s, i) => {
+        const h = Math.max(18, (srcTotals[s] / grandTotal) * usableH);
+        srcPos[s] = { y: sy, h, curOffset: 0, color: PALETTE_COLORS[i % PALETTE_COLORS.length] };
+        sy += h + 14;
+      });
+      const tgtPos = {};
+      let ty = 40;
+      targets.forEach((t, i) => {
+        const h = Math.max(18, (tgtTotals[t] / grandTotal) * usableH);
+        tgtPos[t] = { y: ty, h, curOffset: 0, color: PALETTE_COLORS[(i + 3) % PALETTE_COLORS.length] };
+        ty += h + 16;
+      });
+      const parts = [];
+      flows.forEach((fl, fi) => {
+        const sp = srcPos[fl.from], tp = tgtPos[fl.to];
+        if (!sp || !tp) return;
+        const val = Math.max(1, Number(fl.value) || 1);
+        const strokeW = Math.max(4, (val / grandTotal) * usableH);
+        const y1 = sp.y + sp.curOffset + strokeW / 2;
+        const y2 = tp.y + tp.curOffset + strokeW / 2;
+        sp.curOffset += strokeW;
+        tp.curOffset += strokeW;
+        const col = fl.color || sp.color || PALETTE_COLORS[fi % PALETTE_COLORS.length];
+        const d = `M ${leftX + 16} ${y1.toFixed(1)} C ${(leftX + rightX) / 2} ${y1.toFixed(1)}, ${(leftX + rightX) / 2} ${y2.toFixed(1)}, ${rightX} ${y2.toFixed(1)}`;
+        parts.push(`<path d="${d}" fill="none" stroke="${esc(col)}88" stroke-width="${strokeW.toFixed(1)}"><title>${esc(fl.from)} → ${esc(fl.to)}: ${val} ${unit}</title></path>`);
+      });
+      sources.forEach((s) => {
+        const sp = srcPos[s];
+        parts.push(
+          `<rect x="${leftX}" y="${sp.y.toFixed(1)}" width="16" height="${sp.h.toFixed(1)}" rx="3" fill="${sp.color}"/>` +
+          `<text x="${leftX - 8}" y="${(sp.y + sp.h / 2 + 4).toFixed(1)}" text-anchor="end" font-size="11.5" fill="#eeeef7">${esc(s)}</text>`
+        );
+      });
+      targets.forEach((t) => {
+        const tp = tgtPos[t];
+        parts.push(
+          `<rect x="${rightX}" y="${tp.y.toFixed(1)}" width="16" height="${tp.h.toFixed(1)}" rx="3" fill="${tp.color}"/>` +
+          `<text x="${rightX + 24}" y="${(tp.y + tp.h / 2 + 4).toFixed(1)}" text-anchor="start" font-size="11.5" fill="#9ddacf" font-weight="600">${esc(t)}</text>`
+        );
+      });
+      return wrapFigure(parts.join(""), height);
+    }
+
+    // 8. HISTOGRAM & KERNEL DENSITY CURVE
+    if (type === "histogram") {
+      const bins = Array.isArray(chartSpec.bins) && chartSpec.bins.length
+        ? chartSpec.bins
+        : (chartSpec.bars || []).map((b) => ({ range: b.label, count: Number(b.primary) || 1 }));
+      const maxC = Math.max(1, ...bins.map((b) => Number(b.count) || 0));
+      const left = 74, right = 860, top = 38, bottom = 278;
+      const plotW = right - left, plotH = bottom - top;
+      const step = plotW / Math.max(1, bins.length);
+      const parts = [];
+      for (let k = 0; k <= 4; k++) {
+        const tv = Math.round(((maxC * k) / 4) * 10) / 10;
+        const ty = bottom - (k / 4) * plotH;
+        parts.push(`<line class="chart-grid" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/><text x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv}</text>`);
+      }
+      const curvePts = [];
+      bins.forEach((b, i) => {
+        const val = Number(b.count) || 0;
+        const bx = left + i * step;
+        const bh = Math.max(4, (val / maxC) * plotH);
+        const by = bottom - bh;
+        const cx = bx + step / 2;
+        curvePts.push(`${cx.toFixed(1)},${by.toFixed(1)}`);
+        parts.push(
+          `<rect fill="#69d4cf88" stroke="#69d4cf" stroke-width="1.5" x="${(bx + 2).toFixed(1)}" y="${by.toFixed(1)}" width="${Math.max(8, step - 4).toFixed(1)}" height="${bh.toFixed(1)}"><title>${esc(b.range)}: ${val}</title></rect>` +
+          `<text x="${cx.toFixed(1)}" y="${bottom + 20}" text-anchor="middle" font-size="10.5">${esc(String(b.range || "").slice(0, 14))}</text>`
+        );
+      });
+      if (curvePts.length > 1) {
+        parts.push(`<polyline fill="none" stroke="#f7ab65" stroke-width="2.8" points="${curvePts.join(" ")}"/>`);
+      }
+      return wrapFigure(parts.join(""), 325);
+    }
+
+    // 9. DEFAULT: HORIZONTAL BENCHMARK BARS
+    const bars = Array.isArray(chartSpec?.bars) && chartSpec.bars.length ? chartSpec.bars : buildFallbackAnalytics({}).bars;
     const maxVal = Math.max(1, ...bars.map((b) => (Number(b.primary) || 0) + (Number(b.secondary) || 0)));
     const height = 74 + bars.length * 34;
     const left = 270;
     const width = 415;
-    const unit = esc(analytics?.chartUnit || "");
     const parts = [];
     for (let i = 0; i <= 4; i++) {
       const tickVal = (maxVal * i) / 4;
@@ -1169,14 +1628,22 @@
         `<text class="athletics-label" x="${(left + wP + wS + 8).toFixed(1)}" y="${y + 15}">${pVal}${unit}${sVal > 0 ? ` (+${sVal}${unit})` : ""}</text>`
       );
     });
-    return [
-      `<figure class="sports-chart athletics-chart">`,
-      `<figcaption><span class="chart-title">${esc(analytics?.chartTitle || "Empirical Study Chart")}</span>`,
-      `<small>${esc(analytics?.chartSubtitle || "")}</small></figcaption>`,
-      `<svg viewBox="0 0 900 ${height}" role="img" aria-label="${esc(analytics?.chartTitle || studyId)}">${parts.join("")}</svg>`,
-      `</figure>`,
-    ].join("");
+    return wrapFigure(parts.join(""), height);
   };
+
+  const renderAllStudyChartsHtml = (studyId, analytics) => {
+    if (Array.isArray(analytics?.charts) && analytics.charts.length > 0) {
+      return analytics.charts.map((ch, idx) => renderUniversalChartSvg(`${studyId}-chart-${idx + 1}`, ch)).join("");
+    }
+    return (
+      renderUniversalChartSvg(studyId, analytics) +
+      (Array.isArray(analytics?.extraCharts)
+        ? analytics.extraCharts.map((ch, idx) => renderUniversalChartSvg(`${studyId}-extra-${idx + 2}`, ch)).join("")
+        : "")
+    );
+  };
+
+  const renderAnalyticsSvgHtml = (studyId, analytics) => renderUniversalChartSvg(studyId, analytics);
 
   const renderStudyAnalyticsDom = (container, study, resultRecord) => {
     if (!container) return;
@@ -1251,11 +1718,7 @@
         .join("") +
       `</div></article>`;
 
-    const svgHtml =
-      renderAnalyticsSvgHtml(study.id, analytics) +
-      (Array.isArray(analytics.extraCharts)
-        ? analytics.extraCharts.map((ch, idx) => renderAnalyticsSvgHtml(`${study.id}-extra-${idx + 2}`, ch)).join("")
-        : "");
+    const svgHtml = renderAllStudyChartsHtml(study.id, analytics);
     const cols = Array.isArray(analytics.tableColumns) && analytics.tableColumns.length ? analytics.tableColumns : ["Item", "Primary", "Secondary", "Notes"];
     const rows = Array.isArray(analytics.tableRows) ? analytics.tableRows : [];
     const tableHtml = rows.length
@@ -1320,6 +1783,43 @@
     ].join("\n");
   };
 
+  const renderLinkagesBadgesHtml = (linkages, currentPath = "") => {
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const items = Array.isArray(linkages)
+      ? linkages
+      : String(linkages || "")
+          .split(",")
+          .map((x) => x.trim())
+          .filter(Boolean);
+    if (!items.length) return '<span class="wb-badge wb-flat">—</span>';
+    return (
+      `<div class="wb-linkages-cell" style="display:flex;flex-wrap:wrap;gap:4px;">` +
+      items
+        .map((raw) => {
+          const parts = String(raw).split("|").map((p) => p.trim());
+          const refId = parts[0] || "";
+          const label = parts[1] || refId;
+          const targetPath = parts[2] || currentPath || "";
+          const prefix = refId.slice(0, 2).toUpperCase();
+          const anchor =
+            prefix === "ST"
+              ? `#live-study-${refId.toLowerCase()}`
+              : prefix === "TH"
+              ? "#theory-notebook-derivations"
+              : prefix === "AP"
+              ? "#applied-engineering-systems"
+              : "";
+          const href = targetPath ? `../${esc(targetPath)}/index.html${anchor}` : `#${esc(refId)}`;
+          const badgeCls = prefix === "TH" ? "wb-warn" : prefix === "AP" ? "wb-up" : "wb-flat";
+          return `<a class="wb-badge ${badgeCls} wb-linkage-chip" href="${href}" title="Connected to ${esc(refId)}: ${esc(label)}">🔗 ${esc(refId)} · ${esc(label.slice(0, 24))}</a>`;
+        })
+        .join("") +
+      `</div>`
+    );
+  };
+
+  let openFollowUpModalForStudy = () => {};
+
   const markStudyCompletedInDom = (study, resultRecord) => {
     const hasLiveTokens = Boolean(resultRecord && Number(resultRecord.tokens) > 0);
     const statusCell = document.querySelector(`[data-study-status="${study.id}"]`);
@@ -1344,14 +1844,19 @@
         destLink.textContent = "Destination tab ↗";
         outputCell.appendChild(destLink);
       }
-      if (!hasLiveTokens) {
-        const rerunInlineBtn = document.createElement("button");
-        rerunInlineBtn.type = "button";
-        rerunInlineBtn.className = "button ghost wb-run-study-btn";
-        rerunInlineBtn.textContent = "▶ Run study now";
-        rerunInlineBtn.addEventListener("click", () => requestRunStudy(study));
-        outputCell.appendChild(rerunInlineBtn);
-      }
+      const rerunInlineBtn = document.createElement("button");
+      rerunInlineBtn.type = "button";
+      rerunInlineBtn.className = "button ghost wb-run-study-btn";
+      rerunInlineBtn.textContent = hasLiveTokens ? "↻ Re-Study Deeper" : "▶ Run study now";
+      rerunInlineBtn.addEventListener("click", () => requestRunStudy(study));
+      outputCell.appendChild(rerunInlineBtn);
+
+      const followUpBtn = document.createElement("button");
+      followUpBtn.type = "button";
+      followUpBtn.className = "button ghost wb-followup-btn";
+      followUpBtn.textContent = "➕ Follow-Up / Extrapolate";
+      followUpBtn.addEventListener("click", () => openFollowUpModalForStudy(study));
+      outputCell.appendChild(followUpBtn);
     }
   };
 
@@ -1369,21 +1874,59 @@
     if (statusModalEl) statusModalEl.textContent = `Completed (${resultRecord.mode}) on ${resultRecord.completedAt}`;
     if (destLinksEl && study.atlasPath) {
       const slug = study.atlasPath.split("/").pop().toLowerCase();
+      const rowEl = document.querySelector(`[data-study-row="${study.id}"]`);
+      const rowLinkages = study.linkages || (rowEl ? rowEl.getAttribute("data-study-linkages") : "") || "";
+      const linkagesBar = rowLinkages
+        ? `<div style="margin-top:6px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;"><span class="wb-pbi-label">Connected Linkages:</span>${renderLinkagesBadgesHtml(rowLinkages, study.atlasPath)}</div>`
+        : "";
       destLinksEl.innerHTML =
         `<div class="wb-bucket-bar" style="margin: 4px 0 8px;">` +
         `<a class="wb-bucket-chip is-active" href="../${study.atlasPath}/index.html">📊 Open ${study.atlasPath.split("/").pop().replace(/-/g, " ")} Destination Tab ↗</a>` +
         `<a class="wb-bucket-chip" href="../Mental-Map/index.html#sec:${slug}">🧠 View in Mental Map (§ ${study.atlasPath.split("/").pop().replace(/-/g, " ")}) ↗</a>` +
-        `</div>`;
+        `<button class="wb-bucket-chip" type="button" id="wb-modal-open-followup">➕ Add Follow-Up Study / Extrapolate Theory or App</button>` +
+        `</div>` +
+        linkagesBar;
       destLinksEl.hidden = false;
+      const modalFuBtn = document.getElementById("wb-modal-open-followup");
+      if (modalFuBtn) {
+        modalFuBtn.addEventListener("click", () => {
+          closeDialog(runDialog);
+          openFollowUpModalForStudy(study);
+        });
+      }
     }
     renderStudyAnalyticsDom(visualsEl, study, resultRecord);
-    if (summaryEl) summaryEl.textContent = resultRecord.summary;
+    if (summaryEl) {
+      summaryEl.innerHTML = formatStudyNarrativeHtml(resultRecord.summary);
+      ensureMathJaxLoadedAndTypeset(summaryEl);
+    }
     if (texEl) texEl.value = resultRecord.tex;
     if (keyBarEl) {
       const needsKey = !unlockedApiKey || !resultRecord.tokens || Number(resultRecord.tokens) === 0;
       keyBarEl.hidden = !needsKey;
     }
     openDialog(runDialog);
+  };
+
+  const detectRequestedChartTypes = (study) => {
+    const picked = new Set(Array.isArray(study.chartTypes) ? study.chartTypes : []);
+    document.querySelectorAll(`[data-restudy-chart="${study.id}"] input[type="checkbox"]:checked`).forEach((cb) => {
+      if (cb.value) picked.add(cb.value);
+    });
+    const qLower = String(study.question || "").toLowerCase();
+    if (/box\s*(?:and|&)?\s*whisker|boxplot|quartile|iqr/i.test(qLower)) picked.add("box_whisker");
+    if (/line\s*(?:plot|chart|graph)|time[-\s]*series|daily|monthly|trajectory/i.test(qLower)) picked.add("line");
+    if (/stacked\s*(?:column|bar)/i.test(qLower)) picked.add("stacked_column");
+    if (/clustered\s*(?:column|bar)|dual[-\s]*axis/i.test(qLower)) picked.add("clustered_column");
+    if (/pie\s*chart|donut\s*chart|share\s*breakdown/i.test(qLower)) picked.add("pie_donut");
+    if (/radar\s*chart|spider\s*chart/i.test(qLower)) picked.add("radar");
+    if (/sankey|flow\s*diagram/i.test(qLower)) picked.add("sankey");
+    if (/histogram|distribution/i.test(qLower)) picked.add("histogram");
+    if (picked.size === 0) {
+      picked.add("horizontal_bar");
+      picked.add("line");
+    }
+    return Array.from(picked);
   };
 
   const executeStudy = async (study) => {
@@ -1407,7 +1950,7 @@
     if (titleEl) titleEl.textContent = `Running ${study.id}: ${study.title}…`;
     if (statusModalEl) {
       statusModalEl.textContent = unlockedApiKey
-        ? `Calling Google AI Studio (${MODEL_LABELS[selectedRunnerModel] || selectedRunnerModel}) with key ending in …${unlockedApiKey.slice(-4)} (searching datasets, building SVG chart & Pandas table)…`
+        ? `Calling Google AI Studio (${MODEL_LABELS[selectedRunnerModel] || selectedRunnerModel}) with key ending in …${unlockedApiKey.slice(-4)} (searching datasets, building SVG charts & Pandas table)…`
         : "No Google AI Studio API key saved yet — paste your AQ....eQ3w key below to run with live Gemini 4 Argon tokens.";
     }
     if (keyBarEl) keyBarEl.hidden = Boolean(unlockedApiKey);
@@ -1424,6 +1967,8 @@
     let lastApiError = "";
     let mode = "local deterministic scaffold · 0 API tokens (no Google AI Studio key saved yet — paste your AQ....eQ3w key below)";
     const needsDatasetSearch = !study.dataset || /auto-discover/i.test(study.dataset);
+    const requestedCharts = detectRequestedChartTypes(study);
+    study.chartTypes = requestedCharts;
     let wakeLockSentinel = null;
     if (navigator && navigator.wakeLock && typeof navigator.wakeLock.request === "function") {
       try {
@@ -1434,21 +1979,39 @@
     }
     if (unlockedApiKey) {
       discoverLiveModels(unlockedApiKey);
+      const chartSchemaSpec = [
+        `Requested chart types for this study: ${requestedCharts.join(", ")}.`,
+        `CRITICAL: In your JSON block, include a "charts" array containing one entry for EACH requested chart type (${requestedCharts.join(", ")}) using these exact schemas:`,
+        `- For "line": {"type": "line", "chartTitle": "...", "chartSubtitle": "...", "chartUnit": "°C or % or $", "xLabels": ["T1","T2","T3","T4","T5","T6"], "series": [{"name": "Series 1", "color": "#69d4cf", "values": [1,2,3,4,5,6]}, {"name": "Series 2", "color": "#f7ab65", "values": [2,3,4,5,6,7]}]}`,
+        `- For "box_whisker": {"type": "box_whisker", "chartTitle": "...", "chartSubtitle": "...", "chartUnit": "°C or units", "boxes": [{"label": "Group 1", "min": -5, "q1": 2, "median": 8, "q3": 14, "max": 22}, ...]}`,
+        `- For "stacked_column": {"type": "stacked_column", "chartTitle": "...", "chartSubtitle": "...", "chartUnit": "units", "categories": ["Cat 1","Cat 2","Cat 3"], "stacks": [{"name": "Component A", "color": "#69d4cf", "values": [10,20,15]}, {"name": "Component B", "color": "#f7ab65", "values": [5,8,12]}]}`,
+        `- For "clustered_column": {"type": "clustered_column", "chartTitle": "...", "chartSubtitle": "...", "barUnit": "units", "lineUnit": "$ or %", "items": [{"label": "Entity 1", "primary": 45, "secondary": 12.5}, ...]}`,
+        `- For "pie_donut": {"type": "pie_donut", "chartTitle": "...", "chartSubtitle": "...", "chartUnit": "%", "slices": [{"label": "Segment A", "value": 42}, {"label": "Segment B", "value": 33}, {"label": "Segment C", "value": 25}]}`,
+        `- For "radar": {"type": "radar", "chartTitle": "...", "chartSubtitle": "...", "axes": ["Axis 1","Axis 2","Axis 3","Axis 4","Axis 5"], "profiles": [{"name": "Entity A", "color": "#69d4cf", "scores": [85,70,90,65,80]}, {"name": "Entity B", "color": "#f7ab65", "scores": [60,92,55,88,74]}]}`,
+        `- For "sankey": {"type": "sankey", "chartTitle": "...", "chartSubtitle": "...", "chartUnit": "units", "flows": [{"from": "Source A", "to": "Target X", "value": 25}, {"from": "Source B", "to": "Target Y", "value": 18}]}`,
+        `- For "histogram": {"type": "histogram", "chartTitle": "...", "chartSubtitle": "...", "chartUnit": "count", "bins": [{"range": "0-10", "count": 12}, {"range": "10-20", "count": 28}, {"range": "20-30", "count": 19}]}`,
+        `- For "horizontal_bar": {"type": "horizontal_bar", "chartTitle": "...", "chartSubtitle": "...", "chartUnit": "units", "bars": [{"label": "Item 1", "primary": 160, "secondary": 20, "note": "..."}]}`,
+      ].join("\n");
       const prompt = [
         `You are an empirical data scientist and research assistant for Liam McGrath's technical notebook (liammspandasprojects.org).`,
+        `Study ID: ${study.id}${study.parentId ? ` (Follow-Up to ${study.parentId})` : ""}`,
         `Title: ${study.title}`,
         `Atlas Section: ${study.atlasPath}`,
         `Question: ${study.question}`,
         needsDatasetSearch
-          ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, BLS, FRED, World Bank, IEA, OECD, NREL, USGS, Elections Alberta/Canada, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
+          ? `Dataset: NONE PROVIDED — first search for and name the most authoritative public datasets (e.g. Statistics Canada, Environment Canada, ECMWF ERA5, NOAA, NHTSA, Transport Canada, BLS, FRED, World Bank, IEA, OECD, NREL, USGS, NBER, or peer-reviewed benchmarks) that answer this question, and start your response with a line "DATASETS: <concise dataset names & sources>".`
           : `Dataset provided: ${study.dataset} (also cite any complementary public benchmark datasets and start with "DATASETS: <datasets>").`,
         `Next, write a thorough, fact-grounded 3-paragraph analytical study summary with concrete empirical numbers, physical/economic/structural mechanisms, LaTeX math equations ($...$ and $$...$$), and testable hypotheses.`,
-        `Finally, at the very end of your response, include a fenced \`\`\`json block containing empirical benchmark data for the site's Athletics-style SVG chart, KPI cards, data table, and a runnable Python pandas script in this exact schema:`,
+        chartSchemaSpec,
+        `Finally, at the very end of your response, include a fenced \`\`\`json block containing empirical benchmark data for the site's multi-type SVG charts, KPI cards, data table, and a runnable Python pandas script in this exact schema:`,
         `\`\`\`json`,
         `{`,
         `  "chartTitle": "Concise quantitative chart title (with units)",`,
-        `  "chartSubtitle": "One-sentence explanation of what the bars compare and data source",`,
-        `  "chartUnit": "% or $/kWh or $/L or Wh/kg",`,
+        `  "chartSubtitle": "One-sentence explanation of what the primary chart compares and data source",`,
+        `  "chartUnit": "% or °C or $/kWh or recalls",`,
+        `  "charts": [`,
+        `    /* Populate one chart object per requested chart type: ${requestedCharts.join(", ")} */`,
+        `  ],`,
         `  "kpis": [`,
         `    {"label": "KPI 1 Name", "value": "Concrete #", "note": "Short benchmark context", "definition": "1-2 sentence rigorous definition of this KPI and how it is calculated"},`,
         `    {"label": "KPI 2 Name", "value": "Concrete #", "note": "Short benchmark context", "definition": "1-2 sentence rigorous definition of this KPI and how it is calculated"},`,
@@ -1694,10 +2257,13 @@
     const resultRecord = {
       study: {
         id: study.id,
+        parentId: study.parentId || null,
         title: study.title,
         atlasPath: study.atlasPath,
         question: study.question,
         dataset: discoveredDataset,
+        chartTypes: study.chartTypes || requestedCharts,
+        linkages: study.linkages || [],
         createdOn: study.createdOn || todayIso(),
       },
       summary: summaryText,
@@ -1745,12 +2311,18 @@
       if (useNew) scopeNotes.push("search for & incorporate the newest external benchmark datasets");
       if (useUpdated) scopeNotes.push("re-evaluate updated / internal site datasets (records/athletics, records/health, Smash, basketball)");
       const baseDataset = btn.getAttribute("data-study-dataset") || "";
+      const rowEl = document.querySelector(`[data-study-row="${id}"]`);
+      const rawCharts = btn.getAttribute("data-study-charts") || (rowEl ? rowEl.getAttribute("data-study-charts") : "") || "";
+      const rawLinkages = rowEl ? rowEl.getAttribute("data-study-linkages") || "" : "";
       const study = {
         id,
+        parentId: rowEl ? rowEl.getAttribute("data-study-parent") || null : null,
         title: btn.getAttribute("data-study-title") || "Queued Study",
         atlasPath: btn.getAttribute("data-study-path") || "",
         question: btn.getAttribute("data-study-question") || "",
         dataset: scopeNotes.length ? `${baseDataset} [Re-Study Scope: ${scopeNotes.join(" + ")}]` : baseDataset,
+        chartTypes: rawCharts ? rawCharts.split(",").map((x) => x.trim()).filter(Boolean) : [],
+        linkages: rawLinkages ? rawLinkages.split(",").map((x) => x.trim()).filter(Boolean) : [],
         createdOn: todayIso(),
       };
       requestRunStudy(study);
@@ -1758,6 +2330,24 @@
   };
 
   document.querySelectorAll("[data-run-study-id], [data-restudy-id]").forEach(attachRunButtonListener);
+
+  const attachFollowUpButtonListener = (btn) => {
+    btn.addEventListener("click", (ev) => {
+      ev.stopPropagation();
+      const id = btn.getAttribute("data-followup-id") || "";
+      const rowEl = document.querySelector(`[data-study-row="${id}"]`);
+      const study = {
+        id,
+        title: btn.getAttribute("data-study-title") || (rowEl ? rowEl.getAttribute("data-study-title") : "") || id,
+        atlasPath: btn.getAttribute("data-study-path") || (rowEl ? rowEl.getAttribute("data-study-path") : "") || "",
+        question: btn.getAttribute("data-study-question") || (rowEl ? rowEl.getAttribute("data-study-question") : "") || "",
+        dataset: btn.getAttribute("data-study-dataset") || (rowEl ? rowEl.getAttribute("data-study-dataset") : "") || "",
+      };
+      openFollowUpModalForStudy(study);
+    });
+  };
+
+  document.querySelectorAll("[data-followup-id]").forEach(attachFollowUpButtonListener);
 
   const rerunBtn = document.getElementById("wb-run-rerun");
   if (rerunBtn) {
@@ -2039,6 +2629,19 @@
     runBtn.setAttribute("data-study-dataset", entry.dataset);
     attachRunButtonListener(runBtn);
     outAct.appendChild(runBtn);
+
+    const fuBtn = document.createElement("button");
+    fuBtn.type = "button";
+    fuBtn.className = "button ghost wb-followup-btn";
+    fuBtn.textContent = "➕ Follow-Up / Extrapolate";
+    fuBtn.setAttribute("data-followup-id", entry.id);
+    fuBtn.setAttribute("data-study-title", entry.title);
+    fuBtn.setAttribute("data-study-path", entry.atlasPath);
+    fuBtn.setAttribute("data-study-question", entry.question);
+    fuBtn.setAttribute("data-study-dataset", entry.dataset);
+    attachFollowUpButtonListener(fuBtn);
+    outAct.appendChild(fuBtn);
+
     outRow.append(outLbl, outAct);
 
     const adminRow = document.createElement("div");
@@ -2066,19 +2669,30 @@
     return td;
   };
 
+  const buildLinkagesTd = (linkages, atlasPath) => {
+    const td = document.createElement("td");
+    td.innerHTML = renderLinkagesBadgesHtml(linkages, atlasPath);
+    return td;
+  };
+
   const appendRow = (table, entry) => {
     if (table === "studyQueue") {
       const tbody = document.getElementById("wb-studies-body");
       if (!tbody) return;
       const ipIdx = entry.ipIndex || currentIpIndex;
       const tr = document.createElement("tr");
+      const chartsStr = Array.isArray(entry.chartTypes) ? entry.chartTypes.join(",") : String(entry.chartTypes || "horizontal_bar,line");
+      const linkagesStr = Array.isArray(entry.linkages) ? entry.linkages.join(", ") : String(entry.linkages || "");
       tr.setAttribute("data-study-row", entry.id);
+      tr.setAttribute("data-study-parent", entry.parentId || "");
       tr.setAttribute("data-study-date", entry.createdOn);
       tr.setAttribute("data-study-title", entry.title);
       tr.setAttribute("data-study-path", entry.atlasPath);
       tr.setAttribute("data-study-field", (entry.atlasPath || "").split("/")[0] || "");
       tr.setAttribute("data-study-question", entry.question);
       tr.setAttribute("data-study-dataset", entry.dataset);
+      tr.setAttribute("data-study-charts", chartsStr);
+      tr.setAttribute("data-study-linkages", linkagesStr);
       tr.setAttribute("data-study-status-val", entry.status);
       tr.setAttribute("data-study-ip", ipIdx);
       const statusTd = document.createElement("td");
@@ -2110,6 +2724,7 @@
         cell("td", entry.createdOn),
         buildStudyCellDom({ ...entry, ipIndex: ipIdx }),
         cell("td", entry.dataset),
+        buildLinkagesTd(entry.linkages, entry.atlasPath),
         statusTd,
         ipTd,
         delTd
@@ -2138,6 +2753,7 @@
         cell("td", entry.title),
         cell("td", entry.atlasPath),
         cell("td", entry.scopePrompt),
+        buildLinkagesTd(entry.linkages, entry.atlasPath),
         cell("td", entry.status),
         runTd
       );
@@ -2166,6 +2782,7 @@
         cell("td", entry.atlasPath),
         cell("td", entry.systemDesign),
         cell("td", entry.societalBenefit),
+        buildLinkagesTd(entry.linkages, entry.atlasPath),
         cell("td", entry.status),
         runTd
       );
@@ -2181,6 +2798,7 @@
         cell("td", entry.category),
         cell("td", entry.priority),
         cell("td", entry.atlasPath),
+        buildLinkagesTd(entry.linkages, entry.atlasPath),
         cell("td", entry.status),
         cell("td", entry.notes || "")
       );
@@ -2236,10 +2854,10 @@
     }
   };
 
-  // Sequential ID generator (ST-06, TD-08, RL-04, VN-03) instead of random base-36 postal-code strings
+  // Hierarchical ID generator: ST-12-00 for initial studies, ST-11-01 for follow-ups, TH-05, AP-05, TD-08
   const nextSequentialId = (prefix, tbodyId, tableKey) => {
     let maxNum = 0;
-    const re = new RegExp(`^${prefix}-(\\d+)$`, "i");
+    const re = new RegExp(`^${prefix}-(\\d+)(?:-\\d+)?$`, "i");
     document.querySelectorAll(`#${tbodyId} tr th`).forEach((th) => {
       const m = th.textContent.trim().match(re);
       if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
@@ -2249,8 +2867,34 @@
       const m = String(r.id || "").match(re);
       if (m) maxNum = Math.max(maxNum, parseInt(m[1], 10));
     });
+    if (prefix === "ST") {
+      return `ST-${String(maxNum + 1).padStart(2, "0")}-00`;
+    }
     return `${prefix}-${String(maxNum + 1).padStart(2, "0")}`;
   };
+
+  const nextFollowUpStudyId = (parentId) => {
+    const mBase = String(parentId || "ST-01-00").match(/^ST-(\d+)/i);
+    const major = mBase ? String(parseInt(mBase[1], 10)).padStart(2, "0") : "01";
+    let maxSub = 0;
+    const re = new RegExp(`^ST-0*${parseInt(major, 10)}-(\\d+)$`, "i");
+    document.querySelectorAll("#wb-studies-body tr th").forEach((th) => {
+      const m = th.textContent.trim().match(re);
+      if (m) maxSub = Math.max(maxSub, parseInt(m[1], 10));
+    });
+    const localRows = loadLocal().studyQueue || [];
+    localRows.forEach((r) => {
+      const m = String(r.id || "").match(re);
+      if (m) maxSub = Math.max(maxSub, parseInt(m[1], 10));
+    });
+    return `ST-${major}-${String(maxSub + 1).padStart(2, "0")}`;
+  };
+
+  const parseLinkagesInput = (rawStr) =>
+    String(rawStr || "")
+      .split(",")
+      .map((s) => s.trim())
+      .filter(Boolean);
 
   const buildEntry = (form, table) => {
     const data = new FormData(form);
@@ -2261,13 +2905,18 @@
       if (data.get("scopeNewDatasets")) scopes.push("New External Datasets");
       if (data.get("scopeUpdatedDatasets")) scopes.push("Updated / Internal Site Datasets");
       const dsFinal = rawDataset || (scopes.length ? `Auto-discover (${scopes.join(" + ")})` : "Auto-discover relevant public datasets");
+      const chartTypes = data.getAll("chartTypes").map((x) => String(x).trim()).filter(Boolean);
+      const linkages = parseLinkagesInput(data.get("linkages"));
       return {
         id: nextSequentialId("ST", "wb-studies-body", "studyQueue"),
+        parentId: null,
         createdOn,
         title: String(data.get("title") || "").trim(),
         atlasPath: String(data.get("atlasPath") || "").trim(),
         question: String(data.get("question") || "").trim(),
         dataset: dsFinal,
+        chartTypes: chartTypes.length ? chartTypes : ["horizontal_bar", "line"],
+        linkages,
         status: String(data.get("status") || "queued"),
         studyRoute: null,
         paperRoute: null,
@@ -2284,6 +2933,7 @@
         title: String(data.get("title") || "").trim(),
         atlasPath: String(data.get("atlasPath") || "").trim(),
         scopePrompt: String(data.get("scopePrompt") || "").trim(),
+        linkages: parseLinkagesInput(data.get("linkages")),
         status: "queued",
         notes: "Added from browser Workbench",
       };
@@ -2297,6 +2947,7 @@
         atlasPath: String(data.get("atlasPath") || "").trim(),
         systemDesign: String(data.get("systemDesign") || "").trim(),
         societalBenefit: String(data.get("societalBenefit") || "").trim(),
+        linkages: parseLinkagesInput(data.get("linkages")),
         status: "queued",
         notes: "Added from browser Workbench",
       };
@@ -2309,6 +2960,7 @@
         category: String(data.get("category") || "Website"),
         priority: String(data.get("priority") || "medium"),
         atlasPath: String(data.get("atlasPath") || ""),
+        linkages: parseLinkagesInput(data.get("linkages")),
         status: "planned",
         notes: String(data.get("notes") || "").trim(),
       };
@@ -2445,6 +3097,7 @@
               chartTitle: v.analytics?.chartTitle,
               chartSubtitle: v.analytics?.chartSubtitle,
               chartUnit: v.analytics?.chartUnit,
+              charts: (v.analytics?.charts || []).slice(0, 4),
               kpis: (v.analytics?.kpis || []).slice(0, 4),
               inspectorTitle: v.analytics?.inspectorTitle,
               inspectorParams: (v.analytics?.inspectorParams || []).slice(0, 4),
@@ -2799,8 +3452,15 @@
     });
   }
 
+  // Normalize legacy ST-01 .. ST-11 IDs to hierarchical ST-01-00 .. ST-11-00
+  const normalizeStudyId = (rawId) => {
+    const m = String(rawId || "").trim().match(/^ST-(\d+)$/i);
+    if (m) return `ST-${String(parseInt(m[1], 10)).padStart(2, "0")}-00`;
+    return String(rawId || "").trim();
+  };
+
   // Remove any Admin-deleted seed rows, migrate old ST-L... postal-code IDs, and restore local rows
-  const deletedSet = new Set(getDeletedIds());
+  const deletedSet = new Set(getDeletedIds().map(normalizeStudyId));
   deletedSet.forEach((id) => {
     document.querySelectorAll(`[data-study-row="${id}"]`).forEach((tr) => tr.remove());
   });
@@ -2812,16 +3472,18 @@
         (tr.getAttribute("data-study-title") || "").trim().toLowerCase()
       )
     );
-    // Drop local rows that have already been promoted into the official repo seed (e.g. Sodium Battery Technology -> ST-05)
+    stored.studyQueue.forEach((r) => {
+      r.id = normalizeStudyId(r.id);
+    });
+    // Drop local rows that have already been promoted into the official repo seed (e.g. ST-01-00 .. ST-11-00)
     stored.studyQueue = stored.studyQueue.filter(
       (r) => !seededTitles.has(String(r.title || "").trim().toLowerCase()) && !deletedSet.has(r.id)
     );
-    // Renumber any remaining ST-L... rows into sequential ST-07, ST-08...
-    let nextNum = 6;
+    let nextNum = 11;
     stored.studyQueue.forEach((r) => {
       if (/^ST-L/i.test(String(r.id || ""))) {
         nextNum += 1;
-        r.id = `ST-${String(nextNum).padStart(2, "0")}`;
+        r.id = `ST-${String(nextNum).padStart(2, "0")}-00`;
       }
       if (!r.ipIndex) r.ipIndex = currentIpIndex;
     });
@@ -2832,7 +3494,14 @@
   }
   const savedRuns = loadJson(RUNS_KEY);
   let runsChanged = false;
-  for (const [studyId, resultRecord] of Object.entries(savedRuns)) {
+  for (const [rawStudyId, resultRecord] of Object.entries({ ...savedRuns })) {
+    const studyId = normalizeStudyId(rawStudyId);
+    if (studyId !== rawStudyId) {
+      delete savedRuns[rawStudyId];
+      if (resultRecord && resultRecord.study) resultRecord.study.id = studyId;
+      savedRuns[studyId] = resultRecord;
+      runsChanged = true;
+    }
     // Purge stale 0-token scaffold runs so studies aren't stuck on a cached 0-token placeholder
     if (!resultRecord || !Number(resultRecord.tokens) || /0 API tokens/i.test(String(resultRecord.mode || ""))) {
       delete savedRuns[studyId];
@@ -2848,6 +3517,7 @@
         atlasPath: rowEl.getAttribute("data-study-path") || "",
         question: rowEl.getAttribute("data-study-question") || "",
         dataset: rowEl.getAttribute("data-study-dataset") || "",
+        linkages: (rowEl.getAttribute("data-study-linkages") || "").split(",").map((s) => s.trim()).filter(Boolean),
       };
       markStudyCompletedInDom(studyObj, resultRecord);
     }
@@ -2858,6 +3528,221 @@
   pullCloudSync();
   if (window.location.hash === "#unlock-admin" && authDialog) {
     openDialog(authDialog);
+  }
+
+  // ---- Follow-Up Study & Theory / Application Extrapolation Modal ----
+  const followUpDialog = document.getElementById("wb-followup-dialog");
+  const followUpForm = document.getElementById("wb-followup-form");
+  const followUpCloseBtn = document.getElementById("wb-followup-close");
+  const followUpModeSel = document.getElementById("wb-followup-mode");
+  const followUpParentIdInput = document.getElementById("wb-followup-parent-id");
+  const followUpParentLabel = document.getElementById("wb-followup-parent-label");
+  const followUpNextIdEl = document.getElementById("wb-followup-next-id");
+  const followUpTitleInput = document.getElementById("wb-followup-title");
+  const followUpQuestionInput = document.getElementById("wb-followup-question");
+  const followUpDatasetInput = document.getElementById("wb-followup-dataset");
+  const followUpBenefitLabel = document.getElementById("wb-followup-benefit-label");
+  const followUpBenefitInput = document.getElementById("wb-followup-benefit");
+  const followUpChartsWrap = document.getElementById("wb-followup-charts-wrap");
+  const followUpLinkagesInput = document.getElementById("wb-followup-linkages");
+
+  const syncFollowUpModeUi = () => {
+    const parentId = followUpParentIdInput ? followUpParentIdInput.value : "ST-01-00";
+    const mode = followUpModeSel ? followUpModeSel.value : "followup_study";
+    if (followUpNextIdEl) {
+      if (mode === "followup_study") {
+        followUpNextIdEl.textContent = nextFollowUpStudyId(parentId);
+      } else if (mode === "theory") {
+        followUpNextIdEl.textContent = nextSequentialId("TH", "wb-theory-body", "theoryQueue");
+      } else {
+        followUpNextIdEl.textContent = nextSequentialId("AP", "wb-apps-body", "applicationsQueue");
+      }
+    }
+    if (followUpBenefitLabel) {
+      followUpBenefitLabel.hidden = mode !== "application";
+    }
+    if (followUpChartsWrap) {
+      followUpChartsWrap.hidden = mode !== "followup_study";
+    }
+  };
+
+  if (followUpModeSel) {
+    followUpModeSel.addEventListener("change", syncFollowUpModeUi);
+  }
+  if (followUpCloseBtn && followUpDialog) {
+    followUpCloseBtn.addEventListener("click", () => closeDialog(followUpDialog));
+  }
+
+  openFollowUpModalForStudy = (study) => {
+    if (!followUpDialog || !study) return;
+    const normId = normalizeStudyId(study.id);
+    if (followUpParentIdInput) followUpParentIdInput.value = normId;
+    if (followUpParentLabel) {
+      followUpParentLabel.textContent = `Parent Study: ${normId} · ${study.title} (${study.atlasPath})`;
+    }
+    if (followUpModeSel) followUpModeSel.value = "followup_study";
+    syncFollowUpModeUi();
+    if (followUpTitleInput) followUpTitleInput.value = `${study.title} — Follow-Up`;
+    if (followUpQuestionInput) followUpQuestionInput.value = "";
+    if (followUpDatasetInput) followUpDatasetInput.value = study.dataset || "";
+    if (followUpBenefitInput) followUpBenefitInput.value = "";
+    if (followUpLinkagesInput) {
+      followUpLinkagesInput.value = `${normId} | Parent Study: ${study.title} | ${study.atlasPath}`;
+    }
+    // Pre-select the parent study's Atlas destination in the 3-stage cascading selector
+    const cascadeBox = followUpDialog.querySelector("[data-wb-cascade]");
+    if (cascadeBox && study.atlasPath) {
+      const parts = study.atlasPath.split("/");
+      const fieldSel = cascadeBox.querySelector("[data-cascade-field]");
+      const topicSel = cascadeBox.querySelector("[data-cascade-topic]");
+      const leafSel = cascadeBox.querySelector("[data-cascade-leaf]");
+      if (fieldSel && parts[0]) {
+        fieldSel.value = parts[0];
+        fieldSel.dispatchEvent(new Event("change"));
+      }
+      if (topicSel && parts.length >= 2) {
+        topicSel.value = `${parts[0]}/${parts[1]}`;
+        topicSel.dispatchEvent(new Event("change"));
+      }
+      if (leafSel) {
+        leafSel.value = study.atlasPath;
+      }
+    }
+    openDialog(followUpDialog);
+  };
+
+  if (followUpForm) {
+    followUpForm.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const data = new FormData(followUpForm);
+      const mode = String(data.get("followUpMode") || "followup_study");
+      const parentId = normalizeStudyId(data.get("parentId") || "ST-01-00");
+      const title = String(data.get("title") || "").trim();
+      const atlasPath = String(data.get("atlasPath") || "").trim();
+      const question = String(data.get("question") || "").trim();
+      const dataset = String(data.get("dataset") || "").trim() || "Auto-discover relevant public datasets";
+      const linkages = parseLinkagesInput(data.get("linkages"));
+      const parentLinkToken = `${parentId} | Parent: ${title.replace(/\s*—\s*Follow-Up$/i, "")} | ${atlasPath}`;
+      if (!linkages.some((l) => l.startsWith(parentId))) {
+        linkages.unshift(parentLinkToken);
+      }
+      const createdOn = todayIso();
+      const current = loadLocal();
+      const runNow = Boolean(document.getElementById("wb-followup-run-now")?.checked);
+
+      let createdId = "";
+      let studyToRun = null;
+
+      if (mode === "followup_study") {
+        createdId = nextFollowUpStudyId(parentId);
+        const chartTypes = data.getAll("chartTypes").map((x) => String(x).trim()).filter(Boolean);
+        const entry = {
+          id: createdId,
+          parentId,
+          createdOn,
+          title,
+          atlasPath,
+          question,
+          dataset,
+          chartTypes: chartTypes.length ? chartTypes : ["line", "box_whisker"],
+          linkages,
+          status: "queued",
+          studyRoute: null,
+          paperRoute: null,
+          clicks: 1,
+          ipIndex: isAdminUnlocked() ? "IP#OWNER" : currentIpIndex,
+          notes: `Follow-up study to ${parentId}`,
+        };
+        current.studyQueue = current.studyQueue || [];
+        current.studyQueue.push(entry);
+        appendRow("studyQueue", entry);
+        studyToRun = entry;
+      } else if (mode === "theory") {
+        createdId = nextSequentialId("TH", "wb-theory-body", "theoryQueue");
+        const entry = {
+          id: createdId,
+          createdOn,
+          category: `Extrapolated from ${parentId}`,
+          title,
+          atlasPath,
+          scopePrompt: question,
+          linkages,
+          status: "queued",
+          notes: `Extrapolated from ${parentId}`,
+        };
+        current.theoryQueue = current.theoryQueue || [];
+        current.theoryQueue.push(entry);
+        appendRow("theoryQueue", entry);
+        studyToRun = {
+          id: createdId,
+          parentId,
+          title: `Theory: ${title}`,
+          atlasPath,
+          question,
+          dataset: `First-principles derivation & empirical verification linked to ${parentId} (${dataset})`,
+          chartTypes: ["line", "radar"],
+          linkages,
+          createdOn,
+        };
+      } else {
+        createdId = nextSequentialId("AP", "wb-apps-body", "applicationsQueue");
+        const benefit = String(data.get("societalBenefit") || "").trim() || "Cross-disciplinary engineering application.";
+        const entry = {
+          id: createdId,
+          createdOn,
+          domain: `Applied System from ${parentId}`,
+          title,
+          atlasPath,
+          systemDesign: question,
+          societalBenefit: benefit,
+          linkages,
+          status: "queued",
+          notes: `Extrapolated from ${parentId}`,
+        };
+        current.applicationsQueue = current.applicationsQueue || [];
+        current.applicationsQueue.push(entry);
+        appendRow("applicationsQueue", entry);
+        studyToRun = {
+          id: createdId,
+          parentId,
+          title: `Application: ${title}`,
+          atlasPath,
+          question: `Engineering Design: ${question} | Societal Benefit: ${benefit}`,
+          dataset: `Engineering system benchmarks linked to ${parentId} (${dataset})`,
+          chartTypes: ["clustered_column", "sankey"],
+          linkages,
+          createdOn,
+        };
+      }
+
+      // Also add reverse linkage onto the parent study row in DOM & local store
+      const reverseToken = `${createdId} | ${title} | ${atlasPath}`;
+      const parentTr = document.querySelector(`[data-study-row="${parentId}"]`);
+      if (parentTr) {
+        const curLinks = (parentTr.getAttribute("data-study-linkages") || "")
+          .split(",")
+          .map((s) => s.trim())
+          .filter(Boolean);
+        if (!curLinks.some((l) => l.startsWith(createdId))) {
+          curLinks.push(reverseToken);
+          parentTr.setAttribute("data-study-linkages", curLinks.join(", "));
+          const linkCell = parentTr.querySelector(".wb-linkages-cell")?.parentElement;
+          if (linkCell) {
+            linkCell.innerHTML = renderLinkagesBadgesHtml(curLinks, parentTr.getAttribute("data-study-path") || "");
+          }
+        }
+      }
+
+      saveLocal(current);
+      refreshIpFilterOptions();
+      applyStudyFilters();
+      pushCloudSync();
+      closeDialog(followUpDialog);
+      announce(`Created ${createdId} linked to ${parentId} (${atlasPath}).`);
+      if (runNow && studyToRun) {
+        requestRunStudy(studyToRun);
+      }
+    });
   }
 
   // Handle form submissions

@@ -1340,14 +1340,16 @@
     localStorage.setItem(TRAFFIC_KEY, JSON.stringify(trafficStore));
 
     const routeToStudy = {
-      "/Economic-Growth/": "ST-01",
-      "/Public-Policy/": "ST-02",
-      "/Series-Hub/Analytics/": "ST-03",
-      "/Computer-Science/Simulations/": "ST-04",
-      "/Electrochemistry/": "ST-05",
-      "/Game-Theory/": "ST-06",
-      "/Weightlifting/": "ST-07",
-      "/Emerging-Industries/Artificial-Intelligence/": "ST-08",
+      "/Economic-Growth/": "ST-01-00",
+      "/Public-Policy/": "ST-02-00",
+      "/Series-Hub/Analytics/": "ST-03-00",
+      "/Computer-Science/Simulations/": "ST-04-00",
+      "/Electrochemistry/": "ST-05-00",
+      "/Game-Theory/": "ST-06-00",
+      "/Weightlifting/": "ST-07-00",
+      "/Emerging-Industries/Artificial-Intelligence/": "ST-08-00",
+      "/Customer-Metrics/": "ST-10-00",
+      "/Physical-Chemistry/": "ST-11-00",
     };
     for (const [frag, stId] of Object.entries(routeToStudy)) {
       if (current.includes(frag)) {
@@ -1360,6 +1362,32 @@
     /* ignore storage quota */
   }
 
+  const ensureMathJaxLoadedAndTypeset = (rootEl) => {
+    const runTypeset = () => {
+      if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+        window.MathJax.typesetPromise(rootEl ? [rootEl] : undefined).catch(() => {});
+      }
+    };
+    if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+      runTypeset();
+      return;
+    }
+    if (document.getElementById("MathJax-script")) {
+      setTimeout(runTypeset, 450);
+      return;
+    }
+    const brand = document.querySelector(".site-header .brand");
+    const rootPrefix = brand ? (brand.getAttribute("href") || "index.html").replace(/index\.html$/, "") : "../../../";
+    const cfgScript = document.createElement("script");
+    cfgScript.src = `${rootPrefix}assets/math-config.js`;
+    document.head.appendChild(cfgScript);
+    const mjScript = document.createElement("script");
+    mjScript.id = "MathJax-script";
+    mjScript.src = `${rootPrefix}assets/vendor/mathjax/tex-chtml.js`;
+    mjScript.onload = () => setTimeout(runTypeset, 150);
+    document.head.appendChild(mjScript);
+  };
+
   // Helper: Full Client-Side LaTeX & Markdown -> Semantic .tex-paper HTML Compiler (for Mobile & Web parity)
   const formatStudyProseHtml = (rawText) => {
     const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -1368,7 +1396,9 @@
       .replace(/\\usepackage(?:\[[^\]]*\])?\{[^}]+\}/g, "")
       .replace(/\\setlength\{[^}]+\}\{[^}]+\}/g, "")
       .replace(/\\(?:maketitle|tableofcontents|newpage|clearpage)/g, "")
-      .replace(/\\begin\{document\}|\\end\{document\}/g, "");
+      .replace(/\\begin\{document\}|\\end\{document\}/g, "")
+      .replace(/\\text\{--\}/g, "–")
+      .replace(/\s+-\s+(?=(?:\\\(|\\textbf|\*\*|\$))/g, "\n- ");
 
     const formatInline = (str) => {
       let s = esc(str);
@@ -1376,9 +1406,11 @@
       s = s.replace(/\\textit\{([^{}]+)\}/g, "<em>$1</em>");
       s = s.replace(/\\texttt\{([^{}]+)\}/g, "<code>$1</code>");
       s = s.replace(/\$\$([\s\S]+?)\$\$/g, (_, eq) => `<div class="tex-display-math">\\[${eq}\\]</div>`);
+      s = s.replace(/\\\[([\s\S]+?)\\\]/g, (_, eq) => `<div class="tex-display-math">\\[${eq}\\]</div>`);
       s = s.replace(/\\begin\{(equation\*?|align\*?)\}([\s\S]+?)\\end\{\1\}/g, (_, env, eq) => `<div class="tex-display-math">\\[\\begin{${env}}${eq}\\end{${env}}\\]</div>`);
+      s = s.replace(/\\\(([^\n]+?)\\\)/g, (_, eq) => `<span class="math inline">\\(${eq}\\)</span>`);
       s = s.replace(/\$([^\n$]+?)\$/g, (full, eq) => {
-        if (/^\d[\d,.]*(\s|$)/.test(eq)) return full;
+        if (/^\d[\d,.]*(\s|$)/.test(eq) && !/[\\^_{}]/.test(eq)) return full;
         return `<span class="math inline">\\(${eq}\\)</span>`;
       });
       s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
@@ -1409,66 +1441,359 @@
           const items = inner.split(/\\item\b/).map((x) => x.trim()).filter(Boolean);
           return `<${tag}>${items.map((it) => `<li>${formatInline(it)}</li>`).join("")}</${tag}>`;
         }
+        const lines = trimmed.split("\n");
+        if (lines.length > 1 && lines.some((l) => /^\s*(?:[-*]|\d+\.)\s+/.test(l))) {
+          const outParts = [];
+          let listItems = [];
+          lines.forEach((ln) => {
+            const mLi = ln.match(/^\s*(?:[-*]|\d+\.)\s+(.+)$/);
+            if (mLi) {
+              listItems.push(`<li>${formatInline(mLi[1])}</li>`);
+            } else {
+              if (listItems.length) {
+                outParts.push(`<ul>${listItems.join("")}</ul>`);
+                listItems = [];
+              }
+              outParts.push(`<p>${formatInline(ln)}</p>`);
+            }
+          });
+          if (listItems.length) outParts.push(`<ul>${listItems.join("")}</ul>`);
+          return outParts.join("");
+        }
         return `<p>${formatInline(trimmed)}</p>`;
       })
       .join("");
   };
 
+  const PALETTE_COLORS = ["#69d4cf", "#f7ab65", "#8fe0a8", "#a78bfa", "#f28b82", "#ffd166", "#5ec2f7", "#f48fb1"];
+
+  const renderUniversalStudyChartSvg = (studyId, chartSpec) => {
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const type = String(chartSpec?.type || "horizontal_bar").toLowerCase();
+    const title = esc(chartSpec?.chartTitle || "Empirical Benchmark Chart");
+    const subtitle = esc(chartSpec?.chartSubtitle || "");
+    const unit = esc(chartSpec?.chartUnit || "");
+    const wrapFigure = (svgInner, height = 340, extraLegendHtml = "") =>
+      `<figure class="sports-chart athletics-chart" style="margin:16px 0;padding:18px;border:1px solid #ffffff1a;border-radius:8px;background:#0d111d;">` +
+      `<figcaption style="margin-bottom:10px;"><strong style="display:block;font-size:15px;">${title}</strong><small style="color:#a4acc3;">${subtitle}</small>${extraLegendHtml}</figcaption>` +
+      `<svg viewBox="0 0 900 ${height}" style="width:100%;height:auto;" role="img" aria-label="${title}">${svgInner}</svg>` +
+      `</figure>`;
+
+    if (type === "box_whisker" && Array.isArray(chartSpec.boxes) && chartSpec.boxes.length > 0) {
+      const boxes = chartSpec.boxes;
+      const allVals = boxes.flatMap((b) => [Number(b.min) || 0, Number(b.q1) || 0, Number(b.median) || 0, Number(b.q3) || 0, Number(b.max) || 0]);
+      const minV = Math.floor(Math.min(...allVals) - 2);
+      const maxV = Math.ceil(Math.max(...allVals) + 2);
+      const span = Math.max(1, maxV - minV);
+      const left = 74, right = 860, top = 36, bottom = 276;
+      const plotW = right - left, plotH = bottom - top;
+      const yOf = (v) => bottom - ((v - minV) / span) * plotH;
+      const parts = [];
+      for (let k = 0; k <= 5; k++) {
+        const tv = Math.round((minV + (span * k) / 5) * 10) / 10;
+        const ty = yOf(tv);
+        parts.push(`<line stroke="#ffffff14" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/><text fill="#a4acc3" font-size="11" x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv}${unit}</text>`);
+      }
+      if (minV < 0 && maxV > 0) {
+        const y0 = yOf(0);
+        parts.push(`<line stroke="#f7ab6588" stroke-dasharray="4 3" x1="${left}" x2="${right}" y1="${y0.toFixed(1)}" y2="${y0.toFixed(1)}"/>`);
+      }
+      const step = plotW / boxes.length;
+      boxes.forEach((b, idx) => {
+        const cx = left + (idx + 0.5) * step;
+        const bw = Math.min(36, Math.max(14, step * 0.52));
+        const yMin = yOf(Number(b.min) || 0);
+        const yQ1 = yOf(Number(b.q1) || 0);
+        const yMed = yOf(Number(b.median) || 0);
+        const yQ3 = yOf(Number(b.q3) || 0);
+        const yMax = yOf(Number(b.max) || 0);
+        const col = PALETTE_COLORS[idx % PALETTE_COLORS.length];
+        const iqr = Math.round(((Number(b.q3) || 0) - (Number(b.q1) || 0)) * 10) / 10;
+        const tip = `${b.label}: Min ${b.min}${unit}, Q1 ${b.q1}${unit}, Median ${b.median}${unit}, Q3 ${b.q3}${unit}, Max ${b.max}${unit} (IQR ${iqr}${unit})`;
+        parts.push(
+          `<g><title>${esc(tip)}</title>` +
+          `<line stroke="${col}" stroke-width="2" x1="${cx.toFixed(1)}" x2="${cx.toFixed(1)}" y1="${yMax.toFixed(1)}" y2="${yMin.toFixed(1)}"/>` +
+          `<line stroke="${col}" stroke-width="2" x1="${(cx - bw * 0.35).toFixed(1)}" x2="${(cx + bw * 0.35).toFixed(1)}" y1="${yMax.toFixed(1)}" y2="${yMax.toFixed(1)}"/>` +
+          `<line stroke="${col}" stroke-width="2" x1="${(cx - bw * 0.35).toFixed(1)}" x2="${(cx + bw * 0.35).toFixed(1)}" y1="${yMin.toFixed(1)}" y2="${yMin.toFixed(1)}"/>` +
+          `<rect fill="${col}44" stroke="${col}" stroke-width="2" x="${(cx - bw / 2).toFixed(1)}" y="${Math.min(yQ3, yQ1).toFixed(1)}" width="${bw.toFixed(1)}" height="${Math.max(4, Math.abs(yQ1 - yQ3)).toFixed(1)}"/>` +
+          `<line stroke="#ffffff" stroke-width="2.6" x1="${(cx - bw / 2).toFixed(1)}" x2="${(cx + bw / 2).toFixed(1)}" y1="${yMed.toFixed(1)}" y2="${yMed.toFixed(1)}"/>` +
+          `<text x="${cx.toFixed(1)}" y="${Math.max(24, yMax - 6).toFixed(1)}" text-anchor="middle" font-size="9.5" fill="#9ddacf">${b.median}${unit}</text>` +
+          `<text fill="#e8eaf6" x="${cx.toFixed(1)}" y="${bottom + 18}" text-anchor="end" transform="rotate(-28, ${cx.toFixed(1)}, ${bottom + 18})" font-size="10">${esc(String(b.label || "").slice(0, 22))}</text>` +
+          `</g>`
+        );
+      });
+      return wrapFigure(parts.join(""), 355, `<div style="margin-top:6px;font-size:12px;color:#9ddacf;">📦 Box: Q1–Q3 Interquartile Range · ― White Bar: Median · ┬┴ Whiskers: Min &amp; Max across 200 km Station Network</div>`);
+    }
+
+    if (type === "line" && Array.isArray(chartSpec.series) && chartSpec.series.length > 0) {
+      const xLabels = Array.isArray(chartSpec.xLabels) && chartSpec.xLabels.length ? chartSpec.xLabels : chartSpec.series[0].values.map((_, i) => `T${i + 1}`);
+      const allVals = chartSpec.series.flatMap((s) => (s.values || []).map((v) => Number(v) || 0));
+      const minV = Math.floor(Math.min(0, ...allVals) - 2);
+      const maxV = Math.ceil(Math.max(1, ...allVals) + 2);
+      const span = Math.max(1, maxV - minV);
+      const left = 74, right = 860, top = 36, bottom = 280;
+      const plotW = right - left, plotH = bottom - top;
+      const xOf = (i) => left + (i / Math.max(1, xLabels.length - 1)) * plotW;
+      const yOf = (v) => bottom - ((v - minV) / span) * plotH;
+      const parts = [];
+      for (let k = 0; k <= 5; k++) {
+        const tv = Math.round((minV + (span * k) / 5) * 10) / 10;
+        const ty = yOf(tv);
+        parts.push(`<line stroke="#ffffff14" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/><text fill="#a4acc3" font-size="11" x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv}${unit}</text>`);
+      }
+      xLabels.forEach((xl, i) => {
+        parts.push(`<text fill="#e8eaf6" x="${xOf(i).toFixed(1)}" y="${bottom + 20}" text-anchor="middle" font-size="10.5">${esc(xl)}</text>`);
+      });
+      const legendHtml = chartSpec.series
+        .map((s, si) => `<span style="color:${esc(s.color || PALETTE_COLORS[si % PALETTE_COLORS.length])};font-weight:600;">● ${esc(s.name)}</span>`)
+        .join(" · ");
+      chartSpec.series.forEach((s, si) => {
+        const col = s.color || PALETTE_COLORS[si % PALETTE_COLORS.length];
+        const vals = s.values || [];
+        const pts = vals.map((v, i) => `${xOf(i).toFixed(1)},${yOf(Number(v) || 0).toFixed(1)}`).join(" ");
+        parts.push(`<polyline fill="none" stroke="${esc(col)}" stroke-width="2.6" stroke-linejoin="round" points="${pts}"/>`);
+        vals.forEach((v, i) => {
+          const cx = xOf(i), cy = yOf(Number(v) || 0);
+          parts.push(`<circle cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="4" fill="${esc(col)}" stroke="#0d101b" stroke-width="1.5"><title>${esc(s.name)} (${esc(xLabels[i] || i)}): ${v}${unit}</title></circle>`);
+        });
+      });
+      return wrapFigure(parts.join(""), 330, `<div style="margin-top:6px;font-size:12px;">${legendHtml}</div>`);
+    }
+
+    if (type === "stacked_column" && Array.isArray(chartSpec.categories) && Array.isArray(chartSpec.stacks)) {
+      const cats = chartSpec.categories;
+      const stacks = chartSpec.stacks;
+      const totals = cats.map((_, ci) => stacks.reduce((a, st) => a + (Number(st.values?.[ci]) || 0), 0));
+      const maxTot = Math.max(1, ...totals);
+      const left = 74, right = 860, top = 38, bottom = 278;
+      const plotW = right - left, plotH = bottom - top;
+      const parts = [];
+      for (let k = 0; k <= 4; k++) {
+        const tv = Math.round(((maxTot * k) / 4) * 10) / 10;
+        const ty = bottom - (k / 4) * plotH;
+        parts.push(`<line stroke="#ffffff14" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/><text fill="#a4acc3" font-size="11" x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end">${tv} ${unit}</text>`);
+      }
+      const step = plotW / Math.max(1, cats.length);
+      cats.forEach((cat, ci) => {
+        const cx = left + (ci + 0.5) * step;
+        const bw = Math.min(48, Math.max(18, step * 0.58));
+        const bx = cx - bw / 2;
+        let curY = bottom;
+        stacks.forEach((st, si) => {
+          const val = Math.max(0, Number(st.values?.[ci]) || 0);
+          if (val <= 0) return;
+          const h = (val / maxTot) * plotH;
+          curY -= h;
+          const col = st.color || PALETTE_COLORS[si % PALETTE_COLORS.length];
+          parts.push(`<rect fill="${esc(col)}" x="${bx.toFixed(1)}" y="${curY.toFixed(1)}" width="${bw.toFixed(1)}" height="${h.toFixed(1)}"><title>${esc(cat)} · ${esc(st.name)}: ${val} ${unit}</title></rect>`);
+        });
+        parts.push(`<text x="${cx.toFixed(1)}" y="${Math.max(26, curY - 6).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#eeeef7" font-weight="700">${totals[ci]}</text><text fill="#e8eaf6" x="${cx.toFixed(1)}" y="${bottom + 20}" text-anchor="middle" font-size="11">${esc(cat)}</text>`);
+      });
+      const legendHtml = stacks.map((st, si) => `<span style="color:${esc(st.color || PALETTE_COLORS[si % PALETTE_COLORS.length])};font-weight:600;">■ ${esc(st.name)}</span>`).join(" · ");
+      return wrapFigure(parts.join(""), 325, `<div style="margin-top:6px;font-size:12px;">${legendHtml}</div>`);
+    }
+
+    if (type === "clustered_column" && Array.isArray(chartSpec.items) && chartSpec.items.length > 0) {
+      const items = chartSpec.items;
+      const bUnit = esc(chartSpec.barUnit || unit);
+      const lUnit = esc(chartSpec.lineUnit || "");
+      const maxB = Math.max(1, ...items.map((it) => Number(it.primary) || 0));
+      const maxL = Math.max(1, ...items.map((it) => Number(it.secondary) || 0));
+      const left = 78, right = 822, top = 40, bottom = 278;
+      const plotW = right - left, plotH = bottom - top;
+      const parts = [
+        `<text x="${left - 8}" y="22" text-anchor="end" fill="#69d4cf" font-weight="700" font-size="11">▮ Bars: ${bUnit}</text>`,
+        `<text x="${right + 8}" y="22" text-anchor="start" fill="#f7ab65" font-weight="700" font-size="11">● Line: ${lUnit}</text>`,
+      ];
+      for (let k = 0; k <= 4; k++) {
+        const bTick = Math.round(((maxB * k) / 4) * 10) / 10;
+        const lTick = Math.round(((maxL * k) / 4) * 10) / 10;
+        const ty = bottom - (k / 4) * plotH;
+        parts.push(`<line stroke="#ffffff14" x1="${left}" x2="${right}" y1="${ty.toFixed(1)}" y2="${ty.toFixed(1)}"/><text x="${left - 8}" y="${(ty + 4).toFixed(1)}" text-anchor="end" fill="#69d4cf" font-size="11">${bTick} ${bUnit}</text><text x="${right + 8}" y="${(ty + 4).toFixed(1)}" text-anchor="start" fill="#f7ab65" font-size="11">${lTick} ${lUnit}</text>`);
+      }
+      const step = plotW / items.length;
+      const linePts = [];
+      items.forEach((it, idx) => {
+        const cx = left + (idx + 0.5) * step;
+        const bw = Math.min(46, Math.max(16, step * 0.56));
+        const pVal = Number(it.primary) || 0;
+        const sVal = Number(it.secondary) || 0;
+        const bh = Math.max(4, (pVal / maxB) * plotH);
+        const by = bottom - bh;
+        const ly = bottom - (sVal / maxL) * plotH;
+        linePts.push({ cx, ly, sVal, label: it.label });
+        parts.push(`<rect fill="#69d4cf" x="${(cx - bw / 2).toFixed(1)}" y="${by.toFixed(1)}" width="${bw.toFixed(1)}" height="${bh.toFixed(1)}"><title>${esc(it.label)}: ${pVal} ${bUnit} | ${sVal} ${lUnit}</title></rect><text x="${cx.toFixed(1)}" y="${Math.max(28, by - 6).toFixed(1)}" text-anchor="middle" font-size="10" fill="#eeeef7">${pVal} ${bUnit}</text><text fill="#e8eaf6" x="${cx.toFixed(1)}" y="${bottom + 20}" text-anchor="middle" font-size="11">${esc(it.label)}</text>`);
+      });
+      if (linePts.length > 1) {
+        parts.push(`<polyline fill="none" stroke="#f7ab65" stroke-width="2.8" points="${linePts.map((p) => `${p.cx.toFixed(1)},${p.ly.toFixed(1)}`).join(" ")}"/>`);
+      }
+      linePts.forEach((p) => {
+        parts.push(`<circle cx="${p.cx.toFixed(1)}" cy="${p.ly.toFixed(1)}" r="4.5" fill="#f7ab65" stroke="#0d101b" stroke-width="1.6"><title>${esc(p.label)}: ${p.sVal} ${lUnit}</title></circle>`);
+      });
+      return wrapFigure(parts.join(""), 325);
+    }
+
+    if (type === "radar" && Array.isArray(chartSpec.axes) && Array.isArray(chartSpec.profiles)) {
+      const axes = chartSpec.axes;
+      const profiles = chartSpec.profiles;
+      const nAx = Math.max(3, axes.length);
+      const cx = 250, cy = 175, maxR = 122;
+      const parts = [];
+      [25, 50, 75, 100].forEach((lvl) => {
+        const r = (lvl / 100) * maxR;
+        const ringPts = axes.map((_, i) => {
+          const ang = -Math.PI / 2 + (i * 2 * Math.PI) / nAx;
+          return `${(cx + r * Math.cos(ang)).toFixed(1)},${(cy + r * Math.sin(ang)).toFixed(1)}`;
+        }).join(" ");
+        parts.push(`<polygon points="${ringPts}" fill="none" stroke="#ffffff1c" stroke-width="1"/>`);
+      });
+      axes.forEach((ax, i) => {
+        const ang = -Math.PI / 2 + (i * 2 * Math.PI) / nAx;
+        const xEnd = cx + maxR * Math.cos(ang), yEnd = cy + maxR * Math.sin(ang);
+        const xLbl = cx + (maxR + 24) * Math.cos(ang), yLbl = cy + (maxR + 18) * Math.sin(ang);
+        parts.push(`<line x1="${cx}" y1="${cy}" x2="${xEnd.toFixed(1)}" y2="${yEnd.toFixed(1)}" stroke="#ffffff26"/><text x="${xLbl.toFixed(1)}" y="${(yLbl + 4).toFixed(1)}" text-anchor="middle" font-size="10.5" fill="#d7dcf0">${esc(ax)}</text>`);
+      });
+      profiles.forEach((prof, pi) => {
+        const col = prof.color || PALETTE_COLORS[pi % PALETTE_COLORS.length];
+        const scores = prof.scores || [];
+        const polyPts = axes.map((_, i) => {
+          const sc = Math.max(0, Math.min(100, Number(scores[i]) || 50));
+          const r = (sc / 100) * maxR;
+          const ang = -Math.PI / 2 + (i * 2 * Math.PI) / nAx;
+          return `${(cx + r * Math.cos(ang)).toFixed(1)},${(cy + r * Math.sin(ang)).toFixed(1)}`;
+        }).join(" ");
+        parts.push(`<polygon points="${polyPts}" fill="${esc(col)}26" stroke="${esc(col)}" stroke-width="2.4"><title>${esc(prof.name)}</title></polygon>`);
+        const legY = 55 + pi * 30;
+        parts.push(`<rect x="500" y="${legY - 11}" width="14" height="14" rx="3" fill="${esc(col)}"/><text x="522" y="${legY}" fill="#eeeef7" font-size="12" font-weight="600">${esc(prof.name)}</text>`);
+      });
+      return wrapFigure(parts.join(""), 350);
+    }
+
+    if (type === "sankey" && Array.isArray(chartSpec.flows) && chartSpec.flows.length > 0) {
+      const flows = chartSpec.flows;
+      const sources = Array.from(new Set(flows.map((f) => f.from)));
+      const targets = Array.from(new Set(flows.map((f) => f.to)));
+      const leftX = 195, rightX = 685;
+      const srcTotals = Object.fromEntries(sources.map((s) => [s, flows.filter((f) => f.from === s).reduce((a, x) => a + (Number(x.value) || 1), 0)]));
+      const tgtTotals = Object.fromEntries(targets.map((t) => [t, flows.filter((f) => f.to === t).reduce((a, x) => a + (Number(x.value) || 1), 0)]));
+      const grandTotal = Math.max(1, Object.values(srcTotals).reduce((a, v) => a + v, 0));
+      const usableH = 230;
+      const srcPos = {};
+      let sy = 40;
+      sources.forEach((s, i) => {
+        const h = Math.max(18, (srcTotals[s] / grandTotal) * usableH);
+        srcPos[s] = { y: sy, h, curOffset: 0, color: PALETTE_COLORS[i % PALETTE_COLORS.length] };
+        sy += h + 14;
+      });
+      const tgtPos = {};
+      let ty = 40;
+      targets.forEach((t, i) => {
+        const h = Math.max(18, (tgtTotals[t] / grandTotal) * usableH);
+        tgtPos[t] = { y: ty, h, curOffset: 0, color: PALETTE_COLORS[(i + 3) % PALETTE_COLORS.length] };
+        ty += h + 16;
+      });
+      const parts = [];
+      flows.forEach((fl, fi) => {
+        const sp = srcPos[fl.from], tp = tgtPos[fl.to];
+        if (!sp || !tp) return;
+        const val = Math.max(1, Number(fl.value) || 1);
+        const strokeW = Math.max(4, (val / grandTotal) * usableH);
+        const y1 = sp.y + sp.curOffset + strokeW / 2;
+        const y2 = tp.y + tp.curOffset + strokeW / 2;
+        sp.curOffset += strokeW;
+        tp.curOffset += strokeW;
+        const col = fl.color || sp.color || PALETTE_COLORS[fi % PALETTE_COLORS.length];
+        const d = `M ${leftX + 16} ${y1.toFixed(1)} C ${(leftX + rightX) / 2} ${y1.toFixed(1)}, ${(leftX + rightX) / 2} ${y2.toFixed(1)}, ${rightX} ${y2.toFixed(1)}`;
+        parts.push(`<path d="${d}" fill="none" stroke="${esc(col)}88" stroke-width="${strokeW.toFixed(1)}"><title>${esc(fl.from)} → ${esc(fl.to)}: ${val} ${unit}</title></path>`);
+      });
+      sources.forEach((s) => {
+        const sp = srcPos[s];
+        parts.push(`<rect x="${leftX}" y="${sp.y.toFixed(1)}" width="16" height="${sp.h.toFixed(1)}" rx="3" fill="${sp.color}"/><text x="${leftX - 8}" y="${(sp.y + sp.h / 2 + 4).toFixed(1)}" text-anchor="end" font-size="11.5" fill="#eeeef7">${esc(s)}</text>`);
+      });
+      targets.forEach((t) => {
+        const tp = tgtPos[t];
+        parts.push(`<rect x="${rightX}" y="${tp.y.toFixed(1)}" width="16" height="${tp.h.toFixed(1)}" rx="3" fill="${tp.color}"/><text x="${rightX + 24}" y="${(tp.y + tp.h / 2 + 4).toFixed(1)}" text-anchor="start" font-size="11.5" fill="#9ddacf" font-weight="600">${esc(t)}</text>`);
+      });
+      return wrapFigure(parts.join(""), 340);
+    }
+
+    const bars = Array.isArray(chartSpec?.bars) && chartSpec.bars.length ? chartSpec.bars : [];
+    if (!bars.length) return "";
+    const maxVal = Math.max(1, ...bars.map((b) => (Number(b.primary) || 0) + (Number(b.secondary) || 0)));
+    const height = 74 + bars.length * 34;
+    const left = 270;
+    const width = 415;
+    const parts = [];
+    for (let i = 0; i <= 4; i++) {
+      const tickVal = (maxVal * i) / 4;
+      const tx = left + (i / 4) * width;
+      const tickStr = tickVal >= 10 ? Math.round(tickVal) : tickVal.toFixed(1);
+      parts.push(
+        `<line stroke="#ffffff14" x1="${tx.toFixed(1)}" x2="${tx.toFixed(1)}" y1="30" y2="${height - 26}"/>` +
+        `<text fill="#a4acc3" font-size="11" x="${tx.toFixed(1)}" y="20" text-anchor="middle">${tickStr}${unit}</text>`
+      );
+    }
+    bars.forEach((b, idx) => {
+      const y = 38 + idx * 34;
+      const pVal = Math.max(0, Number(b.primary) || 0);
+      const sVal = Math.max(0, Number(b.secondary) || 0);
+      const wP = (pVal / maxVal) * width;
+      const wS = (sVal / maxVal) * width;
+      const lbl = String(b.label || `Row ${idx + 1}`).slice(0, 34);
+      parts.push(
+        `<text fill="#e8eaf6" font-size="12" x="${left - 10}" y="${y + 15}" text-anchor="end">${esc(lbl)}</text>` +
+        `<rect fill="#69d4cf" x="${left}" y="${y}" width="${wP.toFixed(1)}" height="20"><title>${esc(b.label)}: ${pVal}${unit}</title></rect>` +
+        (wS > 0 ? `<rect fill="#f7ab65" x="${(left + wP).toFixed(1)}" y="${y}" width="${wS.toFixed(1)}" height="20"></rect>` : "") +
+        `<text fill="#9ddacf" font-size="11.5" font-weight="700" x="${(left + wP + wS + 8).toFixed(1)}" y="${y + 15}">${pVal}${unit}${sVal > 0 ? ` (+${sVal}${unit})` : ""}</text>`
+      );
+    });
+    return wrapFigure(parts.join(""), height);
+  };
+
+  const renderAllStudyChartsOnAtlas = (studyId, an) => {
+    if (Array.isArray(an?.charts) && an.charts.length > 0) {
+      return an.charts.map((ch, idx) => renderUniversalStudyChartSvg(`${studyId}-chart-${idx + 1}`, ch)).join("");
+    }
+    return (
+      renderUniversalStudyChartSvg(studyId, an) +
+      (Array.isArray(an?.extraCharts) ? an.extraCharts.map((ch, idx) => renderUniversalStudyChartSvg(`${studyId}-extra-${idx + 2}`, ch)).join("") : "")
+    );
+  };
+
+  const normalizeStudyIdOnAtlas = (rawId) => {
+    const m = String(rawId || "").trim().match(/^ST-(\d+)$/i);
+    if (m) return `ST-${String(parseInt(m[1], 10)).padStart(2, "0")}-00`;
+    return String(rawId || "").trim();
+  };
+
   // ---- Auto-integrate browser-executed Workbench studies into Atlas Destination pages & Mental Map ----
   const integratePublishedStudyRuns = () => {
     try {
-      const runs = JSON.parse(localStorage.getItem("liam_workbench_study_runs_v1") || "{}") || {};
+      const rawRuns = JSON.parse(localStorage.getItem("liam_workbench_study_runs_v1") || "{}") || {};
+      const runs = {};
+      Object.entries(rawRuns).forEach(([k, v]) => {
+        if (!v || !v.study) return;
+        const normId = normalizeStudyIdOnAtlas(v.study.id || k);
+        v.study.id = normId;
+        runs[normId] = v;
+      });
       const runEntries = Object.values(runs).filter((r) => r && r.summary && Number(r.tokens) > 0 && r.study && r.study.atlasPath);
       if (runEntries.length > 0) {
         const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-        const renderSvg = (studyId, analytics) => {
-          const bars = Array.isArray(analytics?.bars) && analytics.bars.length ? analytics.bars : [];
-          if (!bars.length) return "";
-          const maxVal = Math.max(1, ...bars.map((b) => (Number(b.primary) || 0) + (Number(b.secondary) || 0)));
-          const height = 74 + bars.length * 34;
-          const left = 270;
-          const width = 415;
-          const unit = esc(analytics?.chartUnit || "");
-          const parts = [];
-          for (let i = 0; i <= 4; i++) {
-            const tickVal = (maxVal * i) / 4;
-            const tx = left + (i / 4) * width;
-            const tickStr = tickVal >= 10 ? Math.round(tickVal) : tickVal.toFixed(1);
-            parts.push(
-              `<line stroke="#ffffff14" x1="${tx.toFixed(1)}" x2="${tx.toFixed(1)}" y1="30" y2="${height - 26}"/>` +
-              `<text fill="#a4acc3" font-size="11" x="${tx.toFixed(1)}" y="20" text-anchor="middle">${tickStr}${unit}</text>`
-            );
-          }
-          bars.forEach((b, idx) => {
-            const y = 38 + idx * 34;
-            const pVal = Math.max(0, Number(b.primary) || 0);
-            const sVal = Math.max(0, Number(b.secondary) || 0);
-            const wP = (pVal / maxVal) * width;
-            const wS = (sVal / maxVal) * width;
-            const lbl = String(b.label || `Row ${idx + 1}`).slice(0, 34);
-            parts.push(
-              `<text fill="#e8eaf6" font-size="12" x="${left - 10}" y="${y + 15}" text-anchor="end">${esc(lbl)}</text>` +
-              `<rect fill="#69d4cf" x="${left}" y="${y}" width="${wP.toFixed(1)}" height="20"><title>${esc(b.label)}: ${pVal}${unit}</title></rect>` +
-              (wS > 0 ? `<rect fill="#f7ab65" x="${(left + wP).toFixed(1)}" y="${y}" width="${wS.toFixed(1)}" height="20"></rect>` : "") +
-              `<text fill="#9ddacf" font-size="11.5" font-weight="700" x="${(left + wP + wS + 8).toFixed(1)}" y="${y + 15}">${pVal}${unit}${sVal > 0 ? ` (+${sVal}${unit})` : ""}</text>`
-            );
-          });
-          return `<figure class="sports-chart athletics-chart" style="margin:16px 0;padding:18px;border:1px solid #ffffff1a;border-radius:8px;background:#0d111d;"><figcaption style="margin-bottom:10px;"><strong style="display:block;font-size:15px;">${esc(analytics?.chartTitle || "Empirical Benchmark Chart")}</strong><small style="color:#a4acc3;">${esc(analytics?.chartSubtitle || "")}</small></figcaption><svg viewBox="0 0 900 ${height}" style="width:100%;height:auto;" role="img">${parts.join("")}</svg></figure>`;
-        };
 
         // 1. On an Atlas leaf page, hosted study page, OR Topic/Field branch page (.atlas-page), inject cards & Study Tabs
         const leafMain = document.querySelector("main.atlas-leaf, main.study-page, main.atlas-page");
         if (leafMain) {
-          const canonicalIds = new Set(["ST-01", "ST-02", "ST-05", "ST-06", "ST-08", "ST-09"]);
+          const canonicalIds = new Set(["ST-01-00", "ST-02-00", "ST-05-00", "ST-06-00", "ST-08-00", "ST-09-00"]);
           const matching = runEntries.filter(
             (r) =>
               !canonicalIds.has(r.study.id) &&
-              (current.includes(`/${r.study.atlasPath}/`) || r.study.atlasPath.split("/").slice(0, 2).join("/") && current.endsWith(`/${r.study.atlasPath.split("/").slice(0, 2).join("/")}/index.html`))
+              (current.includes(`/${r.study.atlasPath}/`) || (r.study.atlasPath.split("/").slice(0, 2).join("/") && current.endsWith(`/${r.study.atlasPath.split("/").slice(0, 2).join("/")}/index.html`)))
           );
           if (matching.length > 0) {
             const ledeEl = leafMain.querySelector(".leaf-hero .lede");
             if (ledeEl && /first study is being prepared/i.test(ledeEl.textContent)) {
-              ledeEl.textContent = `Live Workbench study active (${matching.map((m) => m.study.id).join(", ")}): empirical benchmarks, interactive parameter definitions, SVG chart, Pandas code, and LaTeX paper below.`;
+              ledeEl.textContent = `Live Workbench study active (${matching.map((m) => m.study.id).join(", ")}): empirical benchmarks, interactive parameter definitions, multi-type SVG charts, Pandas code, and LaTeX paper below.`;
             }
             const brand = document.querySelector(".site-header .brand");
             const rootPrefix = brand ? (brand.getAttribute("href") || "index.html").replace(/index\.html$/, "") : "../../../";
@@ -1493,6 +1818,22 @@
               const slug = (st.atlasPath || "study").split("/").pop().toLowerCase();
               const mmTopic = (st.atlasPath || "Study").replace(/\//g, " / ").replace(/-/g, " ");
               const mmLinkHtml = `<a class="kpi-tip-mm" href="${esc(rootPrefix)}Mental-Map/index.html#sec:${esc(slug)}">🧠 Mental Map: § ${esc(mmTopic)} ↗</a>`;
+
+              const linkagesList = Array.isArray(st.linkages) ? st.linkages : [];
+              const linkagesHtml = linkagesList.length
+                ? `<div style="margin:10px 0;display:flex;flex-wrap:wrap;gap:6px;align-items:center;"><strong style="font-size:12px;color:#9ddacf;">🔗 Connected Studies, Theories &amp; Applications:</strong>` +
+                  linkagesList
+                    .map((raw) => {
+                      const parts = String(raw).split("|").map((p) => p.trim());
+                      const refId = parts[0] || "";
+                      const lbl = parts[1] || refId;
+                      const tPath = parts[2] || st.atlasPath;
+                      const href = tPath ? `${esc(rootPrefix)}${esc(tPath)}/index.html` : `${esc(rootPrefix)}Workbench/index.html`;
+                      return `<a class="badge" href="${href}" style="text-decoration:none;border:1px solid #69d4cf55;padding:4px 9px;border-radius:999px;font-size:12px;color:#eeeef7;">🔗 ${esc(refId)} · ${esc(lbl)} ↗</a>`;
+                    })
+                    .join("") +
+                  `<a class="badge" href="${esc(rootPrefix)}Workbench/index.html" style="text-decoration:none;border:1px solid #f7ab6566;padding:4px 9px;border-radius:999px;font-size:12px;color:#f7ab65;">➕ Follow-Up / Extrapolate in Workbench ↗</a></div>`
+                : `<div style="margin:10px 0;"><a class="badge" href="${esc(rootPrefix)}Workbench/index.html" style="text-decoration:none;border:1px solid #f7ab6566;padding:4px 9px;border-radius:999px;font-size:12px;color:#f7ab65;">➕ Follow-Up / Extrapolate or Re-Run in Workbench ↗</a></div>`;
 
               const kpisBlock = kpis.length
                 ? `<div class="sports-metrics" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin:14px 0;">` +
@@ -1560,7 +1901,8 @@
                 `<p class="eyebrow">Live Workbench Study Tab · ${esc(st.id)} · ${esc(rec.mode)}</p>`,
                 `<h2>${esc(st.title)}</h2>`,
                 `<p style="color:#a4acc3;"><strong>Primary datasets:</strong> ${esc(rec.dataset || st.dataset)}</p>`,
-                renderSvg(st.id, an) + (Array.isArray(an.extraCharts) ? an.extraCharts.map((ch, idx) => renderSvg(`${st.id}-extra-${idx + 2}`, ch)).join("") : ""),
+                linkagesHtml,
+                renderAllStudyChartsOnAtlas(st.id, an),
                 kpisBlock,
                 inspectorBlock,
                 `<div class="tex-paper" style="margin:16px 0;padding:24px;border-radius:8px;">${formatStudyProseHtml(rec.summary)}</div>`,
@@ -1572,16 +1914,14 @@
               else leafMain.appendChild(sec);
               sec.querySelectorAll("[data-kpi-card]").forEach(wireKpiCard);
             });
-            if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
-              window.MathJax.typesetPromise();
-            }
+            ensureMathJaxLoadedAndTypeset(leafMain);
           }
         }
 
         // 2. On Mental-Map/index.html, inject any newly run non-canonical Workbench studies into their matching section with formatted MathJax
         const mmPaper = document.querySelector(".document-page .tex-paper");
         if (mmPaper && current.includes("/Mental-Map/")) {
-          const canonicalIds = new Set(["ST-01", "ST-02", "ST-05", "ST-06", "ST-08", "ST-09"]);
+          const canonicalIds = new Set(["ST-01-00", "ST-02-00", "ST-05-00", "ST-06-00", "ST-08-00", "ST-09-00"]);
           let injectedAny = false;
           runEntries.forEach((rec) => {
             const st = rec.study;
@@ -1606,8 +1946,8 @@
             }
             injectedAny = true;
           });
-          if (injectedAny && window.MathJax && typeof window.MathJax.typesetPromise === "function") {
-            window.MathJax.typesetPromise();
+          if (injectedAny) {
+            ensureMathJaxLoadedAndTypeset(mmPaper);
           }
         }
       }
@@ -1617,8 +1957,33 @@
   };
   integratePublishedStudyRuns();
 
-  // Pull cross-device Mobile <-> Web study runs on Atlas leaf/branch pages & Mental Map (including >4KB attachments)
+  // Pull permanent repo-published live-cloud-studies.json AND cross-device Mobile <-> Web study runs on Atlas pages & Mental Map
   if (typeof fetch === "function" && (document.querySelector("main.atlas-leaf, main.study-page, main.atlas-page") || current.includes("/Mental-Map/"))) {
+    const brand = document.querySelector(".site-header .brand");
+    const rootPrefix = brand ? (brand.getAttribute("href") || "index.html").replace(/index\.html$/, "") : "../../../";
+    fetch(`${rootPrefix}assets/data/live-cloud-studies.json?t=${Date.now()}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((repoData) => {
+        if (!repoData || !repoData.runs) return;
+        const localRuns = JSON.parse(localStorage.getItem("liam_workbench_study_runs_v1") || "{}") || {};
+        let updated = false;
+        Object.entries(repoData.runs).forEach(([sid, rec]) => {
+          const normId = normalizeStudyIdOnAtlas(sid);
+          if (rec && Number(rec.tokens) > 0) {
+            const cur = localRuns[normId];
+            if (!cur || !Number(cur.tokens) || (!Array.isArray(cur.analytics?.charts) && Array.isArray(rec.analytics?.charts))) {
+              localRuns[normId] = rec;
+              updated = true;
+            }
+          }
+        });
+        if (updated) {
+          localStorage.setItem("liam_workbench_study_runs_v1", JSON.stringify(localRuns));
+          integratePublishedStudyRuns();
+        }
+      })
+      .catch(() => {});
+
     fetch("https://ntfy.sh/liam_wb_cloud_sync_67wxyE7LLICn/json?poll=1&since=all")
       .then((r) => (r.ok ? r.text() : ""))
       .then(async (txt) => {
@@ -1639,8 +2004,9 @@
             }
             if (pkt && pkt.v === 1 && pkt.runs && typeof pkt.runs === "object") {
               Object.entries(pkt.runs).forEach(([sid, rec]) => {
-                if (rec && Number(rec.tokens) > 0 && (!localRuns[sid] || !Number(localRuns[sid].tokens))) {
-                  localRuns[sid] = rec;
+                const normId = normalizeStudyIdOnAtlas(sid);
+                if (rec && Number(rec.tokens) > 0 && (!localRuns[normId] || !Number(localRuns[normId].tokens))) {
+                  localRuns[normId] = rec;
                   updated = true;
                 }
               });
@@ -3331,6 +3697,23 @@
       };
     };
 
+    const REABS_WEBHOOK_KEY = "liam_reabs_email_webhook_v1";
+    const savedWebhook = localStorage.getItem(REABS_WEBHOOK_KEY) || "";
+    const webhookInputEl = document.getElementById("reabs-email-webhook");
+    if (webhookInputEl && savedWebhook) webhookInputEl.value = savedWebhook;
+    document.getElementById("reabs-save-webhook-btn")?.addEventListener("click", () => {
+      const val = webhookInputEl ? webhookInputEl.value.trim() : "";
+      if (val) localStorage.setItem(REABS_WEBHOOK_KEY, val);
+      else localStorage.removeItem(REABS_WEBHOOK_KEY);
+      const st = document.getElementById("reabs-test-email-status");
+      if (st) {
+        st.style.color = "#8fe0a8";
+        st.textContent = val
+          ? `✓ Saved background email relay (${val.slice(0, 42)}…)! Clicking Send Test Email will now dispatch via your relay.`
+          : "Cleared custom email relay.";
+      }
+    });
+
     const sendReabsEmail = async (item, statusEl, openMailClientFallback = false) => {
       const payload = buildReabsMessagePayload(item);
       const recipients = [DEFAULT_REABS_EMAIL];
@@ -3349,56 +3732,137 @@
       }
 
       let deliveredViaApi = false;
-      for (const emailAddr of recipients) {
+      let apiErrorNote = "";
+      const customWebhook = (document.getElementById("reabs-email-webhook")?.value || localStorage.getItem(REABS_WEBHOOK_KEY) || "").trim();
+
+      // 1. Custom Google Apps Script Web App or Web3Forms key if configured
+      if (customWebhook) {
         try {
-          const r = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(emailAddr)}`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", Accept: "application/json" },
-            body: JSON.stringify({
-              _subject: payload.subject,
-              _template: "box",
-              Task_ID: item.id,
-              Task: item.title,
-              Urgency_Flag: `${item.urgency} (X-Priority: ${payload.xPriority} / Importance: ${payload.importance})`,
-              Schedule: item.scheduleText,
-              ...(payload.hasPhone ? { Phone_Number: item.phoneNumber } : {}),
-              Reasoning: item.reasoning,
-              One_Tap_Complete_1h: `https://liammspandasprojects.org/Reminders/index.html?reabs_action=complete&id=${encodeURIComponent(item.id)}&hours=1.0`,
-              Reply_Command: `DONE ${item.id} 1.0h`,
-            }),
-          });
-          if (r.ok) deliveredViaApi = true;
+          if (/^https:\/\/script\.google\.com\/macros\/s\//i.test(customWebhook)) {
+            await fetch(customWebhook, {
+              method: "POST",
+              mode: "no-cors",
+              headers: { "Content-Type": "text/plain;charset=UTF-8" },
+              body: JSON.stringify({
+                to: recipients.join(","),
+                subject: payload.subject,
+                body: payload.bodyText,
+                priority: payload.xPriority,
+              }),
+            });
+            deliveredViaApi = true;
+          } else {
+            const wResp = await fetch("https://api.web3forms.com/submit", {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Accept: "application/json" },
+              body: JSON.stringify({
+                access_key: customWebhook,
+                subject: payload.subject,
+                email: recipients[0],
+                message: payload.bodyText,
+              }),
+            });
+            if (wResp.ok) deliveredViaApi = true;
+          }
         } catch {
-          /* continue to ntfy email bridge */
-        }
-        try {
-          const rNtfy = await fetch("https://ntfy.sh/liam_reabs_email_67wxyE7L_v1", {
-            method: "POST",
-            headers: {
-              Title: payload.subject,
-              Priority: payload.ntfyPriority,
-              "X-Email": emailAddr,
-              "X-Priority": payload.xPriority,
-              Importance: payload.importance,
-            },
-            body: payload.bodyText,
-          });
-          if (rNtfy.ok) deliveredViaApi = true;
-        } catch {
-          /* ignore */
+          /* fallback below */
         }
       }
 
-      if (openMailClientFallback) {
-        const outlookUrl = `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(recipients.join(","))}&subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.bodyText)}`;
+      // 2. Try FormSubmit AJAX endpoint (checking both HTTP status and JSON .success)
+      if (!deliveredViaApi) {
+        for (const emailAddr of recipients) {
+          try {
+            const r = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(emailAddr)}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json", Accept: "application/json" },
+              body: JSON.stringify({
+                _subject: payload.subject,
+                _template: "box",
+                Task_ID: item.id,
+                Task: item.title,
+                Urgency_Flag: `${item.urgency} (X-Priority: ${payload.xPriority} / Importance: ${payload.importance})`,
+                Schedule: item.scheduleText,
+                ...(payload.hasPhone ? { Phone_Number: item.phoneNumber } : {}),
+                Reasoning: item.reasoning,
+                One_Tap_Complete_1h: `https://liammspandasprojects.org/Reminders/index.html?reabs_action=complete&id=${encodeURIComponent(item.id)}&hours=1.0`,
+                Reply_Command: `DONE ${item.id} 1.0h`,
+              }),
+            });
+            if (r.ok) {
+              const j = await r.json().catch(() => ({}));
+              if (j && (j.success === "true" || j.success === true)) {
+                deliveredViaApi = true;
+              } else if (j && j.message) {
+                apiErrorNote = j.message;
+              }
+            } else {
+              apiErrorNote = `FormSubmit HTTP ${r.status}`;
+            }
+          } catch {
+            apiErrorNote = "FormSubmit HTTP 521 (origin server offline)";
+          }
+        }
+      }
+
+      // 3. Always mirror the full email digest to the user's phone via UTF-8 JSON POST to ntfy.sh (no non-ASCII HTTP headers!)
+      let mirroredToPhone = false;
+      try {
+        const rMirror = await fetch("https://ntfy.sh", {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify({
+            topic: "liam_reabs_sms_67wxyE7L_v1",
+            title: `📧 ${payload.subject}`,
+            message: `To: ${recipients.join(", ")}\n${payload.bodyText}`,
+            priority: Number(payload.ntfyPriority) || 4,
+            tags: ["e-mail", "bell"],
+            click: "https://liammspandasprojects.org/Reminders/index.html",
+            actions: [
+              {
+                action: "http",
+                label: "✓ Done (1.0h)",
+                url: "https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1",
+                method: "POST",
+                body: `DONE ${item.id} 1.0h`,
+              },
+              {
+                action: "http",
+                label: "🔕 Mute",
+                url: "https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1",
+                method: "POST",
+                body: `OFF ${item.id}`,
+              },
+            ],
+          }),
+        });
+        if (rMirror.ok) mirroredToPhone = true;
+      } catch {
+        /* ignore */
+      }
+
+      const gmailUrl = `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(recipients.join(","))}&su=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.bodyText)}`;
+      const outlookUrl = `https://outlook.office.com/mail/deeplink/compose?to=${encodeURIComponent(recipients.join(","))}&subject=${encodeURIComponent(payload.subject)}&body=${encodeURIComponent(payload.bodyText)}`;
+
+      if (openMailClientFallback === "gmail") {
+        window.open(gmailUrl, "_blank", "noopener");
+      } else if (openMailClientFallback === "outlook" || openMailClientFallback === true) {
         window.open(outlookUrl, "_blank", "noopener");
+      } else if (!deliveredViaApi) {
+        // When FormSubmit is down (HTTP 521), open Gmail compose if a @gmail.com recipient is selected, else Outlook Web
+        const hasGmail = recipients.some((r) => /@gmail\.com$/i.test(r));
+        window.open(hasGmail ? gmailUrl : outlookUrl, "_blank", "noopener");
       }
 
       if (statusEl) {
         statusEl.style.color = "#8fe0a8";
-        statusEl.textContent = deliveredViaApi
-          ? `✓ Sent ${item.urgency} Urgency REABS email [X-Priority: ${payload.xPriority}] to ${recipients.join(", ")}${payload.hasPhone ? ` (with phone ${item.phoneNumber})` : " (Phone: N/A omitted)"}!`
-          : `✓ Queued ${item.urgency} Urgency REABS email to ${recipients.join(", ")} (click 'Open Pre-Filled UWaterloo / Mail Test' to also send directly via Outlook Web).`;
+        if (deliveredViaApi) {
+          statusEl.textContent = `✓ Sent ${item.urgency} Urgency REABS email [X-Priority: ${payload.xPriority}] to ${recipients.join(", ")}${mirroredToPhone ? " + mirrored to your ntfy phone app" : ""}!`;
+        } else {
+          statusEl.innerHTML =
+            `✓ Delivered instant copy to your <strong>ntfy phone app</strong> (<code>liam_reabs_sms_67wxyE7L_v1</code>) &amp; opened pre-filled compose for <strong>${escHtml(recipients.join(", "))}</strong> ` +
+            `<small style="color:#f7ab65;">(${escHtml(apiErrorNote || "FormSubmit 521 offline")} — click <strong>Send</strong> in the opened Gmail/Outlook tab, or expand ⚙️ above to paste a Google Apps Script URL for 100% silent background Gmail delivery)</small>.`;
+        }
       }
     };
 
@@ -3409,52 +3873,64 @@
       const carrier = document.getElementById("reabs-sms-carrier")?.value || smsCfg.carrier || "ntfy";
 
       const shortSms =
-        `[REABS ${item.urgency.toUpperCase()}] ${item.id}: ${item.title} (${item.scheduleText})` +
-        (payload.hasPhone ? ` · Call: ${item.phoneNumber}` : "") +
-        ` · Why: ${item.reasoning}` +
-        ` · Done 1h: https://liammspandasprojects.org/Reminders/index.html?reabs_action=complete&id=${item.id}&hours=1.0`;
+        `[REABS ${item.urgency.toUpperCase()}] ${item.id}: ${item.title}\n` +
+        `Schedule: ${item.scheduleText}` +
+        (payload.hasPhone ? `\nPhone: ${item.phoneNumber}` : "") +
+        `\nWhy: ${item.reasoning}\n` +
+        `Reply "DONE ${item.id} 1h" or tap a button below:`;
 
       if (statusEl) {
         statusEl.style.color = "#9ddacf";
-        statusEl.textContent = `📱 Sending REABS text/push reminder for ${item.id}…`;
+        statusEl.textContent = `📱 Sending REABS push/text notification for ${item.id} to ntfy.sh/liam_reabs_sms_67wxyE7L_v1…`;
       }
       let ok = false;
       try {
-        const r = await fetch("https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1", {
+        // Post UTF-8 JSON body to root https://ntfy.sh (avoids browser fetch ByteString TypeError on emojis in HTTP headers!)
+        const r = await fetch("https://ntfy.sh", {
           method: "POST",
-          headers: {
-            Title: payload.subject,
-            Priority: payload.ntfyPriority,
-            Tags: item.urgency === "High" ? "rotating_light,bell" : "bell",
-          },
-          body: shortSms,
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify({
+            topic: "liam_reabs_sms_67wxyE7L_v1",
+            title: payload.subject,
+            message: shortSms,
+            priority: Number(payload.ntfyPriority) || 4,
+            tags: item.urgency === "High" ? ["rotating_light", "bell"] : ["bell", "zap"],
+            click: "https://liammspandasprojects.org/Reminders/index.html",
+            actions: [
+              {
+                action: "http",
+                label: "✓ Done (0.5h)",
+                url: "https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1",
+                method: "POST",
+                body: `DONE ${item.id} 0.5h`,
+              },
+              {
+                action: "http",
+                label: "✓ Done (1.0h)",
+                url: "https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1",
+                method: "POST",
+                body: `DONE ${item.id} 1.0h`,
+              },
+              {
+                action: "http",
+                label: "🔕 Mute",
+                url: "https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1",
+                method: "POST",
+                body: `OFF ${item.id}`,
+              },
+            ],
+          }),
         });
         if (r.ok) ok = true;
       } catch {
         /* ignore */
       }
 
-      if (phoneDest && carrier !== "ntfy") {
-        const digits = phoneDest.replace(/\D/g, "");
-        if (digits.length >= 10) {
-          const smsGatewayEmail = `${digits.slice(-10)}@${carrier}`;
-          try {
-            await fetch("https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1", {
-              method: "POST",
-              headers: { "X-Email": smsGatewayEmail, Priority: payload.ntfyPriority },
-              body: shortSms,
-            });
-          } catch {
-            /* ignore */
-          }
-        }
-      }
-
       if (statusEl) {
-        statusEl.style.color = "#8fe0a8";
+        statusEl.style.color = ok ? "#8fe0a8" : "#f28b82";
         statusEl.textContent = ok
-          ? `✓ Sent REABS text/push notification for ${item.id} (${item.urgency} Urgency)${phoneDest ? ` to ${phoneDest}` : ""}!`
-          : `✓ Prepared REABS text reminder for ${item.id}.`;
+          ? `✓ Sent live push notification with 1-tap action buttons for ${item.id} (${item.urgency} Urgency) to your ntfy phone app (liam_reabs_sms_67wxyE7L_v1)${phoneDest ? ` · ${phoneDest}` : ""}!`
+          : `⚠ Could not reach ntfy.sh — check your network connection.`;
       }
     };
 
@@ -3625,13 +4101,14 @@
       }
     };
 
-    // Execute a two-way reply command like "DONE RB-01 1.5h" or "OFF RB-02" or "HOURS RB-03 0.75"
-    const executeReabsReplyCommand = (rawCmd, statusEl) => {
+    // Execute a two-way reply command like "DONE RB-01 1.5h", "OFF RB-02", "HOURS RB-03 0.75", or shorthand "1" / "Test"
+    const executeReabsReplyCommand = (rawCmd, statusEl, isSilentPoll = false) => {
       const cmd = String(rawCmd || "").trim();
       if (!cmd) return false;
-      const mDone = cmd.match(/^(?:DONE|COMPLETE|COMPLETED)\s+(RB-\d+)\s*(\d+(?:\.\d+)?)?\s*(?:h|hr|hrs|hours?)?$/i);
-      if (mDone) {
-        const id = mDone[1].toUpperCase();
+      const mDone = cmd.match(/^(?:(?:DONE|COMPLETE|COMPLETED)\s+)?(?:RB-0*)?(\d+)\s*(\d+(?:\.\d+)?)?\s*(?:h|hr|hrs|hours?)?$/i);
+      if (mDone && (/^(?:DONE|COMPLETE|COMPLETED|RB-)/i.test(cmd) || /^\d+$/.test(cmd))) {
+        const num = String(parseInt(mDone[1], 10)).padStart(2, "0");
+        const id = `RB-${num}`;
         const hrs = mDone[2] ? parseFloat(mDone[2]) : 1.0;
         const item = reabsItems.find((x) => x.id.toUpperCase() === id);
         if (item) {
@@ -3648,9 +4125,9 @@
           return true;
         }
       }
-      const mOff = cmd.match(/^(?:OFF|MUTE|STOP)\s+(RB-\d+)$/i);
+      const mOff = cmd.match(/^(?:OFF|MUTE|STOP)\s+(?:RB-0*)?(\d+)$/i);
       if (mOff) {
-        const id = mOff[1].toUpperCase();
+        const id = `RB-${String(parseInt(mOff[1], 10)).padStart(2, "0")}`;
         const item = reabsItems.find((x) => x.id.toUpperCase() === id);
         if (item) {
           item.remindersEnabled = 0;
@@ -3664,9 +4141,9 @@
           return true;
         }
       }
-      const mHrs = cmd.match(/^HOURS?\s+(RB-\d+)\s+(\d+(?:\.\d+)?)\s*(?:h|hr|hrs|hours?)?$/i);
+      const mHrs = cmd.match(/^HOURS?\s+(?:RB-0*)?(\d+)\s+(\d+(?:\.\d+)?)\s*(?:h|hr|hrs|hours?)?$/i);
       if (mHrs) {
-        const id = mHrs[1].toUpperCase();
+        const id = `RB-${String(parseInt(mHrs[1], 10)).padStart(2, "0")}`;
         const hrs = parseFloat(mHrs[2]);
         const item = reabsItems.find((x) => x.id.toUpperCase() === id);
         if (item) {
@@ -3680,9 +4157,9 @@
           return true;
         }
       }
-      if (statusEl) {
-        statusEl.style.color = "#f28b82";
-        statusEl.textContent = `⚠ Unrecognized command. Use: DONE RB-01 1.5h  or  OFF RB-02  or  HOURS RB-03 0.5`;
+      if (!isSilentPoll && statusEl) {
+        statusEl.style.color = "#8fe0a8";
+        statusEl.textContent = `📱 Message received ("${cmd}") · Tip: Reply "DONE RB-01 1.5h" (or "1") to mark completed, or "OFF RB-02" to mute.`;
       }
       return false;
     };
@@ -3716,21 +4193,37 @@
       renderOptionalEmailsUi();
     });
 
-    // Wire Test Email & Outlook Pre-filled Test Buttons
+    // Wire Test Email, Gmail & Outlook Pre-filled Test Buttons
     document.getElementById("reabs-test-email-btn")?.addEventListener("click", () => {
       const checkedExtras = Array.from(document.querySelectorAll("[data-reabs-test-opt-email]:checked")).map((c) =>
         c.getAttribute("data-reabs-test-opt-email")
       );
       const sampleItem = reabsItems[0] || {
-        id: "RB-TEST",
-        title: "REABS Test Email Verification (Contact Manulife Financial Regarding TFSA Setup)",
+        id: "RB-01",
+        title: "Contact Manulife Financial Regarding TFSA Setup",
         urgency: "High",
         scheduleText: "2pm Mon, Wed, Thurs",
         phoneNumber: "1-888-790-4387",
         phoneSource: "google-gemini",
-        reasoning: "Confirming REABS automated email delivery, Urgency headers, and one-tap completion links to l2mcgrat@uwaterloo.ca.",
+        reasoning: "Confirming REABS automated email delivery, Urgency headers, and one-tap completion links.",
       };
       sendReabsEmail({ ...sampleItem, extraEmails: checkedExtras.join(",") }, document.getElementById("reabs-test-email-status"), false);
+    });
+
+    document.getElementById("reabs-test-gmail-btn")?.addEventListener("click", () => {
+      const checkedExtras = Array.from(document.querySelectorAll("[data-reabs-test-opt-email]:checked")).map((c) =>
+        c.getAttribute("data-reabs-test-opt-email")
+      );
+      const sampleItem = reabsItems[0] || {
+        id: "RB-01",
+        title: "Contact Manulife Financial Regarding TFSA Setup",
+        urgency: "Medium",
+        scheduleText: "2pm Mon, Wed, Thurs",
+        phoneNumber: "1-888-790-4387",
+        phoneSource: "google-gemini",
+        reasoning: "I want to be able to pull money out later in the future that I've forgetable put away over time.",
+      };
+      sendReabsEmail({ ...sampleItem, extraEmails: checkedExtras.join(",") }, document.getElementById("reabs-test-email-status"), "gmail");
     });
 
     document.getElementById("reabs-test-outlook-btn")?.addEventListener("click", () => {
@@ -3746,7 +4239,7 @@
         phoneSource: "google-gemini",
         reasoning: "I want to be able to pull money out later in the future that I've forgetable put away over time.",
       };
-      sendReabsEmail({ ...sampleItem, extraEmails: checkedExtras.join(",") }, document.getElementById("reabs-test-email-status"), true);
+      sendReabsEmail({ ...sampleItem, extraEmails: checkedExtras.join(",") }, document.getElementById("reabs-test-email-status"), "outlook");
     });
 
     // Wire SMS Settings & Test Text Button
@@ -3922,36 +4415,80 @@
     };
     setInterval(checkDueReabsSchedule, 60000);
 
-    // Poll cross-device REABS state & inbound email/SMS reply commands from ntfy.sh
+    // Poll & live-stream cross-device REABS state + inbound phone messages from BOTH liam_reabs_sms_67wxyE7L_v1 & liam_reabs_reply_67wxyE7L_v1
+    const seenNtfyIds = new Set();
+    const phoneFeedMessages = [];
+    const handleInboundNtfyEnvelope = (env, isLiveStream = false) => {
+      if (!env || env.event !== "message" || !env.message || seenNtfyIds.has(env.id)) return;
+      seenNtfyIds.add(env.id);
+      const msg = String(env.message || "").trim();
+      const title = String(env.title || "").trim();
+      if (msg.startsWith("{")) {
+        try {
+          const pkt = JSON.parse(msg);
+          if (pkt && pkt.app === "liam_reabs_state_v1" && Array.isArray(pkt.list)) {
+            reabsItems = pkt.list;
+            localStorage.setItem(REABS_STORAGE_KEY, JSON.stringify(reabsItems));
+            renderReabsTablesAndChart();
+          }
+        } catch {
+          /* ignore */
+        }
+        return;
+      }
+      // Skip outbound reminder broadcasts generated by sendReabsSms / sendReabsEmail
+      if (/REABS/i.test(title) || /^\[REABS\s/i.test(msg) || /^To:\s/i.test(msg)) {
+        return;
+      }
+      const tsStr = env.time ? new Date(env.time * 1000).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) : "just now";
+      phoneFeedMessages.push({ id: env.id, text: msg, time: tsStr });
+      const feedBodyEl = document.getElementById("reabs-phone-feed-body");
+      if (feedBodyEl) {
+        const recent = phoneFeedMessages.slice(-4);
+        feedBodyEl.innerHTML = recent
+          .map((m) => `<span class="wb-badge wb-up" style="margin-right:6px;">📱 ${escHtml(m.time)}: &ldquo;${escHtml(m.text)}&rdquo;</span>`)
+          .join(" ");
+      }
+      executeReabsReplyCommand(msg, document.getElementById("reabs-test-sms-status"), !isLiveStream);
+    };
+
     if (typeof fetch === "function") {
-      fetch("https://ntfy.sh/liam_reabs_reply_67wxyE7L_v1/json?poll=1&since=all")
-        .then((r) => (r.ok ? r.text() : ""))
-        .then((txt) => {
-          if (!txt) return;
-          txt
-            .trim()
-            .split("\n")
-            .filter(Boolean)
-            .forEach((line) => {
-              try {
-                const env = JSON.parse(line);
-                if (!env || env.event !== "message" || !env.message) return;
-                if (env.message.startsWith("{")) {
-                  const pkt = JSON.parse(env.message);
-                  if (pkt && pkt.app === "liam_reabs_state_v1" && Array.isArray(pkt.list)) {
-                    reabsItems = pkt.list;
-                    localStorage.setItem(REABS_STORAGE_KEY, JSON.stringify(reabsItems));
-                    renderReabsTablesAndChart();
+      ["https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1/json?poll=1&since=all", "https://ntfy.sh/liam_reabs_reply_67wxyE7L_v1/json?poll=1&since=all"].forEach(
+        (url) => {
+          fetch(url)
+            .then((r) => (r.ok ? r.text() : ""))
+            .then((txt) => {
+              if (!txt) return;
+              txt
+                .trim()
+                .split("\n")
+                .filter(Boolean)
+                .forEach((line) => {
+                  try {
+                    handleInboundNtfyEnvelope(JSON.parse(line), false);
+                  } catch {
+                    /* ignore */
                   }
-                } else {
-                  executeReabsReplyCommand(env.message, document.getElementById("reabs-test-sms-status"));
-                }
-              } catch {
-                /* ignore */
-              }
-            });
-        })
-        .catch(() => {});
+                });
+            })
+            .catch(() => {});
+        }
+      );
+    }
+
+    if (typeof EventSource === "function") {
+      try {
+        const sse = new EventSource("https://ntfy.sh/liam_reabs_sms_67wxyE7L_v1/sse");
+        sse.addEventListener("message", (ev) => {
+          try {
+            handleInboundNtfyEnvelope(JSON.parse(ev.data), true);
+          } catch {
+            /* ignore */
+          }
+        });
+      } catch {
+        /* ignore */
+      }
     }
 
     renderOptionalEmailsUi();

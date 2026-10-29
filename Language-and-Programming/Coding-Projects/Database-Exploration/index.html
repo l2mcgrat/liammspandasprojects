@@ -17,6 +17,7 @@
       <a class="text-link" href="../../../Atlas/index.html">Site atlas →</a></div></div></header>
     <section class="catalog" aria-labelledby="db-leaf-title"><div class="catalog-head"><h2 id="db-leaf-title">Live Engineering Triad Database Workbench</h2><p class="catalog-rule"><strong>Direct access:</strong> Open the <a href="../../../Workbench/index.html">Notebook Workbench (Workbench/index.html) ↗</a> to add Theory, Application, or Study entries, wishlist tasks, spontaneous rap bars, or voice notes from desktop or phone.</p></div><pre class="catalog-code"><code>CREATE TABLE IF NOT EXISTS study_queue (
     id TEXT PRIMARY KEY,
+    parent_id TEXT,
     created_on TEXT NOT NULL,
     title TEXT NOT NULL,
     atlas_path TEXT NOT NULL,
@@ -26,6 +27,8 @@
     study_route TEXT,
     paper_route TEXT,
     clicks INTEGER NOT NULL DEFAULT 0,
+    chart_types TEXT NOT NULL DEFAULT &#x27;auto&#x27;,
+    linkages TEXT NOT NULL DEFAULT &#x27;&#x27;,
     notes TEXT NOT NULL DEFAULT &#x27;&#x27;
 );
 
@@ -37,6 +40,7 @@ CREATE TABLE IF NOT EXISTS theory_queue (
     atlas_path TEXT NOT NULL,
     scope_prompt TEXT NOT NULL,
     status TEXT NOT NULL CHECK (status IN (&#x27;published&#x27;, &#x27;in-progress&#x27;, &#x27;queued&#x27;)),
+    linkages TEXT NOT NULL DEFAULT &#x27;&#x27;,
     notes TEXT NOT NULL DEFAULT &#x27;&#x27;
 );
 
@@ -49,6 +53,7 @@ CREATE TABLE IF NOT EXISTS applications_queue (
     system_design TEXT NOT NULL,
     societal_benefit TEXT NOT NULL,
     status TEXT NOT NULL CHECK (status IN (&#x27;published&#x27;, &#x27;in-progress&#x27;, &#x27;queued&#x27;)),
+    linkages TEXT NOT NULL DEFAULT &#x27;&#x27;,
     notes TEXT NOT NULL DEFAULT &#x27;&#x27;
 );
 
@@ -60,6 +65,7 @@ CREATE TABLE IF NOT EXISTS wishlist_todos (
     priority TEXT NOT NULL CHECK (priority IN (&#x27;high&#x27;, &#x27;medium&#x27;, &#x27;low&#x27;)),
     atlas_path TEXT NOT NULL,
     status TEXT NOT NULL CHECK (status IN (&#x27;done&#x27;, &#x27;in-progress&#x27;, &#x27;planned&#x27;)),
+    linkages TEXT NOT NULL DEFAULT &#x27;&#x27;,
     notes TEXT NOT NULL DEFAULT &#x27;&#x27;
 );
 
