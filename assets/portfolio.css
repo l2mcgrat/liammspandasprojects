@@ -527,6 +527,82 @@ caption { text-align:left; font-size:11px; color:#969db5; padding:14px; }
   /* Also fit all five links when a desktop browser reserves a scrollbar. */
   .site-header { padding-inline:12px; }
 }
+@keyframes mario-coin-spin {
+  0%, 100% { transform: scaleX(1) translateY(0); }
+  25% { transform: scaleX(0.32) translateY(-2px); }
+  50% { transform: scaleX(0.08) translateY(-3px); }
+  75% { transform: scaleX(0.32) translateY(-2px); }
+}
+@keyframes mario-coin-sparkle-pulse {
+  0%, 100% { opacity: 0.25; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
+@keyframes mario-coin-flip-3d {
+  0% { transform: translateY(0) scaleX(1) rotateZ(0deg); }
+  20% { transform: translateY(-42px) scaleX(0.1) rotateZ(8deg); }
+  40% { transform: translateY(-68px) scaleX(1) rotateZ(-8deg); }
+  60% { transform: translateY(-48px) scaleX(0.1) rotateZ(6deg); }
+  80% { transform: translateY(-18px) scaleX(0.85) rotateZ(-4deg); }
+  100% { transform: translateY(0) scaleX(1) rotateZ(0deg); }
+}
+.mario-coin-svg .mario-coin-spin-group {
+  transform-origin: 32px 32px;
+  animation: mario-coin-spin 2.2s ease-in-out infinite;
+}
+.mario-coin-svg .mario-coin-sparkle {
+  transform-origin: 32px 32px;
+  animation: mario-coin-sparkle-pulse 1.6s ease-in-out infinite;
+}
+.mario-coin-3d.is-flipping .mario-coin-svg {
+  animation: mario-coin-flip-3d 0.72s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.mario-coin-widget-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 12px;
+  padding: 10px 16px 10px 12px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 212, 59, 0.48);
+  background: linear-gradient(135deg, rgba(255, 212, 59, 0.14), rgba(229, 153, 0, 0.06));
+  color: #f4f6ff;
+  text-decoration: none;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.28), inset 0 0 12px rgba(255, 212, 59, 0.12);
+  transition: transform 0.18s ease, border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.mario-coin-widget-link:hover,
+.mario-coin-widget-link:focus-visible {
+  transform: translateY(-2px);
+  border-color: #ffd43b;
+  box-shadow: 0 8px 24px rgba(255, 212, 59, 0.24), inset 0 0 16px rgba(255, 212, 59, 0.2);
+}
+.mario-coin-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.mario-coin-copy {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.mario-coin-kicker {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #ffd43b;
+}
+.mario-coin-copy strong {
+  font-size: 14px;
+  color: #ffffff;
+}
+.mario-coin-copy small {
+  font-size: 11.5px;
+  color: #cbd2eb;
+}
+
 @media(forced-colors:active) {
   .hex-map .hex-node:focus-visible { outline:3px solid Highlight; outline-offset:3px; }
 }

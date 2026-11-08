@@ -311,6 +311,11 @@
       rec: "records/athletics/smash/Smash_Series_Log.txt",
       pub: "Gaming-and-Performance-Log/Smash-Bros/1v1-History/Smash_Series_Log.txt",
     },
+    coin_flip: {
+      header: "Coin Flip Decision Log",
+      rec: "records/athletics/coin_flip/Coin_Flip_Log.txt",
+      pub: "Gaming-and-Performance-Log/Coin-Flip/Coin_Flip_Log.txt",
+    },
   };
 
   // Zero-token deterministic regex cleaner matching site_content/log_sync.py
@@ -1103,7 +1108,258 @@
         }
       }
     }
+
+    // 7. Mario Coin Flip Decision & Override Log
+    if (key === "coin_flip" && lines.some((l) => /\|\s*Heads:/i.test(l))) {
+      const flips = [];
+      let curDate = new Date().toISOString().slice(0, 10);
+      const flipPipeRe = /^(.+?)\s*\|\s*Heads:\s*(.+?),\s*Tails:\s*(.+?)\s*\|\s*Landed:\s*(Heads|Tails)\s*\|\s*Action:\s*(Followed|Overrode)(?:\s*->\s*([^|]+?))?(?:\s*\|\s*Category:\s*([^|]+?))?(?:\s*\|\s*Note:\s*(.+))?$/i;
+      lines.forEach((ln) => {
+        const mDay = ln.match(/^(\d{1,2})\/(\d{1,2})\/(20\d{2})$/);
+        if (mDay) {
+          curDate = `${mDay[3]}-${mDay[1].padStart(2, "0")}-${mDay[2].padStart(2, "0")}`;
+          return;
+        }
+        const mf = ln.match(flipPipeRe);
+        if (mf) {
+          const question = mf[1].trim();
+          const headsOption = mf[2].trim();
+          const tailsOption = mf[3].trim();
+          const landed = mf[4].trim().charAt(0).toUpperCase() + mf[4].trim().slice(1).toLowerCase();
+          const action = mf[5].trim().charAt(0).toUpperCase() + mf[5].trim().slice(1).toLowerCase();
+          const overrode = action === "Overrode";
+          const coinChoice = landed === "Heads" ? headsOption : tailsOption;
+          const oppChoice = landed === "Heads" ? tailsOption : headsOption;
+          const finalChoice = (mf[6] || (overrode ? oppChoice : coinChoice)).trim();
+          const category = (mf[7] || "General & Life").trim();
+          const note = (mf[8] || "").trim();
+          flips.push({
+            number: flips.length + 1,
+            date: curDate,
+            question,
+            headsOption,
+            tailsOption,
+            landed,
+            coinChoice,
+            action,
+            overrode,
+            finalChoice,
+            category,
+            note,
+          });
+        }
+      });
+      if (flips.length > 0) {
+        const total = flips.length;
+        const headsCount = flips.filter((f) => f.landed === "Heads").length;
+        const tailsCount = total - headsCount;
+        const overrodeCount = flips.filter((f) => f.overrode).length;
+        const followedCount = total - overrodeCount;
+        const overrideRate = Math.round((1000 * overrodeCount) / total) / 10;
+        const headsPct = Math.round((1000 * headsCount) / total) / 10;
+        const headsOvr = flips.filter((f) => f.landed === "Heads" && f.overrode).length;
+        const tailsOvr = flips.filter((f) => f.landed === "Tails" && f.overrode).length;
+        updateKpiCardOnPage("Decisions flipped", String(total), `${formatShortDayJs(flips[0].date)} → ${formatShortDayJs(flips[flips.length - 1].date)} · ${headsCount} Heads, ${tailsCount} Tails`);
+        updateKpiCardOnPage("Override rate (Gut-Check)", `${overrideRate}%`, `Overrode ${overrodeCount} of ${total} flips (${followedCount} followed)`);
+        updateKpiCardOnPage("Heads vs. Tails fairness", `${headsPct}% Heads`, `${headsOvr} overrides on Heads · ${tailsOvr} on Tails`);
+        const escC = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const flipTbody = document.querySelector("#coin-flip-table tbody");
+        if (flipTbody) {
+          flipTbody.innerHTML = flips
+            .slice()
+            .reverse()
+            .map(
+              (f) =>
+                `<tr><th scope="row">#${f.number} · ${formatShortDayJs(f.date)}</th>` +
+                `<td>${escC(f.category)}</td><td>${escC(f.question)}</td>` +
+                `<td>H: ${escC(f.headsOption)} / T: ${escC(f.tailsOption)}</td>` +
+                `<td>${f.landed === "Heads" ? "🌟" : "🍄"} ${f.landed} (${escC(f.coinChoice)})</td>` +
+                `<td>${f.overrode ? "⚡ Overrode" : "✓ Followed"} → ${escC(f.finalChoice)}</td>` +
+                `<td>${escC(f.note || "—")}</td></tr>`
+            )
+            .join("");
+        }
+        const catMap = new Map();
+        flips.forEach((f) => {
+          const cur = catMap.get(f.category) || { category: f.category, flips: 0, heads: 0, tails: 0, followed: 0, overrode: 0 };
+          cur.flips += 1;
+          if (f.landed === "Heads") cur.heads += 1;
+          else cur.tails += 1;
+          if (f.overrode) cur.overrode += 1;
+          else cur.followed += 1;
+          catMap.set(f.category, cur);
+        });
+        const catTbody = document.querySelector("#coin-flip-category-table tbody");
+        if (catTbody) {
+          catTbody.innerHTML = Array.from(catMap.values())
+            .sort((a, b) => b.flips - a.flips)
+            .map((c) => {
+              const rate = Math.round((1000 * c.overrode) / Math.max(1, c.flips)) / 10;
+              return `<tr><th scope="row">${escC(c.category)}</th><td>${c.flips}</td><td>${c.heads}H / ${c.tails}T</td><td>${c.followed}</td><td>${c.overrode}</td><td>${rate}%</td></tr>`;
+            })
+            .join("");
+        }
+      }
+    }
   };
+
+  // Interactive 3D Super Mario Coin Flipper & Override Recorder (#mario-coin-app)
+  const marioCoinApp = document.getElementById("mario-coin-app");
+  if (marioCoinApp) {
+    const qInput = document.getElementById("mc-question-input");
+    const hInput = document.getElementById("mc-heads-input");
+    const tInput = document.getElementById("mc-tails-input");
+    const catSelect = document.getElementById("mc-category-select");
+    const noteInput = document.getElementById("mc-note-input");
+    const coin3d = document.getElementById("mc-coin-3d");
+    const stageBtn = document.getElementById("mc-coin-stage-btn");
+    const flipBtn = document.getElementById("mc-flip-trigger-btn");
+    const followBtn = document.getElementById("mc-record-follow-btn");
+    const overrideBtn = document.getElementById("mc-record-override-btn");
+    const badgeEl = document.getElementById("mc-flip-badge");
+    const detailEl = document.getElementById("mc-flip-detail");
+    const feedbackEl = document.getElementById("mc-log-feedback");
+
+    let lastLanded = null; // "Heads" | "Tails"
+
+    const playMarioCoinChime = () => {
+      try {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (!AudioCtx) return;
+        const ctx = new AudioCtx();
+        const now = ctx.currentTime;
+        // Classic Super Mario coin two-note chime: B5 (987.77 Hz) -> E6 (1318.51 Hz)
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = "square";
+        osc.frequency.setValueAtTime(987.77, now);
+        osc.frequency.setValueAtTime(1318.51, now + 0.075);
+        gain.gain.setValueAtTime(0.08, now);
+        gain.gain.exponentialRampToValueAtTime(0.0008, now + 0.42);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(now);
+        osc.stop(now + 0.43);
+      } catch {
+        /* ignore audio restrictions */
+      }
+    };
+
+    const syncOptionPreview = () => {
+      const hOpt = (hInput?.value || "Option A").trim();
+      const tOpt = (tInput?.value || "Option B").trim();
+      if (!lastLanded && detailEl) {
+        detailEl.textContent = `🌟 Heads = ${hOpt} · 🍄 Tails = ${tOpt}`;
+      }
+    };
+    hInput?.addEventListener("input", syncOptionPreview);
+    tInput?.addEventListener("input", syncOptionPreview);
+
+    const triggerMarioCoinFlip = () => {
+      if (coin3d) {
+        coin3d.classList.remove("is-flipping");
+        void coin3d.offsetWidth;
+        coin3d.classList.add("is-flipping");
+      }
+      playMarioCoinChime();
+      const randBuf = new Uint32Array(1);
+      if (window.crypto && window.crypto.getRandomValues) {
+        window.crypto.getRandomValues(randBuf);
+        lastLanded = randBuf[0] % 2 === 0 ? "Heads" : "Tails";
+      } else {
+        lastLanded = Math.random() < 0.5 ? "Heads" : "Tails";
+      }
+      const hOpt = (hInput?.value || "Option A").trim();
+      const tOpt = (tInput?.value || "Option B").trim();
+      const chosen = lastLanded === "Heads" ? hOpt : tOpt;
+      const opposite = lastLanded === "Heads" ? tOpt : hOpt;
+
+      setTimeout(() => {
+        if (badgeEl) {
+          badgeEl.className = "wb-badge wb-warn";
+          badgeEl.textContent = `${lastLanded === "Heads" ? "🌟 LANDED HEADS!" : "🍄 LANDED TAILS!"} → Coin says: "${chosen}"`;
+        }
+        if (detailEl) {
+          detailEl.textContent = `Now record what you actually did: did you Follow "${chosen}" or Override to "${opposite}"?`;
+        }
+        if (followBtn) {
+          followBtn.disabled = false;
+          followBtn.textContent = `✓ Follow Coin (${chosen})`;
+        }
+        if (overrideBtn) {
+          overrideBtn.disabled = false;
+          overrideBtn.textContent = `⚡ Override Coin! (Choose ${opposite} Instead)`;
+        }
+      }, 420);
+    };
+
+    stageBtn?.addEventListener("click", triggerMarioCoinFlip);
+    flipBtn?.addEventListener("click", triggerMarioCoinFlip);
+
+    const recordCoinDecision = async (actionType) => {
+      if (!lastLanded) return;
+      const question = (qInput?.value || "Decision Flip").trim();
+      const hOpt = (hInput?.value || "Option A").trim();
+      const tOpt = (tInput?.value || "Option B").trim();
+      const category = (catSelect?.value || "General & Life").trim();
+      const note = (noteInput?.value || "").trim();
+      const coinChoice = lastLanded === "Heads" ? hOpt : tOpt;
+      const oppChoice = lastLanded === "Heads" ? tOpt : hOpt;
+      const finalChoice = actionType === "Overrode" ? oppChoice : coinChoice;
+
+      const now = new Date();
+      const mdy = `${now.getMonth() + 1}/${now.getDate()}/${now.getFullYear()}`;
+      const newLine =
+        `${question} | Heads: ${hOpt}, Tails: ${tOpt} | Landed: ${lastLanded} | Action: ${actionType} -> ${finalChoice} | Category: ${category}` +
+        (note ? ` | Note: ${note}` : "");
+
+      let baseText = "";
+      try {
+        const syncedStore = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
+        if (syncedStore.coin_flip?.rawText) {
+          baseText = syncedStore.coin_flip.rawText;
+        } else {
+          const r = await fetch("Coin_Flip_Log.txt", { cache: "no-store" });
+          if (r.ok) baseText = await r.text();
+        }
+      } catch {
+        /* fallback */
+      }
+      const needsDateHeader = !new RegExp(`^${mdy.replace(/\//g, "\\/")}$`, "m").test(baseText);
+      const blockToAppend = needsDateHeader ? `\n${mdy}\n${newLine}\n` : `\n${newLine}\n`;
+      const combined = repairLogTextInBrowser("coin_flip", `${baseText.trim()}\n${blockToAppend}`);
+      const isoToday = now.toISOString().slice(0, 10);
+      try {
+        const syncedStore = JSON.parse(localStorage.getItem(SYNCED_LOGS_KEY) || "{}") || {};
+        const linesArr = combined.split("\n").map((l) => l.trim()).filter(Boolean);
+        syncedStore.coin_flip = {
+          docId: "on-site-coin-flip",
+          newest: isoToday,
+          lineCount: linesArr.length,
+          rawText: combined,
+          tail: linesArr.slice(-10),
+          syncedAt: new Date().toISOString(),
+        };
+        localStorage.setItem(SYNCED_LOGS_KEY, JSON.stringify(syncedStore));
+      } catch {
+        /* ignore quota */
+      }
+      applyLiveLogUpdateToDom("coin_flip", combined);
+      const pubRes = await commitLogToGithubFromBrowser("coin_flip", combined);
+      if (feedbackEl) {
+        feedbackEl.style.color = "#8fe0a8";
+        feedbackEl.textContent =
+          `✓ Logged #${actionType.toUpperCase()}: "${question}" (Landed ${lastLanded} → ${actionType}: ${finalChoice})` +
+          (pubRes.committed ? " & committed to GitHub!" : " & updated charts/tables live!");
+      }
+      if (followBtn) followBtn.disabled = true;
+      if (overrideBtn) overrideBtn.disabled = true;
+      if (noteInput) noteInput.value = "";
+    };
+
+    followBtn?.addEventListener("click", () => recordCoinDecision("Followed"));
+    overrideBtn?.addEventListener("click", () => recordCoinDecision("Overrode"));
+  }
 
   const runSingleGdocSync = async (box, autoCommit = true) => {
     const key = box.getAttribute("data-gdoc-sync");
