@@ -306,6 +306,11 @@
       rec: "records/health/diet/Diet_and_Calorie_Tracking.txt",
       pub: "Gaming-and-Performance-Log/Health/Diet/Diet_and_Calorie_Tracking.txt",
     },
+    smash_series: {
+      header: "Smash Series Log",
+      rec: "records/athletics/smash/Smash_Series_Log.txt",
+      pub: "Gaming-and-Performance-Log/Smash-Bros/1v1-History/Smash_Series_Log.txt",
+    },
   };
 
   // Zero-token deterministic regex cleaner matching site_content/log_sync.py

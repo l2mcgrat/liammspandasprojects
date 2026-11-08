@@ -1,0 +1,12 @@
+id,date,friend,seriesNumber,games,wins,losses,outcome,netStocks,baseScore,adjustedScore,mvpCharacter,mvpStreak
+2026-10-11-S1,2026-10-11,Owen,1,7,7,0,Won,11,15.09,14.63,Ridley,7
+2026-10-11-S2,2026-10-11,Owen,2,3,3,0,Won,4,5.82,5.99,Chrom,3
+2026-10-30-S1,2026-10-30,Owen,1,12,7,5,Won,6,16.84,17.19,Piranha Plant,3
+2026-10-31-S1,2026-10-31,Owen,1,10,7,3,Won,11,18.84,18.94,Robin,6
+2026-10-31-S2,2026-10-31,Owen,2,12,7,5,Won,3,14.03,13.71,Bowser,3
+2026-11-01-S1,2026-11-01,Owen,1,12,6,6,Tied,4,14.92,15.29,Kirby,2
+2026-11-01-S2,2026-11-01,Owen,2,12,10,2,Won,11,21.25,21.73,Hero,4
+2026-11-07-S1,2026-11-07,Owen,1,10,8,2,Won,8,16.69,17.11,Incineroar,4
+2026-11-07-S2,2026-11-07,Owen,2,11,7,4,Won,8,17.07,17.41,Duck Hunt,6
+2026-11-07-S3,2026-11-07,Owen,3,13,9,4,Won,12,24.41,25.32,Zelda,3
+2026-11-07-S4,2026-11-07,Owen,4,11,7,4,Won,5,15.23,15.28,Greninja,4
