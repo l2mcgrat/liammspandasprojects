@@ -4209,4 +4209,460 @@
       if (timerEl) timerEl.textContent = `Loaded ${file.name}`;
     });
   }
+
+  // ---- Gemini Mobile -> Google Docs -> Website Section Mapper ----
+  const geminiForm = document.getElementById("wb-gemini-form");
+  const geminiBody = document.getElementById("wb-gemini-body");
+  const geminiAutoRoute = document.getElementById("wb-gemini-auto-route");
+  const geminiManualCascade = document.getElementById("wb-gemini-manual-cascade");
+  const geminiPullDocBtn = document.getElementById("wb-gemini-pull-doc-btn");
+  const geminiExportUrlInput = document.getElementById("wb-gemini-export-url");
+  const geminiRawTextarea = document.getElementById("wb-gemini-raw");
+  const geminiSubmitAiBtn = document.getElementById("wb-gemini-submit-ai");
+  const geminiSmartSyncBtn = document.getElementById("wb-gemini-smart-sync-btn");
+  const geminiRerouteSelect = document.getElementById("wb-gemini-reroute-select");
+
+  if (geminiAutoRoute && geminiManualCascade) {
+    const syncManualVisibility = () => {
+      geminiManualCascade.hidden = geminiAutoRoute.checked;
+    };
+    geminiAutoRoute.addEventListener("change", syncManualVisibility);
+    syncManualVisibility();
+  }
+
+  const getAllValidAtlasLeaves = () => {
+    if (!geminiRerouteSelect) return [];
+    return Array.from(geminiRerouteSelect.options)
+      .filter((o) => o.value)
+      .map((o) => ({ path: o.value, label: o.textContent || o.value }));
+  };
+
+  const autoDetectAtlasPathJs = (title, bodyText) => {
+    const hay = `${title || ""}\n${bodyText || ""}`.toLowerCase();
+    const hints = [
+      [["smash", "byleth", "ridley", "matchup", "1v1", "stock"], "Sports-and-Entertainment/Gaming/Smash-Bros"],
+      [["steam", "valve", "indie", "pc game"], "Sports-and-Entertainment/Gaming/Steam"],
+      [["nintendo", "switch", "zelda", "mario"], "Sports-and-Entertainment/Gaming/Nintendo"],
+      [["review", "metacritic", "rating"], "Sports-and-Entertainment/Gaming/Ratings-and-Reviews"],
+      [["game industry", "console", "studio"], "Sports-and-Entertainment/Gaming/Industry"],
+      [["budget", "cash flow", "burn rate", "expense"], "Overall-Performance/Finances/Cash-Flow-and-Budgeting"],
+      [["net worth", "runway", "emergency fund", "savings"], "Overall-Performance/Finances/Savings-and-Net-Worth"],
+      [["tfsa", "fhsa", "rrsp", "etf", "portfolio", "investing"], "Overall-Performance/Finances/Investing-and-Portfolio"],
+      [["salary", "compensation", "income"], "Overall-Performance/Finances/Income-and-Compensation"],
+      [["tax", "subscription"], "Overall-Performance/Finances/Tax-and-Cost-Optimization"],
+      [["habit", "morning routine", "streak"], "Overall-Performance/Stability/Daily-Routines-and-Habits"],
+      [["irritability", "composure", "emotional", "stress"], "Overall-Performance/Stability/Emotional-Regulation"],
+      [["deep work", "focus block", "pomodoro"], "Overall-Performance/Time/Deep-Work-and-Focus"],
+      [["168", "time budget", "time allocation"], "Overall-Performance/Time/Time-Allocation-Ledger"],
+      [["screen time", "doomscroll", "attention"], "Overall-Performance/Time/Screen-Time-and-Friction"],
+      [["deadlift", "squat", "bench", "lifting", "hypertrophy"], "Overall-Performance/Athletics/Weightlifting"],
+      [["interval", "tempo", "vo2", "pace", "running"], "Overall-Performance/Athletics/Running"],
+      [["swim", "freestyle", "butterfly", "laps"], "Overall-Performance/Athletics/Swimming"],
+      [["sleep", "rem", "circadian", "dream"], "Overall-Performance/Health/Sleep"],
+      [["calorie", "protein", "macro", "deficit", "bmr", "diet"], "Overall-Performance/Health/Diet"],
+      [["memory palace", "loci", "spaced repetition"], "Overall-Performance/Memory/Techniques"],
+      [["quantum", "wavefunction", "hamiltonian", "orbital"], "Science-and-Engineering/Physics/Quantum-Mechanics"],
+      [["thermodynamics", "entropy", "boltzmann"], "Science-and-Engineering/Physics/Thermodynamics"],
+      [["battery", "electrochemistry", "sodium", "lithium"], "Science-and-Engineering/Chemistry/Electrochemistry"],
+      [["fiscal", "generational", "public debt"], "Business-and-Economics/Macroeconomics/Fiscal-Policy"],
+      [["oligopoly", "bertrand", "collusion", "game theory"], "Business-and-Economics/Microeconomics/Game-Theory"],
+      [["leetcode", "dynamic programming", "memoization"], "Language-and-Programming/LeetCode/Dynamic-Programming"],
+      [["rap", "rhyme", "verse", "bars"], "Language-and-Programming/Rap/Future-Projects"],
+    ];
+    let bestPath = "Language-and-Programming/Learning-Progress/Natural-Sciences";
+    let bestScore = 0;
+    const leaves = getAllValidAtlasLeaves();
+    const toks = (hay.match(/[a-z0-9]{3,}/g) || []);
+    leaves.forEach((lf) => {
+      let sc = 0;
+      hints.forEach(([words, target]) => {
+        if (target === lf.path) {
+          words.forEach((w) => {
+            if (hay.includes(w)) sc += 6;
+          });
+        }
+      });
+      const leafWords = lf.path.toLowerCase().split(/[\/\-]+/);
+      toks.forEach((t) => {
+        if (leafWords.includes(t)) sc += 2;
+      });
+      if (sc > bestScore) {
+        bestScore = sc;
+        bestPath = lf.path;
+      }
+    });
+    return bestPath;
+  };
+
+  const fetchDocTextForWorkbench = async (rawUrl) => {
+    const m = String(rawUrl || "").trim().match(/(?:\/document\/d\/|^)([A-Za-z0-9_-]{20,})/);
+    if (!m) throw new Error("Paste a valid Google Docs URL (https://docs.google.com/document/d/...).");
+    const docId = m[1];
+    const cb = Date.now();
+    const exportUrl = `https://docs.google.com/document/d/${docId}/export?format=txt&_cb=${cb}`;
+    const urls = [
+      exportUrl,
+      `https://r.jina.ai/https://docs.google.com/document/d/${docId}/export?format=txt?_cb=${cb}`,
+      `https://api.allorigins.win/raw?url=${encodeURIComponent(exportUrl)}&_cb=${cb}`,
+    ];
+    for (const u of urls) {
+      try {
+        const r = await fetch(u, { cache: "no-store" });
+        if (r.ok) {
+          let t = await r.text();
+          const idx = t.indexOf("Markdown Content:");
+          if (idx !== -1) t = t.slice(idx + "Markdown Content:".length).trim();
+          if (t && t.trim().length > 5 && !/<!DOCTYPE html>/i.test(t.slice(0, 180))) return t.trim();
+        }
+      } catch {
+        /* try next */
+      }
+    }
+    throw new Error("Could not fetch Google Doc (set sharing to 'Anyone with the link: Viewer').");
+  };
+
+  let activeSelectedGeminiId = "";
+  const INTENT_BADGES = {
+    "mental-map-note": "🧠 Mental Map Note",
+    "study-seed": "📊 Study Queue Seed",
+    "theory-note": "📐 Theory Framework",
+    "application-idea": "⚙️ Engineering App",
+    "interest-spark": "✨ Interest & Chat",
+  };
+
+  const wireGeminiRowActions = (tr) => {
+    if (!tr || tr.hasAttribute("data-gemini-wired")) return;
+    tr.setAttribute("data-gemini-wired", "1");
+    tr.addEventListener("click", (ev) => {
+      if (ev.target && ev.target.closest && ev.target.closest("a, button, select")) return;
+      activeSelectedGeminiId = tr.getAttribute("data-gemini-row") || "";
+      document.querySelectorAll("#wb-gemini-body tr").forEach((r) => {
+        r.style.outline = r === tr ? "1.5px solid #9ddacf" : "";
+      });
+      if (geminiRerouteSelect) geminiRerouteSelect.value = tr.getAttribute("data-gemini-path") || "";
+      announce(`Selected ${activeSelectedGeminiId} — choose a destination in 'Quick re-route selected row' to move it.`);
+    });
+
+    const promoteBtn = tr.querySelector("[data-gemini-promote-study]");
+    if (promoteBtn) {
+      promoteBtn.addEventListener("click", () => {
+        const gid = tr.getAttribute("data-gemini-row") || "GM";
+        const title = tr.getAttribute("data-gemini-title") || "Gemini Interest Study";
+        const path = tr.getAttribute("data-gemini-path") || "Science-and-Engineering/Physics/Thermodynamics";
+        const summary = tr.getAttribute("data-gemini-summary") || title;
+        const store = loadLocal();
+        store.studyQueue = store.studyQueue || [];
+        const existingCount = document.querySelectorAll("#wb-studies-body tr").length;
+        const sid = `ST-${String(existingCount + 1).padStart(2, "0")}-00`;
+        const newStudy = {
+          id: sid,
+          parentId: null,
+          createdOn: todayIso(),
+          title,
+          atlasPath: path,
+          question: summary,
+          dataset: `Promoted from Gemini mapping ${gid} + public/internal benchmarks`,
+          status: "queued",
+          studyRoute: `${path}/index.html`,
+          paperRoute: null,
+          chartTypes: "auto",
+          linkages: gid,
+          ipIndex: currentIpIndex,
+        };
+        store.studyQueue.push(newStudy);
+        saveLocal(store);
+        appendRow("studyQueue", newStudy);
+        if (typeof pushCloudSync === "function") pushCloudSync();
+        announce(`✓ Promoted ${gid} → Study Queue (${sid}) mapped to ${path}!`);
+        document.getElementById("workbench-studies-table")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
+
+    const texBtn = tr.querySelector("[data-gemini-copy-tex]");
+    if (texBtn) {
+      texBtn.addEventListener("click", () => {
+        const title = tr.getAttribute("data-gemini-title") || "Gemini Exploration";
+        const path = tr.getAttribute("data-gemini-path") || "";
+        const summary = tr.getAttribute("data-gemini-summary") || "";
+        const tex = `% Mapped from Gemini (${todayIso()}) -> ${path}\n\\subsubsubsection{${title.replace(/&/g, "\\&")}}\n${summary.replace(/&/g, "\\&")}\n`;
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(tex).then(() => announce(`✓ Copied LaTeX snippet for ${path} to clipboard!`));
+        } else {
+          announce(tex);
+        }
+      });
+    }
+  };
+
+  document.querySelectorAll("#wb-gemini-body tr[data-gemini-row]").forEach(wireGeminiRowActions);
+
+  const renderGeminiRowDom = (entry) => {
+    if (!geminiBody || !entry || !entry.id) return;
+    if (geminiBody.querySelector(`tr[data-gemini-row="${CSS.escape(entry.id)}"]`)) return;
+    const tr = document.createElement("tr");
+    tr.setAttribute("data-gemini-row", entry.id);
+    tr.setAttribute("data-gemini-path", entry.atlasPath);
+    tr.setAttribute("data-gemini-title", entry.title);
+    tr.setAttribute("data-gemini-summary", entry.summary || "");
+    tr.setAttribute("data-gemini-intent", entry.intent || "interest-spark");
+
+    const leafTitle = (entry.atlasPath || "").split("/").pop().replace(/-/g, " ");
+    const tks = Array.isArray(entry.takeaways) ? entry.takeaways : [];
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const tkHtml = tks.length
+      ? `<ul class="wb-sub" style="margin:6px 0 0;padding-left:16px;">${tks.slice(0, 3).map((b) => `<li>${esc(b)}</li>`).join("")}</ul>`
+      : "";
+    tr.innerHTML =
+      `<th scope="row" class="wb-col-id"><code>${esc(entry.id)}</code></th>` +
+      `<td class="wb-col-date">${esc(entry.createdOn || todayIso())}</td>` +
+      `<td><strong>${esc(entry.title)}</strong><p style="margin:4px 0 0;font-size:13px;color:#dfe4f6;">${esc(entry.summary || "")}</p>${tkHtml}</td>` +
+      `<td><span class="wb-channel">${esc(INTENT_BADGES[entry.intent] || "✨ Interest & Chat")}</span></td>` +
+      `<td data-gemini-dest-cell="${esc(entry.id)}"><a class="wb-action-link" href="../${esc(entry.atlasPath)}/index.html">↗ ${esc(leafTitle)}</a><small class="wb-sub">${esc(entry.atlasPath)}</small></td>` +
+      `<td><div style="display:flex;flex-wrap:wrap;gap:6px;">` +
+      `<button class="button ghost wb-run-study-btn" type="button" data-gemini-promote-study="${esc(entry.id)}">📊 → Study Queue</button>` +
+      `<button class="button ghost wb-run-study-btn" type="button" data-gemini-copy-tex="${esc(entry.id)}">🧠 Copy TeX</button>` +
+      `</div></td>`;
+    geminiBody.prepend(tr);
+    wireGeminiRowActions(tr);
+  };
+
+  // Hydrate saved browser Gemini mappings on page load
+  (() => {
+    const saved = loadLocal().geminiMappings;
+    if (Array.isArray(saved)) saved.forEach(renderGeminiRowDom);
+  })();
+
+  if (geminiRerouteSelect) {
+    geminiRerouteSelect.addEventListener("change", () => {
+      const newPath = geminiRerouteSelect.value;
+      if (!newPath) return;
+      const targetTr =
+        (activeSelectedGeminiId && geminiBody?.querySelector(`tr[data-gemini-row="${CSS.escape(activeSelectedGeminiId)}"]`)) ||
+        geminiBody?.querySelector("tr[data-gemini-row]");
+      if (!targetTr) return;
+      const gid = targetTr.getAttribute("data-gemini-row") || "";
+      targetTr.setAttribute("data-gemini-path", newPath);
+      const cellEl = targetTr.querySelector(`[data-gemini-dest-cell="${CSS.escape(gid)}"]`);
+      const leafTitle = newPath.split("/").pop().replace(/-/g, " ");
+      if (cellEl) {
+        cellEl.innerHTML = `<a class="wb-action-link" href="../${newPath}/index.html">↗ ${leafTitle}</a><small class="wb-sub">${newPath}</small>`;
+      }
+      const store = loadLocal();
+      if (Array.isArray(store.geminiMappings)) {
+        const found = store.geminiMappings.find((m) => m.id === gid);
+        if (found) found.atlasPath = newPath;
+        saveLocal(store);
+      }
+      window.dispatchEvent(new CustomEvent("liam-gemini-mappings-updated"));
+      if (typeof pushCloudSync === "function") pushCloudSync();
+      announce(`✓ Re-routed ${gid} → ${newPath}!`);
+    });
+  }
+
+  if (geminiPullDocBtn) {
+    geminiPullDocBtn.addEventListener("click", async () => {
+      const rawUrl = geminiExportUrlInput ? geminiExportUrlInput.value.trim() : "";
+      if (!rawUrl) {
+        announce("⚠ Paste a Google Doc URL from Gemini mobile 'Export to Docs' first.");
+        return;
+      }
+      announce("📲 Fetching exported Gemini Google Doc (0 tokens)…");
+      try {
+        const text = await fetchDocTextForWorkbench(rawUrl);
+        if (geminiRawTextarea) {
+          geminiRawTextarea.value = text;
+          geminiRawTextarea.dispatchEvent(new Event("input"));
+        }
+        announce(`✓ Pulled ${text.split("\n").length} lines from Google Doc! Click 'Map to Website Section' below.`);
+      } catch (err) {
+        announce(`⚠ ${err.message || err}`);
+      }
+    });
+  }
+
+  const parseRawGeminiBlocksClient = (rawText, forcedTitle, forcedIntent, forcedAtlasPath) => {
+    const chunks = String(rawText || "")
+      .replace(/\r\n/g, "\n")
+      .replace(/^Gemini Interests & Chat Log\s*/i, "")
+      .split(/\n\s*(?:---+|===+)\s*\n/)
+      .map((c) => c.trim())
+      .filter(Boolean);
+    const existingCount = document.querySelectorAll("#wb-gemini-body tr").length;
+    return chunks.map((chunk, idx) => {
+      const lines = chunk.split("\n").map((l) => l.trim()).filter(Boolean);
+      let explicitAtlas = "";
+      let explicitIntent = "";
+      let explicitTitle = "";
+      const contentLines = [];
+      lines.forEach((ln) => {
+        const mMeta = ln.match(/^(Atlas|Section|Destination|Route|Intent|Title|Topic)\s*:\s*(.+)$/i);
+        if (mMeta) {
+          const k = mMeta[1].toLowerCase();
+          if (k === "intent") explicitIntent = mMeta[2].trim();
+          else if (k === "title" || k === "topic") explicitTitle = mMeta[2].trim();
+          else explicitAtlas = mMeta[2].trim();
+        } else {
+          contentLines.push(ln);
+        }
+      });
+      const title =
+        (chunks.length === 1 && forcedTitle) ||
+        explicitTitle ||
+        (contentLines[0] || "Gemini Exploration").replace(/^#+\s*|^\d{4}-\d{2}-\d{2}\s*[-–—]\s*/, "").slice(0, 95);
+      const bodyRest = contentLines.slice(contentLines[0]?.includes(title) ? 1 : 0);
+      const bullets = bodyRest.filter((l) => /^[-*•]|\d+\.\s/.test(l)).map((l) => l.replace(/^([-*•]|\d+\.)\s*/, ""));
+      const prose = bodyRest.filter((l) => !/^[-*•]|\d+\.\s/.test(l));
+      const summary = (prose[0] || bullets[0] || title).replace(/^Gemini\s*:\s*/i, "").slice(0, 280);
+      const atlasPath = forcedAtlasPath || explicitAtlas || autoDetectAtlasPathJs(title, chunk);
+      const intent = explicitIntent || forcedIntent || "mental-map-note";
+      return {
+        id: `GM-${String(existingCount + idx + 1).padStart(2, "0")}`,
+        createdOn: todayIso(),
+        title,
+        atlasPath,
+        intent,
+        summary,
+        takeaways: bullets.slice(0, 4),
+        sourceDoc: "Google Doc / Workbench",
+        status: "mapped",
+      };
+    });
+  };
+
+  const saveMappedGeminiEntries = (entries) => {
+    if (!entries.length) return;
+    const store = loadLocal();
+    store.geminiMappings = store.geminiMappings || [];
+    const seen = new Set(store.geminiMappings.map((m) => `${m.title}|${m.atlasPath}`));
+    let added = 0;
+    entries.forEach((e) => {
+      const sig = `${e.title}|${e.atlasPath}`;
+      if (!seen.has(sig)) {
+        store.geminiMappings.push(e);
+        seen.add(sig);
+        renderGeminiRowDom(e);
+        added += 1;
+      }
+    });
+    saveLocal(store);
+    window.dispatchEvent(new CustomEvent("liam-gemini-mappings-updated"));
+    if (typeof pushCloudSync === "function") pushCloudSync();
+    return added;
+  };
+
+  if (geminiForm) {
+    geminiForm.addEventListener("submit", (ev) => {
+      ev.preventDefault();
+      const rawText = geminiRawTextarea ? geminiRawTextarea.value.trim() : "";
+      if (!rawText) return;
+      const title = (document.getElementById("wb-gemini-title")?.value || "").trim();
+      const intent = document.getElementById("wb-gemini-intent")?.value || "mental-map-note";
+      const manualPath = geminiAutoRoute && !geminiAutoRoute.checked
+        ? (document.getElementById("wb-gemini-path")?.value || "")
+        : "";
+      const parsed = parseRawGeminiBlocksClient(rawText, title, intent, manualPath);
+      saveMappedGeminiEntries(parsed);
+      geminiForm.reset();
+      if (geminiAutoRoute) geminiAutoRoute.checked = true;
+      if (geminiManualCascade) geminiManualCascade.hidden = true;
+      announce(`✓ Mapped ${parsed.length} Gemini topic(s) to ${parsed.map((p) => p.atlasPath).join(", ")} (0 tokens)!`);
+    });
+  }
+
+  const runGeminiApiSmartMap = async (rawText) => {
+    if (!unlockedApiKey) {
+      openDialog(authDialog);
+      announce("🔐 Unlock Admin with your Gemini API key first to use Smart Gemini API Classification (or use the 0-Token button!).");
+      return;
+    }
+    const validPaths = getAllValidAtlasLeaves().map((l) => l.path);
+    const prompt = [
+      "You are mapping exported Gemini mobile chats onto Liam McGrath's 216-destination personal website.",
+      "Split the following exported chat text into 1 to 5 distinct topic items and map each one to the single best matching atlasPath from this exact list:",
+      validPaths.join(", "),
+      "Return ONLY valid JSON array where each element has: {\"title\": string, \"atlasPath\": string, \"intent\": \"mental-map-note\"|\"study-seed\"|\"theory-note\"|\"application-idea\"|\"interest-spark\", \"summary\": string, \"takeaways\": [string, string]}",
+      "Chat export text:",
+      rawText.slice(0, 14000),
+    ].join("\n\n");
+
+    announce("✨ Calling Gemini API to summarize & map chat topics onto your 216 website sections…");
+    const candidateModels = [...discoveredLiveModelIds, "gemini-2.5-flash", "gemini-2.0-flash"];
+    let items = null;
+    for (const modelId of candidateModels) {
+      try {
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${encodeURIComponent(unlockedApiKey)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.2, responseMimeType: "application/json" },
+          }),
+        });
+        if (!resp.ok) continue;
+        const data = await resp.json();
+        const txt = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
+        const cleaned = txt.replace(/^```json\s*|\s*```$/g, "").trim();
+        const parsed = JSON.parse(cleaned);
+        if (Array.isArray(parsed) && parsed.length) {
+          items = parsed;
+          break;
+        }
+      } catch {
+        /* try next model */
+      }
+    }
+    if (!items) {
+      const fallback = parseRawGeminiBlocksClient(rawText, "", "mental-map-note", "");
+      saveMappedGeminiEntries(fallback);
+      announce(`✓ Mapped ${fallback.length} item(s) via deterministic router (Gemini endpoint unavailable).`);
+      return;
+    }
+    const baseCount = document.querySelectorAll("#wb-gemini-body tr").length;
+    const validSet = new Set(validPaths);
+    const normalized = items.map((it, idx) => ({
+      id: `GM-${String(baseCount + idx + 1).padStart(2, "0")}`,
+      createdOn: todayIso(),
+      title: String(it.title || "Gemini Insight").slice(0, 110),
+      atlasPath: validSet.has(it.atlasPath) ? it.atlasPath : autoDetectAtlasPathJs(it.title, it.summary),
+      intent: INTENT_BADGES[it.intent] ? it.intent : "mental-map-note",
+      summary: String(it.summary || ""),
+      takeaways: Array.isArray(it.takeaways) ? it.takeaways.slice(0, 4).map(String) : [],
+      sourceDoc: "Gemini API Mapper",
+      status: "mapped",
+    }));
+    saveMappedGeminiEntries(normalized);
+    announce(`✓ Gemini API mapped & summarized ${normalized.length} topic(s) → ${normalized.map((n) => n.atlasPath).join(", ")}!`);
+  };
+
+  geminiSubmitAiBtn?.addEventListener("click", async () => {
+    const rawText = geminiRawTextarea ? geminiRawTextarea.value.trim() : "";
+    if (!rawText) {
+      announce("⚠ Paste a Gemini conversation or pull a Google Doc in Option B first.");
+      return;
+    }
+    await runGeminiApiSmartMap(rawText);
+  });
+
+  geminiSmartSyncBtn?.addEventListener("click", async () => {
+    const urlInput = document.getElementById("gdoc-url-gemini_interests");
+    const rawUrl = urlInput ? urlInput.value.trim() : "";
+    if (!rawUrl) {
+      announce("⚠ Paste your Master Gemini Interests Google Doc URL in Option A first.");
+      return;
+    }
+    try {
+      const text = await fetchDocTextForWorkbench(rawUrl);
+      await runGeminiApiSmartMap(text);
+    } catch (err) {
+      announce(`⚠ ${err.message || err}`);
+    }
+  });
+
+  window.addEventListener("liam-gemini-doc-synced", (ev) => {
+    const rawText = ev?.detail?.rawText || "";
+    if (!rawText) return;
+    const parsed = parseRawGeminiBlocksClient(rawText, "", "mental-map-note", "");
+    const added = saveMappedGeminiEntries(parsed);
+    if (added) announce(`✓ Synced & auto-mapped ${added} new Gemini Google Doc topic(s) onto your website!`);
+  });
 })();

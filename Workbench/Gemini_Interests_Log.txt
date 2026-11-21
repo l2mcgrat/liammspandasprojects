@@ -1,0 +1,27 @@
+Gemini Interests & Chat Log
+
+2026-11-18 - Circadian Temperature Drop, Glymphatic Clearance & Deep-Work Timing
+Atlas: Overall-Performance/Health/Sleep
+Intent: mental-map-note
+Gemini: Core body temperature drops by ~1.0 °C to initiate slow-wave NREM sleep, driving glymphatic metabolic clearance before REM dream consolidation peaks in the final two sleep cycles.
+- Distal vasodilation (warm shower 60–90 min pre-bed) accelerates sleep-onset latency without blunting deep sleep.
+- Protecting a consistent wake anchor (±30 min) stabilizes cortisol/adenosine timing for morning deep-work blocks.
+- Cross-check against Sleep_and_Dream_Log.txt dream recall polarity on ≥8.0 h vs. <6.5 h nights.
+
+---
+
+2026-11-19 - Savings Margin vs. Liquid Runway as Privacy-Safe Personal KPIs
+Atlas: Overall-Performance/Finances/Savings-and-Net-Worth
+Intent: study-seed
+Summary: Dimensionless ratios—net savings margin (% of post-tax inflow), liquid runway (months of fixed expenses), and indexed net-worth velocity (base = 100)—capture financial trajectory cleanly on a public dashboard without exposing raw account balances.
+- Track monthly fixed-cost floor vs. discretionary variance (%) alongside TFSA/FHSA contribution cadence.
+- Compute cost-per-hour-of-use on major hardware, athletic, and gaming purchases.
+
+---
+
+2026-11-20 - Frame Advantage, Disjointed Hitboxes & Matchup Volatility in Smash Ultimate
+Atlas: Sports-and-Entertainment/Gaming/Smash-Bros
+Intent: interest-spark
+Summary: Comparing sword/disjoint archetypes (Byleth, Link, Young Link, Sephiroth) against heavy punish archetypes (Ridley, King Dedede, Bowser) explains why stage control and out-of-shield frame data dominate 1v1 King-of-the-Hill streaks.
+- Byleth and Young Link convert spacing traps into consistent stock leads across both Next Smash Mains and 1v1 Series logs.
+- Matchup multiplier 1 - (MU / 20) rewards winning uphill disadvantage states without over-penalizing close last-hit losses.

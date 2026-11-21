@@ -1,0 +1,184 @@
+Smash Series Log
+
+
+10/11/2026 - Owen
+
+
+Series 1
+
+
+Ridley vs. Ridley - (2, 128)
+Ridley vs. Banjo & Kazooie - (1, 100)
+Ridley vs. Hero - (2, 115)
+Ridley vs. Joker - (1, 100)
+Ridley vs. Little Mac - (1, 0)
+Ridley vs. Ike - (1, 0)
+Ridley vs. Incineroar - (3, 139)
+
+
+Series 2
+
+
+Chrom vs. Pichu - (1, 0)
+Chrom vs. Little Mac - (1, 118)
+Chrom vs. Hero - (2, 118)
+
+
+10/30/2026 - Owen
+
+
+Series 1
+
+
+Piranha Plant vs. Ike - (3, 128)
+Piranha Plant vs. Little Mac - (2, 83)
+Piranha Plant vs Banjo & Kazooie - (1, 87)
+Piranha Plant vs. Hero - (-1, 43)
+Duck Hunt vs. Hero - (-1, 94)
+Wolf vs. Hero - (1, 89)
+Wolf vs. Joker - (-1, 83)
+Dark Pit vs. Joker - (2, 121)
+Dark Pit vs. Pikachu - (-1, 87)
+Zelda vs. Pikachu - (-1, 73)
+Yoshi vs. Pikachu - (1, 21)
+Yoshi vs. Sora - (1, 84)
+
+
+10/31/2026 - Owen
+
+
+Series 1
+
+
+Isabelle vs. Little Mac - (3, 158)
+Isabelle vs. Hero - (-1, 90)
+King Dedede vs. Hero - (-1, 69)
+Chrom vs. Hero - (-1, 40)
+Robin vs. Hero - (2, 30)
+Robin vs. Sora - (3, 35)
+Robin vs. Banjo & Kazooie - (1, 91)
+Robin vs. Pikachu - (2, 160)
+Robin vs. Joker - (1, 35)
+Robin vs. Pyra & Mythra - (2, 121)
+
+
+Series 2
+
+
+Wii Fit Trainer vs. Wolf - (1, 126)
+Wii Fit Trainer vs. Pichu - (2, 97)
+Wii Fit Trainer vs. Hero - (-2, 36)
+Olimar vs. Hero - (-1, 132)
+Bowser vs. Hero - (3, 126)
+Bowser vs. Ridley - (1, 146)
+Bowser vs. Captain Falcon - (1, 0)
+Bowser vs. Banjo & Kazooie - (-1, 86)
+Byleth vs. Banjo & Kazooie - (-2, 14)
+Sephiroth vs. Banjo & Kazooie - (-1, 147)
+Diddy Kong vs. Banjo & Kazooie - (1, 47)
+Diddy Kong vs. Toon Link - (1, 67)
+
+
+11/1/2026 - Owen
+
+
+Series 1
+
+
+Duck Hunt vs. Joker - (1, 136)
+Duck Hunt vs. Hero - (-2, 12)
+Zelda vs. Hero - (2, 22)
+Zelda vs. Banjo & Kazooie - (-1, 5)
+Ridley vs. Banjo & Kazooie - (-1, 13)
+Kirby vs. Banjo & Kazooie - (2, 73)
+Kirby vs. Pikachu - (3, 82)
+Kirby vs. Pyra & Mythra - (-2, 156)
+Isabelle vs. Pyra & Mythra - (-1, 70)
+Lucas vs. Pyra & Mythra - (-1, 40)
+Robin vs. Pyra & Mythra - (3, 65)
+Robin vs. Little Mac - (1, 133)
+
+
+Series 2
+
+
+Incineroar vs. Sora - (2, 83)
+Incineroar vs. Banjo & Kazooie - (2, 38)
+Incineroar vs. Ridley - (-1, 36)
+Hero vs. Ridley - (1, 0)
+Hero vs. Pichu - (3, 94)
+Hero vs. Wolf - (1, 44)
+Hero vs. Sephiroth - (1, 85)
+Olimar vs. Sephiroth - (-2, 135)
+King Dedede vs. Sephiroth - (1, 36)
+Young Link vs. Sephiroth - (1, 0)
+Young Link vs. Incineroar - (1, 142)
+Greninja vs. Incineroar - (1, 0)
+
+
+11/7/2026 
+
+
+Series 1
+
+
+Isabelle vs. Pyra & Mythra - (-1, 93)
+Incineroar vs. Pyra & Mythra - (1, 0)
+Incineroar vs. Hero - (2, 91)
+Incineroar vs. Ridley - (1, 72)
+Incineroar vs. Banjo & Kazooie - (1, 49)
+Robin vs. Banjo & Kazooie - (-1, 25)
+Bowser vs. Banjo & Kazooie - (2, 145)
+Bowser vs. Little Mac - (1, 5)
+Bowser vs. Joker - (1, 18)
+Bowser vs. Pikachu - (1, 0)
+
+
+Series 2
+
+
+Pokemon Trainer vs. Sephiroth - (1, 71)
+Pokemon Trainer vs. Pyra & Mythra - (-1, 12)
+Hero vs. Pyra & Mythra - (-2, 27)
+Olimar vs. Pyra & Mythra - (-1, 146)
+Steve vs. Pyra & Mythra - (-1, 34)
+Duck Hunt vs. Pyra & Mythra - (3, 65)
+Duck Hunt vs. Incineroar - (1, 100)
+Duck Hunt vs. Sora - (2, 77)
+Duck Hunt vs. Joker - (3, 129)
+Duck Hunt vs. Hero - (1, 35)
+Duck Hunt vs. Banjo & Kazooie - (2, 127)
+
+
+Series 3
+
+
+Piranha Plant vs. Little Mac - (-1, 67)
+Kirby vs. Little Mac - (1, 108)
+Zelda vs. Little Mac - (1, 12)
+Zelda vs. Hero - (1, 11)
+Zelda vs. Banjo & Kazooie - (3, 58)
+Zelda vs. Pyra & Mythra - (-1, 53)
+Isabelle vs. Pyra & Mythra - (-1, 142)
+Kirby vs. Pyra & Mythra - (1, 82)
+Kirby vs. Pyra & Mythra - (-1, 92)
+Piranha Plant vs. Pyra & Mythra - (2, 88)
+Piranha Plant vs. Hero - (2, 15)
+Piranha Plant vs Little Mac - (2, 47)
+Zelda vs. Little Mac - (3, 52)
+
+
+Series 4
+
+
+Greninja vs. Pikachu - (2, 26)
+Greninja vs. Ganondorf - (1, 54)
+Greninja vs. Wolf - (3, 94)
+Greninja vs. Pichu - (2, 72)
+Greninja vs. Little Mac - (-2, 42)
+Donkey Kong vs. Little Mac - (-1, 33)
+Mewtwo vs. Little Mac - (-1, 0)
+Ridley vs. Little Mac - (1, 75)
+Ridley vs. Hero - (-2, 92)
+Bowser Jr. vs Hero - (1, 0)
+Bowser Jr. vs Sephiroth - (1, 0)

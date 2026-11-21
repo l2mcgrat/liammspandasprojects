@@ -273,53 +273,64 @@
     running: {
       header: "Interval Training Data",
       rec: "records/athletics/running/Interval_Data.txt",
-      pub: "Gaming-and-Performance-Log/Athletics/Running/Interval_Data.txt",
+      pub: "Overall-Performance/Athletics/Running/Interval_Data.txt",
     },
     tempo: {
       header: "Tempo_Run_Log",
       rec: "records/athletics/running/Tempo_Run_Log.txt",
-      pub: "Gaming-and-Performance-Log/Athletics/Running/Tempo_Run_Log.txt",
+      pub: "Overall-Performance/Athletics/Running/Tempo_Run_Log.txt",
     },
     long_run: {
       header: "Long_Run_Log",
       rec: "records/athletics/running/Long_Run_Log.txt",
-      pub: "Gaming-and-Performance-Log/Athletics/Running/Long_Run_Log.txt",
+      pub: "Overall-Performance/Athletics/Running/Long_Run_Log.txt",
       placeholderDocId: "1Yw_Vjd-VCPS599GW6NN45AqPCHBpWE2yNSrR9qr9ouM",
     },
     swimming: {
       header: "Swimming Log",
       rec: "records/athletics/swimming/Swimming_Log.txt",
-      pub: "Gaming-and-Performance-Log/Athletics/Swimming/Swimming_Log.txt",
+      pub: "Overall-Performance/Athletics/Swimming/Swimming_Log.txt",
     },
     weightlifting: {
       header: "Weightlifting Log (Dropsets Excluded)",
       rec: "records/athletics/weightlifting/Weightlifting_Log.txt",
-      pub: "Gaming-and-Performance-Log/Athletics/Weightlifting/Weightlifting_Log.txt",
+      pub: "Overall-Performance/Athletics/Weightlifting/Weightlifting_Log.txt",
     },
     sleep: {
       header: "Sleep_and_Dream_Log",
       rec: "records/health/sleep/Sleep_and_Dream_Log.txt",
-      pub: "Gaming-and-Performance-Log/Health/Sleep/Sleep_and_Dream_Log.txt",
+      pub: "Overall-Performance/Health/Sleep/Sleep_and_Dream_Log.txt",
     },
     diet: {
       header: "Diet and Calorie Tracking",
       rec: "records/health/diet/Diet_and_Calorie_Tracking.txt",
-      pub: "Gaming-and-Performance-Log/Health/Diet/Diet_and_Calorie_Tracking.txt",
+      pub: "Overall-Performance/Health/Diet/Diet_and_Calorie_Tracking.txt",
     },
     smash_series: {
       header: "Smash Series Log",
       rec: "records/athletics/smash/Smash_Series_Log.txt",
-      pub: "Gaming-and-Performance-Log/Smash-Bros/1v1-History/Smash_Series_Log.txt",
+      pub: "Sports-and-Entertainment/Gaming/Smash-Bros/1v1-History/Smash_Series_Log.txt",
     },
     coin_flip: {
       header: "Coin Flip Decision Log",
       rec: "records/athletics/coin_flip/Coin_Flip_Log.txt",
-      pub: "Gaming-and-Performance-Log/Coin-Flip/Coin_Flip_Log.txt",
+      pub: "Overall-Performance/Coin-Flip/Coin_Flip_Log.txt",
+    },
+    gemini_interests: {
+      header: "Gemini Interests & Chat Log",
+      rec: "records/workbench/Gemini_Interests_Log.txt",
+      pub: "Workbench/Gemini_Interests_Log.txt",
     },
   };
 
   // Zero-token deterministic regex cleaner matching site_content/log_sync.py
   const repairLogTextInBrowser = (key, rawText) => {
+    if (key === "gemini_interests") {
+      const cleaned = String(rawText || "").replace(/\r\n/g, "\n").replace(/[\u200b\u200c\u200d\ufeff]/g, "").trim();
+      if (!cleaned) return "Gemini Interests & Chat Log\n";
+      const first = cleaned.split("\n", 1)[0].trim();
+      return (/^Gemini Interests & Chat Log$/i.test(first) ? cleaned : `Gemini Interests & Chat Log\n\n${cleaned}`) + "\n";
+    }
     const spec = LOG_REPO_PATHS[key] || LOG_REPO_PATHS.diet;
     const rawLines = String(rawText || "")
       .replace(/\r\n/g, "\n")
@@ -606,6 +617,10 @@
 
   const applyLiveLogUpdateToDom = (key, rawText) => {
     if (!rawText || typeof rawText !== "string") return;
+    if (key === "gemini_interests") {
+      window.dispatchEvent(new CustomEvent("liam-gemini-doc-synced", { detail: { rawText } }));
+      return;
+    }
     const repaired = repairLogTextInBrowser(key, rawText);
     const lines = repaired.replace(/\r\n/g, "\n").split("\n").map((l) => l.trim()).filter(Boolean);
     if (!lines.length) return;
@@ -4805,4 +4820,98 @@
       })
       .catch(() => {});
   }
+
+  // ---- Overall Performance Pillar Slicer (Overall-Performance/index.html) ----
+  const opMain = document.querySelector("main[data-overall-performance]");
+  if (opMain) {
+    const chips = opMain.querySelectorAll("[data-op-filter]");
+    chips.forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const val = chip.getAttribute("data-op-filter") || "all";
+        chips.forEach((c) => c.classList.toggle("is-active", c === chip));
+        opMain.querySelectorAll(".op-pillar-card[data-op-pillar]").forEach((card) => {
+          card.hidden = val !== "all" && card.getAttribute("data-op-pillar") !== val;
+        });
+        opMain.querySelectorAll("#op-blueprint-tbody tr[data-op-pillar]").forEach((tr) => {
+          tr.hidden = val !== "all" && tr.getAttribute("data-op-pillar") !== val;
+        });
+      });
+    });
+  }
+
+  // ---- Smash Bros 3-Tab In-Page Switcher (Sports-and-Entertainment/Gaming/Smash-Bros) ----
+  const smashHubMain = document.querySelector("main[data-smash-hub]");
+  if (smashHubMain && /\/Smash-Bros\/(?:index\.html)?$/i.test(window.location.pathname)) {
+    const tabBtns = smashHubMain.querySelectorAll("[data-smash-tab-btn]");
+    const panels = smashHubMain.querySelectorAll("[data-smash-tab-panel]");
+    tabBtns.forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        const targetTab = btn.getAttribute("data-smash-tab-btn");
+        if (!targetTab) return;
+        ev.preventDefault();
+        tabBtns.forEach((b) => {
+          const active = b === btn;
+          b.classList.toggle("primary", active);
+          b.classList.toggle("ghost", !active);
+          b.setAttribute("aria-selected", active ? "true" : "false");
+        });
+        panels.forEach((p) => {
+          p.hidden = p.getAttribute("data-smash-tab-panel") !== targetTab;
+        });
+      });
+    });
+  }
+
+  // ---- Live Hydration of Mapped Gemini Phone Chats onto Target Website Sections ----
+  const hydrateGeminiAtlasSlots = () => {
+    const slots = document.querySelectorAll("[data-gemini-atlas-slot]");
+    if (!slots.length) return;
+    let localMappings = [];
+    try {
+      const store = JSON.parse(localStorage.getItem("liam_workbench_entries_v1") || "{}") || {};
+      if (Array.isArray(store.geminiMappings)) localMappings = store.geminiMappings;
+    } catch {
+      localMappings = [];
+    }
+    if (!localMappings.length) return;
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const intentLabels = {
+      "mental-map-note": "🧠 Mental Map Note",
+      "study-seed": "📊 Study Queue Seed",
+      "theory-note": "📐 Theory Framework",
+      "application-idea": "⚙️ Engineering App",
+      "interest-spark": "✨ Interest & Chat",
+    };
+    slots.forEach((slot) => {
+      const nodePath = slot.getAttribute("data-gemini-atlas-slot") || "";
+      const prefix = slot.getAttribute("data-gemini-prefix") || "../";
+      const depth = nodePath.split("/").filter(Boolean).length;
+      const listEl = slot.querySelector(".gemini-mapped-list");
+      if (!listEl || !nodePath) return;
+      const matching = localMappings.filter((m) => {
+        const mp = String(m.atlasPath || "");
+        return mp === nodePath || (depth === 2 && mp.startsWith(nodePath + "/"));
+      });
+      if (!matching.length) return;
+      matching.forEach((item) => {
+        if (listEl.querySelector(`[data-gemini-card="${CSS.escape(item.id)}"]`)) return;
+        const tks = Array.isArray(item.takeaways) ? item.takeaways : [];
+        const ul = tks.length
+          ? `<ul style="margin:8px 0 0;padding-left:18px;color:#cfd5ea;font-size:13.5px;">${tks.slice(0, 4).map((t) => `<li>${esc(t)}</li>`).join("")}</ul>`
+          : "";
+        const art = document.createElement("article");
+        art.className = "study-reg-card gemini-mapped-card";
+        art.setAttribute("data-gemini-card", item.id);
+        art.innerHTML =
+          `<div class="study-reg-head"><div><span class="eyebrow"><code>${esc(item.id)}</code> · ${esc(item.createdOn || "")} · ${esc(intentLabels[item.intent] || "✨ Interest & Chat")}</span>` +
+          `<h3 style="margin:3px 0 0;">${esc(item.title)}</h3></div>` +
+          `<a class="button ghost" href="${esc(prefix)}Workbench/index.html#wb-gemini-mapper">Manage in Workbench ↗</a></div>` +
+          `<p style="margin:8px 0 0;color:#e5e9f7;line-height:1.58;">${esc(item.summary || "")}</p>${ul}`;
+        listEl.appendChild(art);
+      });
+      slot.hidden = false;
+    });
+  };
+  hydrateGeminiAtlasSlots();
+  window.addEventListener("liam-gemini-mappings-updated", hydrateGeminiAtlasSlots);
 })();
