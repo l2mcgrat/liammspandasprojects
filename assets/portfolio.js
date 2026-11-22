@@ -374,15 +374,19 @@
         if ((m = fixed.match(/^(Breakfast|Lunch|Dinner|Snacks)\s*[:\-]\s*(.+)$/i))) {
           const mealName = m[1].charAt(0).toUpperCase() + m[1].slice(1).toLowerCase();
           fixed = `${mealName} - ${m[2].trim()}`;
-        } else if ((m = fixed.match(/^Total Expenditure\s*[:\-]\s*(\d+)\s*(?:k?cals?)?(?:\s*\((.+)\))?$/i))) {
+        } else if ((m = fixed.match(/^Total Expenditure(?:\s*\(So Far\))?\s*[:\-]\s*(\d+)\s*(?:k?cals?)?(?:\s*\((.+)\))?$/i))) {
           fixed = `Total Expenditure - ${m[1]}cals${m[2] ? ` (${m[2]})` : ""}`;
-        } else if ((m = fixed.match(/^Total Consumption\s*[:\-]\s*(.+)$/i))) {
-          const body = m[1].trim().replace(/(\d+)\s*k?cals?\b/gi, "$1cals");
+        } else if ((m = fixed.match(/^Total Consumption(?:\s*\(So Far\))?\s*[:\-]\s*(.+)$/i))) {
+          const body = m[1].trim().replace(/(\d+)\s*k?cals?\b/gi, "$1cals").replace(/\s*\(So Far\)\s*$/i, "");
           fixed = `Total Consumption - ${body}`;
-        } else if ((m = fixed.match(/^Net Expenditure\s*[:\-]\s*([+-]?\d+)\s*(?:k?cals?)?\s*(loss|gain)?$/i))) {
+        } else if (/^Net Expenditure(?:\s*\(So Far\))?\s*[:\-]\s*(?:TBD|Pending|So Far)$/i.test(fixed)) {
+          fixed = "Net Expenditure - TBD";
+        } else if ((m = fixed.match(/^Net Expenditure(?:\s*\(So Far\))?\s*[:\-]\s*([+-]?\d+)\s*(?:k?cals?)?\s*(loss|gain)?(?:\s*\(So Far\))?$/i))) {
           const val = parseInt(m[1], 10);
           const dir = (m[2] || (val < 0 ? "gain" : "loss")).toLowerCase();
           fixed = `Net Expenditure - ${Math.abs(val)}cal ${dir}`;
+        } else if ((m = fixed.match(/^(Week of \d{1,2}\/\d{1,2}\/20\d{2}\s*-->\s*\d+\s*cals?\s*(?:loss|gain)\s*or\s*~?\d+(?:\.\d+)?\s*lbs?)\s*\((?:So Far|Running|In Progress)\)$/i))) {
+          fixed = m[1].trim();
         }
       } else if (key === "swimming") {
         const m = fixed.match(/^\(?(\d{1,2}\/\d{1,2}\/\d{4})\)?\s*[-:]?\s*(\d+)\s*(m|y|yd|yds|yards?|meters?|metres?)\s*[-:]\s*(.+)$/i);
@@ -841,9 +845,9 @@
           return;
         }
         if (!sessions.length) return;
-        const mEx = ln.match(/^([A-Za-z][A-Za-z0-9\s'()/&]*?)\s*(?:([;:])\s*|[-,]\s*|\s+)(?=\d+\s*[xX*]|\s*$)(.*)$/);
+        const mEx = ln.match(/^([A-Za-z][A-Za-z0-9\s'()/&\-]*?)\s*(?:([;:])\s*|[-,]\s*|\s+)(?=\d+\s*[xX*]|\s*$)(.*)$/);
         if (mEx) {
-          const name = mEx[1].trim().replace(/Assited/g, "Assisted").replace(/Dumbell/g, "Dumbbell");
+          const name = mEx[1].trim().replace(/Assited/g, "Assisted").replace(/Dumbell/g, "Dumbbell").replace(/Real Delt/g, "Rear Delt");
           exNamesSet.add(name);
           const rest = mEx[3].trim();
           const sets = [];
@@ -1053,6 +1057,9 @@
         const mNet = ln.match(/^Net Expenditure\s*-\s*(\d+)\s*cals?\s*(loss|gain)$/i);
         if (mNet) {
           cur.writtenNet = parseInt(mNet[1], 10) * (mNet[2].toLowerCase() === "loss" ? 1 : -1);
+          cur.rawLines.push(ln);
+        } else if (/^Net Expenditure\s*-\s*(?:TBD|Pending)$/i.test(ln)) {
+          cur.writtenNet = null;
           cur.rawLines.push(ln);
         }
       });

@@ -695,30 +695,174 @@ date,split,exercise,kind,set,reps,weightLbs
 2026-11-06,Shoulders & Tris & Abs,Leg Raises,loaded,3,15,10.0
 2026-11-06,Shoulders & Tris & Abs,Leg Raises,loaded,4,12,10.0
 2026-11-06,Shoulders & Tris & Abs,Leg Raises,loaded,5,20,0.0
-2026-11-08,Back,Assisted Pullups,assisted,1,6,0.0
-2026-11-08,Back,Assisted Pullups,assisted,2,5,0.0
-2026-11-08,Back,Assisted Pullups,assisted,3,10,40.0
-2026-11-08,Back,Assisted Pullups,assisted,4,9,55.0
-2026-11-08,Back,Assisted Pullups,assisted,5,6,80.0
-2026-11-08,Back,Seated Rows,loaded,1,20,70.0
-2026-11-08,Back,Seated Rows,loaded,2,15,95.0
-2026-11-08,Back,Seated Rows,loaded,3,15,105.0
-2026-11-08,Back,Seated Rows,loaded,4,15,115.0
-2026-11-08,Back,Seated Rows,loaded,5,12,130.0
-2026-11-08,Back,Seated Rows,loaded,6,15,95.0
-2026-11-08,Back,Seated Rows,loaded,7,20,70.0
-2026-11-08,Back,Front Pulldown,loaded,1,15,45.0
-2026-11-08,Back,Front Pulldown,loaded,2,15,55.0
-2026-11-08,Back,Front Pulldown,loaded,3,15,65.0
-2026-11-08,Back,Front Pulldown,loaded,4,12,70.0
-2026-11-08,Back,Front Pulldown,loaded,5,12,45.0
-2026-11-08,Back,Row,loaded,1,15,50.0
-2026-11-08,Back,Row,loaded,2,15,58.0
-2026-11-08,Back,Row,loaded,3,12,65.0
-2026-11-08,Back,Row,loaded,4,12,42.0
-2026-11-08,Back,Shoulder Shrugs,loaded,1,15,0.0
-2026-11-08,Back,Shoulder Shrugs,loaded,2,15,25.0
-2026-11-08,Back,Shoulder Shrugs,loaded,3,15,35.0
-2026-11-08,Back,Shoulder Shrugs,loaded,4,13,45.0
-2026-11-08,Back,Shoulder Shrugs,loaded,5,12,50.0
-2026-11-08,Back,Shoulder Shrugs,loaded,6,12,25.0
+2026-11-08,Back & Bis,Assisted Pullups,assisted,1,6,0.0
+2026-11-08,Back & Bis,Assisted Pullups,assisted,2,5,0.0
+2026-11-08,Back & Bis,Assisted Pullups,assisted,3,10,40.0
+2026-11-08,Back & Bis,Assisted Pullups,assisted,4,9,55.0
+2026-11-08,Back & Bis,Assisted Pullups,assisted,5,6,80.0
+2026-11-08,Back & Bis,Bent Over Rows,loaded,1,20,45.0
+2026-11-08,Back & Bis,Bent Over Rows,loaded,2,15,95.0
+2026-11-08,Back & Bis,Bent Over Rows,loaded,3,12,145.0
+2026-11-08,Back & Bis,Bent Over Rows,loaded,4,6,165.0
+2026-11-08,Back & Bis,Bent Over Rows,loaded,5,15,95.0
+2026-11-08,Back & Bis,Seated Rows,loaded,1,20,70.0
+2026-11-08,Back & Bis,Seated Rows,loaded,2,15,95.0
+2026-11-08,Back & Bis,Seated Rows,loaded,3,15,105.0
+2026-11-08,Back & Bis,Seated Rows,loaded,4,15,115.0
+2026-11-08,Back & Bis,Seated Rows,loaded,5,12,130.0
+2026-11-08,Back & Bis,Seated Rows,loaded,6,15,95.0
+2026-11-08,Back & Bis,Seated Rows,loaded,7,20,70.0
+2026-11-08,Back & Bis,Front Pulldown,loaded,1,15,45.0
+2026-11-08,Back & Bis,Front Pulldown,loaded,2,15,55.0
+2026-11-08,Back & Bis,Front Pulldown,loaded,3,15,65.0
+2026-11-08,Back & Bis,Front Pulldown,loaded,4,12,70.0
+2026-11-08,Back & Bis,Front Pulldown,loaded,5,12,45.0
+2026-11-08,Back & Bis,Row,loaded,1,15,50.0
+2026-11-08,Back & Bis,Row,loaded,2,15,58.0
+2026-11-08,Back & Bis,Row,loaded,3,12,65.0
+2026-11-08,Back & Bis,Row,loaded,4,12,42.0
+2026-11-08,Back & Bis,Shoulder Shrugs,loaded,1,15,0.0
+2026-11-08,Back & Bis,Shoulder Shrugs,loaded,2,15,25.0
+2026-11-08,Back & Bis,Shoulder Shrugs,loaded,3,15,35.0
+2026-11-08,Back & Bis,Shoulder Shrugs,loaded,4,13,45.0
+2026-11-08,Back & Bis,Shoulder Shrugs,loaded,5,12,50.0
+2026-11-08,Back & Bis,Shoulder Shrugs,loaded,6,12,25.0
+2026-11-08,Back & Bis,Barbell Curls,loaded,1,15,40.0
+2026-11-08,Back & Bis,Barbell Curls,loaded,2,12,50.0
+2026-11-08,Back & Bis,Barbell Curls,loaded,3,12,60.0
+2026-11-08,Back & Bis,Barbell Curls,loaded,4,12,70.0
+2026-11-08,Back & Bis,Barbell Curls,loaded,5,12,30.0
+2026-11-08,Back & Bis,Machine Curls,loaded,1,15,80.0
+2026-11-08,Back & Bis,Machine Curls,loaded,2,8,95.0
+2026-11-08,Back & Bis,Machine Curls,loaded,3,8,50.0
+2026-11-08,Back & Bis,Back Extensions,loaded,1,15,25.0
+2026-11-08,Back & Bis,Back Extensions,loaded,2,15,25.0
+2026-11-08,Back & Bis,Back Extensions,loaded,3,15,25.0
+2026-11-08,Back & Bis,Back Extensions,loaded,4,9,0.0
+2026-11-10,Chest & Tris & Abs,Barbell Press,loaded,1,30,45.0
+2026-11-10,Chest & Tris & Abs,Barbell Press,loaded,2,12,135.0
+2026-11-10,Chest & Tris & Abs,Barbell Press,loaded,3,6,155.0
+2026-11-10,Chest & Tris & Abs,Barbell Press,loaded,4,5,155.0
+2026-11-10,Chest & Tris & Abs,Barbell Press,loaded,5,10,115.0
+2026-11-10,Chest & Tris & Abs,Barbell Press,loaded,6,10,95.0
+2026-11-10,Chest & Tris & Abs,Incline Dumbbell Press,loaded,1,12,40.0
+2026-11-10,Chest & Tris & Abs,Incline Dumbbell Press,loaded,2,9,45.0
+2026-11-10,Chest & Tris & Abs,Incline Dumbbell Press,loaded,3,5,52.0
+2026-11-10,Chest & Tris & Abs,Incline Dumbbell Press,loaded,4,9,42.0
+2026-11-10,Chest & Tris & Abs,Incline Dumbbell Press,loaded,5,5,28.0
+2026-11-10,Chest & Tris & Abs,Dumbell Flys,loaded,1,15,18.0
+2026-11-10,Chest & Tris & Abs,Dumbell Flys,loaded,2,12,20.0
+2026-11-10,Chest & Tris & Abs,Dumbell Flys,loaded,3,12,22.0
+2026-11-10,Chest & Tris & Abs,Dumbell Flys,loaded,4,10,25.0
+2026-11-10,Chest & Tris & Abs,Cable Machine Flys,loaded,1,15,130.0
+2026-11-10,Chest & Tris & Abs,Cable Machine Flys,loaded,2,10,145.0
+2026-11-10,Chest & Tris & Abs,Cable Machine Flys,loaded,3,12,115.0
+2026-11-10,Chest & Tris & Abs,Isolateral Incline Press,loaded,1,10,45.0
+2026-11-10,Chest & Tris & Abs,Isolateral Incline Press,loaded,2,10,35.0
+2026-11-10,Chest & Tris & Abs,Isolateral Incline Press,loaded,3,10,25.0
+2026-11-10,Chest & Tris & Abs,Assisted Dips,assisted,1,8,0.0
+2026-11-10,Chest & Tris & Abs,Assisted Dips,assisted,2,15,40.0
+2026-11-10,Chest & Tris & Abs,Assisted Dips,assisted,3,15,55.0
+2026-11-10,Chest & Tris & Abs,Assisted Dips,assisted,4,15,70.0
+2026-11-10,Chest & Tris & Abs,Cable Tricep Extensions,loaded,1,15,30.0
+2026-11-10,Chest & Tris & Abs,Cable Tricep Extensions,loaded,2,15,42.0
+2026-11-10,Chest & Tris & Abs,Cable Tricep Extensions,loaded,3,10,50.0
+2026-11-10,Chest & Tris & Abs,Cable Tricep Extensions,loaded,4,10,30.0
+2026-11-10,Chest & Tris & Abs,Machine Crunches,loaded,1,20,25.0
+2026-11-10,Chest & Tris & Abs,Machine Crunches,loaded,2,20,25.0
+2026-11-10,Chest & Tris & Abs,Machine Crunches,loaded,3,16,25.0
+2026-11-10,Chest & Tris & Abs,Machine Crunches,loaded,4,20,15.0
+2026-11-18,Back & Abs,Assisted Pull-ups,assisted,1,20,85.0
+2026-11-18,Back & Abs,Assisted Pull-ups,assisted,2,5,0.0
+2026-11-18,Back & Abs,Assisted Pull-ups,assisted,3,15,55.0
+2026-11-18,Back & Abs,Assisted Pull-ups,assisted,4,8,40.0
+2026-11-18,Back & Abs,Assisted Pull-ups,assisted,5,8,85.0
+2026-11-18,Back & Abs,Iso-Lateral Row,loaded,1,15,45.0
+2026-11-18,Back & Abs,Iso-Lateral Row,loaded,2,14,55.0
+2026-11-18,Back & Abs,Iso-Lateral Row,loaded,3,12,65.0
+2026-11-18,Back & Abs,Iso-Lateral Row,loaded,4,10,80.0
+2026-11-18,Back & Abs,Iso-Lateral Row,loaded,5,15,25.0
+2026-11-18,Back & Abs,Lat Pulldowns,loaded,1,15,100.0
+2026-11-18,Back & Abs,Lat Pulldowns,loaded,2,12,115.0
+2026-11-18,Back & Abs,Lat Pulldowns,loaded,3,10,125.0
+2026-11-18,Back & Abs,Lat Pulldowns,loaded,4,8,95.0
+2026-11-18,Back & Abs,Row,loaded,1,20,55.0
+2026-11-18,Back & Abs,Row,loaded,2,15,70.0
+2026-11-18,Back & Abs,Row,loaded,3,15,85.0
+2026-11-18,Back & Abs,Row,loaded,4,12,100.0
+2026-11-18,Back & Abs,Bent Over Rows,loaded,1,15,8.0
+2026-11-18,Back & Abs,Bent Over Rows,loaded,2,15,8.0
+2026-11-18,Back & Abs,Bent Over Rows,loaded,3,15,8.0
+2026-11-18,Back & Abs,Bent Over Rows,loaded,4,15,8.0
+2026-11-18,Back & Abs,Bent Over Rows,loaded,5,15,8.0
+2026-11-18,Back & Abs,Machine Crunches,loaded,1,15,25.0
+2026-11-18,Back & Abs,Machine Crunches,loaded,2,15,25.0
+2026-11-18,Back & Abs,Machine Crunches,loaded,3,15,25.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Press,loaded,1,15,30.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Press,loaded,2,12,40.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Press,loaded,3,8,50.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Press,loaded,4,10,45.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Press,loaded,5,10,28.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Raises,loaded,1,15,15.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Raises,loaded,2,12,20.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Raises,loaded,3,15,20.0
+2026-11-21,"Shoulders, Tris & Abs",Dumbell Shoulder Raises,loaded,4,15,20.0
+2026-11-21,"Shoulders, Tris & Abs",Rear Delt Raises,loaded,1,15,8.0
+2026-11-21,"Shoulders, Tris & Abs",Rear Delt Raises,loaded,2,15,8.0
+2026-11-21,"Shoulders, Tris & Abs",Rear Delt Raises,loaded,3,15,8.0
+2026-11-21,"Shoulders, Tris & Abs",Rear Delt Raises,loaded,4,15,8.0
+2026-11-21,"Shoulders, Tris & Abs",Real Delt Cable Flys,loaded,1,15,70.0
+2026-11-21,"Shoulders, Tris & Abs",Real Delt Cable Flys,loaded,2,15,85.0
+2026-11-21,"Shoulders, Tris & Abs",Real Delt Cable Flys,loaded,3,12,100.0
+2026-11-21,"Shoulders, Tris & Abs",Cable Shoulder Raises,loaded,1,15,5.0
+2026-11-21,"Shoulders, Tris & Abs",Cable Shoulder Raises,loaded,2,15,5.0
+2026-11-21,"Shoulders, Tris & Abs",Cable Shoulder Raises,loaded,3,12,5.0
+2026-11-21,"Shoulders, Tris & Abs",Assisted Dips,assisted,1,15,25.0
+2026-11-21,"Shoulders, Tris & Abs",Assisted Dips,assisted,2,15,40.0
+2026-11-21,"Shoulders, Tris & Abs",Assisted Dips,assisted,3,15,55.0
+2026-11-21,"Shoulders, Tris & Abs",Assisted Dips,assisted,4,15,70.0
+2026-11-21,"Shoulders, Tris & Abs",Cable Tricep Extensions,loaded,1,20,30.0
+2026-11-21,"Shoulders, Tris & Abs",Cable Tricep Extensions,loaded,2,15,35.0
+2026-11-21,"Shoulders, Tris & Abs",Cable Tricep Extensions,loaded,3,12,42.0
+2026-11-21,"Shoulders, Tris & Abs",Cable Tricep Extensions,loaded,4,12,30.0
+2026-11-21,"Shoulders, Tris & Abs",Leg Raises,loaded,1,25,0.0
+2026-11-21,"Shoulders, Tris & Abs",Leg Raises,loaded,2,20,8.0
+2026-11-21,"Shoulders, Tris & Abs",Leg Raises,loaded,3,25,0.0
+2026-11-21,"Shoulders, Tris & Abs",Leg Raises,loaded,4,15,8.0
+2026-11-21,"Shoulders, Tris & Abs",Leg Raises,loaded,5,25,0.0
+2026-11-22,Back & Bis & Abs,Assisted Pull-ups,assisted,1,20,90.0
+2026-11-22,Back & Bis & Abs,Assisted Pull-ups,assisted,2,6,0.0
+2026-11-22,Back & Bis & Abs,Assisted Pull-ups,assisted,3,12,50.0
+2026-11-22,Back & Bis & Abs,Assisted Pull-ups,assisted,4,13,70.0
+2026-11-22,Back & Bis & Abs,Seated Rows,loaded,1,20,70.0
+2026-11-22,Back & Bis & Abs,Seated Rows,loaded,2,15,90.0
+2026-11-22,Back & Bis & Abs,Seated Rows,loaded,3,12,115.0
+2026-11-22,Back & Bis & Abs,Seated Rows,loaded,4,12,125.0
+2026-11-22,Back & Bis & Abs,Seated Rows,loaded,5,12,90.0
+2026-11-22,Back & Bis & Abs,Seated Rows,loaded,6,12,70.0
+2026-11-22,Back & Bis & Abs,Lat Pulldowns,loaded,1,12,100.0
+2026-11-22,Back & Bis & Abs,Lat Pulldowns,loaded,2,12,115.0
+2026-11-22,Back & Bis & Abs,Lat Pulldowns,loaded,3,12,130.0
+2026-11-22,Back & Bis & Abs,Lat Pulldowns,loaded,4,7,140.0
+2026-11-22,Back & Bis & Abs,Lat Pulldowns,loaded,5,12,95.0
+2026-11-22,Back & Bis & Abs,Diverging Seated Rows,loaded,1,15,90.0
+2026-11-22,Back & Bis & Abs,Diverging Seated Rows,loaded,2,15,100.0
+2026-11-22,Back & Bis & Abs,Diverging Seated Rows,loaded,3,12,115.0
+2026-11-22,Back & Bis & Abs,Diverging Seated Rows,loaded,4,8,130.0
+2026-11-22,Back & Bis & Abs,Diverging Seated Rows,loaded,5,12,90.0
+2026-11-22,Back & Bis & Abs,Lat Pull Towards,loaded,1,15,50.0
+2026-11-22,Back & Bis & Abs,Lat Pull Towards,loaded,2,15,58.0
+2026-11-22,Back & Bis & Abs,Lat Pull Towards,loaded,3,15,65.0
+2026-11-22,Back & Bis & Abs,Barbell Curls,loaded,1,15,50.0
+2026-11-22,Back & Bis & Abs,Barbell Curls,loaded,2,12,60.0
+2026-11-22,Back & Bis & Abs,Barbell Curls,loaded,3,12,70.0
+2026-11-22,Back & Bis & Abs,Barbell Curls,loaded,4,10,70.0
+2026-11-22,Back & Bis & Abs,Barbell Curls,loaded,5,15,30.0
+2026-11-22,Back & Bis & Abs,Machine Curls,loaded,1,14,80.0
+2026-11-22,Back & Bis & Abs,Machine Curls,loaded,2,13,65.0
+2026-11-22,Back & Bis & Abs,Machine Curls,loaded,3,12,50.0
+2026-11-22,Back & Bis & Abs,Decline Sit-ups,loaded,1,25,20.0
+2026-11-22,Back & Bis & Abs,Decline Sit-ups,loaded,2,25,25.0
+2026-11-22,Back & Bis & Abs,Decline Sit-ups,loaded,3,25,25.0
+2026-11-22,Back & Bis & Abs,Decline Sit-ups,loaded,4,20,20.0
+2026-11-22,Back & Bis & Abs,Decline Sit-ups,loaded,5,20,0.0

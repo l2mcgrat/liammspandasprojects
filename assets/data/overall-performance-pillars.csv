@@ -1,7 +1,7 @@
 order,pillar,atlasPath,scorePts,maturity,primaryKpi,secondaryKpi
 01,Finances,Overall-Performance/Finances,,Placeholder Blueprint,6 sub-ledgers outlined,Target: ≥30% savings margin · ≥6 mo runway
-02,Stability,Overall-Performance/Stability,69,Hybrid Telemetry + Placeholders,7.3 / 10 composure,±1.71 h sleep σ · 8 coin-flip checks
-03,Time,Overall-Performance/Time,78,Hybrid Telemetry + Placeholders,7.5 / 10 focus,0.0 h REABS logged · 66 training blocks
-04,Athletics,Overall-Performance/Athletics,94,Live Telemetry,66 logged workouts,"382,328 lb lifted · 24.2 km tempo · 45,010 m swim"
+02,Stability,Overall-Performance/Stability,69,Hybrid Telemetry + Placeholders,7.3 / 10 composure,±1.74 h sleep σ · 8 coin-flip checks
+03,Time,Overall-Performance/Time,78,Hybrid Telemetry + Placeholders,7.5 / 10 focus,0.0 h REABS logged · 80 training blocks
+04,Athletics,Overall-Performance/Athletics,96,Live Telemetry,80 logged workouts,"469,464 lb lifted · 24.2 km tempo · 64,588 m swim"
 05,Memory,Overall-Performance/Memory,75,Hybrid Telemetry + Output,7.0 / 10 pattern · 6.9 / 10 bandwidth,8 live studies · 3 Gemini notes mapped
-06,Health,Overall-Performance/Health,83,Live Telemetry,7.53 h/night · 610 kcal/day deficit,35 nights (35 dreams) · 35 diet days
+06,Health,Overall-Performance/Health,84,Live Telemetry,7.73 h/night · 616 kcal/day deficit,49 nights (50 dreams) · 49 diet days

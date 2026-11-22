@@ -301,11 +301,65 @@ Cable Tricep Extensions: 20x35lbs, 15x42lbs, 12x50lbs, 15x42lbs, 15x35lbs, 15x25
 Leg Raises; 20x10lbs, 18x10lbs, 15x10lbs, 12x10lbs, 20x0lbs
 
 
-11/8/2026 - Back
+11/8/2026 - Back & Bis
 
 
 Assisted Pullups; 6x0lbs, 5x0lbs, 10x40lbs, 9x55lbs, 6x80lbs
+Bent Over Rows; 20x45lbs, 15x95lbs, 12x145lbs, 6x165lbs, 15x95lbs
 Seated Rows; 20x70lbs, 15x95lbs, 15x105lbs, 15x115lbs, 12x130lbs, 15x95lbs, 20x70lbs
 Front Pulldown; 15x45lbs, 15x55lbs, 15x65lbs, 12x70lbs, 12x45lbs
 Row; 15x50lbs, 15x58lbs, 12x65lbs, 12x42lbs
 Shoulder Shrugs; 15x0lbs, 15x25lbs, 15x35lbs, 13x45lbs, 12x50lbs, 12x25lbs
+Barbell Curls; 15x40lbs, 12x50lbs, 12x60lbs, 12x70lbs, 12x30lbs
+Machine Curls; 15x80lbs, 8x95lbs, 8x50lbs
+Back Extensions: 15x25lbs, 15x25lbs, 15x25lbs, 9x0lbs
+
+
+11/10/2026 - Chest & Tris & Abs
+
+
+Barbell Press; 30x45lbs, 12x135lbs, 6x155lbs, 5x155lbs, 10x115lbs, 10x95lbs
+Incline Dumbbell Press; 12x40lbs, 9x45lbs, 5x52lbs, 9x42lbs, 5x28lbs
+Dumbell Flys; 15x18lbs, 12x20lbs, 12x22lbs, 10x25lbs
+Cable Machine Flys; 15x130lbs, 10x145lbs, 12x115lbs
+Isolateral Incline Press; 10x45lbs, 10x35lbs, 10x25lbs
+Assisted Dips; 8x0lbs, 15x40lbs, 15x55lbs, 15x70lbs
+Cable Tricep Extensions; 15x30lbs, 15x42lbs, 10x50lbs, 10x30lbs
+Machine Crunches; 20x25lbs, 20x25lbs, 16x25lbs, 20x15lbs
+
+
+11/18/2026 - Back & Abs
+
+
+Assisted Pull-ups; 20x85lbs, 5x0lbs, 15x55lbs, 8x40lbs, 8x85lbs
+Iso-Lateral Row; 15x45lbs, 14x55lbs, 12x65lbs, 10x80lbs, 15x25lbs
+Lat Pulldowns; 15x100lbs, 12x115lbs, 10x125lbs, 8x95lbs
+Row; 20x55lbs, 15x70lbs, 15x85lbs, 12x100lbs
+Bent Over Rows; 15x8lbs, 15x8lbs, 15x8lbs, 15x8lbs, 15x8lbs
+Machine Crunches; 15x25lbs, 15x25lbs, 15x25lbs
+
+
+11/21/2026 - Shoulders, Tris & Abs
+
+
+Dumbell Shoulder Press; 15x30lbs, 12x40lbs, 8x50lbs, 10x45lbs, 10x28lbs
+Dumbell Shoulder Raises; 15x15lbs, 12x20lbs, 15x20lbs, 15x20lbs
+Rear Delt Raises; 15x8lbs, 15x8lbs, 15x8lbs, 15x8lbs
+Real Delt Cable Flys; 15x70lbs, 15x85lbs, 12x100lbs
+Cable Shoulder Raises; 15x5lbs, 15x5lbs, 12x5lbs
+Assisted Dips; 15x25lbs, 15x40lbs, 15x55lbs, 15x70lbs
+Cable Tricep Extensions; 20x30lbs, 15x35lbs, 12x42lbs, 12x30lbs
+Leg Raises; 25x0lbs, 20x8lbs, 25x0lbs, 15x8lbs, 25x0lbs
+
+
+11/22/2026 - Back & Bis & Abs
+
+
+Assisted Pull-ups; 20x90lbs, 6x0lbs, 12x50lbs, 13x70lbs
+Seated Rows; 20x70lbs, 15x90lbs, 12x115lbs, 12x125lbs, 12x90lbs, 12x70lbs
+Lat Pulldowns; 12x100lbs, 12x115lbs, 12x130lbs, 7x140lbs, 12x95lbs
+Diverging Seated Rows; 15x90lbs, 15x100lbs, 12x115lbs, 8x130lbs, 12x90lbs
+Lat Pull Towards; 15x50lbs, 15x58lbs, 15x65lbs
+Barbell Curls; 15x50lbs, 12x60lbs, 12x70lbs, 10x70lbs, 15x30lbs
+Machine Curls; 14x80lbs, 13x65lbs, 12x50lbs
+Decline Sit-ups; 25x20lbs, 25x25lbs, 25x25lbs, 20x20lbs, 20x0lbs
