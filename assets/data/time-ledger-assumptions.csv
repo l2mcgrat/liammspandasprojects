@@ -1,0 +1,12 @@
+key,label,value,unit,setBy
+workday,"Day job, each weekday",9.5,h,Liam's whiteboard
+swim,"Swimming, with rest and stretching",5.5,min per 200 m,Liam: 5 to 6 min
+eating,Eating,30.0,"min per 1,500 kcal",Liam
+rap_write,"Writing one song, split evenly over its lyric commits",3.0,h,Liam: 1 h per minute of beat; 3 min assumed
+rap_open,A lyric commit on a song not finished yet,1.0,h,Placeholder
+rap_practice,"Practising a song, on the day it is finished",1.0,h,Liam: 1 h minimum
+lift_rep,Lifting: time under the bar,3.0,s per rep,Placeholder
+lift_rest,Lifting: rest after a set,120.0,s per set,Placeholder
+lift_setup,Lifting: warm-up and changeovers,10.0,min per session,Placeholder
+run_rest,Intervals: rest between repeats,3.0,min,Placeholder
+run_setup,Running: warm-up and cool-down,10.0,min per run,Placeholder

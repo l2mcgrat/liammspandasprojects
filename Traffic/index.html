@@ -38,7 +38,11 @@ CREATE TABLE IF NOT EXISTS theory_queue (
     category TEXT NOT NULL,
     title TEXT NOT NULL,
     atlas_path TEXT NOT NULL,
+    secondary_paths TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    governing_equation TEXT NOT NULL DEFAULT &#x27;&#x27;,
     scope_prompt TEXT NOT NULL,
+    doc_url TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    gemini_id TEXT NOT NULL DEFAULT &#x27;&#x27;,
     status TEXT NOT NULL CHECK (status IN (&#x27;published&#x27;, &#x27;in-progress&#x27;, &#x27;queued&#x27;)),
     linkages TEXT NOT NULL DEFAULT &#x27;&#x27;,
     notes TEXT NOT NULL DEFAULT &#x27;&#x27;
@@ -50,11 +54,29 @@ CREATE TABLE IF NOT EXISTS applications_queue (
     domain TEXT NOT NULL,
     title TEXT NOT NULL,
     atlas_path TEXT NOT NULL,
+    secondary_paths TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    theory_id TEXT NOT NULL DEFAULT &#x27;&#x27;,
     system_design TEXT NOT NULL,
     societal_benefit TEXT NOT NULL,
+    doc_url TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    gemini_id TEXT NOT NULL DEFAULT &#x27;&#x27;,
     status TEXT NOT NULL CHECK (status IN (&#x27;published&#x27;, &#x27;in-progress&#x27;, &#x27;queued&#x27;)),
     linkages TEXT NOT NULL DEFAULT &#x27;&#x27;,
     notes TEXT NOT NULL DEFAULT &#x27;&#x27;
+);
+
+CREATE TABLE IF NOT EXISTS whiteboard_themes (
+    id TEXT PRIMARY KEY,
+    month_label TEXT NOT NULL,
+    week_of TEXT NOT NULL,
+    track TEXT NOT NULL CHECK (track IN (&#x27;S&amp;E&#x27;, &#x27;B&amp;E&#x27;)),
+    title TEXT NOT NULL,
+    subtitle TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    equation_latex TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    atlas_paths TEXT NOT NULL,
+    linked_ids TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    idea_notes TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    status TEXT NOT NULL CHECK (status IN (&#x27;active&#x27;, &#x27;upcoming&#x27;, &#x27;completed&#x27;))
 );
 
 CREATE TABLE IF NOT EXISTS wishlist_todos (
@@ -119,7 +141,9 @@ CREATE TABLE IF NOT EXISTS reabs_reminders (
     reminders_enabled INTEGER NOT NULL DEFAULT 1,
     status TEXT NOT NULL CHECK (status IN (&#x27;active&#x27;, &#x27;completed&#x27;, &#x27;muted&#x27;)),
     completed_on TEXT,
-    hours_spent REAL NOT NULL DEFAULT 0.0
+    hours_spent REAL NOT NULL DEFAULT 0.0,
+    start_on TEXT NOT NULL DEFAULT &#x27;&#x27;,
+    updated_at TEXT NOT NULL DEFAULT &#x27;&#x27;
 );
 
 CREATE TABLE IF NOT EXISTS gemini_mappings (

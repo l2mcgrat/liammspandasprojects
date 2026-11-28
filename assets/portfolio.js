@@ -3795,6 +3795,34 @@
     const REABS_SENT_LOG_KEY = "liam_reabs_sent_slots_v1";
     const DEFAULT_REABS_EMAIL = "l2mcgrat@uwaterloo.ca";
 
+    // records/workbench/workbench.json is what the cloud scheduler reads. A reminder that exists
+    // only in this browser is shown with a warning, because the scheduler cannot see it.
+    const CANONICAL_REABS_URL = "https://raw.githubusercontent.com/l2mcgrat/pandas_projects/main/records/workbench/workbench.json";
+    const canonicalReabsIds = new Set();
+    const reabsStamp = (it) => String((it && it.updatedAt) || "");
+    const reabsNowStamp = () => new Date().toISOString().replace(/\.\d{3}Z$/, "Z");
+    const reabsIdNumber = (id) => parseInt(String(id || "").replace(/^RB-/i, ""), 10) || 0;
+    const nextReabsId = (ids) => `RB-${String(Math.max(0, ...Array.from(ids, reabsIdNumber)) + 1).padStart(2, "0")}`;
+
+    const noteCanonicalReabs = (list) => list.forEach((it) => canonicalReabsIds.add(it.id));
+
+    // Per reminder the newest edit wins (updatedAt); on a tie the incoming copy stays, as it always has.
+    const mergeReabs = (base, incoming) => {
+      const map = new Map();
+      const displaced = [];
+      base.forEach((it) => map.set(it.id, it));
+      incoming.forEach((it) => {
+        const kept = map.get(it.id);
+        if (!kept || reabsStamp(it) >= reabsStamp(kept)) map.set(it.id, it);
+        else if (it.title !== kept.title) displaced.push(it); // a different reminder that reused this id
+      });
+      displaced.forEach((it) => {
+        const id = nextReabsId(map.keys());
+        map.set(id, { ...it, id });
+      });
+      return Array.from(map.values());
+    };
+
     const loadReabsList = () => {
       let seed = [];
       try {
@@ -3802,18 +3830,25 @@
       } catch {
         seed = [];
       }
+      let stored = [];
       try {
-        const stored = JSON.parse(localStorage.getItem(REABS_STORAGE_KEY) || "null");
-        if (Array.isArray(stored) && stored.length > 0) {
-          const map = new Map();
-          seed.forEach((it) => map.set(it.id, it));
-          stored.forEach((it) => map.set(it.id, it));
-          return Array.from(map.values());
-        }
+        const parsed = JSON.parse(localStorage.getItem(REABS_STORAGE_KEY) || "null");
+        if (Array.isArray(parsed)) stored = parsed;
       } catch {
         /* ignore */
       }
-      return seed;
+      noteCanonicalReabs(seed);
+      return mergeReabs(seed, stored);
+    };
+
+    // Tell the cloud scheduler about a change made on this page ("DONE RB-04 1h", "OFF RB-04", "ON RB-04").
+    const postReabsCommand = (item, text) => {
+      if (!item || !canonicalReabsIds.has(item.id) || typeof fetch !== "function") return;
+      fetch("https://ntfy.sh/liam_reabs_reply_67wxyE7L_v1", {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=UTF-8" },
+        body: text,
+      }).catch(() => {});
     };
 
     const saveReabsList = (list) => {
@@ -4281,9 +4316,12 @@
             const remOn = Boolean(r.remindersEnabled) && r.status !== "completed";
             const hrs = Number(r.hoursSpent) || 0;
             const extraList = r.extraEmails ? ` + ${escHtml(r.extraEmails)}` : "";
+            const localOnly = canonicalReabsIds.has(r.id)
+              ? ""
+              : `<br><span class="wb-badge wb-warn" title="Saved in this browser only. The cloud scheduler reads workbench.json and cannot see this reminder, so it fires only while this page is open.">⚠ This browser only</span>`;
             return (
               `<tr data-reabs-row="${rid}" data-reabs-status="${escHtml(r.status)}">` +
-              `<th scope="row"><code>${rid}</code><br><small style="color:#a4acc3;">${escHtml(r.createdOn || "2026-10-29")}</small></th>` +
+              `<th scope="row"><code>${rid}</code><br><small style="color:#a4acc3;">${escHtml(r.createdOn || "2026-10-29")}</small>${localOnly}</th>` +
               `<td><strong>${escHtml(r.title)}</strong><br><small style="color:#b8c0d8;"><strong>Reasoning:</strong> ${escHtml(r.reasoning)}</small></td>` +
               `<td><span class="wb-badge ${urgCls}">${urgIcon}</span><br><small>Email Flag: <code>${flagStr}</code></small></td>` +
               `<td><strong>${escHtml(r.scheduleText)}</strong><br><small style="color:#9ddacf;">To: <code>${escHtml(r.defaultEmail || DEFAULT_REABS_EMAIL)}${extraList}</code></small></td>` +
@@ -4311,6 +4349,8 @@
             item.remindersEnabled = item.remindersEnabled ? 0 : 1;
             if (item.remindersEnabled && item.status === "muted") item.status = "active";
             if (!item.remindersEnabled && item.status === "active") item.status = "muted";
+            item.updatedAt = reabsNowStamp();
+            postReabsCommand(item, `${item.remindersEnabled ? "ON" : "OFF"} ${item.id}`);
             saveReabsList(reabsItems);
             renderReabsTablesAndChart();
           });
@@ -4327,6 +4367,8 @@
             item.status = "completed";
             item.remindersEnabled = 0;
             item.completedOn = new Date().toISOString().slice(0, 10);
+            item.updatedAt = reabsNowStamp();
+            postReabsCommand(item, `DONE ${item.id} ${item.hoursSpent}h`);
             saveReabsList(reabsItems);
             renderReabsTablesAndChart();
           });
@@ -4351,6 +4393,8 @@
         tbody.querySelectorAll("[data-reabs-delete]").forEach((btn) => {
           btn.addEventListener("click", () => {
             const id = btn.getAttribute("data-reabs-delete");
+            // A reminder stored in workbench.json cannot be deleted from here; muting it stops the cloud sends.
+            postReabsCommand(reabsItems.find((x) => x.id === id), `OFF ${id}`);
             reabsItems = reabsItems.filter((x) => x.id !== id);
             saveReabsList(reabsItems);
             renderReabsTablesAndChart();
@@ -4384,10 +4428,16 @@
       }
     };
 
-    // Execute a two-way reply command like "DONE RB-01 1.5h", "OFF RB-02", "HOURS RB-03 0.75", or shorthand "1" / "Test"
-    const executeReabsReplyCommand = (rawCmd, statusEl, isSilentPoll = false) => {
+    // Execute a two-way reply command like "DONE RB-01 1.5h", "OFF RB-02", "ON RB-02", "HOURS RB-03 0.75", or shorthand "1" / "Test".
+    // stampIso is the ntfy time of a replayed message; one no newer than the reminder's last edit was already applied.
+    const executeReabsReplyCommand = (rawCmd, statusEl, isSilentPoll = false, stampIso = "") => {
       const cmd = String(rawCmd || "").trim();
       if (!cmd) return false;
+      const alreadyApplied = (item) => Boolean(stampIso) && stampIso <= reabsStamp(item);
+      const localDay = () => {
+        const d = stampIso ? new Date(stampIso) : new Date();
+        return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      };
       const mDone = cmd.match(/^(?:(?:DONE|COMPLETE|COMPLETED)\s+)?(?:RB-0*)?(\d+)\s*(\d+(?:\.\d+)?)?\s*(?:h|hr|hrs|hours?)?$/i);
       if (mDone && (/^(?:DONE|COMPLETE|COMPLETED|RB-)/i.test(cmd) || /^\d+$/.test(cmd))) {
         const num = String(parseInt(mDone[1], 10)).padStart(2, "0");
@@ -4395,10 +4445,12 @@
         const hrs = mDone[2] ? parseFloat(mDone[2]) : 1.0;
         const item = reabsItems.find((x) => x.id.toUpperCase() === id);
         if (item) {
+          if (alreadyApplied(item)) return true;
           item.status = "completed";
           item.remindersEnabled = 0;
           item.hoursSpent = hrs;
-          item.completedOn = new Date().toISOString().slice(0, 10);
+          item.completedOn = localDay();
+          item.updatedAt = stampIso || reabsNowStamp();
           saveReabsList(reabsItems);
           renderReabsTablesAndChart();
           if (statusEl) {
@@ -4413,13 +4465,34 @@
         const id = `RB-${String(parseInt(mOff[1], 10)).padStart(2, "0")}`;
         const item = reabsItems.find((x) => x.id.toUpperCase() === id);
         if (item) {
+          if (alreadyApplied(item)) return true;
           item.remindersEnabled = 0;
-          item.status = "muted";
+          if (item.status === "active") item.status = "muted";
+          item.updatedAt = stampIso || reabsNowStamp();
           saveReabsList(reabsItems);
           renderReabsTablesAndChart();
           if (statusEl) {
             statusEl.style.color = "#8fe0a8";
             statusEl.textContent = `✓ Reply processed: Turned OFF reminders for ${item.id} (${item.title}).`;
+          }
+          return true;
+        }
+      }
+      const mOn = cmd.match(/^(?:ON|RESUME)\s+(?:RB-0*)?(\d+)$/i);
+      if (mOn) {
+        const id = `RB-${String(parseInt(mOn[1], 10)).padStart(2, "0")}`;
+        const item = reabsItems.find((x) => x.id.toUpperCase() === id);
+        if (item) {
+          if (alreadyApplied(item)) return true;
+          item.remindersEnabled = 1;
+          item.status = "active";
+          item.completedOn = null;
+          item.updatedAt = stampIso || reabsNowStamp();
+          saveReabsList(reabsItems);
+          renderReabsTablesAndChart();
+          if (statusEl) {
+            statusEl.style.color = "#8fe0a8";
+            statusEl.textContent = `✓ Reply processed: Turned reminders back ON for ${item.id} (${item.title}).`;
           }
           return true;
         }
@@ -4430,7 +4503,9 @@
         const hrs = parseFloat(mHrs[2]);
         const item = reabsItems.find((x) => x.id.toUpperCase() === id);
         if (item) {
+          if (alreadyApplied(item)) return true;
           item.hoursSpent = hrs;
+          item.updatedAt = stampIso || reabsNowStamp();
           saveReabsList(reabsItems);
           renderReabsTablesAndChart();
           if (statusEl) {
@@ -4455,8 +4530,10 @@
       const hrs = params.get("hours") || "1.0";
       if (act === "complete" && rid) {
         executeReabsReplyCommand(`DONE ${rid} ${hrs}`, document.getElementById("reabs-test-sms-status"));
+        postReabsCommand(reabsItems.find((x) => x.id.toUpperCase() === rid.toUpperCase()), `DONE ${rid} ${hrs}h`);
       } else if (act === "mute" && rid) {
         executeReabsReplyCommand(`OFF ${rid}`, document.getElementById("reabs-test-sms-status"));
+        postReabsCommand(reabsItems.find((x) => x.id.toUpperCase() === rid.toUpperCase()), `OFF ${rid}`);
       }
     } catch {
       /* ignore */
@@ -4635,11 +4712,11 @@
       const smsEnabled = document.getElementById("reabs-form-sms")?.checked ? 1 : 0;
       const reasoning = document.getElementById("reabs-reasoning")?.value?.trim() || "Needs to get done.";
 
-      const nextNum = reabsItems.length + 1;
-      const newId = `RB-${String(nextNum).padStart(2, "0")}`;
+      const newId = nextReabsId([...reabsItems.map((x) => x.id), ...canonicalReabsIds]);
       const newItem = {
         id: newId,
         createdOn: new Date().toISOString().slice(0, 10),
+        updatedAt: reabsNowStamp(),
         title: titleVal,
         urgency: urgencyVal,
         scheduleText,
@@ -4662,15 +4739,17 @@
       ev.target.reset();
       if (phoneInput) phoneInput.disabled = false;
       const fb = document.getElementById("reabs-form-feedback");
-      if (fb) fb.textContent = `✓ Added ${newId} (${scheduleText}) · Armed for ${DEFAULT_REABS_EMAIL}${extraEmails ? ` + ${extraEmails}` : ""}!`;
+      if (fb) fb.textContent = `✓ Added ${newId} (${scheduleText}) in this browser. It fires only while this page is open until it is added to records/workbench/workbench.json, which is what the cloud scheduler reads.`;
     });
 
-    // Background Time-of-Day Scheduler (checks every 60s if any active REABS is due right now)
+    // Background Time-of-Day Scheduler for reminders that exist only in this browser (checks every 60s).
+    // Reminders stored in workbench.json are sent by the cloud scheduler, so they are skipped here.
     const checkDueReabsSchedule = () => {
       const now = new Date();
       const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       const curDay = dayNames[now.getDay()];
       const curHm = `${String(now.getHours()).padStart(2, "0")}:${String(now.getMinutes()).padStart(2, "0")}`;
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}`;
       const dateSlotKey = `${now.toISOString().slice(0, 10)}_${curHm}`;
       let sentSlots = {};
       try {
@@ -4680,6 +4759,7 @@
       }
       reabsItems.forEach((item) => {
         if (item.status !== "active" || !item.remindersEnabled) return;
+        if (canonicalReabsIds.has(item.id) || (item.startOn && today < item.startOn)) return;
         const itemDays = String(item.daysOfWeek || "").split(",").map((d) => d.trim());
         if (itemDays.includes(curDay) && item.timeOfDay === curHm) {
           const slotId = `${item.id}_${dateSlotKey}`;
@@ -4710,7 +4790,7 @@
         try {
           const pkt = JSON.parse(msg);
           if (pkt && pkt.app === "liam_reabs_state_v1" && Array.isArray(pkt.list)) {
-            reabsItems = pkt.list;
+            reabsItems = mergeReabs(reabsItems, pkt.list);
             localStorage.setItem(REABS_STORAGE_KEY, JSON.stringify(reabsItems));
             renderReabsTablesAndChart();
           }
@@ -4732,7 +4812,8 @@
           .map((m) => `<span class="wb-badge wb-up" style="margin-right:6px;">📱 ${escHtml(m.time)}: &ldquo;${escHtml(m.text)}&rdquo;</span>`)
           .join(" ");
       }
-      executeReabsReplyCommand(msg, document.getElementById("reabs-test-sms-status"), !isLiveStream);
+      const stampIso = env.time ? new Date(env.time * 1000).toISOString().replace(/\.\d{3}Z$/, "Z") : "";
+      executeReabsReplyCommand(msg, document.getElementById("reabs-test-sms-status"), !isLiveStream, stampIso);
     };
 
     if (typeof fetch === "function") {
@@ -4776,6 +4857,20 @@
 
     renderOptionalEmailsUi();
     renderReabsTablesAndChart();
+
+    // The built page can be older than workbench.json (phone replies are committed hourly), so read the live file too.
+    if (typeof fetch === "function") {
+      fetch(CANONICAL_REABS_URL, { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : null))
+        .then((data) => {
+          if (!data || !Array.isArray(data.reabsReminders)) return;
+          noteCanonicalReabs(data.reabsReminders);
+          reabsItems = mergeReabs(data.reabsReminders, reabsItems);
+          localStorage.setItem(REABS_STORAGE_KEY, JSON.stringify(reabsItems));
+          renderReabsTablesAndChart();
+        })
+        .catch(() => {});
+    }
   }
 
   // Re-apply any previously synced Google Doc logs from localStorage AFTER all BI charts are wired
@@ -4921,4 +5016,99 @@
   };
   hydrateGeminiAtlasSlots();
   window.addEventListener("liam-gemini-mappings-updated", hydrateGeminiAtlasSlots);
+
+  // ---- Live Hydration of Multi-Subsection Theory & Applications + Bidirectional 3rd-Layer Links ----
+  const hydrateTheoryAppAtlasSlots = () => {
+    const slots = document.querySelectorAll("[data-theory-atlas-slot]");
+    if (!slots.length) return;
+    let localTheory = [];
+    let localApps = [];
+    try {
+      const store = JSON.parse(localStorage.getItem("liam_workbench_entries_v1") || "{}") || {};
+      if (Array.isArray(store.theoryQueue)) localTheory = store.theoryQueue;
+      if (Array.isArray(store.applicationsQueue)) localApps = store.applicationsQueue;
+    } catch {
+      localTheory = [];
+      localApps = [];
+    }
+    if (!localTheory.length && !localApps.length) return;
+    const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    const getPaths = (item) => {
+      const raw = [
+        item.atlasPath,
+        ...(Array.isArray(item.atlasPaths) ? item.atlasPaths : []),
+        ...String(item.secondaryPaths || "").split(","),
+      ];
+      return Array.from(new Set(raw.map((s) => String(s || "").trim()).filter((s) => s.includes("/"))));
+    };
+
+    slots.forEach((slot) => {
+      const nodePath = slot.getAttribute("data-theory-atlas-slot") || "";
+      const prefix = slot.getAttribute("data-theory-prefix") || "../../../";
+      const listEl = slot.querySelector(".wb-theory-app-list");
+      if (!listEl || !nodePath) return;
+
+      const matchedTh = localTheory.filter((t) => getPaths(t).includes(nodePath));
+      const matchedAp = localApps.filter((a) => getPaths(a).includes(nodePath));
+      if (!matchedTh.length && !matchedAp.length) return;
+
+      matchedTh.forEach((t) => {
+        if (listEl.querySelector(`[data-theory-card="${CSS.escape(t.id)}"]`)) return;
+        const paths = getPaths(t);
+        const pills = paths
+          .map((p) => {
+            const lbl = p.split("/").slice(-2).join(" · ").replace(/-/g, " ");
+            return p === nodePath
+              ? `<span class="wb-linkage-pill wb-theory-leaf-pill is-current">📍 ${esc(lbl)} <small>(this page)</small></span>`
+              : `<a class="wb-linkage-pill wb-theory-leaf-pill" href="${esc(prefix)}${esc(p)}/index.html">↗ ${esc(lbl)}</a>`;
+          })
+          .join("");
+        const art = document.createElement("article");
+        art.className = "study-reg-card wb-theory-mapped-card";
+        art.setAttribute("data-theory-card", t.id);
+        art.innerHTML =
+          `<div class="study-reg-head"><div><span class="eyebrow"><code>${esc(t.id)}</code> · 📐 Theory · ${esc(t.category || "")} · ${esc(t.createdOn || "")}</span>` +
+          `<h3 style="margin:3px 0 0;">${esc(t.title)}</h3></div>` +
+          `<a class="button ghost" href="${esc(prefix)}Workbench/index.html#wb-theory-form">Open Theory Mapper ↗</a></div>` +
+          (t.governingEquation ? `<div class="wb-whiteboard-eq">\\[${esc(t.governingEquation)}\\]</div>` : "") +
+          `<p style="margin:8px 0 0;color:#e5e9f7;line-height:1.6;">${esc(t.scopePrompt || "")}</p>` +
+          (paths.length > 1
+            ? `<div class="wb-crosslink-bar"><span class="wb-crosslink-label">🔗 Connected 3rd-Layer Sections (${paths.length} linked):</span><div class="wb-crosslink-pills">${pills}</div></div>`
+            : "");
+        listEl.appendChild(art);
+      });
+
+      matchedAp.forEach((a) => {
+        if (listEl.querySelector(`[data-app-card="${CSS.escape(a.id)}"]`)) return;
+        const paths = getPaths(a);
+        const pills = paths
+          .map((p) => {
+            const lbl = p.split("/").slice(-2).join(" · ").replace(/-/g, " ");
+            return p === nodePath
+              ? `<span class="wb-linkage-pill wb-theory-leaf-pill is-current">📍 ${esc(lbl)} <small>(this page)</small></span>`
+              : `<a class="wb-linkage-pill wb-theory-leaf-pill" href="${esc(prefix)}${esc(p)}/index.html">↗ ${esc(lbl)}</a>`;
+          })
+          .join("");
+        const art = document.createElement("article");
+        art.className = "study-reg-card wb-app-mapped-card";
+        art.setAttribute("data-app-card", a.id);
+        art.innerHTML =
+          `<div class="study-reg-head"><div><span class="eyebrow"><code>${esc(a.id)}</code> · ⚙️ Application · ${esc(a.domain || "")} · ${esc(a.createdOn || "")}</span>` +
+          `<h3 style="margin:3px 0 0;">${esc(a.title)}</h3></div>` +
+          `<a class="button ghost" href="${esc(prefix)}Workbench/index.html#wb-app-form">Manage Application ↗</a></div>` +
+          `<p style="margin:8px 0 0;color:#e5e9f7;line-height:1.58;"><strong>Mechanism &amp; System:</strong> ${esc(a.systemDesign || "")}</p>` +
+          `<p style="margin:6px 0 0;color:#cfd5ea;line-height:1.55;"><strong>Impact &amp; Benefit:</strong> ${esc(a.societalBenefit || "")}</p>` +
+          (paths.length > 1
+            ? `<div class="wb-crosslink-bar"><span class="wb-crosslink-label">🔗 Connected 3rd-Layer Sections (${paths.length} linked):</span><div class="wb-crosslink-pills">${pills}</div></div>`
+            : "");
+        listEl.appendChild(art);
+      });
+
+      slot.hidden = false;
+      if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+        window.MathJax.typesetPromise([slot]).catch(() => {});
+      }
+    });
+  };
+  hydrateTheoryAppAtlasSlots();
 })();

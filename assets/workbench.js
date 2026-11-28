@@ -2759,60 +2759,150 @@
     } else if (table === "theoryQueue") {
       const tbody = document.getElementById("wb-theory-body");
       if (!tbody) return;
+      if (tbody.querySelector(`tr[data-theory-row="${CSS.escape(entry.id)}"]`)) return;
+      const allPaths = Array.from(
+        new Set(
+          [entry.atlasPath, ...String(entry.secondaryPaths || "").split(",")].map((s) => String(s || "").trim()).filter(Boolean)
+        )
+      );
       const tr = document.createElement("tr");
       tr.setAttribute("data-theory-row", entry.id);
-      const runTd = document.createElement("td");
-      const runBtn = cell("button", "▶ Derive Theory Now");
-      runBtn.type = "button";
-      runBtn.className = "button ghost wb-run-study-btn";
-      runBtn.setAttribute("data-run-study-id", entry.id);
-      runBtn.setAttribute("data-study-title", `Theory: ${entry.title}`);
-      runBtn.setAttribute("data-study-path", entry.atlasPath);
-      runBtn.setAttribute("data-study-question", entry.scopePrompt);
-      runBtn.setAttribute("data-study-dataset", `First-principles textbook & peer-reviewed derivation (${entry.category})`);
-      attachRunButtonListener(runBtn);
-      runTd.appendChild(runBtn);
+      tr.setAttribute("data-theory-title", entry.title || "");
+      tr.setAttribute("data-theory-paths", allPaths.join(","));
+      tr.setAttribute("data-theory-eq", entry.governingEquation || "");
+      tr.setAttribute("data-theory-scope", entry.scopePrompt || "");
+
+      const titleTd = document.createElement("td");
+      const strongEl = cell("strong", entry.title);
+      titleTd.appendChild(strongEl);
+      if (entry.docUrl && /^https?:\/\//i.test(entry.docUrl)) {
+        const aDoc = document.createElement("a");
+        aDoc.href = entry.docUrl;
+        aDoc.target = "_blank";
+        aDoc.rel = "noopener noreferrer";
+        aDoc.textContent = " 📄 Doc ↗";
+        titleTd.appendChild(aDoc);
+      }
+      if (entry.geminiId) {
+        const gCode = cell("code", entry.geminiId);
+        titleTd.append(" · ", gCode);
+      }
+      if (entry.governingEquation) {
+        const eqDiv = document.createElement("div");
+        eqDiv.className = "wb-whiteboard-eq wb-table-eq";
+        eqDiv.textContent = `\\(${entry.governingEquation}\\)`;
+        titleTd.appendChild(eqDiv);
+      }
+
+      const destTd = document.createElement("td");
+      const pillsWrap = document.createElement("div");
+      pillsWrap.className = "wb-crosslink-pills";
+      allPaths.forEach((p, idx) => {
+        const a = document.createElement("a");
+        a.className = "wb-linkage-pill wb-theory-leaf-pill";
+        a.href = `../${p}/index.html`;
+        const parts = p.split("/");
+        const lbl = parts.slice(-2).join(" · ").replace(/-/g, " ");
+        a.textContent = `↗ ${lbl}${idx === 0 && allPaths.length > 1 ? " (Primary)" : ""}`;
+        pillsWrap.appendChild(a);
+      });
+      destTd.appendChild(pillsWrap);
+
+      const bridgeTd = document.createElement("td");
+      const btnWrap = document.createElement("div");
+      btnWrap.style.cssText = "display:flex;flex-wrap:wrap;gap:6px;";
+      const toAppBtn = cell("button", "⚙️ → Application");
+      toAppBtn.type = "button";
+      toAppBtn.className = "button ghost wb-run-study-btn";
+      toAppBtn.setAttribute("data-theory-promote-app", entry.id);
+      const texBtn = cell("button", "🧠 Copy TeX");
+      texBtn.type = "button";
+      texBtn.className = "button ghost wb-run-study-btn";
+      texBtn.setAttribute("data-theory-copy-tex", entry.id);
+      btnWrap.append(toAppBtn, texBtn);
+      bridgeTd.appendChild(btnWrap);
+
+      const catTd = document.createElement("td");
+      const catSpan = cell("span", entry.category);
+      catSpan.className = "wb-channel";
+      catTd.appendChild(catSpan);
+
       tr.append(
         cell("th", entry.id),
         cell("td", entry.createdOn),
-        cell("td", entry.category),
-        cell("td", entry.title),
-        cell("td", entry.atlasPath),
+        catTd,
+        titleTd,
+        destTd,
         cell("td", entry.scopePrompt),
         buildLinkagesTd(entry.linkages, entry.atlasPath),
         cell("td", entry.status),
-        runTd
+        bridgeTd
       );
-      tbody.appendChild(tr);
+      tbody.prepend(tr);
+      if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+        window.MathJax.typesetPromise([tr]).catch(() => {});
+      }
     } else if (table === "applicationsQueue") {
       const tbody = document.getElementById("wb-apps-body");
       if (!tbody) return;
+      if (tbody.querySelector(`tr[data-app-row="${CSS.escape(entry.id)}"]`)) return;
+      const allPaths = Array.from(
+        new Set(
+          [entry.atlasPath, ...String(entry.secondaryPaths || "").split(",")].map((s) => String(s || "").trim()).filter(Boolean)
+        )
+      );
       const tr = document.createElement("tr");
       tr.setAttribute("data-app-row", entry.id);
-      const runTd = document.createElement("td");
-      const runBtn = cell("button", "▶ Build Application Now");
-      runBtn.type = "button";
-      runBtn.className = "button ghost wb-run-study-btn";
-      runBtn.setAttribute("data-run-study-id", entry.id);
-      runBtn.setAttribute("data-study-title", `Application: ${entry.title}`);
-      runBtn.setAttribute("data-study-path", entry.atlasPath);
-      runBtn.setAttribute("data-study-question", `Engineering Design: ${entry.systemDesign} | Societal Benefit: ${entry.societalBenefit}`);
-      runBtn.setAttribute("data-study-dataset", `Engineering system benchmarks & deployment data (${entry.domain})`);
-      attachRunButtonListener(runBtn);
-      runTd.appendChild(runBtn);
+      tr.setAttribute("data-app-title", entry.title || "");
+      tr.setAttribute("data-app-paths", allPaths.join(","));
+      tr.setAttribute("data-app-design", entry.systemDesign || "");
+      tr.setAttribute("data-app-benefit", entry.societalBenefit || "");
+
+      const destTd = document.createElement("td");
+      const pillsWrap = document.createElement("div");
+      pillsWrap.className = "wb-crosslink-pills";
+      allPaths.forEach((p, idx) => {
+        const a = document.createElement("a");
+        a.className = "wb-linkage-pill wb-theory-leaf-pill";
+        a.href = `../${p}/index.html`;
+        const lbl = p.split("/").slice(-2).join(" · ").replace(/-/g, " ");
+        a.textContent = `↗ ${lbl}${idx === 0 && allPaths.length > 1 ? " (Primary)" : ""}`;
+        pillsWrap.appendChild(a);
+      });
+      destTd.appendChild(pillsWrap);
+
+      const bridgeTd = document.createElement("td");
+      const btnWrap = document.createElement("div");
+      btnWrap.style.cssText = "display:flex;flex-wrap:wrap;gap:6px;";
+      const toStudyBtn = cell("button", "📊 → Study Seed");
+      toStudyBtn.type = "button";
+      toStudyBtn.className = "button ghost wb-run-study-btn";
+      toStudyBtn.setAttribute("data-app-promote-study", entry.id);
+      const texBtn = cell("button", "🧠 Copy TeX");
+      texBtn.type = "button";
+      texBtn.className = "button ghost wb-run-study-btn";
+      texBtn.setAttribute("data-app-copy-tex", entry.id);
+      btnWrap.append(toStudyBtn, texBtn);
+      bridgeTd.appendChild(btnWrap);
+
+      const domTd = document.createElement("td");
+      const domSpan = cell("span", entry.domain);
+      domSpan.className = "wb-channel";
+      domTd.appendChild(domSpan);
+
       tr.append(
         cell("th", entry.id),
         cell("td", entry.createdOn),
-        cell("td", entry.domain),
+        domTd,
         cell("td", entry.title),
-        cell("td", entry.atlasPath),
+        destTd,
         cell("td", entry.systemDesign),
         cell("td", entry.societalBenefit),
         buildLinkagesTd(entry.linkages, entry.atlasPath),
         cell("td", entry.status),
-        runTd
+        bridgeTd
       );
-      tbody.appendChild(tr);
+      tbody.prepend(tr);
     } else if (table === "wishlistTodos") {
       const tbody = document.getElementById("wb-todos-body");
       if (!tbody) return;
@@ -2952,30 +3042,57 @@
       };
     }
     if (table === "theoryQueue") {
+      const primaryPath = String(data.get("atlasPath") || "").trim();
+      const secRaw = String(data.get("secondaryPaths") || "").trim();
+      const secClean = secRaw
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s && s !== primaryPath);
+      const gemId = String(data.get("geminiId") || "").trim();
+      const lnks = parseLinkagesInput(data.get("linkages"));
+      if (gemId && !lnks.includes(gemId)) lnks.unshift(gemId);
       return {
         id: nextSequentialId("TH", "wb-theory-body", "theoryQueue"),
         createdOn,
         category: String(data.get("category") || "General / Subsubsection Introduction"),
         title: String(data.get("title") || "").trim(),
-        atlasPath: String(data.get("atlasPath") || "").trim(),
+        atlasPath: primaryPath,
+        secondaryPaths: secClean.join(","),
+        atlasPaths: [primaryPath, ...secClean].filter(Boolean),
+        governingEquation: String(data.get("governingEquation") || "").trim(),
         scopePrompt: String(data.get("scopePrompt") || "").trim(),
-        linkages: parseLinkagesInput(data.get("linkages")),
-        status: "queued",
-        notes: "Added from browser Workbench",
+        docUrl: String(data.get("docUrl") || "").trim(),
+        geminiId: gemId,
+        linkages: lnks,
+        status: "in-progress",
+        notes: "Mapped across 3rd-layer subsections from Workbench",
       };
     }
     if (table === "applicationsQueue") {
+      const primaryPath = String(data.get("atlasPath") || "").trim();
+      const secRaw = String(data.get("secondaryPaths") || "").trim();
+      const secClean = secRaw
+        .split(",")
+        .map((s) => s.trim())
+        .filter((s) => s && s !== primaryPath);
+      const thId = String(data.get("theoryId") || "").trim();
+      const lnks = parseLinkagesInput(data.get("linkages"));
+      if (thId && !lnks.includes(thId)) lnks.unshift(thId);
       return {
         id: nextSequentialId("AP", "wb-apps-body", "applicationsQueue"),
         createdOn,
         domain: String(data.get("domain") || "General Engineering Application"),
         title: String(data.get("title") || "").trim(),
-        atlasPath: String(data.get("atlasPath") || "").trim(),
+        atlasPath: primaryPath,
+        secondaryPaths: secClean.join(","),
+        atlasPaths: [primaryPath, ...secClean].filter(Boolean),
+        theoryId: thId,
+        docUrl: String(data.get("docUrl") || "").trim(),
         systemDesign: String(data.get("systemDesign") || "").trim(),
         societalBenefit: String(data.get("societalBenefit") || "").trim(),
-        linkages: parseLinkagesInput(data.get("linkages")),
-        status: "queued",
-        notes: "Added from browser Workbench",
+        linkages: lnks,
+        status: "in-progress",
+        notes: "Mapped from Workbench Applications",
       };
     }
     if (table === "wishlistTodos") {
@@ -4419,6 +4536,8 @@
       `<td><span class="wb-channel">${esc(INTENT_BADGES[entry.intent] || "✨ Interest & Chat")}</span></td>` +
       `<td data-gemini-dest-cell="${esc(entry.id)}"><a class="wb-action-link" href="../${esc(entry.atlasPath)}/index.html">↗ ${esc(leafTitle)}</a><small class="wb-sub">${esc(entry.atlasPath)}</small></td>` +
       `<td><div style="display:flex;flex-wrap:wrap;gap:6px;">` +
+      `<button class="button ghost wb-run-study-btn" type="button" data-gemini-promote-theory="${esc(entry.id)}">📐 → Theory</button>` +
+      `<button class="button ghost wb-run-study-btn" type="button" data-gemini-promote-app="${esc(entry.id)}">⚙️ → Application</button>` +
       `<button class="button ghost wb-run-study-btn" type="button" data-gemini-promote-study="${esc(entry.id)}">📊 → Study Queue</button>` +
       `<button class="button ghost wb-run-study-btn" type="button" data-gemini-copy-tex="${esc(entry.id)}">🧠 Copy TeX</button>` +
       `</div></td>`;
@@ -4664,5 +4783,588 @@
     const parsed = parseRawGeminiBlocksClient(rawText, "", "mental-map-note", "");
     const added = saveMappedGeminiEntries(parsed);
     if (added) announce(`✓ Synced & auto-mapped ${added} new Gemini Google Doc topic(s) onto your website!`);
+  });
+
+  // ---- Multi-Subsection Theory & Application Google Doc Mapper + Whiteboard Theme Bridges ----
+  const setCascadeLeafValue = (prefixId, leafPath) => {
+    if (!leafPath) return;
+    const parts = leafPath.split("/");
+    if (parts.length < 2) return;
+    const fieldSel = document.getElementById(`${prefixId}-field`);
+    const topicSel = document.getElementById(`${prefixId}-topic`);
+    const leafSel = document.getElementById(`${prefixId}-path`);
+    if (fieldSel) {
+      fieldSel.value = parts[0];
+      fieldSel.dispatchEvent(new Event("change"));
+    }
+    if (topicSel && parts.length >= 2) {
+      topicSel.value = `${parts[0]}/${parts[1]}`;
+      topicSel.dispatchEvent(new Event("change"));
+    }
+    if (leafSel) {
+      leafSel.value = leafPath;
+      leafSel.dispatchEvent(new Event("change"));
+    }
+  };
+
+  const suggestMultiAtlasLeavesJs = (title, bodyText, eqText, maxCount = 5) => {
+    const hay = `${title || ""}\n${bodyText || ""}\n${eqText || ""}`.toLowerCase();
+    const multiHints = [
+      [
+        ["continuity", "divergence", "flux", "surface", "boundary", "boundaries", "iiint", "iint", "conservation"],
+        [
+          "Science-and-Engineering/Mathematics/Calculus-and-Vectors",
+          "Career-and-Education/Educational-Favourites/Continuum-Mechanics",
+          "Career-and-Education/Educational-Favourites/Vector-Calculus",
+          "Science-and-Engineering/Physics/Electromagnetism",
+          "Science-and-Engineering/Physics/Quantum-Mechanics",
+          "Science-and-Engineering/Physics/Thermodynamics",
+        ],
+      ],
+      [
+        ["ai capabilit", "economic stability", "business cycle", "labor", "automation", "iceberg", "macro"],
+        [
+          "Business-and-Economics/Emerging-Industries/Artificial-Intelligence",
+          "Business-and-Economics/Macroeconomics/Business-Cycles",
+          "Business-and-Economics/Macroeconomics/Economic-Growth",
+          "Business-and-Economics/Macroeconomics/Monetary-Policy",
+          "Business-and-Economics/Macroeconomics/Fiscal-Policy",
+        ],
+      ],
+      [
+        ["electrochem", "nernst", "battery", "intercalation", "sodium", "lithium", "redox"],
+        [
+          "Science-and-Engineering/Chemistry/Electrochemistry",
+          "Science-and-Engineering/Chemistry/Physical-Chemistry",
+          "Science-and-Engineering/Physics/Thermodynamics",
+        ],
+      ],
+      [
+        ["game theory", "nash", "bertrand", "collusion", "oligopoly", "replicator"],
+        [
+          "Business-and-Economics/Microeconomics/Game-Theory",
+          "Business-and-Economics/Microeconomics/Market-Structures",
+          "Science-and-Engineering/Computer-Science/Simulations",
+        ],
+      ],
+    ];
+
+    const leaves = getAllValidAtlasLeaves();
+    const scoreMap = new Map();
+    multiHints.forEach(([words, targets]) => {
+      let hits = 0;
+      words.forEach((w) => {
+        if (hay.includes(w)) hits += 1;
+      });
+      if (hits > 0) {
+        targets.forEach((t, idx) => {
+          scoreMap.set(t, (scoreMap.get(t) || 0) + hits * (8 - idx * 0.5));
+        });
+      }
+    });
+    const toks = hay.match(/[a-z0-9]{3,}/g) || [];
+    leaves.forEach((lf) => {
+      let sc = scoreMap.get(lf.path) || 0;
+      const leafWords = lf.path.toLowerCase().split(/[\/\-]+/);
+      toks.forEach((t) => {
+        if (leafWords.includes(t)) sc += 2.2;
+      });
+      if (sc > 0) scoreMap.set(lf.path, sc);
+    });
+    const ranked = Array.from(scoreMap.entries())
+      .sort((a, b) => b[1] - a[1])
+      .map((kv) => kv[0]);
+    if (!ranked.length) ranked.push(autoDetectAtlasPathJs(title, bodyText));
+    return ranked.slice(0, maxCount);
+  };
+
+  const theorySecondaryInput = document.getElementById("wb-theory-secondary-paths");
+  const theorySelectedWrap = document.getElementById("wb-theory-selected-leaves");
+  const theorySuggestedWrap = document.getElementById("wb-theory-suggested-chips");
+  const theoryAddLeafSelect = document.getElementById("wb-theory-add-leaf-select");
+  const theoryPrimarySelect = document.getElementById("wb-theory-path");
+
+  const getSelectedTheoryLeaves = () => {
+    const primary = theoryPrimarySelect ? theoryPrimarySelect.value.trim() : "";
+    const secs = theorySecondaryInput
+      ? theorySecondaryInput.value.split(",").map((s) => s.trim()).filter(Boolean)
+      : [];
+    return Array.from(new Set([primary, ...secs].filter(Boolean)));
+  };
+
+  const setSelectedTheoryLeaves = (paths) => {
+    const unique = Array.from(new Set((paths || []).map((p) => String(p || "").trim()).filter(Boolean)));
+    if (unique.length && theoryPrimarySelect) {
+      setCascadeLeafValue("wb-theory", unique[0]);
+    }
+    if (theorySecondaryInput) {
+      theorySecondaryInput.value = unique.slice(1).join(",");
+    }
+    renderSelectedTheoryPills();
+  };
+
+  const renderSelectedTheoryPills = () => {
+    if (!theorySelectedWrap) return;
+    const leaves = getSelectedTheoryLeaves();
+    theorySelectedWrap.innerHTML = "";
+    leaves.forEach((p, idx) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "wb-linkage-pill wb-theory-leaf-pill";
+      const lbl = p.split("/").slice(-2).join(" · ").replace(/-/g, " ");
+      btn.textContent = `${idx === 0 ? "★ Primary: " : "🔗 "}${lbl} ×`;
+      btn.title = idx === 0 ? `${p} (Primary — click to promote next)` : `Remove ${p}`;
+      btn.addEventListener("click", () => {
+        const next = leaves.filter((item) => item !== p);
+        if (next.length) setSelectedTheoryLeaves(next);
+        else if (theorySecondaryInput) {
+          theorySecondaryInput.value = "";
+          renderSelectedTheoryPills();
+        }
+      });
+      theorySelectedWrap.appendChild(btn);
+    });
+  };
+
+  const refreshTheorySuggestions = () => {
+    if (!theorySuggestedWrap) return;
+    const title = document.getElementById("wb-theory-title")?.value || "";
+    const scope = document.getElementById("wb-theory-scope")?.value || "";
+    const eq = document.getElementById("wb-theory-equation")?.value || "";
+    const suggested = suggestMultiAtlasLeavesJs(title, scope, eq, 6);
+    const activeSet = new Set(getSelectedTheoryLeaves());
+    theorySuggestedWrap.innerHTML = "";
+    suggested.forEach((p) => {
+      const chip = document.createElement("button");
+      chip.type = "button";
+      chip.className = `wb-suggest-chip${activeSet.has(p) ? " is-selected" : ""}`;
+      const lbl = p.split("/").slice(-2).join(" · ").replace(/-/g, " ");
+      chip.textContent = `${activeSet.has(p) ? "✓ " : "+ "}${lbl}`;
+      chip.title = p;
+      chip.addEventListener("click", () => {
+        const cur = getSelectedTheoryLeaves();
+        if (cur.includes(p)) {
+          if (cur.length > 1) setSelectedTheoryLeaves(cur.filter((x) => x !== p));
+        } else {
+          setSelectedTheoryLeaves([...cur, p]);
+        }
+        refreshTheorySuggestions();
+      });
+      theorySuggestedWrap.appendChild(chip);
+    });
+  };
+
+  theoryPrimarySelect?.addEventListener("change", () => {
+    renderSelectedTheoryPills();
+    refreshTheorySuggestions();
+  });
+  theoryAddLeafSelect?.addEventListener("change", () => {
+    const val = theoryAddLeafSelect.value;
+    if (!val) return;
+    setSelectedTheoryLeaves([...getSelectedTheoryLeaves(), val]);
+    theoryAddLeafSelect.value = "";
+    refreshTheorySuggestions();
+  });
+  document.getElementById("wb-theory-suggest-btn")?.addEventListener("click", () => {
+    const title = document.getElementById("wb-theory-title")?.value || "";
+    const scope = document.getElementById("wb-theory-scope")?.value || "";
+    const eq = document.getElementById("wb-theory-equation")?.value || "";
+    const suggested = suggestMultiAtlasLeavesJs(title, scope, eq, 4);
+    setSelectedTheoryLeaves(suggested);
+    refreshTheorySuggestions();
+    announce(`✓ Auto-selected ${suggested.length} matching 3rd-layer subsections for cross-linking!`);
+  });
+  ["wb-theory-title", "wb-theory-scope", "wb-theory-equation"].forEach((id) => {
+    document.getElementById(id)?.addEventListener("input", refreshTheorySuggestions);
+  });
+  renderSelectedTheoryPills();
+  refreshTheorySuggestions();
+
+  // Pull Google Doc into Theory (0 tokens)
+  document.getElementById("wb-theory-pull-doc-btn")?.addEventListener("click", async () => {
+    const rawUrl = (document.getElementById("wb-theory-doc-url")?.value || "").trim();
+    if (!rawUrl) {
+      announce("⚠ Paste a Google Doc URL in the Theory Google Doc box first.");
+      return;
+    }
+    announce("📲 Pulling Google Doc into Theory Mapper (0 tokens)…");
+    try {
+      const text = await fetchDocTextForWorkbench(rawUrl);
+      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const titleInput = document.getElementById("wb-theory-title");
+      const eqInput = document.getElementById("wb-theory-equation");
+      const scopeInput = document.getElementById("wb-theory-scope");
+      if (titleInput && !titleInput.value.trim() && lines.length) {
+        titleInput.value = lines[0].replace(/^#+\s*/, "").slice(0, 140);
+      }
+      const eqMatch = text.match(/\\(?:frac|iiint|iint|int|sum|nabla|partial)[^\n]+/);
+      if (eqInput && !eqInput.value.trim() && eqMatch) {
+        eqInput.value = eqMatch[0].trim();
+      }
+      if (scopeInput) {
+        scopeInput.value = text;
+        scopeInput.dispatchEvent(new Event("input"));
+      }
+      const suggested = suggestMultiAtlasLeavesJs(titleInput?.value || "", text, eqInput?.value || "", 4);
+      setSelectedTheoryLeaves(suggested);
+      refreshTheorySuggestions();
+      announce(`✓ Pulled Theory Google Doc & suggested ${suggested.length} cross-linked 3rd-layer subsections!`);
+    } catch (err) {
+      announce(`⚠ ${err.message || err}`);
+    }
+  });
+
+  // Gemini API Multi-Section + Equation Extractor for Theory
+  document.getElementById("wb-theory-ai-map-btn")?.addEventListener("click", async () => {
+    if (!unlockedApiKey) {
+      openDialog(authDialog);
+      announce("🔐 Unlock Admin with your Gemini API key first (or use the 0-Token multi-section mapper!).");
+      return;
+    }
+    const titleInput = document.getElementById("wb-theory-title");
+    const eqInput = document.getElementById("wb-theory-equation");
+    const scopeInput = document.getElementById("wb-theory-scope");
+    const rawContent = `${titleInput?.value || ""}\n\n${scopeInput?.value || ""}`.trim();
+    if (!rawContent) {
+      announce("⚠ Pull a Google Doc or enter your Theory notes first.");
+      return;
+    }
+    const validPaths = getAllValidAtlasLeaves().map((l) => l.path);
+    const prompt = [
+      "You are structuring a first-principles Theory module for Liam McGrath's 216-destination website (distinct from empirical dataset studies).",
+      "Pick 1 to 5 3rd-layer atlasPaths from this exact list that genuinely share this theoretical mechanism so those pages cross-link to each other:",
+      validPaths.join(", "),
+      "Return ONLY JSON: {\"title\": string, \"governingEquation\": string (clean LaTeX without outer $$), \"synthesis\": string, \"atlasPaths\": [string]}",
+      "Input notes:",
+      rawContent.slice(0, 12000),
+    ].join("\n\n");
+    announce("✨ Calling Gemini API to extract governing equation & map across matching 3rd-layer subsections…");
+    for (const modelId of [...discoveredLiveModelIds, "gemini-2.5-flash", "gemini-2.0-flash"]) {
+      try {
+        const resp = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${modelId}:generateContent?key=${encodeURIComponent(unlockedApiKey)}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: prompt }] }],
+            generationConfig: { temperature: 0.2, responseMimeType: "application/json" },
+          }),
+        });
+        if (!resp.ok) continue;
+        const data = await resp.json();
+        const txt = (data?.candidates?.[0]?.content?.parts?.[0]?.text || "").replace(/^```json\s*|\s*```$/g, "").trim();
+        const parsed = JSON.parse(txt);
+        if (parsed && typeof parsed === "object") {
+          if (titleInput && parsed.title) titleInput.value = parsed.title;
+          if (eqInput && parsed.governingEquation) eqInput.value = parsed.governingEquation;
+          if (scopeInput && parsed.synthesis) scopeInput.value = parsed.synthesis;
+          const validSet = new Set(validPaths);
+          const chosen = (Array.isArray(parsed.atlasPaths) ? parsed.atlasPaths : []).filter((p) => validSet.has(p));
+          if (chosen.length) setSelectedTheoryLeaves(chosen);
+          refreshTheorySuggestions();
+          announce(`✓ Gemini extracted governing formalism & mapped across ${chosen.length} 3rd-layer subsections!`);
+          return;
+        }
+      } catch {
+        /* try next */
+      }
+    }
+    announce("⚠ Gemini endpoint unavailable — used 0-token multi-section recommender.");
+  });
+
+  // Bridge from Gemini Chat dropdown into Theory form
+  document.getElementById("wb-theory-gemini-link")?.addEventListener("change", (ev) => {
+    const opt = ev.target.selectedOptions && ev.target.selectedOptions[0];
+    if (!opt || !opt.value) return;
+    const gTitle = opt.getAttribute("data-gem-title") || "";
+    const gSummary = opt.getAttribute("data-gem-summary") || "";
+    const gPath = opt.getAttribute("data-gem-path") || "";
+    const titleInput = document.getElementById("wb-theory-title");
+    const scopeInput = document.getElementById("wb-theory-scope");
+    if (titleInput && !titleInput.value.trim()) titleInput.value = gTitle;
+    if (scopeInput && !scopeInput.value.trim()) scopeInput.value = gSummary;
+    const suggested = suggestMultiAtlasLeavesJs(gTitle, gSummary, "", 4);
+    setSelectedTheoryLeaves(gPath ? [gPath, ...suggested] : suggested);
+    refreshTheorySuggestions();
+  });
+
+  // Application Google Doc pull, Theory-link inheritance & secondary leaf picker
+  document.getElementById("wb-app-pull-doc-btn")?.addEventListener("click", async () => {
+    const rawUrl = (document.getElementById("wb-app-doc-url")?.value || "").trim();
+    if (!rawUrl) {
+      announce("⚠ Paste a Google Doc URL in the Application Google Doc box first.");
+      return;
+    }
+    announce("📲 Pulling Google Doc into Application Mapper (0 tokens)…");
+    try {
+      const text = await fetchDocTextForWorkbench(rawUrl);
+      const lines = text.split("\n").map((l) => l.trim()).filter(Boolean);
+      const titleInput = document.getElementById("wb-app-title");
+      const designInput = document.getElementById("wb-app-design");
+      if (titleInput && !titleInput.value.trim() && lines.length) {
+        titleInput.value = lines[0].replace(/^#+\s*/, "").slice(0, 140);
+      }
+      if (designInput) {
+        designInput.value = text;
+        designInput.dispatchEvent(new Event("input"));
+      }
+      announce("✓ Pulled Google Doc into Application Mapper!");
+    } catch (err) {
+      announce(`⚠ ${err.message || err}`);
+    }
+  });
+
+  document.getElementById("wb-app-theory-link")?.addEventListener("change", (ev) => {
+    const opt = ev.target.selectedOptions && ev.target.selectedOptions[0];
+    if (!opt || !opt.value) return;
+    const paths = (opt.getAttribute("data-th-paths") || "").split(",").map((s) => s.trim()).filter(Boolean);
+    if (paths.length) {
+      setCascadeLeafValue("wb-app", paths[0]);
+      const secEl = document.getElementById("wb-app-secondary-paths");
+      if (secEl) secEl.value = paths.slice(1).join(",");
+    }
+    const lnkEl = document.getElementById("wb-app-linkages");
+    if (lnkEl && !lnkEl.value.includes(opt.value)) {
+      lnkEl.value = lnkEl.value.trim() ? `${opt.value}, ${lnkEl.value.trim()}` : opt.value;
+    }
+  });
+
+  document.getElementById("wb-app-add-leaf-select")?.addEventListener("change", (ev) => {
+    const val = ev.target.value;
+    if (!val) return;
+    const secEl = document.getElementById("wb-app-secondary-paths");
+    if (secEl) {
+      const cur = secEl.value.split(",").map((s) => s.trim()).filter(Boolean);
+      if (!cur.includes(val)) cur.push(val);
+      secEl.value = cur.join(",");
+    }
+    ev.target.value = "";
+  });
+
+  // Whiteboard Theme form & 1-click bridges into Theory / Application
+  document.getElementById("wb-theme-leaf-add")?.addEventListener("change", (ev) => {
+    const val = ev.target.value;
+    if (!val) return;
+    const pathsInput = document.getElementById("wb-theme-paths");
+    if (pathsInput) {
+      const cur = pathsInput.value.split(",").map((s) => s.trim()).filter(Boolean);
+      if (!cur.includes(val)) cur.push(val);
+      pathsInput.value = cur.join(",");
+    }
+    ev.target.value = "";
+  });
+
+  document.getElementById("wb-whiteboard-form")?.addEventListener("submit", (ev) => {
+    ev.preventDefault();
+    const fd = new FormData(ev.target);
+    const store = loadLocal();
+    store.whiteboardThemes = store.whiteboardThemes || [];
+    const nextIdx = document.querySelectorAll("[data-wb-theme-id]").length + 1;
+    const wbId = `WB-${String(nextIdx).padStart(2, "0")}`;
+    const paths = String(fd.get("atlasPaths") || "").split(",").map((s) => s.trim()).filter(Boolean);
+    const item = {
+      id: wbId,
+      monthLabel: String(fd.get("monthLabel") || "November 2026").trim(),
+      weekOf: String(fd.get("weekOf") || todayIso()).trim(),
+      track: String(fd.get("track") || "S&E").trim(),
+      title: String(fd.get("title") || "").trim(),
+      subtitle: String(fd.get("subtitle") || "").trim(),
+      equationLatex: String(fd.get("equationLatex") || "").trim(),
+      atlasPaths: paths.join(","),
+      ideaNotes: String(fd.get("ideaNotes") || "").trim(),
+      status: "active",
+    };
+    store.whiteboardThemes.push(item);
+    saveLocal(store);
+    const grid = document.getElementById("wb-whiteboard-cards");
+    if (grid) {
+      const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+      const card = document.createElement("article");
+      card.className = "wb-pipe-card wb-whiteboard-card";
+      card.setAttribute("data-wb-theme-id", item.id);
+      card.setAttribute("data-wb-theme-title", item.title);
+      card.setAttribute("data-wb-theme-eq", item.equationLatex);
+      card.setAttribute("data-wb-theme-paths", item.atlasPaths);
+      card.setAttribute("data-wb-theme-notes", item.ideaNotes);
+      const pills = paths
+        .map((p) => `<a class="wb-linkage-pill wb-theory-leaf-pill" href="../${esc(p)}/index.html">↗ ${esc(p.split("/").slice(-2).join(" · ").replace(/-/g, " "))}</a>`)
+        .join("");
+      card.innerHTML =
+        `<div class="study-reg-head"><div><span class="eyebrow"><code>${esc(item.id)}</code> · ${esc(item.monthLabel)} · Week of ${esc(item.weekOf)} · ${esc(item.track)}${item.subtitle ? ` · <span class="wb-channel">${esc(item.subtitle)}</span>` : ""}</span>` +
+        `<h3 style="margin:4px 0 0;">${esc(item.title)}</h3></div>` +
+        `<div style="display:flex;flex-wrap:wrap;gap:6px;"><button class="button primary wb-run-study-btn" type="button" data-wb-theme-to-theory="${esc(item.id)}">📐 Open in Theory Mapper</button>` +
+        `<button class="button ghost wb-run-study-btn" type="button" data-wb-theme-to-app="${esc(item.id)}">⚙️ Draft Application</button></div></div>` +
+        (item.equationLatex ? `<div class="wb-whiteboard-eq">\\[${esc(item.equationLatex)}\\]</div>` : "") +
+        `<p style="margin:8px 0 0;color:#e4e8f7;line-height:1.58;">${esc(item.ideaNotes)}</p>` +
+        `<div class="wb-crosslink-bar"><span class="wb-crosslink-label">🔗 Cross-Linked 3rd-Layer Subsections (${paths.length}):</span><div class="wb-crosslink-pills">${pills}</div></div>`;
+      grid.prepend(card);
+      if (window.MathJax && typeof window.MathJax.typesetPromise === "function") {
+        window.MathJax.typesetPromise([card]).catch(() => {});
+      }
+    }
+    ev.target.reset();
+    announce(`✓ Added Whiteboard Theme ${wbId} (${item.track}: ${item.title})!`);
+  });
+
+  // Delegated click handler for Gemini->Theory/App, Whiteboard->Theory/App, Theory->App, App->Study & Copy TeX
+  document.addEventListener("click", (ev) => {
+    const btn = ev.target && ev.target.closest ? ev.target.closest("button") : null;
+    if (!btn) return;
+
+    if (btn.hasAttribute("data-gemini-promote-theory")) {
+      const tr = btn.closest("tr[data-gemini-row]");
+      if (!tr) return;
+      const gid = tr.getAttribute("data-gemini-row") || "";
+      const title = tr.getAttribute("data-gemini-title") || "";
+      const path = tr.getAttribute("data-gemini-path") || "";
+      const summary = tr.getAttribute("data-gemini-summary") || "";
+      const titleEl = document.getElementById("wb-theory-title");
+      const scopeEl = document.getElementById("wb-theory-scope");
+      const gemSel = document.getElementById("wb-theory-gemini-link");
+      const lnkEl = document.getElementById("wb-theory-linkages");
+      if (titleEl) titleEl.value = title;
+      if (scopeEl) scopeEl.value = summary;
+      if (gemSel) gemSel.value = gid;
+      if (lnkEl) lnkEl.value = gid;
+      const suggested = suggestMultiAtlasLeavesJs(title, summary, "", 4);
+      setSelectedTheoryLeaves(path ? [path, ...suggested] : suggested);
+      refreshTheorySuggestions();
+      document.getElementById("wb-theory-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce(`✓ Loaded Gemini chat ${gid} into Theory Mapper with multi-subsection suggestions!`);
+      return;
+    }
+
+    if (btn.hasAttribute("data-gemini-promote-app")) {
+      const tr = btn.closest("tr[data-gemini-row]");
+      if (!tr) return;
+      const gid = tr.getAttribute("data-gemini-row") || "";
+      const title = tr.getAttribute("data-gemini-title") || "";
+      const path = tr.getAttribute("data-gemini-path") || "";
+      const summary = tr.getAttribute("data-gemini-summary") || "";
+      const titleEl = document.getElementById("wb-app-title");
+      const designEl = document.getElementById("wb-app-design");
+      const lnkEl = document.getElementById("wb-app-linkages");
+      if (titleEl) titleEl.value = title;
+      if (designEl) designEl.value = summary;
+      if (lnkEl) lnkEl.value = gid;
+      if (path) setCascadeLeafValue("wb-app", path);
+      document.getElementById("wb-app-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce(`✓ Loaded Gemini chat ${gid} into Applications Mapper!`);
+      return;
+    }
+
+    if (btn.hasAttribute("data-wb-theme-to-theory")) {
+      const card = btn.closest("[data-wb-theme-id]");
+      if (!card) return;
+      const wbId = card.getAttribute("data-wb-theme-id") || "";
+      const title = card.getAttribute("data-wb-theme-title") || "";
+      const sub = card.getAttribute("data-wb-theme-sub") || "";
+      const eq = card.getAttribute("data-wb-theme-eq") || "";
+      const paths = (card.getAttribute("data-wb-theme-paths") || "").split(",").map((s) => s.trim()).filter(Boolean);
+      const notes = card.getAttribute("data-wb-theme-notes") || "";
+      const titleEl = document.getElementById("wb-theory-title");
+      const eqEl = document.getElementById("wb-theory-equation");
+      const scopeEl = document.getElementById("wb-theory-scope");
+      const lnkEl = document.getElementById("wb-theory-linkages");
+      if (titleEl) titleEl.value = sub ? `${title} (${sub})` : title;
+      if (eqEl) eqEl.value = eq;
+      if (scopeEl) scopeEl.value = notes;
+      if (lnkEl) lnkEl.value = wbId;
+      if (paths.length) setSelectedTheoryLeaves(paths);
+      refreshTheorySuggestions();
+      document.getElementById("wb-theory-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce(`✓ Loaded Whiteboard Theme ${wbId} into Theory Mapper across ${paths.length} subsections!`);
+      return;
+    }
+
+    if (btn.hasAttribute("data-wb-theme-to-app")) {
+      const card = btn.closest("[data-wb-theme-id]");
+      if (!card) return;
+      const wbId = card.getAttribute("data-wb-theme-id") || "";
+      const title = card.getAttribute("data-wb-theme-title") || "";
+      const paths = (card.getAttribute("data-wb-theme-paths") || "").split(",").map((s) => s.trim()).filter(Boolean);
+      const notes = card.getAttribute("data-wb-theme-notes") || "";
+      const titleEl = document.getElementById("wb-app-title");
+      const designEl = document.getElementById("wb-app-design");
+      const secEl = document.getElementById("wb-app-secondary-paths");
+      const lnkEl = document.getElementById("wb-app-linkages");
+      if (titleEl) titleEl.value = `${title} — Applied Architecture`;
+      if (designEl) designEl.value = notes;
+      if (paths.length) {
+        setCascadeLeafValue("wb-app", paths[0]);
+        if (secEl) secEl.value = paths.slice(1).join(",");
+      }
+      if (lnkEl) lnkEl.value = wbId;
+      document.getElementById("wb-app-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce(`✓ Loaded Whiteboard Theme ${wbId} into Applications Mapper!`);
+      return;
+    }
+
+    if (btn.hasAttribute("data-theory-promote-app")) {
+      const tr = btn.closest("tr[data-theory-row]");
+      if (!tr) return;
+      const thId = tr.getAttribute("data-theory-row") || "";
+      const title = tr.getAttribute("data-theory-title") || "";
+      const paths = (tr.getAttribute("data-theory-paths") || "").split(",").map((s) => s.trim()).filter(Boolean);
+      const scope = tr.getAttribute("data-theory-scope") || "";
+      const thSel = document.getElementById("wb-app-theory-link");
+      const titleEl = document.getElementById("wb-app-title");
+      const designEl = document.getElementById("wb-app-design");
+      const secEl = document.getElementById("wb-app-secondary-paths");
+      const lnkEl = document.getElementById("wb-app-linkages");
+      if (thSel) thSel.value = thId;
+      if (titleEl) titleEl.value = `Applied System: ${title}`;
+      if (designEl && !designEl.value.trim()) designEl.value = scope;
+      if (paths.length) {
+        setCascadeLeafValue("wb-app", paths[0]);
+        if (secEl) secEl.value = paths.slice(1).join(",");
+      }
+      if (lnkEl) lnkEl.value = thId;
+      document.getElementById("wb-app-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce(`✓ Linked ${thId} → Applications Mapper (inheriting ${paths.length} 3rd-layer subsections)!`);
+      return;
+    }
+
+    if (btn.hasAttribute("data-theory-copy-tex")) {
+      const tr = btn.closest("tr[data-theory-row]");
+      if (!tr) return;
+      const title = tr.getAttribute("data-theory-title") || "Theory";
+      const paths = tr.getAttribute("data-theory-paths") || "";
+      const eq = tr.getAttribute("data-theory-eq") || "";
+      const scope = tr.getAttribute("data-theory-scope") || "";
+      const eqTex = eq ? `\n\\begin{equation}\n${eq}\n\\end{equation}\n` : "\n";
+      const tex = `% Theory mapped to: ${paths}\n\\subsubsubsection{${title.replace(/&/g, "\\&")}}${eqTex}${scope.replace(/&/g, "\\&")}\n`;
+      navigator.clipboard?.writeText(tex).then(() => announce("✓ Copied Theory LaTeX block to clipboard!"));
+      return;
+    }
+
+    if (btn.hasAttribute("data-app-promote-study")) {
+      const tr = btn.closest("tr[data-app-row]");
+      if (!tr) return;
+      const apId = tr.getAttribute("data-app-row") || "";
+      const title = tr.getAttribute("data-app-title") || "";
+      const paths = (tr.getAttribute("data-app-paths") || "").split(",").map((s) => s.trim()).filter(Boolean);
+      const design = tr.getAttribute("data-app-design") || "";
+      const titleEl = document.getElementById("wb-study-title");
+      const qEl = document.getElementById("wb-study-question");
+      const lnkEl = document.getElementById("wb-study-linkages");
+      if (titleEl) titleEl.value = `${title} — Empirical Benchmark`;
+      if (qEl) qEl.value = design;
+      if (paths.length) setCascadeLeafValue("wb-study", paths[0]);
+      if (lnkEl) lnkEl.value = apId;
+      document.getElementById("wb-study-form")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      announce(`✓ Seeded empirical Study form from Application ${apId}!`);
+      return;
+    }
+
+    if (btn.hasAttribute("data-app-copy-tex")) {
+      const tr = btn.closest("tr[data-app-row]");
+      if (!tr) return;
+      const title = tr.getAttribute("data-app-title") || "Application";
+      const paths = tr.getAttribute("data-app-paths") || "";
+      const design = tr.getAttribute("data-app-design") || "";
+      const benefit = tr.getAttribute("data-app-benefit") || "";
+      const tex = `% Application mapped to: ${paths}\n\\subsubsubsection{Application: ${title.replace(/&/g, "\\&")}}\n${design.replace(/&/g, "\\&")}\n\n\\textbf{Societal Impact:} ${benefit.replace(/&/g, "\\&")}\n`;
+      navigator.clipboard?.writeText(tex).then(() => announce("✓ Copied Application LaTeX block to clipboard!"));
+    }
   });
 })();

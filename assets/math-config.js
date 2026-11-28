@@ -5,7 +5,7 @@ window.MathJax = {
     macros: { oiint: '\\mathop{\\unicode{x222F}}', oiiint: '\\mathop{\\unicode{x2230}}', Tr: '\\operatorname{Tr}', Tilde: '\\tilde' } },
   options: { ignoreHtmlClass: 'tex-unsupported' },
   startup: {
-    elements: ['.tex-paper', '.study-page', '.wb-run-dialog'],
+    elements: ['.tex-paper', '.study-page', '.wb-run-dialog', '.wb-whiteboard-eq'],
     pageReady() {
       return MathJax.startup.defaultPageReady().then(() => {
         const status = document.querySelector('.math-status');

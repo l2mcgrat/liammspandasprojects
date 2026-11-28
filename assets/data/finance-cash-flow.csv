@@ -1,0 +1,24 @@
+month,through,direction,group,amount,oneOff
+2026-11,2026-11-27,in,Employment Pay,7811.49,False
+2026-11,2026-11-27,in,Insurance Settlement,17017.97,True
+2026-11,2026-11-27,in,Refunds & Adjustments,218.03,True
+2026-11,2026-11-27,out,Housing,1600.0,False
+2026-11,2026-11-27,out,Groceries,412.44,False
+2026-11,2026-11-27,out,Dining & Coffee,69.49,False
+2026-11,2026-11-27,out,Fuel & Convenience,284.68,False
+2026-11,2026-11-27,out,Vehicle & Transport,88.61,False
+2026-11,2026-11-27,out,Insurance,365.79,False
+2026-11,2026-11-27,out,Phone & Internet,113.81,False
+2026-11,2026-11-27,out,Health & Pharmacy,149.67,False
+2026-11,2026-11-27,out,Fitness & Sport,123.16,False
+2026-11,2026-11-27,out,AI & Developer Tools,247.19,False
+2026-11,2026-11-27,out,Learning & Books,873.72,False
+2026-11,2026-11-27,out,"Streaming, Music & Software",83.56,False
+2026-11,2026-11-27,out,Gaming & Hobbies,159.85,False
+2026-11,2026-11-27,out,Shopping & Personal,1627.95,False
+2026-11,2026-11-27,out,Financial Services,28.19,False
+2026-11,2026-11-27,out,Interest & Card Fees,592.4,False
+2026-11,2026-11-27,out,Vehicle Loan Payment,717.7,False
+2026-11,2026-11-27,out,Personal Loan Payment,436.26,False
+2026-11,2026-11-27,out,Student Loan Payment,306.15,False
+2026-11,2026-11-27,out,Family Repayment,3020.35,True

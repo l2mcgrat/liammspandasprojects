@@ -3,11 +3,38 @@
 \usepackage[hidelinks]{hyperref}
 \title{Website Change Log}
 \author{Liam McGrath}
-\date{Last updated 25 October 2026}
+\date{Last updated 28 November 2026}
 \begin{document}
 \maketitle
 
 Newest first. Each date lists what was requested and what was implemented. Requests come from the prompts recorded in Website\_Change\_Log.txt and the build conversations; planned work lives in the separate Upcoming Changes document.
+
+\section{28 November 2026: Finances dashboards, the Time Allocation Ledger, and a cloud reminder scheduler}
+\subsection{Requested changes}
+\begin{itemize}
+\item Real data for the Finances pillar from the bank's card and chequing exports, the credit report and a pay stub, published as dollar totals without merchants or account numbers.
+\item A first version of the Time pillar built on a Work, Maintenance and Leisure split, using the logs that already exist and stated assumptions.
+\item Reminders that arrive on time: a daily 10 am pharmacy pickup, a daily credit-report review starting 2 December, and the TFSA reminder raised to High urgency.
+\end{itemize}
+\subsection{Implemented changes}
+\begin{itemize}
+\item \texttt{python -B -m site\_content.finances} reads the raw exports from a git-ignored folder, checks that the chequing balances chain from row to row, and writes \texttt{records/finances/finance\_summary.json}. The summary holds totals under a fixed list of group names; the build refuses it if any other text appears.
+\item Six Finances pages are live: cash flow and budgeting, savings and net worth, investing, income, tax and costs, and goals. Each chart has a table with the same values, and the Finances pillar now has a score built from five stated parts.
+\item \texttt{Overall-Performance/Time/Time-Allocation-Ledger} shows seven weeks against 168 hours. Sleep is read from its log; eating, swimming, lifting, running and rap writing are derived from their logs with the assumptions listed on the page; the rest is reported as not captured.
+\item \texttt{site\_content/reabs\_notify.py} runs hourly in GitHub Actions, queues each reminder for its exact Toronto time (daylight saving included), sends each slot once, and records Done and Mute replies from the phone in \texttt{records/workbench/workbench.json}.
+\end{itemize}
+
+\section{22 November 2026: Theory and Application mappers and weekly whiteboard themes}
+\subsection{Requested changes}
+\begin{itemize}
+\item A way to map a Google Doc into Theory or Application and on to one or more third-layer destinations, with links in both directions, while keeping the Gemini chat mapper as it is.
+\item A place for the weekly Science \& Engineering and Business \& Economics whiteboard themes.
+\end{itemize}
+\subsection{Implemented changes}
+\begin{itemize}
+\item The Workbench gained Theory and Application mappers that route one document to several destinations; each destination page links back to the entries mapped to it.
+\item Whiteboard themes are stored per week and track, linked to their Theory entries, with equations rendered by MathJax.
+\end{itemize}
 
 \section{25 October 2026: database Workbench, hybrid log sync, and two flagship studies}
 \subsection{Requested changes}

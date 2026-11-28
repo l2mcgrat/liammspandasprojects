@@ -490,6 +490,12 @@ clutter-56616761626f6e642f436c75747465722e747874,Vagabond/Clutter.txt,28,Loving,
 clutter-56616761626f6e642f436c75747465722e747874,Vagabond/Clutter.txt,29,Angry,Furious,1,anger,anger,49,54,10,11,False,1
 clutter-56616761626f6e642f436c75747465722e747874,Vagabond/Clutter.txt,32,Loving,Affectionate,1,love,love,16,20,3,4,False,1
 clutter-56616761626f6e642f436c75747465722e747874,Vagabond/Clutter.txt,38,Loving,Affectionate,1,love,love,14,18,4,5,False,1
+dashboard-56616761626f6e642f44617368626f6172642e747874,Vagabond/Dashboard.txt,23,Sad,Grieving,1,crying,crying,24,30,5,6,False,1
+dashboard-56616761626f6e642f44617368626f6172642e747874,Vagabond/Dashboard.txt,64,Sad,Lonely,0,alone,alone,19,24,4,5,True,0
+dashboard-56616761626f6e642f44617368626f6172642e747874,Vagabond/Dashboard.txt,69,Trusting,Hopeful,1,hope,Hope,0,4,0,1,False,1
+dashboard-56616761626f6e642f44617368626f6172642e747874,Vagabond/Dashboard.txt,72,Loving,Connected,1,close,close,18,23,4,5,False,1
+dashboard-56616761626f6e642f44617368626f6172642e747874,Vagabond/Dashboard.txt,73,Proud,Respected,1,respected,respected,19,28,4,5,False,1
+dashboard-56616761626f6e642f44617368626f6172642e747874,Vagabond/Dashboard.txt,73,Loving,Affectionate,1,adored,adored,3,9,1,2,False,1
 dragon-fruit-56616761626f6e642f447261676f6e5f46727569742e747874,Vagabond/Dragon_Fruit.txt,37,Loving,Compassionate,1,kindness,Kindness,0,8,0,1,False,1
 faith-56616761626f6e642f46616974682e747874,Vagabond/Faith.txt,1,Trusting,Hopeful,1,faith,Faith,0,5,0,1,False,1
 faith-56616761626f6e642f46616974682e747874,Vagabond/Faith.txt,3,Trusting,Hopeful,1,faith,faith,17,22,4,5,False,1
@@ -562,6 +568,10 @@ sparkly-56616761626f6e642f537061726b6c792e747874,Vagabond/Sparkly.txt,22,Gratefu
 synced-up-56616761626f6e642f53796e6365645f55702e747874,Vagabond/Synced_Up.txt,8,Grateful,Blessed,1,blessed,blessed,13,20,2,3,False,1
 synced-up-56616761626f6e642f53796e6365645f55702e747874,Vagabond/Synced_Up.txt,12,Loving,Connected,1,close,close,6,11,2,3,False,1
 synced-up-56616761626f6e642f53796e6365645f55702e747874,Vagabond/Synced_Up.txt,18,Disgusted,Ashamed,1,guilt,guilt,28,33,5,6,False,1
+synced-up-56616761626f6e642f53796e6365645f55702e747874,Vagabond/Synced_Up.txt,25,Loving,Affectionate,1,love,love,2,6,1,2,False,1
+synced-up-56616761626f6e642f53796e6365645f55702e747874,Vagabond/Synced_Up.txt,26,Trusting,Hopeful,1,hope,hope,30,34,7,8,False,1
+synced-up-56616761626f6e642f53796e6365645f55702e747874,Vagabond/Synced_Up.txt,30,Intrigued,Inspired,1,envision,envision,24,32,6,7,False,1
+synced-up-56616761626f6e642f53796e6365645f55702e747874,Vagabond/Synced_Up.txt,51,Loving,Affectionate,1,love,love,2,6,1,2,False,1
 target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,15,Intrigued,Curious,1,wondering,wondering,30,39,7,8,False,1
 target-56616761626f6e642f5461726765742e747874,Vagabond/Target.txt,65,Sad,Lonely,0,lonely,lonely,20,26,4,5,True,0
 type-shit-56616761626f6e642f547970655f536869742e747874,Vagabond/Type_Shit.txt,9,Depressed,Unworthy,1,powerless,Powerless,0,9,0,1,False,1
