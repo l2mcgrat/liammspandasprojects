@@ -1,0 +1,55 @@
+/* Vault: locked panels, the unlock dialog, the status chip, and the two apps that store encrypted records. */
+.vault-locked { margin:28px 0; padding:34px 28px; border:1px dashed #ffffff40; border-radius:10px; background:#0d1220cc; text-align:center; }
+.vault-locked h2 { margin:0 0 10px; font-size:1.5rem; }
+.vault-locked p { margin:0 auto 18px; max-width:56ch; color:var(--muted,#a9adbd); line-height:1.6; font-size:14px; }
+.vault-locked .toolbar { justify-content:center; }
+.vault-locked-inline { display:flex; flex-wrap:wrap; gap:8px 12px; align-items:center; font-size:12.5px; color:var(--muted,#a9adbd); }
+.vault-locked-inline button { font:inherit; color:#bba1ff; background:none; border:0; padding:0; text-decoration:underline; cursor:pointer; }
+.vault-dialog { width:min(92vw,460px); padding:26px; border:1px solid #ffffff2e; border-radius:12px; background:#111626; color:#eef0f8; }
+.vault-dialog::backdrop { background:#05070dcc; }
+.vault-dialog h2 { margin:0 0 8px; font-size:1.35rem; }
+.vault-dialog p { margin:0 0 16px; font-size:13.5px; line-height:1.6; color:#b9bdcc; }
+.vault-dialog label { display:grid; gap:6px; margin-bottom:14px; font-size:13px; font-weight:600; }
+.vault-dialog input[type=password] { padding:11px 12px; border-radius:8px; border:1px solid #ffffff33; background:#0a0e1a; color:inherit; font:15px ui-monospace,Consolas,monospace; }
+.vault-dialog .vault-remember { display:flex; gap:8px; align-items:flex-start; font-weight:400; color:#b9bdcc; }
+.vault-error { color:#ff9c9c !important; font-weight:600; }
+.vault-chip { position:fixed; left:14px; bottom:14px; z-index:40; padding:7px 12px; border-radius:999px; border:1px solid #8fe0a866; background:#0d1220f2; color:#8fe0a8; font-size:12px; }
+.vault-chip button { margin-left:6px; font:inherit; color:#eef0f8; background:none; border:0; text-decoration:underline; cursor:pointer; }
+
+.vt-app { display:grid; gap:22px; margin:26px 0; }
+.vt-status { display:flex; flex-wrap:wrap; gap:8px 14px; align-items:center; font-size:12.5px; color:var(--muted,#a9adbd); }
+.vt-status strong { color:#eef0f8; }
+.vt-card { padding:20px; border:1px solid #ffffff1f; border-radius:10px; background:#0d1220; min-width:0; }
+.vt-card h3 { margin:0 0 14px; font-size:1.05rem; }
+.vt-form { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px 14px; align-items:end; }
+.vt-form label { display:grid; gap:5px; font-size:12px; font-weight:600; color:#c9cddc; min-width:0; }
+.vt-form .vt-wide { grid-column:1 / -1; }
+.vt-form input,.vt-form select,.vt-form textarea { width:100%; box-sizing:border-box; padding:9px 10px; border-radius:7px; border:1px solid #ffffff2b; background:#0a0e1a; color:#eef0f8; font:14px "Segoe UI",system-ui,sans-serif; }
+.vt-form textarea { min-height:64px; resize:vertical; }
+.vt-form input[type=range] { padding:0; }
+.vt-actions { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.vt-msg { font-size:12.5px; color:#8fe0a8; }
+.vt-msg.is-error { color:#ff9c9c; }
+.vt-table-wrap { overflow-x:auto; }
+.vt-table { width:100%; border-collapse:collapse; font-size:13px; }
+.vt-table th,.vt-table td { padding:8px 10px; border-bottom:1px solid #ffffff14; text-align:left; vertical-align:top; }
+.vt-table th { font-size:11px; letter-spacing:.05em; text-transform:uppercase; color:#a9adbd; white-space:nowrap; }
+.vt-table td.vt-num,.vt-table th.vt-num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+.vt-table button { font:inherit; font-size:12px; color:#bba1ff; background:none; border:0; padding:0 0 0 8px; cursor:pointer; text-decoration:underline; }
+.vt-bar { display:block; height:8px; border-radius:4px; background:#69d4cf; min-width:2px; }
+.vt-bar.b-work { background:#5ec2f7; } .vt-bar.b-maintenance { background:#bba1ff; } .vt-bar.b-leisure { background:#8fe0a8; }
+.vt-week { display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin-bottom:12px; font-size:13px; }
+.vt-week button,.vt-chipbtn { font:inherit; font-size:12.5px; padding:5px 11px; border-radius:999px; border:1px solid #ffffff2b; background:#0a0e1a; color:#eef0f8; cursor:pointer; }
+.vt-chipbtn.is-on { border-color:#bba1ff; color:#bba1ff; }
+.vt-empty { color:var(--muted,#a9adbd); font-size:13px; }
+.vt-graph { width:100%; height:auto; display:block; background:linear-gradient(135deg,#1a1f33,#0d1220); border-radius:8px; }
+.vt-graph text { font:12px "Segoe UI",system-ui,sans-serif; fill:#dfe3f2; pointer-events:none; }
+.vt-graph .vt-node { cursor:pointer; }
+.vt-graph .vt-node:focus { outline:none; }
+.vt-graph .vt-node:focus circle,.vt-graph .vt-node.is-selected circle { stroke:#fff; stroke-width:2.5; }
+.vt-two { display:grid; grid-template-columns:minmax(0,1.6fr) minmax(0,1fr); gap:18px; }
+.vt-history { margin:10px 0 0; padding:0; list-style:none; display:grid; gap:8px; font-size:13px; }
+.vt-history li { padding:8px 10px; border-left:3px solid #ffffff2b; background:#0a0e1a; border-radius:0 6px 6px 0; }
+.vt-history li.is-up { border-left-color:#8fe0a8; } .vt-history li.is-down { border-left-color:#ff8f8f; }
+.vt-history small { display:block; color:#a9adbd; margin-bottom:2px; }
+@media (max-width:760px) { .vt-two { grid-template-columns:1fr; } .vault-locked { padding:26px 16px; } }

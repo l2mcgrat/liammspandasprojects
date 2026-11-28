@@ -1,0 +1,25 @@
+{
+  "v": 1,
+  "kdf": {
+    "name": "PBKDF2",
+    "hash": "SHA-256",
+    "iterations": 600000,
+    "salt": "tCgxX/4QKPgmawDp4JQTTQ=="
+  },
+  "wrappedKey": {
+    "iv": "E3ylK3mgmNiWk+2q",
+    "ct": "4iU9X/SkdTAfgwbdJsXSrtp38mYyMd91qyeMWRgQaXxldOEInqe5mjntbqMkR2zb"
+  },
+  "signing": {
+    "curve": "P-256",
+    "public": "BJTH/RjBDKTh1R1s8075YT2VO16f2wUgiahDyA0X+pZjjnOBuULGktyVk/Vg1kLUcXr9j82Cb1sIlyHVwaqnu1c=",
+    "sealedPrivate": {
+      "iv": "3rjLyP1EwXmJhmM5",
+      "ct": "Ly5nxuJixfHuWsBLPrtuOgwDv7pMTWQsi8vYSt193zqLAzAfn4Y1TmzcQOwHfrq6IVYwsvcWkh2a07oCT5/QTNHg0LR20q3jI0BIkp3Y4zFnaTbFwGTwnpnP6CBIPifedsZ/1EVypqbWaoPhR/xVt0rX6rOMzwFHZHGwVeHJTWSNXoxdLUuaetqn38AX3mUX8Vtnvb3V/dvlpQ=="
+    }
+  },
+  "events": {
+    "topic": "liam_vault_a665af84de0412ed",
+    "log": "https://raw.githubusercontent.com/l2mcgrat/pandas_projects/main/records/vault/events.jsonl"
+  }
+}
