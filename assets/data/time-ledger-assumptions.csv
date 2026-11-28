@@ -10,3 +10,4 @@ lift_rest,Lifting: rest after a set,120.0,s per set,Placeholder
 lift_setup,Lifting: warm-up and changeovers,10.0,min per session,Placeholder
 run_rest,Intervals: rest between repeats,3.0,min,Placeholder
 run_setup,Running: warm-up and cool-down,10.0,min per run,Placeholder
+whiteboard,"One weekly theme whiteboard, counted on the day before its week starts",30.0,min,Liam: about 30 min a board; the day is assumed

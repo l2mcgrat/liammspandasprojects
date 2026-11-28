@@ -1,7 +1,7 @@
 order,pillar,atlasPath,scorePts,maturity,primaryKpi,secondaryKpi
 01,Finances,Overall-Performance/Finances,,Locked · six dashboards in the vault,Locked,Unlock the vault to see the score and readouts
 02,Stability,Overall-Performance/Stability,69,Hybrid Telemetry + Placeholders,7.3 / 10 composure,±1.74 h sleep σ · 8 coin-flip checks
-03,Time,Overall-Performance/Time,78,Hybrid Telemetry + Placeholders,7.5 / 10 focus,123 of 168 h/wk captured · 82 training blocks
+03,Time,Overall-Performance/Time,78,Hybrid Telemetry + Placeholders,7.5 / 10 focus,125 of 168 h/wk captured · 82 training blocks
 04,Athletics,Overall-Performance/Athletics,96,Live Telemetry,82 logged workouts,"469,464 lb lifted · 24.2 km tempo · 70,617 m swim"
 05,Memory,Overall-Performance/Memory,75,Hybrid Telemetry + Output,7.0 / 10 pattern · 6.9 / 10 bandwidth,8 live studies · 3 Gemini notes mapped
 06,Health,Overall-Performance/Health,84,Live Telemetry,7.73 h/night · 616 kcal/day deficit,49 nights (50 dreams) · 49 diet days

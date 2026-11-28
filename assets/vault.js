@@ -108,6 +108,10 @@
         console.error("vault slot", slot.dataset.vaultSlot, error);
       }
     }
+    // A public introduction that the sealed page replaces with its own.
+    if (document.querySelector('[data-vault-slot][data-vault-state="open"]')) {
+      document.querySelectorAll("[data-vault-hide-when-open]").forEach((node) => { node.hidden = true; });
+    }
   };
 
   // ---- Unlock dialog and status chip -----------------------------------------------------

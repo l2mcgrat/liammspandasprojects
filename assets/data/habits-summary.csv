@@ -1,0 +1,6 @@
+key,label,source,daysWithData,daysHit,rate,currentStreak,longestStreak
+sleep7,Slept 7 hours or more,Sleep log,49,34,0.6938775510204082,2,8
+trained,"Trained (lift, swim or run)","Lifting, swimming and running logs",49,34,0.6938775510204082,6,6
+deficit,Hit the calorie-deficit target,Diet log,49,27,0.5510204081632653,1,10
+song,Worked on a song,Lyric commits in the music repository,49,12,0.24489795918367346,2,3
+played,Played a game,Steam session log,49,3,0.061224489795918366,2,2
